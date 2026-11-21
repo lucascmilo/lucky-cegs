@@ -12,14 +12,13 @@ type PropsCartaoAviso = {
   tituloRosa: string;
   cursiva: string;
   texto: string;
-  // Botões e links de ação
   children: ReactNode;
 };
 
 // === Seção: Cartão-postal de aviso (página não encontrada, erro) ===
 export default function CartaoAviso({ selo, etiqueta, tituloPreto, tituloRosa, cursiva, texto, children }: PropsCartaoAviso) {
   return (
-    <section className="cartaoAviso">
+    <section className="cartaoAviso fundoPontosRosa">
       <div className="cartaoAviso__cartao envelopeCorreio">
         {/* === Seção: Selo === */}
         <div className="cartaoAviso__colunaSelo" aria-hidden="true">

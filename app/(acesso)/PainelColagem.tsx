@@ -31,7 +31,7 @@ type Peca =
   | "modelo";
 
 // === Seção: Ordem das camadas ===
-// Ordem das camadas em cada tela: a última peça fica por cima.
+// A última peça da lista fica por cima.
 const CAMADAS: Record<VarianteAcesso, Peca[]> = {
   entrar: ["codigoBarras", "cd", "coracao", "brilhos", "etiquetas", "chaveiro", "polaroid", "modelo", "selo"],
   criarConta: [

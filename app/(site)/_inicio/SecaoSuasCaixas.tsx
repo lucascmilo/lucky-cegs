@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { IconeSeta } from "@/componentes/Icones";
+import { SeloNovo } from "@/componentes/Novidade";
 import { ETAPAS_CAIXA, obterEtapaCaixa } from "@/lib/etapas";
-import { formatarTempoRelativo } from "@/lib/formatacao";
+import { formatarTempoRelativo, nomeOrigem } from "@/lib/formatacao";
 import type { CaixaResumo } from "@/lib/joiner";
 import carimboPostal from "@/public/imagens/carimbo-postal.png";
 
@@ -48,8 +49,9 @@ function CartaoCaixa({ caixa }: { caixa: CaixaResumo }) {
 
   return (
     <Link href={`/caixas/${caixa.id}`} className="caixaResumo">
+      <SeloNovo caixaId={caixa.id} atualizadoEm={caixa.situacaoAtualizadaEm} texto="NOVA ETAPA" className="caixaResumo__novo" />
       <div className="caixaResumo__topo">
-        <span className="caixaResumo__origem">{caixa.origem ?? "—"}</span>
+        <span className="caixaResumo__origem">{nomeOrigem(caixa.origem) ?? "—"}</span>
         <span className="caixaResumo__tempo">{formatarTempoRelativo(caixa.situacaoAtualizadaEm)}</span>
       </div>
 

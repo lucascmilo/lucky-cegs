@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin, username } from "better-auth/plugins";
 import { db } from "@/db";
-import { DOMINIO_EMAIL_INTERNO, PADRAO_USER, TAMANHO_MINIMO_SENHA } from "@/lib/configuracoes";
+import { DOMINIO_EMAIL_INTERNO, PADRAO_USER, TAMANHO_MINIMO_SENHA, TAMANHO_USER } from "@/lib/configuracoes";
 
 // === Seção: Configuração do Better Auth ===
 // Login com @ (username) + senha. Papéis do plugin admin: "admin" = GOM, "user" = joiner.
@@ -12,8 +12,8 @@ export const auth = betterAuth({
   plugins: [
     admin(),
     username({
-      minUsernameLength: 3,
-      maxUsernameLength: 15,
+      minUsernameLength: TAMANHO_USER.minimo,
+      maxUsernameLength: TAMANHO_USER.maximo,
       usernameValidator: (valor) => PADRAO_USER.test(valor),
     }),
   ],

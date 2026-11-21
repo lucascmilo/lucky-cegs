@@ -127,3 +127,46 @@ export function IconeOlho({ className, tamanho = 18, riscado = false }: PropsIco
     </svg>
   );
 }
+
+// === Seção: Ícones da tela de caixa ===
+export function IconeLupa({ className, tamanho = 18 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="8.6" cy="8.6" r="5.6" stroke="currentColor" strokeWidth="1.8" />
+      <path d="m12.8 12.8 4.4 4.4M8.6 6.4v4.4M6.4 8.6h4.4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconeCoracao({ className, tamanho = 12 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M8 14.2S1.5 10.3 1.5 5.7A3.4 3.4 0 0 1 8 4.2a3.4 3.4 0 0 1 6.5 1.5c0 4.6-6.5 8.5-6.5 8.5Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function IconeCheck({ className, tamanho = 10 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path d="m2.2 6.4 2.4 2.4 5.2-5.6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconeRelogio({ className, tamanho = 10 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <circle cx="6" cy="6" r="4.6" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M6 3.6V6l1.6 1" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconeFechar({ className, tamanho = 18 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="m5 5 10 10M15 5 5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}

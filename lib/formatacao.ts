@@ -1,3 +1,5 @@
+import { ORIGENS } from "@/lib/configuracoes";
+
 // === Seção: Dinheiro ===
 const formatadorReais = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -26,4 +28,11 @@ export function formatarTempoRelativo(data: Date, agora = new Date()) {
   }
   const meses = Math.floor(dias / 30);
   return meses === 1 ? "1 mês atrás" : `${meses} meses atrás`;
+}
+
+// === Seção: Origem da caixa ===
+// Converte a sigla (JP, KR…) no nome do país; textos que não são sigla aparecem como estão
+export function nomeOrigem(origem: string | null) {
+  if (!origem) return null;
+  return ORIGENS[origem.trim().toUpperCase()] ?? origem;
 }

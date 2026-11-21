@@ -1,6 +1,6 @@
 /* === Seção: Página Termos da comunidade === */
 .termos {
-  /* 1 px do protótipo, encolhendo em telas mais estreitas que 1440 px */
+  /* Escala da faixa do título: encolhe em telas estreitas */
   --px-faixa: min(1px, 100vw / 1440);
   padding-bottom: 42px;
 }
@@ -368,7 +368,7 @@
   }
 
   .termos__titulo {
-    font-size: clamp(30px, 10.4vw, 52px);
+    font-size: clamp(28px, 9.5vw, 46px);
     line-height: 0.82;
   }
 
@@ -405,7 +405,7 @@
   }
 
   .termos__tituloSecao {
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .termos__numeroSecao {

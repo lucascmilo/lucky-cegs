@@ -34,3 +34,18 @@ export function obterLinksNavegacao(papel: Papel): LinkNavegacao[] {
   if (papel === "user") return linksJoiner;
   return linksVisitante;
 }
+
+// === Seção: Volta depois do login ===
+// Páginas que exigem login mandam para /entrar?voltar=<página>; depois de entrar, a pessoa volta para ela.
+export function enderecoEntrar(voltarPara: string) {
+  return `/entrar?voltar=${encodeURIComponent(voltarPara)}`;
+}
+
+// Só aceita endereços do próprio site (evita mandar a pessoa para outro domínio)
+export function destinoSeguro(voltar: string | null) {
+  return voltar && voltar.startsWith("/") && !voltar.startsWith("//") && !voltar.startsWith("/\\") ? voltar : "/";
+}
+
+export function destinoDepoisDoLogin() {
+  return destinoSeguro(new URLSearchParams(window.location.search).get("voltar"));
+}

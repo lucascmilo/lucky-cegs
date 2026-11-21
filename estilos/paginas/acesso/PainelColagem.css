@@ -1,6 +1,6 @@
 /* === Seção: Painel === */
 .painelColagem__painel {
-  /* 1 px do protótipo na escala da colagem (usado pelos letreiros) */
+  /* Escala da colagem (usada pelos letreiros) */
   --px-palco: calc(min(100cqh, 100cqw * 926 / 754) / 926);
   position: relative;
   overflow: hidden;

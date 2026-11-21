@@ -5,9 +5,6 @@
   align-items: center;
   justify-content: center;
   padding: 72px var(--margem-lateral);
-  background-color: var(--cor-rosa);
-  background-image: radial-gradient(var(--cor-rosa-pontos) 2.5px, transparent 3px);
-  background-size: 22px 22px;
 }
 
 /* === Seção: Cartão-postal === */
@@ -102,7 +99,7 @@
   flex-direction: column;
   margin-top: 22px;
   font-family: var(--fonte-titulo);
-  font-size: 52px;
+  font-size: clamp(36px, 5.4vw, 52px);
   font-weight: 400;
   line-height: 0.703;
   letter-spacing: 0.02em;
@@ -175,7 +172,15 @@
 
   .cartaoAviso__titulo {
     align-items: center;
-    font-size: clamp(30px, 9vw, 44px);
+    font-size: clamp(28px, 8.5vw, 40px);
+  }
+
+  .cartaoAviso__cursiva {
+    font-size: 26px;
+  }
+
+  .cartaoAviso__texto {
+    font-size: 15px;
   }
 
   .cartaoAviso__acoes {

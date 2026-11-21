@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { authClient } from "@/lib/auth-client";
 import { DOMINIO_EMAIL_INTERNO, PADRAO_USER, TAMANHO_MINIMO_SENHA } from "@/lib/configuracoes";
-import { limparUser, traduzirErroAutenticacao } from "@/lib/mensagensErro";
+import { limparUser, MENSAGEM_USER_INVALIDO, traduzirErroAutenticacao } from "@/lib/mensagensErro";
+import { destinoDepoisDoLogin } from "@/lib/navegacao";
 import EntradaSenha from "../EntradaSenha";
 import "@/estilos/paginas/acesso/Formulario.css";
 
@@ -25,7 +26,7 @@ function validarCampos(campos: CamposFormulario, aceitouTermos: boolean): ErrosC
   const userLimpo = limparUser(campos.user);
 
   if (!campos.nome.trim()) erros.nome = "Informe seu nome.";
-  if (!PADRAO_USER.test(userLimpo)) erros.user = "Use de 3 a 15 caracteres: letras, números ou _.";
+  if (!PADRAO_USER.test(userLimpo)) erros.user = MENSAGEM_USER_INVALIDO;
   if (campos.senha.length < TAMANHO_MINIMO_SENHA) erros.senha = `Mínimo de ${TAMANHO_MINIMO_SENHA} caracteres.`;
   if (campos.confirmarSenha !== campos.senha) erros.confirmarSenha = "As senhas não são iguais.";
   if (!aceitouTermos) erros.termos = "Para criar a conta, aceite os Termos da comunidade.";
@@ -70,7 +71,7 @@ export default function FormularioCriarConta() {
       return;
     }
 
-    roteador.push("/");
+    roteador.push(destinoDepoisDoLogin());
     roteador.refresh();
   }
 
@@ -115,7 +116,7 @@ export default function FormularioCriarConta() {
       <div className="formulario__grade">
         {renderizarCampo("nome", "Nome", "O nome que você usa no twitter", { autoComplete: "name" })}
         {renderizarCampo("user", "Seu user", "Seu user no twitter", { autoComplete: "username" })}
-        {renderizarCampo("senha", "Senha", "Mínimo de 8 caracteres", { type: "password", autoComplete: "new-password" })}
+        {renderizarCampo("senha", "Senha", `Mínimo de ${TAMANHO_MINIMO_SENHA} caracteres`, { type: "password", autoComplete: "new-password" })}
         {renderizarCampo("confirmarSenha", "Confirmar senha", "Repita a senha", {
           type: "password",
           autoComplete: "new-password",

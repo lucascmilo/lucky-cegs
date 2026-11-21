@@ -1,0 +1,935 @@
+/* === Seção: Faixa azul do topo === */
+.caixaTopo {
+  background: var(--cor-azul-colagem);
+  border-bottom: 1px solid var(--cor-preto);
+}
+
+.caixaTopo__conteudo {
+  position: relative;
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
+  min-height: 340px;
+  margin-inline: auto;
+  padding: 53px 0 52px;
+}
+
+.caixaTopo__titulo {
+  position: relative;
+  width: fit-content;
+  max-width: calc(100% - 400px);
+  overflow-wrap: anywhere;
+  font-family: var(--fonte-titulo);
+  font-size: 94px;
+  font-weight: 400;
+  line-height: 68px;
+  letter-spacing: 0.088em;
+  text-transform: uppercase;
+  color: var(--cor-preto);
+}
+
+/* A origem fica escrita à mão sobre o canto do título; acompanha o tamanho dele */
+.caixaTopo__origem {
+  position: absolute;
+  top: 1.107em;
+  left: -0.46em;
+  font-family: var(--fonte-cursiva);
+  font-size: 0.574em;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  transform: rotate(-7deg);
+  transform-origin: left center;
+}
+
+/* === Seção: Etapas da caixa === */
+.caixaTopo__etapas {
+  display: grid;
+  grid-template-columns: repeat(5, 126px);
+  gap: 10px;
+  margin: 73px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.caixaTopo__etapa {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--cor-preto);
+}
+
+.caixaTopo__barra {
+  height: 12px;
+  border-radius: 2px;
+  background: rgba(21, 18, 20, 0.15);
+}
+
+.caixaTopo__etapaConcluida .caixaTopo__barra {
+  background: var(--cor-preto);
+}
+
+.caixaTopo__etapa [aria-current="step"] {
+  font-weight: 700;
+}
+
+/* === Seção: Pílulas das caixas abertas === */
+.caixaTopo__caixas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  max-width: 820px;
+  margin-top: 14px;
+}
+
+/* Pílula de escolha: caixas abertas e filtros (a ativa fica preta) */
+.pilulaSelecao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 154px;
+  height: 40px;
+  padding: 0 20px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cor-preto);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.pilulaSelecao:hover {
+  background: var(--cor-rosa-claro);
+}
+
+.pilulaSelecao__ativa,
+.pilulaSelecao__ativa:hover {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+/* === Seção: Colagem da faixa === */
+.caixaTopo__colagem {
+  position: absolute;
+  top: 21px;
+  right: -46px;
+  width: 370px;
+  aspect-ratio: 370 / 264;
+}
+
+.caixaTopo__colagem > * {
+  position: absolute;
+  height: auto;
+}
+
+.caixaTopo__quadrado {
+  left: 27.03%;
+  top: 8.71%;
+  width: 59.46%;
+  height: 64.39%;
+  border: 1px solid var(--cor-preto);
+  background: var(--cor-rosa);
+}
+
+.caixaTopo__foto {
+  left: 0;
+  top: 28.03%;
+  width: 51.35%;
+  border: 6px solid var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+}
+
+.caixaTopo__codigoBarras {
+  left: 56.76%;
+  top: 0;
+  width: 43.24%;
+  transform: rotate(-2deg);
+}
+
+.caixaTopo__brilho {
+  left: 17.57%;
+  top: 14.02%;
+  width: 5.95%;
+}
+
+.caixaTopo__coracao {
+  left: 77.84%;
+  top: 60.61%;
+  width: 7.03%;
+}
+
+/* === Seção: Área dos itens === */
+.caixaItens {
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
+  margin-inline: auto;
+  padding: 53px 0 32px;
+}
+
+.caixaItens__barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1160px;
+}
+
+.caixaItens__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.caixaItens__aviso {
+  margin-top: 15px;
+  font-size: 16px;
+  color: var(--cor-texto);
+}
+
+.caixaItens__busca {
+  display: flex;
+  align-items: center;
+  width: min(100%, 360px);
+  height: 40px;
+  padding: 0 4px 0 16px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+}
+
+.caixaItens__busca:focus-within {
+  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
+  border-color: var(--cor-rosa-escuro);
+}
+
+.caixaItens__campoBusca {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+}
+
+.caixaItens__campoBusca::placeholder {
+  color: #6b6466;
+}
+
+.caixaItens__botaoBusca {
+  flex-shrink: 0;
+  height: 32px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-preto);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cor-branco);
+}
+
+.caixaItens__botaoBusca:hover {
+  background: #2a2628;
+}
+
+.caixaItens__resultadoBusca {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.caixaItens__resultadoBusca a {
+  color: var(--cor-rosa-texto);
+  text-underline-offset: 3px;
+}
+
+.caixaItens__secao {
+  max-width: 1160px;
+  margin-top: 42px;
+}
+
+.caixaItens__titulo {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fonte-titulo);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 44px;
+  color: var(--cor-preto);
+}
+
+.caixaItens__tituloRosa {
+  color: var(--cor-rosa);
+}
+
+.caixaItens__sets {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 42px;
+}
+
+.caixaItens__vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 1160px;
+  margin-top: 42px;
+  padding: 48px 24px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.caixaItens__vazioEtiqueta {
+  font-family: var(--fonte-pixel);
+  color: var(--cor-rosa-texto);
+}
+
+/* === Seção: Peças comuns dos itens === */
+.pilulaContorno,
+.pilulaEtapa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 95px;
+  height: 25px;
+  padding: 0 12px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cor-preto);
+  white-space: nowrap;
+}
+
+.pilulaContorno__versao {
+  min-width: 70px;
+}
+
+.etiquetaMeu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 60px;
+  height: 20px;
+  border-radius: 4px;
+  background: var(--cor-preto);
+  font-family: var(--fonte-pixel);
+  font-size: 11px;
+  color: var(--cor-branco);
+}
+
+.etiquetaMeu__coracao {
+  color: var(--cor-rosa);
+}
+
+.nomePessoa {
+  font-size: 16px;
+  color: var(--cor-preto);
+}
+
+.nomePessoa__user {
+  font-weight: 500;
+}
+
+.valorPagamento {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.valorPagamento__selo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 20px;
+  border-radius: var(--raio-pilula);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.valorPagamento__pago {
+  min-width: 53px;
+  border: 1px solid #5aa548;
+  background: #dcf3d3;
+  color: #2d6a1f;
+}
+
+.valorPagamento__pendente {
+  min-width: 72px;
+  border: 1px dashed var(--cor-rosa-texto);
+  background: var(--cor-branco);
+  color: var(--cor-rosa-texto);
+}
+
+/* === Seção: Foto do item === */
+.fotoItem {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--cor-preto);
+  border-left: 15px solid var(--cor-rosa);
+  border-radius: 8px;
+  background: var(--cor-bege-claro);
+}
+
+.fotoItem__imagem {
+  object-fit: cover;
+}
+
+.fotoItem__vazia {
+  display: grid;
+  place-items: center;
+}
+
+.fotoItem__semFoto {
+  font-family: var(--fonte-pixel);
+  font-size: 11px;
+  color: #6b6466;
+}
+
+.fotoItem__lupa {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-branco);
+  color: var(--cor-preto);
+  transition: transform 0.15s ease;
+}
+
+.fotoItem__lupa:hover {
+  transform: scale(1.08);
+}
+
+.fotoItem__janela {
+  width: min(92vw, 1000px);
+  overscroll-behavior: contain;
+  max-height: 90svh;
+  padding: 0;
+  overflow: visible;
+  border: 1px solid var(--cor-preto);
+  border-radius: 16px;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+}
+
+html:has(.fotoItem__janela[open]) {
+  overflow: hidden;
+}
+
+.fotoItem__janela::backdrop {
+  background: rgba(21, 18, 20, 0.6);
+}
+
+.fotoItem__ampliada {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: calc(90svh - 2px);
+  border-radius: 15px;
+  object-fit: contain;
+}
+
+.fotoItem__fechar {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-rosa);
+  color: var(--cor-branco);
+}
+
+.fotoItem__fechar:hover {
+  background: var(--cor-rosa-escuro);
+}
+
+/* === Seção: Cartão de set === */
+.cartaoSet {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  column-gap: 65px;
+  padding: 55px 52px 56px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 18px;
+  background: #fbf9f6;
+  box-shadow: var(--sombra-cartao);
+}
+
+.cartaoSet__fotos {
+  display: flex;
+  flex-direction: column;
+  gap: 29px;
+}
+
+.cartaoSet__foto {
+  height: 200px;
+}
+
+.cartaoSet__grupo {
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.cartaoSet__nome {
+  margin-top: 8px;
+  font-family: var(--fonte-titulo);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cartaoSet__pilulas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+  margin-top: 12px;
+}
+
+.cartaoSet__pessoas {
+  margin: 23px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--cor-borda-bege);
+  list-style: none;
+}
+
+.cartaoSet__pessoa {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  min-height: 60px;
+  padding-block: 8px;
+  border-bottom: 1px solid var(--cor-borda-bege);
+}
+
+.cartaoSet__versoes {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* === Seção: Caixa rosa com as partes do joiner === */
+.minhasPartes {
+  margin-top: 29px;
+  padding: 21px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 14px;
+  background: var(--cor-rosa-suave);
+}
+
+.minhasPartes__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 15px;
+}
+
+.minhasPartes__topo .nomePessoa {
+  font-size: 15px;
+}
+
+.minhasPartes__topo .pilulaContorno__versao {
+  min-width: 72px;
+}
+
+.minhasPartes__detalhes {
+  margin-left: auto;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cor-preto);
+  text-underline-offset: 3px;
+}
+
+.minhasPartes__detalhes:hover {
+  color: var(--cor-rosa-texto);
+}
+
+.minhasPartes__rolagem {
+  margin-top: 11px;
+  overflow-x: auto;
+}
+
+.minhasPartes__tabela {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.minhasPartes__tabela th {
+  padding: 0 0 8px;
+  border-bottom: 1px solid var(--cor-preto);
+  font-family: var(--fonte-pixel);
+  font-size: 12px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.minhasPartes__tabela th:nth-child(1) {
+  width: 176px;
+}
+
+.minhasPartes__tabela th:nth-child(2) {
+  width: 165px;
+}
+
+.minhasPartes__tabela th:nth-child(3) {
+  width: 159px;
+}
+
+.minhasPartes__tabela td {
+  height: 34px;
+  border-bottom: 1px solid rgba(21, 18, 20, 0.15);
+  font-weight: 700;
+}
+
+.minhasPartes__tabela tr:last-child td {
+  border-bottom: 0;
+}
+
+/* === Seção: Pedidos individuais === */
+.pedidosIndividuais__lista {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px;
+  margin: 42px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pedidosIndividuais__verMais {
+  display: flex;
+  width: 206px;
+  height: 40px;
+  margin: 33px auto 0;
+}
+
+.cartaoIndividual {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 490px;
+  height: 100%;
+  padding: 22px 17px 18px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 14px;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+}
+
+.cartaoIndividual__meu {
+  background: var(--cor-rosa-suave);
+}
+
+.cartaoIndividual__etiqueta {
+  position: absolute;
+  top: -10px;
+  left: -1px;
+}
+
+.cartaoIndividual__foto {
+  height: 154px;
+  border-left-width: 11px;
+}
+
+.cartaoIndividual__foto + .cartaoIndividual__foto {
+  margin-top: 10px;
+}
+
+.cartaoIndividual__foto .fotoItem__lupa {
+  width: 32px;
+  height: 32px;
+  top: 6px;
+  right: 6px;
+}
+
+.cartaoIndividual__nome {
+  margin-top: 15px;
+  font-family: var(--fonte-titulo);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cartaoIndividual__dono {
+  margin-top: 6px;
+}
+
+.cartaoIndividual__dono .nomePessoa {
+  font-size: 13px;
+}
+
+.cartaoIndividual__etapa {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.cartaoIndividual__etapa .pilulaEtapa {
+  min-width: 105px;
+}
+
+.cartaoIndividual__rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.cartaoIndividual__falta {
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cor-rosa-texto);
+}
+
+.cartaoIndividual__detalhes {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 20px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cor-preto);
+  text-decoration: none;
+}
+
+.cartaoIndividual__detalhes:hover {
+  background: var(--cor-rosa-claro);
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 1280px) {
+  .caixaTopo__colagem {
+    right: 0;
+  }
+}
+
+@media (max-width: 1240px) {
+  .caixaTopo__colagem {
+    width: 300px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .caixaTopo__colagem {
+    top: 40px;
+    width: 240px;
+  }
+
+  .caixaTopo__titulo {
+    max-width: calc(100% - 270px);
+  }
+
+  .caixaTopo__etapas {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    max-width: 670px;
+  }
+
+  .caixaTopo__titulo {
+    font-size: clamp(48px, 8vw, 94px);
+    line-height: 0.74;
+  }
+
+  .pedidosIndividuais__lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  .cartaoSet {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 28px;
+    padding: 32px 28px;
+  }
+
+  .cartaoSet__fotos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .cartaoSet__foto {
+    height: auto;
+    aspect-ratio: 3 / 2;
+  }
+
+  .cartaoSet__nome {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 860px) {
+  .caixaItens__busca {
+    width: 100%;
+  }
+
+  .caixaTopo__conteudo {
+    padding-top: 40px;
+  }
+
+  .caixaTopo__titulo {
+    max-width: 100%;
+  }
+
+  .caixaTopo__colagem {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: min(300px, 86%);
+    margin: 32px auto 0;
+  }
+
+  .caixaTopo__etapas {
+    margin-top: 56px;
+  }
+
+  .caixaTopo__etapa {
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .pilulaSelecao {
+    min-width: 0;
+    height: 38px;
+    padding: 0 18px;
+    font-size: 14px;
+  }
+
+  .caixaItens__titulo {
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  .pedidosIndividuais__lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 560px) {
+  .caixaTopo__etapas {
+    gap: 6px;
+  }
+
+  .caixaTopo__etapa {
+    font-size: 11px;
+  }
+
+  .caixaTopo__caixas,
+  .caixaItens__filtros {
+    gap: 10px;
+  }
+
+  .caixaItens__aviso {
+    font-size: 14px;
+  }
+
+  .cartaoSet {
+    padding: 24px 18px;
+    border-radius: 16px;
+  }
+
+  .cartaoSet__fotos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cartaoSet__nome {
+    font-size: 26px;
+  }
+
+  .nomePessoa {
+    font-size: 15px;
+  }
+
+  .minhasPartes {
+    padding: 16px;
+  }
+
+  /* No celular, cada parte vira um bloco com os rótulos ao lado dos valores */
+  .minhasPartes__tabela {
+    min-width: 0;
+  }
+
+  .minhasPartes__tabela thead {
+    display: none;
+  }
+
+  .minhasPartes__tabela tr {
+    display: grid;
+    gap: 6px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(21, 18, 20, 0.15);
+  }
+
+  .minhasPartes__tabela tr:last-child {
+    border-bottom: 0;
+  }
+
+  .minhasPartes__tabela td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: auto;
+    border: 0;
+  }
+
+  .minhasPartes__tabela td::before {
+    content: attr(data-rotulo);
+    font-family: var(--fonte-pixel);
+    font-size: 11px;
+    font-weight: 400;
+  }
+
+  .pedidosIndividuais__lista {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cartaoIndividual {
+    min-height: 0;
+  }
+
+  .cartaoIndividual__foto {
+    height: auto;
+    aspect-ratio: 3 / 2;
+  }
+}

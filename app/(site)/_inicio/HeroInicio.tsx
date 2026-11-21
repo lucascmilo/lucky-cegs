@@ -8,10 +8,11 @@ import photocardInicio from "@/public/imagens/inicio-photocard.png";
 import "@/estilos/paginas/Inicio.css";
 
 // === Seção: Hero da tela inicial ===
-// "acoes" só aparece para o joiner (botões e "Falta pagar").
-export default function HeroInicio({ acoes }: { acoes?: ReactNode }) {
+// "acoes": botões abaixo do texto (de conta para o visitante; do joiner com o "Falta pagar").
+// "textoAlto": sobe o texto para caber o bloco maior de ações do joiner.
+export default function HeroInicio({ acoes, textoAlto = false }: { acoes?: ReactNode; textoAlto?: boolean }) {
   return (
-    <section className={juntarClasses("inicio__hero", acoes ? "inicio__heroComAcoes" : null)}>
+    <section className={juntarClasses("inicio__hero", textoAlto && "inicio__heroComAcoes")}>
       <div className="inicio__conteudo">
         {/* === Seção: Texto de apresentação === */}
         <div className="inicio__texto">

@@ -21,7 +21,7 @@
 
 /* === Seção: Cartão-postal === */
 .telaAcesso__cartao {
-  /* 1 px do protótipo: fixo no celular, proporcional ao cartão no desktop */
+  /* Escala do cartão: fixa no celular, proporcional no desktop */
   --px-cartao: 1px;
   position: relative;
   width: min(100%, 560px);

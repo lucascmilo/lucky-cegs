@@ -3,7 +3,7 @@ import { ETAPAS_ITEM } from "@/lib/etapas";
 // === Seção: Do pedido até você ===
 export default function SecaoEtapas() {
   return (
-    <section className="inicioJoiner__faixa inicioJoiner__faixaPontos">
+    <section className="inicioJoiner__faixa fundoPontosRosa">
       <div className="inicioJoiner__cartao inicioJoiner__cartaoEtapas">
         <div className="inicioJoiner__textoEtapas">
           <h2 className="inicioJoiner__titulo">
@@ -19,9 +19,9 @@ export default function SecaoEtapas() {
 
         <ol className="inicioJoiner__etapas">
           {ETAPAS_ITEM.map((etapa, indice) => (
-            <li key={etapa}>
+            <li key={etapa.id}>
               <span className="inicioJoiner__numeroEtapa">{String(indice + 1).padStart(2, "0")}</span>
-              {etapa}
+              {etapa.rotulo}
             </li>
           ))}
         </ol>

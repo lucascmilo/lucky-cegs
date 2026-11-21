@@ -104,17 +104,69 @@
 .cabecalho__botaoConta {
   display: inline-flex;
   align-items: center;
-  gap: 13.5px;
-  padding: 0;
-  border: 0;
-  background: transparent;
+  gap: 11px;
+  padding: 4px 18px 4px 4px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
   font-size: 14px;
   font-weight: 700;
   color: var(--cor-preto);
   text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.cabecalho__botaoConta:hover {
+  background: var(--cor-rosa-claro);
+}
+
+.cabecalho__textoConta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.cabecalho__dicaConta {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b6466;
+}
+
+/* Bolinha amarela piscando no canto do coração */
+.cabecalho__avisoLogin {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-amarelo);
+}
+
+.cabecalho__avisoLogin::after {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 50%;
+  background: var(--cor-amarelo);
+  animation: pulsarAviso 1.8s ease-out infinite;
+}
+
+@keyframes pulsarAviso {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.4);
+  }
 }
 
 .cabecalho__circuloCoracao {
+  position: relative;
   display: grid;
   place-items: center;
   width: 40px;
@@ -169,8 +221,12 @@
 }
 
 .cabecalho__arroba {
+  max-width: 150px;
+  overflow: hidden;
   font-size: 14px;
   font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cabecalho__setaMenu {
@@ -307,6 +363,17 @@
   }
 }
 
+@media (max-width: 600px) {
+  .cabecalho__dicaConta,
+  .cabecalho__arroba {
+    display: none;
+  }
+
+  .cabecalho__setaMenu {
+    margin-left: -23px;
+  }
+}
+
 @media (max-width: 420px) {
   .cabecalho__logo {
     font-size: 20px;
@@ -317,12 +384,35 @@
     height: 22px;
   }
 
-  .cabecalho__botaoConta > span:last-child:not(.cabecalho__circuloCoracao),
-  .cabecalho__arroba {
+  .cabecalho__conteudo {
+    gap: 8px;
+  }
+
+  /* Pílula compacta: o "Entrar" continua escrito */
+  .cabecalho__botaoConta {
+    gap: 7px;
+    padding: 3px 11px 3px 3px;
+    font-size: 13px;
+  }
+
+  .cabecalho__botaoConta .cabecalho__circuloCoracao {
+    width: 30px;
+    height: 30px;
+  }
+
+  .cabecalho__botaoConta .cabecalho__coracaoBotao {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Só em telas muito estreitas fica apenas o coração */
+@media (max-width: 340px) {
+  .cabecalho__textoConta {
     display: none;
   }
 
-  .cabecalho__setaMenu {
-    margin-left: -23px;
+  .cabecalho__botaoConta {
+    padding: 3px;
   }
 }

@@ -3,14 +3,14 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { obterUsuarioAtual } from "@/lib/sessao";
 import estrelaLogo from "@/public/imagens/estrela-logo.png";
-import MenuCabecalho from "./MenuCabecalho";
+import MenuCabecalho, { MenuCabecalhoComCaminho } from "./MenuCabecalho";
 import "@/estilos/componentes/Cabecalho.css";
 
 // === Seção: Menu com a sessão ===
 // Lê a sessão no servidor; fica dentro de <Suspense> porque depende dos cookies da requisição.
 async function MenuComSessao() {
   const usuario = await obterUsuarioAtual();
-  return <MenuCabecalho usuario={usuario} />;
+  return <MenuCabecalhoComCaminho usuario={usuario} />;
 }
 
 // === Seção: Cabeçalho ===

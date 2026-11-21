@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { authClient } from "@/lib/auth-client";
+import { TAMANHO_MINIMO_SENHA } from "@/lib/configuracoes";
 import { limparUser, traduzirErroAutenticacao } from "@/lib/mensagensErro";
+import { destinoDepoisDoLogin } from "@/lib/navegacao";
 import EntradaSenha from "../EntradaSenha";
 import "@/estilos/paginas/acesso/Formulario.css";
 
@@ -35,7 +37,7 @@ export default function FormularioEntrar() {
       return;
     }
 
-    roteador.push("/");
+    roteador.push(destinoDepoisDoLogin());
     roteador.refresh();
   }
 
@@ -63,7 +65,7 @@ export default function FormularioEntrar() {
             className="formulario__entrada"
             name="senha"
             autoComplete="current-password"
-            placeholder="Mínimo de 8 caracteres"
+            placeholder={`Mínimo de ${TAMANHO_MINIMO_SENHA} caracteres`}
             value={senha}
             onChange={(evento) => setSenha(evento.target.value)}
           />

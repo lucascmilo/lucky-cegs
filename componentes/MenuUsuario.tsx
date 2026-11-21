@@ -14,7 +14,6 @@ export default function MenuUsuario({ usuario }: { usuario: UsuarioAtual }) {
   const [aberto, setAberto] = useState(false);
   const [saindo, setSaindo] = useState(false);
 
-  // Inicial do nome, ou do user se não houver nome
   const inicial = (usuario.nome || usuario.user).trim().charAt(0).toUpperCase();
 
   useEffect(() => {

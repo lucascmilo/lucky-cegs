@@ -1,0 +1,60 @@
+"use client";
+
+import { CldImage } from "next-cloudinary";
+import { useRef } from "react";
+import { IconeFechar, IconeLupa } from "@/componentes/Icones";
+import { juntarClasses } from "@/lib/classes";
+
+type PropsFotoItem = {
+  publicId: string | null;
+  descricao: string;
+  className?: string;
+};
+
+// === Seção: Foto do item com lupa ===
+// A lupa abre a foto grande por cima da tela (fecha no X, no Esc ou clicando fora).
+export default function FotoItem({ publicId, descricao, className }: PropsFotoItem) {
+  const referenciaJanela = useRef<HTMLDialogElement>(null);
+
+  if (!publicId) {
+    return (
+      <div className={juntarClasses("fotoItem fotoItem__vazia", className)}>
+        <span className="fotoItem__semFoto">SEM FOTO AINDA</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className={juntarClasses("fotoItem", className)}>
+      <CldImage src={publicId} alt={descricao} fill sizes="300px" className="fotoItem__imagem" />
+      <button
+        type="button"
+        className="fotoItem__lupa"
+        onClick={() => referenciaJanela.current?.showModal()}
+        aria-label={`Ampliar: ${descricao}`}
+      >
+        <IconeLupa />
+      </button>
+
+      {/* === Seção: Foto ampliada === */}
+      <dialog
+        ref={referenciaJanela}
+        className="fotoItem__janela"
+        aria-label={descricao}
+        onClick={(evento) => {
+          if (evento.target === evento.currentTarget) evento.currentTarget.close();
+        }}
+      >
+        <CldImage src={publicId} alt={descricao} width={1200} height={900} sizes="90vw" className="fotoItem__ampliada" />
+        <button
+          type="button"
+          className="fotoItem__fechar"
+          onClick={() => referenciaJanela.current?.close()}
+          aria-label="Fechar foto"
+        >
+          <IconeFechar />
+        </button>
+      </dialog>
+    </div>
+  );
+}

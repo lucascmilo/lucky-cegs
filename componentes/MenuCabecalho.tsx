@@ -17,17 +17,25 @@ type PropsMenuCabecalho = {
   usuario: UsuarioAtual | null;
   // Enquanto a sessão carrega, o botão de conta fica invisível (sem piscar "Entrar")
   carregando?: boolean;
+  // Endereço atual, para marcar o link ativo (fica vazio enquanto carrega)
+  caminhoAtual?: string;
 };
 
+// === Seção: Menu já com o endereço atual ===
+// Separado porque ler o endereço só é permitido depois do carregamento (dentro de <Suspense>).
+export function MenuCabecalhoComCaminho(props: Omit<PropsMenuCabecalho, "caminhoAtual">) {
+  return <MenuCabecalho {...props} caminhoAtual={usePathname()} />;
+}
+
 // === Seção: Menu do cabeçalho ===
-export default function MenuCabecalho({ usuario, carregando = false }: PropsMenuCabecalho) {
-  const caminhoAtual = usePathname();
+export default function MenuCabecalho({ usuario, carregando = false, caminhoAtual }: PropsMenuCabecalho) {
   const [menuAberto, setMenuAberto] = useState(false);
 
   const links = obterLinksNavegacao(usuario?.papel ?? null);
 
   // "/" só fica ativo na própria página inicial; os demais também nas subpáginas
   function linkEstaAtivo(destino: string) {
+    if (!caminhoAtual) return false;
     return destino === "/" ? caminhoAtual === "/" : caminhoAtual.startsWith(destino);
   }
 
@@ -75,11 +83,15 @@ export default function MenuCabecalho({ usuario, carregando = false }: PropsMenu
         {usuario ? (
           <MenuUsuario usuario={usuario} />
         ) : (
-          <Link href="/entrar" className="cabecalho__botaoConta">
+          <Link href="/entrar" className="cabecalho__botaoConta" aria-label="Entrar para ver suas caixas">
             <span className="cabecalho__circuloCoracao">
               <Image src={coracaoBranco} alt="" className="cabecalho__coracaoBotao" />
+              <span className="cabecalho__avisoLogin" aria-hidden="true" />
             </span>
-            <span>Entrar</span>
+            <span className="cabecalho__textoConta">
+              <span className="cabecalho__rotuloConta">Entrar</span>
+              <span className="cabecalho__dicaConta">para ver suas caixas</span>
+            </span>
           </Link>
         )}
       </div>

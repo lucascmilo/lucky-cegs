@@ -15,7 +15,24 @@ export type CaixaResumo = {
 };
 
 // === Seção: Falta pagar ===
-// Soma venda, inter e taxa ainda não pagos das partes do joiner (valores "a definir" ficam de fora)
+type ValoresParte = {
+  venda: string | number | null;
+  inter: string | number | null;
+  taxa: string | number | null;
+  vendaPago: boolean;
+  interPago: boolean;
+  taxaPago: boolean;
+};
+
+// Soma venda, inter e taxa ainda não pagos de uma parte (valores "a definir" ficam de fora)
+export function somarNaoPago(p: ValoresParte) {
+  let total = 0;
+  if (!p.vendaPago && p.venda !== null) total += Number(p.venda);
+  if (!p.interPago && p.inter !== null) total += Number(p.inter);
+  if (!p.taxaPago && p.taxa !== null) total += Number(p.taxa);
+  return total;
+}
+
 export async function obterFaltaPagar(userId: string) {
   const partes = await db
     .select({
@@ -29,12 +46,7 @@ export async function obterFaltaPagar(userId: string) {
     .from(parte)
     .where(eq(parte.userId, userId));
 
-  return partes.reduce((total, p) => {
-    if (!p.vendaPago && p.venda) total += Number(p.venda);
-    if (!p.interPago && p.inter) total += Number(p.inter);
-    if (!p.taxaPago && p.taxa) total += Number(p.taxa);
-    return total;
-  }, 0);
+  return partes.reduce((total, p) => total + somarNaoPago(p), 0);
 }
 
 // === Seção: Caixas mais recentes do joiner ===

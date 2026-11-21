@@ -75,3 +75,22 @@
     width: 100%;
   }
 }
+
+@media (max-width: 360px) {
+  .barraSuperior__emailPix {
+    display: block;
+    line-height: 25px;
+    text-align: center;
+    min-width: 0;
+    overflow: hidden;
+    padding: 0 8px;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .barraSuperior .botaoCopiar {
+    width: auto;
+    padding: 0 10px;
+  }
+}

@@ -1,8 +1,17 @@
 // === Seção: Dados fixos da loja ===
 export const EMAIL_PIX = "luckycegs@gmail.com";
 
+// === Seção: Origens das caixas ===
+// O campo "origem" da caixa guarda a sigla; a tela mostra o nome do país
+export const ORIGENS: Record<string, string> = {
+  JP: "Japão",
+  KR: "Coreia",
+  PH: "Filipinas",
+  CH: "China",
+};
+
 // === Seção: Playlist do player da barra superior ===
-export type Musica = {
+type Musica = {
   artista: string;
   titulo: string;
   arquivo: string;
@@ -21,7 +30,8 @@ export const PLAYLIST: Musica[] = [
 // E-mail interno gerado a partir do user (<username>@lucky-cegs.local)
 export const DOMINIO_EMAIL_INTERNO = "lucky-cegs.local";
 
-// User do Twitter/X: letras, números e "_", de 3 a 15 caracteres
-export const PADRAO_USER = /^[a-zA-Z0-9_]{3,15}$/;
+// User do Twitter/X: letras, números e "_"
+export const TAMANHO_USER = { minimo: 3, maximo: 15 };
+export const PADRAO_USER = new RegExp(`^[a-zA-Z0-9_]{${TAMANHO_USER.minimo},${TAMANHO_USER.maximo}}$`);
 
 export const TAMANHO_MINIMO_SENHA = 8;

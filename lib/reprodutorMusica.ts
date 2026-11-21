@@ -2,15 +2,14 @@ import { useSyncExternalStore } from "react";
 import { PLAYLIST } from "@/lib/configuracoes";
 
 // === Seção: Reprodutor de música único do site ===
-// O Next guarda páginas já visitadas escondidas na memória (para voltar instantaneamente),
-// e cada uma tem sua própria cópia do player. Por isso o áudio fica aqui, fora do React:
-// existe um só para o site inteiro, e cada cópia do player é apenas um controle dele.
+// O Next mantém páginas visitadas escondidas na memória, cada uma com uma cópia do player.
+// Por isso o áudio vive aqui, fora do React: um só para o site, e os players só o controlam.
 
 const VOLUME_INICIAL = 0.05;
 // Ao voltar com mais desse tempo tocado, a música recomeça em vez de ir para a anterior
 const SEGUNDOS_PARA_RECOMECAR = 3;
 
-export type EstadoReprodutor = {
+type EstadoReprodutor = {
   indice: number;
   tocando: boolean;
   tempoAtual: number;
@@ -26,8 +25,7 @@ const ESTADO_INICIAL: EstadoReprodutor = {
   volume: VOLUME_INICIAL,
 };
 
-// Tudo fica guardado na janela do navegador, e não só neste arquivo: assim o áudio continua
-// sendo um só mesmo quando o código é recarregado (por exemplo, ao salvar um arquivo no dev).
+// Guardado na janela (e não no módulo) para sobreviver a recargas de código no dev.
 type Registro = {
   audio: HTMLAudioElement | null;
   estado: EstadoReprodutor;
@@ -55,8 +53,7 @@ function atualizarEstado(mudancas: Partial<EstadoReprodutor>) {
 }
 
 // === Seção: Conversa entre abas ===
-// Só uma aba do site toca por vez: quando uma começa, as outras pausam.
-// Mensagens: "tocando" (comecei a tocar), "alguem-tocando?" (pergunta) e "sim" (resposta).
+// Só uma aba toca por vez. Mensagens: "tocando", "alguem-tocando?" e a resposta "sim".
 function obterCanal() {
   const registro = obterRegistro();
   if (registro.canal !== undefined) return registro.canal;
@@ -71,7 +68,6 @@ function obterCanal() {
   return (registro.canal = canal);
 }
 
-// Pergunta às outras abas se alguma já está tocando (espera a resposta por pouco tempo)
 function outraAbaEstaTocando() {
   const canal = obterCanal();
   if (!canal) return Promise.resolve(false);
@@ -99,9 +95,6 @@ function obterAudio() {
   audio.preload = "metadata";
   audio.volume = registro.estado.volume;
   audio.addEventListener("play", () => {
-    // Garantia extra: nenhum outro áudio da página toca junto
-    document.querySelectorAll("audio").forEach((outro) => outro.pause());
-    // Avisa as outras abas do site para pausarem
     obterCanal()?.postMessage("tocando");
     atualizarEstado({ tocando: true });
   });
@@ -156,9 +149,8 @@ export function definirVolume(volume: number) {
 }
 
 // === Seção: Começar a tocar ao abrir o site (uma vez só) ===
-// O navegador só libera som depois de alguma interação com a página. Se bloquear,
-// a música começa no primeiro clique, toque ou tecla fora do player.
-// Se outra aba do site já estiver tocando, esta não começa sozinha.
+// Se o navegador bloquear o som, começa no primeiro clique ou tecla fora do player.
+// Não começa se outra aba do site já estiver tocando.
 export async function iniciarReproducaoAutomatica() {
   const registro = obterRegistro();
   if (registro.reproducaoAutomaticaIniciada) return;

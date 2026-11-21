@@ -6,6 +6,7 @@ import FaixaLetreiro from "@/componentes/FaixaLetreiro";
 import { obterCaixasRecentes, obterFaltaPagar } from "@/lib/joiner";
 import { obterUsuarioAtual } from "@/lib/sessao";
 import AcoesJoiner from "./_inicio/AcoesJoiner";
+import AcoesVisitante from "./_inicio/AcoesVisitante";
 import HeroInicio from "./_inicio/HeroInicio";
 import SecaoCasaDaGom from "./_inicio/SecaoCasaDaGom";
 import SecaoEtapas from "./_inicio/SecaoEtapas";
@@ -25,7 +26,7 @@ export default function PaginaInicial() {
 // Checagem rápida (sem banco): quem tem cookie de sessão já vê o esqueleto da tela do joiner,
 // em vez de ver o hero de visitante piscar enquanto os dados carregam.
 async function InicioPorCookie() {
-  if (!getSessionCookie(await headers())) return <HeroInicio />;
+  if (!getSessionCookie(await headers())) return <HeroInicio acoes={<AcoesVisitante />} />;
 
   return (
     <Suspense
@@ -45,7 +46,7 @@ async function InicioPorCookie() {
 async function InicioPorPerfil() {
   const usuario = await obterUsuarioAtual();
   if (usuario?.papel === "admin") redirect("/painel");
-  if (!usuario) return <HeroInicio />;
+  if (!usuario) return <HeroInicio acoes={<AcoesVisitante />} />;
 
   const [faltaPagar, caixas] = await Promise.all([obterFaltaPagar(usuario.id), obterCaixasRecentes(usuario.id)]);
   return <InicioJoiner faltaPagar={faltaPagar} caixas={caixas} />;
@@ -55,7 +56,7 @@ async function InicioPorPerfil() {
 function InicioJoiner({ faltaPagar, caixas }: { faltaPagar: number | null; caixas: ListaCaixas }) {
   return (
     <>
-      <HeroInicio acoes={<AcoesJoiner faltaPagar={faltaPagar} />} />
+      <HeroInicio acoes={<AcoesJoiner faltaPagar={faltaPagar} />} textoAlto />
       <FaixaLetreiro variante="preta" className="inicioJoiner__letreiro" />
       <SecaoSuasCaixas caixas={caixas} />
       <SecaoEtapas />

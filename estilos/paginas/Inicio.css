@@ -1,6 +1,6 @@
 /* === Seção: Hero === */
 .inicio__hero {
-  /* 1 px do protótipo, encolhendo pela largura e pela altura da tela */
+  /* Escala do hero: encolhe com a largura e a altura da tela */
   --px-hero: max(0.5px, min(1px, var(--largura-tela) / 1440, (var(--altura-tela) - 150px) / 776));
   display: flex;
   flex: 1;
@@ -123,6 +123,7 @@
 }
 
 .inicio__faltaPagarValor {
+  font-variant-numeric: tabular-nums;
   font-family: var(--fonte-titulo);
   font-size: max(20px, var(--px-hero) * 26);
   font-weight: 400;
@@ -190,7 +191,7 @@
 
   .inicio__titulo {
     align-items: center;
-    font-size: clamp(64px, 17vw, 110px);
+    font-size: clamp(56px, 15vw, 96px);
   }
 
   .inicio__tituloPreto {
@@ -201,7 +202,7 @@
     align-items: center;
     margin-top: 32px;
     padding-left: 0;
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .inicio__heroComAcoes .inicio__texto {
@@ -234,7 +235,7 @@
 
 @media (max-width: 480px) {
   .inicio__descricao {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
 
