@@ -1,15 +1,15 @@
 /* === Seção: Tela (duas colunas) === */
 .telaAcesso__tela {
   display: grid;
-  grid-template-columns: min(52.361vw, 81.425svh) minmax(0, 1fr);
-  min-height: 100svh;
+  grid-template-columns: min(var(--largura-tela) * 0.52361, var(--altura-tela) * 0.81425) minmax(0, 1fr);
+  min-height: var(--altura-tela);
 }
 
 .telaAcesso__tela > aside {
   position: sticky;
   top: 0;
   z-index: 1;
-  height: 100svh;
+  height: var(--altura-tela);
 }
 
 /* === Seção: Área do cartão === */
@@ -28,9 +28,8 @@
   border-radius: 4px;
   background: var(--cor-creme);
   box-shadow:
-    inset 0 0 0 1px #3b3536,
-    0 2px 4px rgba(0, 0, 0, 0.06),
-    0 22px 44px -10px rgba(60, 40, 30, 0.3);
+    inset 0 0 0 1px var(--cor-preto),
+    var(--sombra-cartao);
 }
 
 .telaAcesso__molduraRosa {
@@ -94,7 +93,7 @@
   .telaAcesso__cartao {
     /* cqw é resolvido nos filhos, em relação ao próprio cartão */
     --px-cartao: calc(100cqw / 560);
-    width: min(560px, 100cqw, 60.474svh);
+    width: min(560px, 100cqw, var(--altura-tela) * 0.60474);
     container-type: inline-size;
   }
 }

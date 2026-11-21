@@ -1,0 +1,480 @@
+/* === Seção: Letreiro entre o hero e as seções === */
+.inicioJoiner__letreiro.faixaLetreiro__faixa {
+  height: 46px;
+  padding-top: 0;
+  font-size: 14px;
+}
+
+/* === Seção: Faixas de fundo === */
+.inicioJoiner__faixa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 630px;
+  padding: 85px var(--margem-lateral);
+  border-bottom: 1px solid var(--cor-preto);
+}
+
+.inicioJoiner__faixaQuadrados {
+  /* Azulejo desenhado em SVG para controlar o tamanho do quadrado e o espaço entre eles */
+  background: #cfe2f6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Crect x='11' y='11' width='34' height='34' rx='7' fill='%23dceaf9'/%3E%3C/svg%3E") 0 0 / 56px 56px;
+}
+
+.inicioJoiner__faixaPontos {
+  background-color: var(--cor-rosa);
+  background-image: radial-gradient(var(--cor-rosa-pontos) 2.5px, transparent 3px);
+  background-size: 22px 22px;
+}
+
+.inicioJoiner__faixaCoracoes {
+  min-height: 400px;
+  padding-block: 75px;
+  background: var(--cor-creme) url("/imagens/fundo-coracoes.png") 0 0 / 112px 112px;
+}
+
+/* === Seção: Cartão das seções === */
+.inicioJoiner__cartao {
+  width: min(100%, 1160px);
+  min-height: 460px;
+  padding: 0 44px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 24px;
+  background: #fbf9f6;
+  box-shadow: var(--sombra-cartao);
+}
+
+.inicioJoiner__titulo {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fonte-titulo);
+  font-size: 62px;
+  font-weight: 400;
+  line-height: 0.703;
+  letter-spacing: 0.02em;
+  color: var(--cor-preto);
+}
+
+.inicioJoiner__tituloRosa {
+  margin-top: 0.215em;
+  color: var(--cor-rosa);
+}
+
+.inicioJoiner__texto {
+  margin-top: 14px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--cor-texto);
+}
+
+/* === Seção: Suas caixas === */
+.inicioJoiner__cartaoCaixas {
+  padding-top: 52px;
+  padding-bottom: 50px;
+}
+
+.inicioJoiner__topoCaixas {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.inicioJoiner__topoCaixas .botao {
+  width: 212px;
+}
+
+.inicioJoiner__listaCaixas {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin: 46px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* === Seção: Cartão de uma caixa === */
+.caixaResumo {
+  display: flex;
+  flex-direction: column;
+  height: 210px;
+  padding: 21px 14px 0 17px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 16px;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.caixaResumo:hover {
+  transform: translateY(-3px);
+}
+
+.caixaResumo__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 16px;
+  font-size: 13px;
+}
+
+.caixaResumo__origem {
+  font-family: var(--fonte-pixel);
+  text-transform: uppercase;
+}
+
+.caixaResumo__tempo {
+  color: #6b6466;
+  white-space: nowrap;
+}
+
+.caixaResumo__nome {
+  overflow: hidden;
+  height: 20px;
+  margin-top: 21px;
+  font-family: var(--fonte-titulo);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.caixaResumo__selo {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  margin-top: 20px;
+  padding: 0 24px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.caixaResumo__progresso {
+  display: grid;
+  grid-template-columns: repeat(5, 37px);
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.caixaResumo__barra,
+.caixaResumo__barraCheia {
+  height: 8px;
+  border-radius: var(--raio-pilula);
+  background: #e6e0d9;
+}
+
+.caixaResumo__barraCheia {
+  background: var(--cor-rosa);
+}
+
+.caixaResumo__rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 19px;
+  padding-right: 11px;
+  font-size: 14px;
+}
+
+.caixaResumo__seus {
+  color: var(--cor-rosa-texto);
+}
+
+/* === Seção: Esqueleto do cartão de caixa === */
+.caixaResumo__carregando {
+  gap: 0;
+  cursor: progress;
+}
+
+.caixaResumo__carregando:hover {
+  transform: none;
+}
+
+.caixaResumo__esqueletoTopo {
+  width: 100%;
+  height: 14px;
+}
+
+.caixaResumo__esqueletoNome {
+  width: 70%;
+  height: 20px;
+  margin-top: 23px;
+}
+
+.caixaResumo__esqueletoSelo {
+  width: 120px;
+  height: 26px;
+  margin-top: 20px;
+  border-radius: var(--raio-pilula);
+}
+
+.caixaResumo__esqueletoBarras {
+  width: 100%;
+  height: 8px;
+  margin-top: 20px;
+}
+
+.caixaResumo__esqueletoRodape {
+  width: 60%;
+  height: 14px;
+  margin-top: 21px;
+}
+
+/* === Seção: Aviso sem caixas (etiqueta de envio) === */
+.inicioJoiner__vazio {
+  position: relative;
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 36px;
+  min-height: 210px;
+  margin-top: 46px;
+  padding: 24px 40px 24px 32px;
+}
+
+.inicioJoiner__vazioCarimbo {
+  position: relative;
+  justify-self: center;
+  width: 150px;
+  height: auto;
+  transform: rotate(-8deg);
+}
+
+.inicioJoiner__vazioTextos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.inicioJoiner__vazioEtiqueta {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 12px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-amarelo);
+  font-family: var(--fonte-pixel);
+  font-size: 12px;
+  color: var(--cor-preto);
+}
+
+.inicioJoiner__vazioTitulo {
+  font-family: var(--fonte-titulo);
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--cor-preto);
+  text-wrap: balance;
+}
+
+.inicioJoiner__vazioTitulo span {
+  color: var(--cor-rosa);
+}
+
+.inicioJoiner__vazioTexto {
+  max-width: 440px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.inicioJoiner__vazioAcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.inicioJoiner__vazioAcoes .botao {
+  width: 212px;
+}
+
+/* === Seção: Do pedido até você === */
+.inicioJoiner__cartaoEtapas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.inicioJoiner__etapas {
+  width: 426px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.inicioJoiner__etapas li {
+  display: flex;
+  align-items: baseline;
+  height: 63px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.inicioJoiner__numeroEtapa {
+  flex: none;
+  width: 72px;
+  font-family: var(--fonte-pixel);
+  font-size: 32px;
+  color: var(--cor-rosa);
+}
+
+/* === Seção: Chegou na casa da GOM === */
+.inicioJoiner__cartaoCasa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  min-height: 250px;
+}
+
+.inicioJoiner__botoesCasa {
+  display: flex;
+  gap: 18px;
+}
+
+.inicioJoiner__botoesCasa .botao {
+  width: 212px;
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 1180px) {
+  .inicioJoiner__listaCaixas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .inicioJoiner__cartaoCasa {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  .inicioJoiner__faixa {
+    min-height: 0;
+    padding-block: 56px;
+  }
+
+  .inicioJoiner__cartao {
+    min-height: 0;
+    padding: 36px 28px;
+  }
+
+  .inicioJoiner__cartaoEtapas {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+  }
+
+  .inicioJoiner__etapas {
+    width: 100%;
+  }
+
+  .inicioJoiner__vazio {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 20px;
+    padding: 36px 24px 48px;
+    text-align: center;
+  }
+
+  .inicioJoiner__vazioCarimbo {
+    width: 120px;
+  }
+
+  .inicioJoiner__vazioTextos {
+    align-items: center;
+  }
+
+  .inicioJoiner__vazioAcoes {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .inicioJoiner__texto br {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .inicioJoiner__faixa {
+    padding-block: 40px;
+  }
+
+  .inicioJoiner__cartao {
+    padding: 28px 18px;
+    border-radius: 18px;
+  }
+
+  .inicioJoiner__titulo {
+    font-size: 36px;
+    line-height: 0.86;
+  }
+
+  .inicioJoiner__texto {
+    font-size: 16px;
+  }
+
+  .inicioJoiner__topoCaixas {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .inicioJoiner__listaCaixas {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .inicioJoiner__vazio {
+    margin-top: 28px;
+  }
+
+  .inicioJoiner__vazioAcoes {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .inicioJoiner__vazioAcoes .botao {
+    width: 100%;
+  }
+
+  .inicioJoiner__vazioTitulo {
+    font-size: 22px;
+  }
+
+  .inicioJoiner__etapas li {
+    height: 52px;
+    font-size: 16px;
+  }
+
+  .inicioJoiner__numeroEtapa {
+    width: 56px;
+    font-size: 26px;
+  }
+
+  .inicioJoiner__botoesCasa {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .inicioJoiner__topoCaixas .botao,
+  .inicioJoiner__botoesCasa .botao {
+    width: 100%;
+  }
+}

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Archivo_Black, Figtree, Pinyon_Script, Silkscreen } from "next/font/google";
 import "@/estilos/globais.css";
 
@@ -30,6 +30,10 @@ const silkscreen = Silkscreen({
 export const metadata: Metadata = {
   title: "Lucky Cegs",
   description: "Organização de CEG's de sets nacionais e internacionais.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#efebe5",
 };
 
 // === Seção: Layout raiz ===

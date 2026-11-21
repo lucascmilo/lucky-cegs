@@ -34,6 +34,10 @@
   animation-direction: reverse;
 }
 
+.faixaLetreiro__faixa:hover .faixaLetreiro__trilho {
+  animation-play-state: paused;
+}
+
 .faixaLetreiro__grupo {
   display: flex;
 }

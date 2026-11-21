@@ -129,6 +129,7 @@
   border: 1px solid var(--cor-preto);
   border-radius: 20px;
   background-color: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
 }
 
 .termos__secao + .termos__secao {
@@ -157,7 +158,7 @@
   font-family: var(--fonte-pixel);
   font-size: 18px;
   font-weight: 400;
-  color: var(--cor-rosa);
+  color: var(--cor-rosa-texto);
 }
 
 .termos__itens {
@@ -223,7 +224,7 @@
   font-family: var(--fonte-pixel);
   font-size: 18px;
   line-height: 20px;
-  color: var(--cor-rosa);
+  color: var(--cor-rosa-texto);
 }
 
 .indiceTermos__titulo {
@@ -239,7 +240,7 @@
 }
 
 .indiceTermos__itemAtivo .indiceTermos__titulo {
-  color: var(--cor-rosa);
+  color: var(--cor-rosa-texto);
 }
 
 /* === Seção: Celular e tablet: barra de abas === */
@@ -260,7 +261,11 @@
     gap: 8px;
     padding: 10px var(--margem-lateral);
     overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: var(--margem-lateral);
     scrollbar-width: none;
+    /* Esmaece a borda direita para indicar que dá para rolar as abas */
+    mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent);
   }
 
   .indiceTermos__lista::-webkit-scrollbar {
@@ -293,7 +298,8 @@
   }
 
   .indiceTermos__itemAtivo {
-    background: var(--cor-rosa);
+    background: var(--cor-rosa-escuro);
+    border-color: var(--cor-rosa-escuro);
   }
 
   .indiceTermos__itemAtivo .indiceTermos__titulo,

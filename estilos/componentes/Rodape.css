@@ -74,6 +74,7 @@
   border: 1.5px solid #f6c9d8;
   border-radius: 17px;
   background: var(--cor-rosa);
+  box-shadow: var(--sombra-cartao);
   color: var(--cor-preto);
 }
 

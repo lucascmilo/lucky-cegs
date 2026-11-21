@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { authClient } from "@/lib/auth-client";
 import { DOMINIO_EMAIL_INTERNO, PADRAO_USER, TAMANHO_MINIMO_SENHA } from "@/lib/configuracoes";
 import { limparUser, traduzirErroAutenticacao } from "@/lib/mensagensErro";
+import EntradaSenha from "../EntradaSenha";
 import "@/estilos/paginas/acesso/Formulario.css";
 
 // === Seção: Tipos ===
@@ -81,21 +82,28 @@ export default function FormularioCriarConta() {
     extras: { type?: string; autoComplete?: string } = {},
   ) {
     const mensagem = errosCampos[nomeCampo];
+    const propsEntrada = {
+      className: "formulario__entrada",
+      name: nomeCampo,
+      autoComplete: extras.autoComplete,
+      placeholder: marcador,
+      value: campos[nomeCampo],
+      onChange: (evento: ChangeEvent<HTMLInputElement>) => atualizarCampo(nomeCampo, evento.target.value),
+      "aria-invalid": mensagem ? true : undefined,
+    };
     return (
       <label className="formulario__campo">
         <span className="formulario__rotulo">{rotulo}</span>
-        <input
-          className="formulario__entrada"
-          name={nomeCampo}
-          type={extras.type ?? "text"}
-          autoComplete={extras.autoComplete}
-          autoCapitalize={nomeCampo === "user" ? "none" : undefined}
-          spellCheck={nomeCampo === "user" ? false : undefined}
-          placeholder={marcador}
-          value={campos[nomeCampo]}
-          onChange={(evento) => atualizarCampo(nomeCampo, evento.target.value)}
-          aria-invalid={mensagem ? true : undefined}
-        />
+        {extras.type === "password" ? (
+          <EntradaSenha {...propsEntrada} />
+        ) : (
+          <input
+            {...propsEntrada}
+            type={extras.type ?? "text"}
+            autoCapitalize={nomeCampo === "user" ? "none" : undefined}
+            spellCheck={nomeCampo === "user" ? false : undefined}
+          />
+        )}
         {mensagem && <span className="formulario__dica">{mensagem}</span>}
       </label>
     );
@@ -145,7 +153,7 @@ export default function FormularioCriarConta() {
 
       {/* === Seção: Ações === */}
       <button type="submit" className="formulario__botaoPrincipal" disabled={enviando}>
-        {enviando ? "Criando conta..." : "Criar conta"}
+        {enviando ? "Criando conta…" : "Criar conta"}
       </button>
 
       <hr className="formulario__divisoria" />

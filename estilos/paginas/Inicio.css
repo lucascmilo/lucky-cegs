@@ -1,7 +1,7 @@
 /* === Seção: Hero === */
 .inicio__hero {
   /* 1 px do protótipo, encolhendo pela largura e pela altura da tela */
-  --px-hero: max(0.5px, min(1px, 100vw / 1440, (100svh - 150px) / 776));
+  --px-hero: max(0.5px, min(1px, var(--largura-tela) / 1440, (var(--altura-tela) - 150px) / 776));
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -66,6 +66,68 @@
 
 .inicio__listaServicos li::before {
   content: "★ ";
+}
+
+/* === Seção: Ações do joiner === */
+.inicio__heroComAcoes .inicio__texto {
+  padding-top: calc(var(--px-hero) * 99);
+}
+
+.inicio__acoes {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--px-hero) * 24);
+  width: max(320px, var(--px-hero) * 510);
+  margin-top: calc(var(--px-hero) * 24);
+}
+
+.inicio__botoes {
+  display: grid;
+  grid-template-columns: 250fr 242fr;
+  gap: calc(var(--px-hero) * 19);
+}
+
+.inicio__botoes .botao {
+  height: max(42px, var(--px-hero) * 50);
+  padding: 0 12px;
+  font-size: max(14px, var(--px-hero) * 16);
+}
+
+.inicio__faltaPagar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: max(64px, var(--px-hero) * 75);
+  padding: 0 calc(var(--px-hero) * 36) 0 calc(var(--px-hero) * 18);
+  border: 1px solid var(--cor-preto);
+  border-radius: 16px;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.inicio__faltaPagar:hover {
+  transform: translateY(-1px);
+}
+
+.inicio__faltaPagarTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.inicio__faltaPagarRotulo {
+  font-size: max(12px, var(--px-hero) * 14);
+  font-weight: 600;
+}
+
+.inicio__faltaPagarValor {
+  font-family: var(--fonte-titulo);
+  font-size: max(20px, var(--px-hero) * 26);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--cor-rosa);
 }
 
 /* === Seção: Colagem === */
@@ -142,6 +204,25 @@
     font-size: 17px;
   }
 
+  .inicio__heroComAcoes .inicio__texto {
+    padding-top: 40px;
+  }
+
+  .inicio__acoes {
+    width: min(100%, 510px);
+    margin: 32px auto 0;
+    gap: 16px;
+    text-align: left;
+  }
+
+  .inicio__botoes {
+    gap: 12px;
+  }
+
+  .inicio__faltaPagar {
+    padding: 0 24px 0 18px;
+  }
+
   .inicio__colagem {
     justify-self: center;
     align-self: end;
@@ -155,4 +236,11 @@
   .inicio__descricao {
     font-size: 16px;
   }
+}
+
+/* === Seção: Esqueleto do valor === */
+.inicio__faltaPagarEsqueleto {
+  width: max(110px, var(--px-hero) * 130);
+  height: max(20px, var(--px-hero) * 26);
+  margin-top: 2px;
 }

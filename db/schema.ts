@@ -3,8 +3,10 @@ import {
 } from "drizzle-orm/pg-core";
 import { user } from "../auth-schema";
 
-// situação da caixa / do item
+// situação do item (6 etapas)
 export const situacao = pgEnum("situacao", ["esperando", "comprado", "warehouse", "otw", "brasil", "casa_gom"]);
+// situação da caixa (5 etapas)
+export const situacaoCaixa = pgEnum("situacao_caixa", ["warehouse", "otw", "brasil", "esperando_taxa", "casa_gom"]);
 export const tipoRegistro = pgEnum("tipo_registro", ["individual", "set"]);
 export const statusClaim = pgEnum("status_claim", ["pedido", "aceito", "recusado"]);
 
@@ -14,7 +16,9 @@ export const caixa = pgTable("caixa", {
   nome: text("nome").notNull(),                
   origem: text("origem"),                         
   warehouse: text("warehouse"),
-  situacao: situacao("situacao").notNull().default("esperando"),
+  situacao: situacaoCaixa("situacao").notNull().default("warehouse"),
+  // quando a caixa mudou de etapa pela última vez (atualizar junto com "situacao")
+  situacaoAtualizadaEm: timestamp("situacao_atualizada_em").notNull().defaultNow(),
   abertura: date("abertura"),
   observacao: text("observacao"),
   criadaEm: timestamp("criada_em").notNull().defaultNow(),

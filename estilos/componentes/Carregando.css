@@ -1,0 +1,111 @@
+/* === Seção: Tela de carregamento === */
+.carregando {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  min-height: 420px;
+  padding: 64px var(--margem-lateral);
+}
+
+/* === Seção: Photocards embaralhando === */
+.carregando__cartas {
+  position: relative;
+  width: 84px;
+  height: 108px;
+}
+
+.carregando__carta {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--cor-preto);
+  border-radius: 10px;
+  box-shadow: var(--sombra-cartao);
+}
+
+.carregando__cartaUm {
+  background: var(--cor-azul-colagem);
+  animation: embaralharUm 1.6s ease-in-out infinite;
+}
+
+.carregando__cartaDois {
+  background: var(--cor-amarelo);
+  animation: embaralharDois 1.6s ease-in-out infinite;
+}
+
+.carregando__cartaTres {
+  background-color: var(--cor-rosa);
+  background-image: radial-gradient(var(--cor-rosa-pontos) 1.5px, transparent 2px);
+  background-size: 10px 10px;
+  animation: embaralharTres 1.6s ease-in-out infinite;
+}
+
+.carregando__estrela {
+  width: 30px;
+  height: 30px;
+}
+
+@keyframes embaralharUm {
+  0%,
+  100% {
+    transform: rotate(-14deg) translateX(-18px);
+  }
+  50% {
+    transform: rotate(-6deg) translateX(-8px);
+  }
+}
+
+@keyframes embaralharDois {
+  0%,
+  100% {
+    transform: rotate(12deg) translateX(18px);
+  }
+  50% {
+    transform: rotate(5deg) translateX(8px);
+  }
+}
+
+@keyframes embaralharTres {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-10px) rotate(-3deg);
+  }
+}
+
+/* === Seção: Texto === */
+.carregando__texto {
+  font-family: var(--fonte-pixel);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: var(--cor-preto);
+}
+
+.carregando__pontos span {
+  animation: piscarPonto 1.2s infinite;
+}
+
+.carregando__pontos span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.carregando__pontos span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes piscarPonto {
+  0%,
+  60%,
+  100% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 1;
+  }
+}

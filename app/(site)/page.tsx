@@ -1,46 +1,65 @@
-import Image from "next/image";
-import SeloPedidosAbertos from "@/componentes/SeloPedidosAbertos";
-import codigoBarras from "@/public/imagens/codigo-barras.png";
-import colagemInicio from "@/public/imagens/inicio-colagem.webp";
-import photocardInicio from "@/public/imagens/inicio-photocard.png";
-import "@/estilos/paginas/Inicio.css";
+import { getSessionCookie } from "better-auth/cookies";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { Suspense, ViewTransition } from "react";
+import FaixaLetreiro from "@/componentes/FaixaLetreiro";
+import { obterCaixasRecentes, obterFaltaPagar } from "@/lib/joiner";
+import { obterUsuarioAtual } from "@/lib/sessao";
+import AcoesJoiner from "./_inicio/AcoesJoiner";
+import HeroInicio from "./_inicio/HeroInicio";
+import SecaoCasaDaGom from "./_inicio/SecaoCasaDaGom";
+import SecaoEtapas from "./_inicio/SecaoEtapas";
+import SecaoSuasCaixas, { type ListaCaixas } from "./_inicio/SecaoSuasCaixas";
+import "@/estilos/paginas/InicioJoiner.css";
 
 // === Seção: Tela inicial ===
+// Visitante vê só o hero; joiner vê também as seções dele; GOM vai para o painel.
 export default function PaginaInicial() {
   return (
-    <section className="inicio__hero">
-      <div className="inicio__conteudo">
-        {/* === Seção: Texto de apresentação === */}
-        <div className="inicio__texto">
-          <h1 className="inicio__titulo">
-            <span className="inicio__tituloPreto">LUCKY</span>
-            <span className="inicio__tituloRosa">CEGS</span>
-          </h1>
+    <Suspense fallback={<HeroInicio />}>
+      <InicioPorCookie />
+    </Suspense>
+  );
+}
 
-          <div className="inicio__descricao">
-            <p>Organização de CEG&apos;s de sets nacionais e internacionais</p>
-            <ul className="inicio__listaServicos">
-              <li>Caixinha Mercari</li>
-              <li>Oferecemos serviço de procura</li>
-            </ul>
-            <p>Além dos itens anunciados, aceitamos links externos.</p>
-          </div>
-        </div>
+// Checagem rápida (sem banco): quem tem cookie de sessão já vê o esqueleto da tela do joiner,
+// em vez de ver o hero de visitante piscar enquanto os dados carregam.
+async function InicioPorCookie() {
+  if (!getSessionCookie(await headers())) return <HeroInicio />;
 
-        {/* === Seção: Colagem === */}
-        <div className="inicio__colagem">
-          <Image
-            src={colagemInicio}
-            alt="Colagem com photocards, álbuns e cacarecos"
-            priority
-            sizes="(max-width: 860px) 90vw, 562px"
-            className="inicio__imagemColagem"
-          />
-          <Image src={photocardInicio} alt="" sizes="170px" className="inicio__photocard" />
-          <Image src={codigoBarras} alt="" sizes="163px" className="inicio__codigoBarras" />
-          <SeloPedidosAbertos className="inicio__selo" />
-        </div>
-      </div>
-    </section>
+  return (
+    <Suspense
+      fallback={
+        <ViewTransition exit="esqueleto-sai" default="none">
+          <InicioJoiner faltaPagar={null} caixas={null} />
+        </ViewTransition>
+      }
+    >
+      <ViewTransition enter="conteudo-entra" default="none">
+        <InicioPorPerfil />
+      </ViewTransition>
+    </Suspense>
+  );
+}
+
+async function InicioPorPerfil() {
+  const usuario = await obterUsuarioAtual();
+  if (usuario?.papel === "admin") redirect("/painel");
+  if (!usuario) return <HeroInicio />;
+
+  const [faltaPagar, caixas] = await Promise.all([obterFaltaPagar(usuario.id), obterCaixasRecentes(usuario.id)]);
+  return <InicioJoiner faltaPagar={faltaPagar} caixas={caixas} />;
+}
+
+// === Seção: Tela do joiner (null = ainda carregando) ===
+function InicioJoiner({ faltaPagar, caixas }: { faltaPagar: number | null; caixas: ListaCaixas }) {
+  return (
+    <>
+      <HeroInicio acoes={<AcoesJoiner faltaPagar={faltaPagar} />} />
+      <FaixaLetreiro variante="preta" className="inicioJoiner__letreiro" />
+      <SecaoSuasCaixas caixas={caixas} />
+      <SecaoEtapas />
+      <SecaoCasaDaGom />
+    </>
   );
 }

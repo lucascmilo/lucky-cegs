@@ -63,6 +63,15 @@ export function IconeVolume({ className, tamanho = 13, mudo = false }: PropsIcon
   );
 }
 
+// === Seção: Seta para a direita ===
+export function IconeSeta({ className, tamanho = 16 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M2.5 8h11m0 0L9 3.5M13.5 8 9 12.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 // === Seção: Ícones do menu do usuário ===
 export function IconeSetaBaixo({ className, tamanho = 12 }: PropsIcone) {
   return (
@@ -99,6 +108,22 @@ export function IconeMenu({ className, tamanho = 20, aberto = false }: PropsIcon
       ) : (
         <path d="M3 5.5h14M3 10h14M3 14.5h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
       )}
+    </svg>
+  );
+}
+
+// === Seção: Ícones de mostrar senha ===
+export function IconeOlho({ className, tamanho = 18, riscado = false }: PropsIcone & { riscado?: boolean }) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path
+        d="M1.8 10S4.8 4.2 10 4.2 18.2 10 18.2 10 15.2 15.8 10 15.8 1.8 10 1.8 10Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <circle cx="10" cy="10" r="2.6" stroke="currentColor" strokeWidth="1.6" />
+      {riscado && <path d="M3.5 16.5 16.5 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />}
     </svg>
   );
 }

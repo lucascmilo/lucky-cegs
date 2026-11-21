@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { juntarClasses } from "@/lib/classes";
 import carimboPostal from "@/public/imagens/carimbo-postal.png";
+import TransicaoPagina from "@/componentes/TransicaoPagina";
 import PainelColagem, { type VarianteAcesso } from "./PainelColagem";
 import "@/estilos/paginas/acesso/TelaAcesso.css";
 
@@ -14,7 +15,12 @@ type PropsTelaAcesso = {
 };
 
 // === Seção: Estrutura das telas de acesso ===
-export default function TelaAcesso({ variante, saudacao, titulo, children }: PropsTelaAcesso) {
+export default function TelaAcesso({
+  variante,
+  saudacao,
+  titulo,
+  children,
+}: PropsTelaAcesso) {
   return (
     <div className="telaAcesso__tela">
       {/* === Seção: Colagem === */}
@@ -22,17 +28,30 @@ export default function TelaAcesso({ variante, saudacao, titulo, children }: Pro
 
       {/* === Seção: Cartão-postal === */}
       <main className="telaAcesso__areaCartao">
-        <div className={juntarClasses("telaAcesso__cartao", variante === "entrar" && "telaAcesso__cartaoEntrar")}>
-          <div className="telaAcesso__molduraRosa">
-            <p className="telaAcesso__marca">LUCKY CEGS · POST CARD CO.</p>
-            <Image src={carimboPostal} alt="" className="telaAcesso__carimbo" sizes="184px" priority />
+        <TransicaoPagina>
+          <div
+            className={juntarClasses(
+              "telaAcesso__cartao",
+              variante === "entrar" && "telaAcesso__cartaoEntrar",
+            )}
+          >
+            <div className="telaAcesso__molduraRosa">
+              <p className="telaAcesso__marca">LUCKY CEGS · POST CARD CO.</p>
+              <Image
+                src={carimboPostal}
+                alt=""
+                className="telaAcesso__carimbo"
+                sizes="184px"
+                priority
+              />
 
-            <p className="telaAcesso__saudacao">{saudacao}</p>
-            <h1 className="telaAcesso__titulo">{titulo}</h1>
+              <p className="telaAcesso__saudacao">{saudacao}</p>
+              <h1 className="telaAcesso__titulo">{titulo}</h1>
 
-            {children}
+              {children}
+            </div>
           </div>
-        </div>
+        </TransicaoPagina>
       </main>
     </div>
   );

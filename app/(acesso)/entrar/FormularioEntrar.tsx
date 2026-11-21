@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { authClient } from "@/lib/auth-client";
 import { limparUser, traduzirErroAutenticacao } from "@/lib/mensagensErro";
+import EntradaSenha from "../EntradaSenha";
 import "@/estilos/paginas/acesso/Formulario.css";
 
 // === Seção: Formulário de login ===
@@ -58,9 +59,8 @@ export default function FormularioEntrar() {
 
         <label className="formulario__campo">
           <span className="formulario__rotulo">Senha</span>
-          <input
+          <EntradaSenha
             className="formulario__entrada"
-            type="password"
             name="senha"
             autoComplete="current-password"
             placeholder="Mínimo de 8 caracteres"
@@ -79,7 +79,7 @@ export default function FormularioEntrar() {
 
       {/* === Seção: Ações === */}
       <button type="submit" className="formulario__botaoPrincipal" disabled={enviando}>
-        {enviando ? "Entrando..." : "Entrar"}
+        {enviando ? "Entrando…" : "Entrar"}
       </button>
 
       <hr className="formulario__divisoria" />

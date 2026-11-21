@@ -4,6 +4,7 @@ import type { Papel } from "@/lib/navegacao";
 
 // === Seção: Usuário atual ===
 export type UsuarioAtual = {
+  id: string;
   nome: string;
   user: string;
   papel: Exclude<Papel, null>;
@@ -16,6 +17,7 @@ export async function obterUsuarioAtual(): Promise<UsuarioAtual | null> {
 
   const { user } = sessao;
   return {
+    id: user.id,
     nome: user.name,
     user: user.username ?? "",
     papel: user.role === "admin" ? "admin" : "user",

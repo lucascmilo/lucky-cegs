@@ -1,0 +1,190 @@
+/* === Seção: Fundo da página === */
+.cartaoAviso {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 72px var(--margem-lateral);
+  background-color: var(--cor-rosa);
+  background-image: radial-gradient(var(--cor-rosa-pontos) 2.5px, transparent 3px);
+  background-size: 22px 22px;
+}
+
+/* === Seção: Cartão-postal === */
+.cartaoAviso__cartao {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  align-items: center;
+  gap: 48px;
+  width: min(100%, 880px);
+  padding: 48px 56px 48px 44px;
+}
+
+/* === Seção: Selo com o 404 === */
+.cartaoAviso__colunaSelo {
+  position: relative;
+  justify-self: center;
+  padding-bottom: 36px;
+}
+
+/* A borda pontilhada na cor do cartão imita o picote do selo */
+.cartaoAviso__selo {
+  width: 170px;
+  padding: 8px;
+  border: 7px dotted var(--cor-branco);
+  outline: 1px solid var(--cor-preto);
+  outline-offset: -7px;
+  background: var(--cor-creme);
+  box-shadow: var(--sombra-cartao);
+  transform: rotate(-5deg);
+}
+
+.cartaoAviso__seloMiolo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--cor-preto);
+  background-color: var(--cor-rosa);
+  background-image: radial-gradient(var(--cor-rosa-pontos) 1.5px, transparent 2px);
+  background-size: 12px 12px;
+}
+
+.cartaoAviso__seloNumero {
+  font-family: var(--fonte-titulo);
+  font-size: 50px;
+  line-height: 1;
+  color: var(--cor-branco);
+  -webkit-text-stroke: 1px var(--cor-preto);
+  text-shadow: 0 3px 0 var(--cor-preto);
+}
+
+.cartaoAviso__seloMarca {
+  font-family: var(--fonte-pixel);
+  font-size: 11px;
+  color: var(--cor-preto);
+}
+
+.cartaoAviso__carimbo {
+  position: absolute;
+  right: -46px;
+  bottom: 0;
+  width: 150px;
+  height: auto;
+  transform: rotate(8deg);
+  pointer-events: none;
+}
+
+/* === Seção: Mensagem === */
+.cartaoAviso__textos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.cartaoAviso__etiqueta {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 12px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-amarelo);
+  font-family: var(--fonte-pixel);
+  font-size: 12px;
+  color: var(--cor-preto);
+}
+
+.cartaoAviso__titulo {
+  display: flex;
+  flex-direction: column;
+  margin-top: 22px;
+  font-family: var(--fonte-titulo);
+  font-size: 52px;
+  font-weight: 400;
+  line-height: 0.703;
+  letter-spacing: 0.02em;
+  color: var(--cor-preto);
+}
+
+.cartaoAviso__tituloRosa {
+  margin-top: 0.215em;
+  color: var(--cor-rosa);
+}
+
+.cartaoAviso__cursiva {
+  margin-top: 18px;
+  font-family: var(--fonte-cursiva);
+  font-size: 30px;
+  line-height: 1.1;
+  color: var(--cor-rosa-escuro);
+}
+
+.cartaoAviso__texto {
+  max-width: 440px;
+  margin-top: 8px;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.cartaoAviso__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.cartaoAviso__acoes .botao {
+  min-width: 212px;
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 760px) {
+  .cartaoAviso {
+    padding-block: 48px;
+  }
+
+  .cartaoAviso__cartao {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 28px;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .cartaoAviso__textos {
+    align-items: center;
+  }
+
+  .cartaoAviso__selo {
+    width: 140px;
+  }
+
+  .cartaoAviso__seloNumero {
+    font-size: 42px;
+  }
+
+  .cartaoAviso__carimbo {
+    right: -56px;
+    width: 120px;
+  }
+
+  .cartaoAviso__titulo {
+    align-items: center;
+    font-size: clamp(30px, 9vw, 44px);
+  }
+
+  .cartaoAviso__acoes {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .cartaoAviso__acoes .botao {
+    width: 100%;
+    min-width: 0;
+  }
+}

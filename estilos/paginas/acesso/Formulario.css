@@ -36,7 +36,7 @@
   border: 1.2px solid var(--cor-preto);
   border-radius: calc(var(--px-cartao) * 12);
   background: var(--cor-branco);
-  font-size: calc(var(--px-cartao) * 12);
+  font-size: max(12px, var(--px-cartao) * 12);
   color: var(--cor-preto);
   transition:
     border-color 0.15s ease,
@@ -58,7 +58,7 @@
 }
 
 .formulario__dica {
-  font-size: calc(var(--px-cartao) * 11);
+  font-size: max(12px, var(--px-cartao) * 11);
   color: var(--cor-erro);
 }
 
@@ -68,7 +68,7 @@
   align-items: center;
   gap: calc(var(--px-cartao) * 14);
   margin-top: calc(var(--px-cartao) * 30);
-  font-size: calc(var(--px-cartao) * 14);
+  font-size: max(12px, var(--px-cartao) * 14);
   font-weight: 700;
   line-height: calc(var(--px-cartao) * 18);
   cursor: pointer;
@@ -120,7 +120,7 @@
   border: 1px solid var(--cor-erro);
   border-radius: 10px;
   background: rgba(234, 79, 128, 0.1);
-  font-size: calc(var(--px-cartao) * 13);
+  font-size: max(12px, var(--px-cartao) * 13);
   font-weight: 600;
   color: var(--cor-erro);
 }
@@ -138,8 +138,8 @@
   background: linear-gradient(180deg, #d6487a 0%, #c42a62 45%, var(--cor-rosa-profundo) 100%);
   box-shadow:
     inset 0 2px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -3px 0 rgba(0, 0, 0, 0.12),
-    0 9px 16px -4px rgba(0, 0, 0, 0.3);
+    inset 0 -3px 0 rgba(21, 18, 20, 0.12),
+    0 9px 16px -4px rgba(21, 18, 20, 0.3);
   font-size: calc(var(--px-cartao) * 16);
   font-weight: 700;
   color: var(--cor-branco);
@@ -215,4 +215,42 @@
   .formulario__aceite {
     align-items: flex-start;
   }
+}
+
+/* === Seção: Campo de senha com olho === */
+.formulario__envoltorioSenha {
+  position: relative;
+  display: block;
+}
+
+.formulario__entradaSenha {
+  padding-right: calc(var(--px-cartao) * 12 + 36px);
+}
+
+.formulario__botaoOlho {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--px-cartao) * 6);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #4a4547;
+  transform: translateY(-50%);
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.formulario__botaoOlho:hover {
+  background: var(--cor-rosa-claro);
+  color: var(--cor-rosa-texto);
+}
+
+.formulario__botaoOlho[aria-pressed="true"] {
+  color: var(--cor-rosa-texto);
 }

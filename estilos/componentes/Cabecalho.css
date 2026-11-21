@@ -40,9 +40,9 @@
 
 /* === Seção: Navegação === */
 .cabecalho__navegacao {
-  position: absolute;
-  top: 0;
-  left: 300px;
+  display: flex;
+  flex: 1;
+  justify-content: center;
   height: 100%;
 }
 
@@ -94,7 +94,7 @@
 
 /* === Seção: Conta === */
 .cabecalho__conta {
-  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .cabecalho__contaCarregando {
@@ -195,7 +195,7 @@
   border: 1px solid var(--cor-preto);
   border-radius: 14px;
   background: var(--cor-branco);
-  box-shadow: 0 14px 28px -8px rgba(60, 40, 30, 0.3);
+  box-shadow: var(--sombra-cartao);
 }
 
 .cabecalho__opcaoMenu {
@@ -239,11 +239,6 @@
 
 /* === Seção: Responsivo === */
 @media (max-width: 1240px) {
-  .cabecalho__navegacao {
-    position: static;
-    margin-left: 32px;
-  }
-
   .cabecalho__link {
     width: auto;
     min-width: 72px;
@@ -277,7 +272,7 @@
     background-color: var(--cor-bege-claro);
     background-image: var(--textura-ruido);
     border-bottom: 1px solid var(--cor-borda-bege);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 20px rgba(21, 18, 20, 0.08);
   }
 
   .cabecalho__navegacaoAberta {

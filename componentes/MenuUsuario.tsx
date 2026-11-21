@@ -47,8 +47,8 @@ export default function MenuUsuario({ usuario }: { usuario: UsuarioAtual }) {
         type="button"
         className="cabecalho__botaoUsuario"
         onClick={() => setAberto((atual) => !atual)}
-        aria-haspopup="menu"
         aria-expanded={aberto}
+        aria-controls="menu-conta"
         aria-label={`Menu da conta @${usuario.user}`}
       >
         <span className="cabecalho__avatar" aria-hidden="true">
@@ -60,20 +60,20 @@ export default function MenuUsuario({ usuario }: { usuario: UsuarioAtual }) {
 
       {/* === Seção: Opções === */}
       {aberto && (
-        <div className="cabecalho__menuSuspenso" role="menu">
-          <Link href="/perfil" role="menuitem" className="cabecalho__opcaoMenu" onClick={() => setAberto(false)}>
+        <div className="cabecalho__menuSuspenso" id="menu-conta">
+          <Link href="/perfil" className="cabecalho__opcaoMenu" onClick={() => setAberto(false)}>
             <IconePerfil />
             Perfil
           </Link>
           <button
             type="button"
-            role="menuitem"
+           
             className="cabecalho__opcaoMenu"
             onClick={sairDaConta}
             disabled={saindo}
           >
             <IconeSair />
-            {saindo ? "Saindo..." : "Sair"}
+            {saindo ? "Saindo…" : "Sair"}
           </button>
         </div>
       )}

@@ -1,13 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, type CSSProperties } from "react";
 import { PLAYLIST } from "@/lib/configuracoes";
+import {
+  alternarReproducao,
+  avancarPara,
+  definirVolume,
+  iniciarReproducaoAutomatica,
+  trocarFaixa,
+  useReprodutorMusica,
+  voltarFaixa,
+} from "@/lib/reprodutorMusica";
 import { IconeAnterior, IconePausa, IconePlay, IconeProxima, IconeVolume } from "./Icones";
 import "@/estilos/componentes/PlayerMusica.css";
-
-const VOLUME_INICIAL = 0.15;
-// Ao voltar com mais desse tempo tocado, a música recomeça em vez de ir para a anterior
-const SEGUNDOS_PARA_RECOMECAR = 3;
 
 function formatarTempo(segundos: number) {
   if (!Number.isFinite(segundos) || segundos < 0) return "0:00";
@@ -17,85 +22,21 @@ function formatarTempo(segundos: number) {
 }
 
 // === Seção: Player de música da barra superior ===
+// Só controla o áudio único do site (lib/reprodutorMusica), sem ter um áudio próprio.
 export default function PlayerMusica() {
-  const referenciaAudio = useRef<HTMLAudioElement>(null);
-  // Guarda se a nova faixa deve começar a tocar sozinha ao trocar de música
-  const continuarTocando = useRef(false);
-  const [indiceMusica, setIndiceMusica] = useState(0);
-  const [tocando, setTocando] = useState(false);
-  const [volume, setVolume] = useState(VOLUME_INICIAL);
-  const [tempoAtual, setTempoAtual] = useState(0);
-  const [duracao, setDuracao] = useState(0);
-
-  const musicaAtual = PLAYLIST[indiceMusica];
+  const { indice, tocando, tempoAtual, duracao, volume } = useReprodutorMusica();
+  const musicaAtual = PLAYLIST[indice];
   const progresso = duracao > 0 ? (tempoAtual / duracao) * 100 : 0;
 
-  // Recarrega os metadados: a duração pode ter sido lida antes de o React ligar os eventos
   useEffect(() => {
-    referenciaAudio.current?.load();
+    iniciarReproducaoAutomatica();
   }, []);
 
-  useEffect(() => {
-    if (referenciaAudio.current) referenciaAudio.current.volume = volume;
-  }, [volume]);
-
-  // Depois de trocar a faixa, retoma a reprodução se a música anterior estava tocando
-  useEffect(() => {
-    if (!continuarTocando.current) return;
-    continuarTocando.current = false;
-    referenciaAudio.current?.play().catch(() => setTocando(false));
-  }, [indiceMusica]);
-
-  async function alternarReproducao() {
-    const audio = referenciaAudio.current;
-    if (!audio) return;
-    if (audio.paused) {
-      await audio.play().catch(() => setTocando(false));
-    } else {
-      audio.pause();
-    }
-  }
-
-  function trocarFaixa(passo: 1 | -1) {
-    const audio = referenciaAudio.current;
-    // "ended" deixa o áudio pausado, então ao terminar uma faixa a próxima também deve tocar
-    continuarTocando.current = Boolean(audio && (!audio.paused || audio.ended));
-    setTempoAtual(0);
-    setDuracao(0);
-    setIndiceMusica((atual) => (atual + passo + PLAYLIST.length) % PLAYLIST.length);
-  }
-
-  function voltar() {
-    const audio = referenciaAudio.current;
-    if (audio && audio.currentTime > SEGUNDOS_PARA_RECOMECAR) {
-      audio.currentTime = 0;
-      return;
-    }
-    trocarFaixa(-1);
-  }
-
-  function avancarPara(segundos: number) {
-    if (referenciaAudio.current) referenciaAudio.current.currentTime = segundos;
-    setTempoAtual(segundos);
-  }
-
   return (
-    <div className="playerMusica__player">
-      {/* === Seção: Áudio === */}
-      <audio
-        ref={referenciaAudio}
-        src={musicaAtual.arquivo}
-        preload="metadata"
-        onEnded={() => trocarFaixa(1)}
-        onPause={() => setTocando(false)}
-        onPlay={() => setTocando(true)}
-        onTimeUpdate={(evento) => setTempoAtual(evento.currentTarget.currentTime)}
-        onDurationChange={(evento) => setDuracao(evento.currentTarget.duration)}
-      />
-
+    <div className="playerMusica__player" data-player-musica>
       {/* === Seção: Controles === */}
       <div className="playerMusica__controles">
-        <button type="button" className="playerMusica__botaoPular" onClick={voltar} aria-label="Música anterior">
+        <button type="button" className="playerMusica__botaoPular" onClick={voltarFaixa} aria-label="Música anterior">
           <IconeAnterior />
         </button>
         <button
@@ -147,7 +88,7 @@ export default function PlayerMusica() {
           max={1}
           step={0.01}
           value={volume}
-          onChange={(evento) => setVolume(Number(evento.target.value))}
+          onChange={(evento) => definirVolume(Number(evento.target.value))}
           className="playerMusica__controleVolume"
           style={{ "--preenchimento": `${volume * 100}%` } as CSSProperties}
         />

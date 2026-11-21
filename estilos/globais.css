@@ -3,11 +3,13 @@
   --cor-rosa: #ea4f80;
   --cor-rosa-vivo: #e24c7c;
   --cor-rosa-escuro: #c2185b;
+  /* Rosa para textos pequenos: contraste de 5,9:1 no branco (o rosa principal fica só em textos grandes) */
+  --cor-rosa-texto: #c2185b;
   --cor-rosa-profundo: #b3154f;
   --cor-rosa-claro: #fad0e0;
   --cor-rosa-pontos: #f27ea4;
-  --cor-preto: #151314;
-  --cor-preto-suave: #1f1c1d;
+  --cor-preto: #151214;
+  --cor-preto-suave: #151214;
   --cor-branco: #ffffff;
   --cor-bege: #efebe5;
   --cor-bege-claro: #f4f1ec;
@@ -16,7 +18,7 @@
   --cor-amarelo: #ffe27a;
   --cor-azul-colagem: #bed9f2;
   --cor-menta: #9fe3d2;
-  --cor-texto: #1a1718;
+  --cor-texto: #151214;
   --cor-erro: #b3154f;
 
   --fonte-texto: var(--fonte-figtree), system-ui, sans-serif;
@@ -27,8 +29,14 @@
   --largura-conteudo: 1170px;
   --margem-lateral: 16px;
   --raio-pilula: 999px;
+  --sombra-cartao: 0 18px 40px rgba(21, 18, 20, 0.1);
 
   --textura-ruido: url("/imagens/textura-fundo.png");
+
+  /* Tamanho real da tela, descontando a ampliação aplicada em telas grandes */
+  --zoom: 1;
+  --altura-tela: calc(100svh / var(--zoom));
+  --largura-tela: calc(100vw / var(--zoom));
 }
 
 @media (min-width: 640px) {
@@ -56,7 +64,7 @@ html {
 }
 
 body {
-  min-height: 100svh;
+  min-height: var(--altura-tela);
   display: flex;
   flex-direction: column;
   background-color: var(--cor-bege);
@@ -72,6 +80,20 @@ h2,
 h3,
 p {
   margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+a,
+button,
+input,
+label {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 a {
@@ -158,6 +180,29 @@ button {
   outline-offset: 2px;
 }
 
+.pularConteudo {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-preto);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cor-branco);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.pularConteudo:focus-visible {
+  transform: none;
+}
+
+.layoutSite__principal:focus {
+  outline: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -169,5 +214,193 @@ button {
 
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* === Seção: Botões === */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  padding: 0 28px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.botao:hover {
+  transform: translateY(-1px);
+}
+
+.botao:active {
+  transform: translateY(1px);
+}
+
+.botao__rosa {
+  border-color: rgba(255, 255, 255, 0.55);
+  background: linear-gradient(180deg, #d6487a 0%, #c42a62 45%, var(--cor-rosa-profundo) 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -3px 0 rgba(21, 18, 20, 0.12),
+    0 9px 16px -4px rgba(21, 18, 20, 0.3);
+  color: var(--cor-branco);
+}
+
+.botao__rosa:hover {
+  filter: brightness(1.06);
+}
+
+.botao__preto {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+.botao__preto:hover {
+  background: #2a2628;
+}
+
+.botao__contorno {
+  background: var(--cor-branco);
+  color: var(--cor-preto);
+}
+
+.botao__contorno:hover {
+  background: var(--cor-bege-claro);
+}
+
+/* === Seção: Envelope de correio aéreo === */
+.envelopeCorreio {
+  position: relative;
+  border: 6px solid transparent;
+  border-radius: 16px;
+  background:
+    linear-gradient(var(--cor-branco), var(--cor-branco)) padding-box,
+    repeating-linear-gradient(
+        135deg,
+        var(--cor-rosa) 0 14px,
+        var(--cor-branco) 14px 22px,
+        var(--cor-azul-colagem) 22px 36px,
+        var(--cor-branco) 36px 44px
+      )
+      border-box;
+  box-shadow:
+    0 0 0 1px var(--cor-preto),
+    var(--sombra-cartao);
+}
+
+/* === Seção: Áreas de toque === */
+/* Em telas de toque, links e botões pequenos ganham uma área clicável invisível maior */
+@media (pointer: coarse) {
+  .playerMusica__botaoPular,
+  .rodape__link,
+  .formulario__linkTermos,
+  .formulario__alternarConta a {
+    position: relative;
+  }
+
+  .playerMusica__botaoPular::before,
+  .rodape__link::before,
+  .formulario__linkTermos::before,
+  .formulario__alternarConta a::before {
+    content: "";
+    position: absolute;
+    inset: -11px -6px;
+  }
+}
+
+/* === Seção: Telas grandes === */
+/* Acima de 1680px o site inteiro é ampliado para não ficar pequeno no meio da tela */
+@media (min-width: 1680px) {
+  :root {
+    --zoom: 1.12;
+    zoom: 1.12;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --zoom: 1.25;
+    zoom: 1.25;
+  }
+}
+
+@media (min-width: 2400px) {
+  :root {
+    --zoom: 1.5;
+    zoom: 1.5;
+  }
+}
+
+@media (min-width: 3200px) {
+  :root {
+    --zoom: 2;
+    zoom: 2;
+  }
+}
+
+/* === Seção: Esqueleto (blocos cinza enquanto o conteúdo carrega) === */
+.esqueleto {
+  display: block;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #ebe5de 0%, #f6f2ed 50%, #ebe5de 100%) 0 0 / 200% 100%;
+  animation: brilharEsqueleto 1.4s ease-in-out infinite;
+}
+
+@keyframes brilharEsqueleto {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+/* === Seção: Transições entre telas === */
+/* Cliques continuam funcionando durante a animação */
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(.pagina-sai),
+::view-transition-old(.esqueleto-sai) {
+  animation: 140ms ease-out both desaparecer;
+}
+
+::view-transition-new(.pagina-entra),
+::view-transition-new(.conteudo-entra) {
+  animation: 280ms cubic-bezier(0.2, 0.8, 0.2, 1) 90ms both surgir;
+}
+
+@keyframes desaparecer {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
 }
