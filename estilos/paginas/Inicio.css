@@ -1,13 +1,6 @@
-/* === Seção: Hero ===
-   Medidas do protótipo (frame de 1440 px). O hero começa em Y 150 (barra 70 + cabeçalho 80)
-   e tem 776 px de altura até o rodapé.
-   --px-hero vale "1 px do protótipo" na escala atual. Ele é o menor entre:
-   - 1 px (nunca maior que o protótipo);
-   - 100vw / 1440 (encolhe em telas mais estreitas que 1440 px);
-   - (100svh - 150px) / 776 (encolhe em janelas baixas, para o hero inteiro caber na tela
-     junto com a barra e o cabeçalho; só o rodapé fica para baixo).
-   O mínimo é 0,5 px, para os textos não ficarem pequenos demais em janelas muito baixas. */
+/* === Seção: Hero === */
 .inicio__hero {
+  /* 1 px do protótipo, encolhendo pela largura e pela altura da tela */
   --px-hero: max(0.5px, min(1px, 100vw / 1440, (100svh - 150px) / 776));
   display: flex;
   flex: 1;
@@ -16,7 +9,6 @@
   container-type: inline-size;
 }
 
-/* Texto alinhado à esquerda (com o logo) e colagem à direita (com o botão Entrar) */
 .inicio__conteudo {
   display: flex;
   flex: 1;
@@ -30,7 +22,6 @@
 .inicio__texto {
   flex: 0 1 auto;
   min-width: 0;
-  /* "LUCKY" começa em Y 337 → 187 px abaixo do topo do hero */
   padding-top: calc(var(--px-hero) * 187);
   padding-bottom: calc(var(--px-hero) * 48);
 }
@@ -41,24 +32,20 @@
   font-family: var(--fonte-titulo);
   font-size: calc(var(--px-hero) * 130);
   font-weight: 400;
-  /* line-height igual à altura das maiúsculas: o topo da caixa coincide com o topo das letras */
   line-height: 0.703;
   letter-spacing: 0.02em;
 }
 
-/* "LUCKY" em X 139,24 */
 .inicio__tituloPreto {
   padding-left: 0.033em;
   color: var(--cor-preto);
 }
 
-/* "CEGS" em X 135, Y 456,32 (119,32 px abaixo de "LUCKY") */
 .inicio__tituloRosa {
   margin-top: 0.215em;
   color: var(--cor-rosa);
 }
 
-/* Texto em X 139, Y 596, Figtree 20 px, entrelinha 24 e uma linha em branco entre os blocos */
 .inicio__descricao {
   display: flex;
   flex-direction: column;
@@ -81,14 +68,7 @@
   content: "★ ";
 }
 
-/* === Seção: Colagem ===
-   Caixa da colagem: X 717 → 1366, Y 173 → 928 (649 × 755), passando 61 px da margem direita
-   (ou menos, se a margem da página for menor, para a colagem nunca ser cortada).
-   Camadas, em % da caixa:
-   - imagem da colagem: X 743, Y 218, 562 × 710
-   - photocard: X 743, Y 218, 170 × 170
-   - código de barras: X 717, Y 490, 162,28 × 73,54
-   - selo "Pedidos abertos": X 1203, Y 173, 162,18 × 162,18 */
+/* === Seção: Colagem === */
 .inicio__colagem {
   position: relative;
   flex: none;
@@ -98,8 +78,7 @@
   margin-right: calc(
     -1 * min(var(--px-hero) * 61, (100cqw - min(100cqw - 2 * var(--margem-lateral), var(--largura-conteudo))) / 2)
   );
-  /* A colagem passa 3 px por baixo do rodapé (o hero corta o excesso): assim o contorno
-     branco da base da modelo fica escondido e o rodapé não ganha uma linha branca. */
+  /* Esconde sob o rodapé o contorno branco da base da colagem */
   margin-bottom: calc(var(--px-hero) * -3);
 }
 

@@ -1,14 +1,21 @@
-/* === Seção: Player (começa em X 905 e termina em X 1305: 400 px) === */
+/* === Seção: Player === */
 .playerMusica__player {
   display: flex;
   align-items: center;
   gap: 17px;
-  width: 400px;
+  width: 456px;
   max-width: 100%;
   min-width: 0;
 }
 
-/* === Seção: Botão tocar/pausar === */
+/* === Seção: Controles === */
+.playerMusica__controles {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+}
+
 .playerMusica__botaoTocar {
   flex-shrink: 0;
   display: grid;
@@ -27,6 +34,27 @@
   transform: scale(1.08);
 }
 
+.playerMusica__botaoPular {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--cor-branco);
+  opacity: 0.75;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease;
+}
+
+.playerMusica__botaoPular:hover {
+  color: var(--cor-rosa);
+  opacity: 1;
+}
+
 /* === Seção: Faixa atual === */
 .playerMusica__faixa {
   display: flex;
@@ -38,27 +66,84 @@
   text-transform: uppercase;
 }
 
+.playerMusica__linhaStatus {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .playerMusica__status {
   font-size: 14px;
   color: var(--cor-menta);
+  white-space: nowrap;
+}
+
+.playerMusica__tempo {
+  font-size: 10px;
+  color: #a8a2a4;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .playerMusica__titulo {
   overflow: hidden;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  font: inherit;
   font-size: 14px;
-  text-align: left;
-  text-transform: uppercase;
   color: var(--cor-branco);
-  cursor: pointer;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-/* === Seção: Volume (ícone em X 1180, barra de X 1206 a X 1305) === */
+.playerMusica__progresso {
+  width: 100%;
+  height: 3px;
+  margin: 5px 0 0;
+  border-radius: var(--raio-pilula);
+  background: linear-gradient(
+    to right,
+    var(--cor-rosa) 0 var(--preenchimento, 0%),
+    rgba(255, 255, 255, 0.25) var(--preenchimento, 0%) 100%
+  );
+  appearance: none;
+  cursor: pointer;
+}
+
+.playerMusica__progresso:disabled {
+  cursor: default;
+}
+
+.playerMusica__progresso::-webkit-slider-thumb {
+  width: 9px;
+  height: 9px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cor-rosa);
+  appearance: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.playerMusica__progresso::-moz-range-thumb {
+  width: 9px;
+  height: 9px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cor-rosa);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.playerMusica__progresso:not(:disabled):hover::-webkit-slider-thumb,
+.playerMusica__progresso:focus-visible::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.playerMusica__progresso:not(:disabled):hover::-moz-range-thumb,
+.playerMusica__progresso:focus-visible::-moz-range-thumb {
+  opacity: 1;
+}
+
+/* === Seção: Volume === */
 .playerMusica__volume {
   display: flex;
   flex-shrink: 0;
@@ -107,10 +192,15 @@
 /* === Seção: Responsivo === */
 @media (max-width: 480px) {
   .playerMusica__player {
+    gap: 12px;
     width: 100%;
   }
 
   .playerMusica__controleVolume {
-    width: 64px;
+    width: 56px;
+  }
+
+  .playerMusica__tempo {
+    display: none;
   }
 }

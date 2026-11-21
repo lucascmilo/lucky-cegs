@@ -1,6 +1,4 @@
-/* === Seção: Formulário ===
-   Usado dentro do cartão-postal (TelaAcesso.css). As medidas usam --px-cartao,
-   então o formulário escala junto com o cartão no desktop. */
+/* === Seção: Formulário === */
 .formulario {
   display: flex;
   flex-direction: column;
@@ -95,7 +93,6 @@
   background: var(--cor-rosa-escuro);
 }
 
-/* Marca de "visto" desenhada com bordas */
 .formulario__caixaSelecao:checked::after {
   content: "";
   width: calc(var(--px-cartao) * 6);
@@ -185,7 +182,7 @@
   text-underline-offset: 2px;
 }
 
-/* === Seção: Variante Entrar (sem caixa de seleção, espaçamentos próprios) === */
+/* === Seção: Variante Entrar === */
 .formulario__formularioEntrar {
   margin-top: calc(var(--px-cartao) * 33.9);
 }
@@ -210,7 +207,7 @@
     gap: 22px;
   }
 
-  /* 16 px evita o zoom automático do iPhone ao focar o campo */
+  /* 16 px evita o zoom automático do iPhone ao tocar no campo */
   .formulario__entrada {
     font-size: 16px;
   }

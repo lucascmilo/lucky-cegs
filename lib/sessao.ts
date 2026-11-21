@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import type { Papel } from "@/lib/navegacao";
 
-// === Seção: Usuário atual (servidor) ===
+// === Seção: Usuário atual ===
 export type UsuarioAtual = {
   nome: string;
   user: string;

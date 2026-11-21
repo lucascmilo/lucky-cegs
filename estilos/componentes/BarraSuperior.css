@@ -1,5 +1,4 @@
-/* === Seção: Barra superior ===
-   Medidas do protótipo (frame de 1440 px): altura 70, conteúdo de X 135 a X 1305. */
+/* === Seção: Barra superior === */
 .barraSuperior {
   background: var(--cor-preto);
   color: var(--cor-branco);
@@ -17,7 +16,7 @@
   padding-block: 10px;
 }
 
-/* === Seção: Pix (rótulo X 135, e-mail X 270, Copiar X 518) === */
+/* === Seção: Pix === */
 .barraSuperior__pix {
   display: flex;
   align-items: center;

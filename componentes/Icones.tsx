@@ -18,7 +18,6 @@ export function IconeCopiar({ className, tamanho = 14 }: PropsIcone) {
 export function IconePlay({ className, tamanho = 14 }: PropsIcone) {
   return (
     <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 12 12" aria-hidden="true">
-      {/* Triângulo com a caixa centralizada no círculo e leve ajuste óptico para a direita */}
       <path d="M3.1 2.2v7.6c0 .4.4.6.7.4l5.5-3.8a.5.5 0 0 0 0-.8L3.8 1.8c-.3-.2-.7 0-.7.4Z" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
     </svg>
   );
@@ -29,6 +28,24 @@ export function IconePausa({ className, tamanho = 12 }: PropsIcone) {
     <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 12 12" aria-hidden="true">
       <rect x="2.3" y="1.5" width="2.6" height="9" rx=".6" fill="currentColor" />
       <rect x="7.1" y="1.5" width="2.6" height="9" rx=".6" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function IconeAnterior({ className, tamanho = 12 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path d="M10 2.4v7.2c0 .4-.4.6-.7.4L4.1 6.4a.5.5 0 0 1 0-.8l5.2-3.6c.3-.2.7 0 .7.4Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+      <path d="M2 2.2v7.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconeProxima({ className, tamanho = 12 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path d="M2 2.4v7.2c0 .4.4.6.7.4l5.2-3.6a.5.5 0 0 0 0-.8L2.7 2c-.3-.2-.7 0-.7.4Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+      <path d="M10 2.2v7.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   );
 }
@@ -46,7 +63,34 @@ export function IconeVolume({ className, tamanho = 13, mudo = false }: PropsIcon
   );
 }
 
-// === Seção: Ícone de menu (mobile) ===
+// === Seção: Ícones do menu do usuário ===
+export function IconeSetaBaixo({ className, tamanho = 12 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path d="m3 4.5 3 3 3-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconePerfil({ className, tamanho = 16 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <circle cx="8" cy="5.5" r="2.8" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M2.8 14c.5-2.6 2.6-4.2 5.2-4.2s4.7 1.6 5.2 4.2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconeSair({ className, tamanho = 16 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M9.5 2.5H4.3c-.9 0-1.6.7-1.6 1.6v7.8c0 .9.7 1.6 1.6 1.6h5.2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M7 8h6.5m0 0-2.4-2.4M13.5 8l-2.4 2.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// === Seção: Ícone de menu ===
 export function IconeMenu({ className, tamanho = 20, aberto = false }: PropsIcone & { aberto?: boolean }) {
   return (
     <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 20 20" fill="none" aria-hidden="true">

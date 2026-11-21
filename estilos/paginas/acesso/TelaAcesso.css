@@ -1,7 +1,4 @@
-/* === Seção: Tela (duas colunas) ===
-   Painel rosa à esquerda e cartão-postal centralizado à direita.
-   A largura do painel mantém a proporção do protótipo (754 × 926) e é a menor entre
-   81,425% da altura da janela (754 / 926) e 52,361% da largura (754 / 1440). */
+/* === Seção: Tela (duas colunas) === */
 .telaAcesso__tela {
   display: grid;
   grid-template-columns: min(52.361vw, 81.425svh) minmax(0, 1fr);
@@ -22,24 +19,20 @@
   padding: 24px 32px;
 }
 
-/* === Seção: Cartão-postal ===
-   Protótipo: 560 × 710 (Criar conta) e 560 × 625 (Entrar).
-   --px-cartao vale "1 px do protótipo": 1px no celular e no tablet; no desktop,
-   1/560 da largura do cartão, para tudo dentro dele escalar junto (ver fim do arquivo). */
+/* === Seção: Cartão-postal === */
 .telaAcesso__cartao {
+  /* 1 px do protótipo: fixo no celular, proporcional ao cartão no desktop */
   --px-cartao: 1px;
   position: relative;
   width: min(100%, 560px);
   border-radius: 4px;
   background: var(--cor-creme);
-  /* Borda escura de 1 px desenhada por dentro, sem ocupar espaço */
   box-shadow:
     inset 0 0 0 1px #3b3536,
     0 2px 4px rgba(0, 0, 0, 0.06),
     0 22px 44px -10px rgba(60, 40, 30, 0.3);
 }
 
-/* Borda rosa de 4 px a 13 px da borda do cartão; conteúdo a 28,5 px da borda rosa */
 .telaAcesso__molduraRosa {
   margin: calc(var(--px-cartao) * 13);
   padding: calc(var(--px-cartao) * 24.4) calc(var(--px-cartao) * 28.5) calc(var(--px-cartao) * 46.6);
@@ -55,7 +48,6 @@
   color: var(--cor-preto);
 }
 
-/* Carimbo (a imagem já vem girada 10°) */
 .telaAcesso__carimbo {
   position: absolute;
   top: calc(var(--px-cartao) * 15);
@@ -93,24 +85,21 @@
   font-size: calc(var(--px-cartao) * 61);
 }
 
-/* === Seção: Cartão proporcional (layout em duas colunas) ===
-   Com 926 px de altura ou mais, o cartão tem o tamanho do protótipo. Em janelas mais baixas
-   ele diminui por inteiro, na mesma proporção que o painel rosa.
-   Largura = menor entre 560 px, a largura livre e 60,474% da altura (560 / 926). */
+/* === Seção: Cartão proporcional (layout em duas colunas) === */
 @media (min-width: 1001px) {
   .telaAcesso__areaCartao {
     container-type: size;
   }
 
   .telaAcesso__cartao {
-    /* As unidades cqw são resolvidas nos filhos, em relação ao próprio cartão */
+    /* cqw é resolvido nos filhos, em relação ao próprio cartão */
     --px-cartao: calc(100cqw / 560);
     width: min(560px, 100cqw, 60.474svh);
     container-type: inline-size;
   }
 }
 
-/* === Seção: Responsivo (painel em cima, formulário embaixo) === */
+/* === Seção: Responsivo === */
 @media (max-width: 1000px) {
   .telaAcesso__tela {
     grid-template-columns: 1fr;

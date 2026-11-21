@@ -3,7 +3,7 @@ import BotaoCopiar from "./BotaoCopiar";
 import PlayerMusica from "./PlayerMusica";
 import "@/estilos/componentes/BarraSuperior.css";
 
-// === Seção: Barra superior (Pix + player) ===
+// === Seção: Barra superior ===
 export default function BarraSuperior() {
   return (
     <div className="barraSuperior">

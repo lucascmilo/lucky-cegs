@@ -22,7 +22,7 @@ Depois de alterar `db/schema.ts`, aplique no banco com `npx drizzle-kit push`.
 
 | Pasta / arquivo | O que tem |
 |---|---|
-| `app/(site)/` | Páginas com barra superior, cabeçalho e rodapé (tela inicial) |
+| `app/(site)/` | Páginas com barra superior, cabeçalho e rodapé (tela inicial e Termos) |
 | `app/(acesso)/` | Telas de Entrar e Criar conta (colagem + cartão-postal) |
 | `app/api/` | Rotas do Better Auth e da assinatura de upload do Cloudinary |
 | `componentes/` | Componentes compartilhados (cabeçalho, rodapé, player, ícones…) |
@@ -41,8 +41,8 @@ Depois de alterar `db/schema.ts`, aplique no banco com `npx drizzle-kit push`.
   `juntarClasses` (`lib/classes.ts`).
 - **Comentários de seção** no topo de cada bloco, em TSX e CSS
   (`{/* === Seção: Cabeçalho === */}`, `/* === Seção: Cabeçalho === */`).
-- **Medidas do protótipo**: os comentários dos CSS trazem as posições originais do Figma
-  (frame de 1440 px). As telas escalam a partir delas com variáveis que valem
-  "1 px do protótipo": `--px-hero` (tela inicial), `--px-palco` (colagem) e
-  `--px-cartao` (cartão das telas de acesso).
+- **Medidas do protótipo** (frame de 1440 px): as telas escalam com variáveis que valem
+  "1 px do protótipo": `--px-hero` (tela inicial), `--px-faixa` (Termos),
+  `--px-palco` (colagem das telas de acesso) e `--px-cartao` (cartão das telas de acesso).
+- **Termos**: o texto das regras fica em `app/(site)/termos/conteudoTermos.tsx`.
 - **Segurança**: toda ação da GOM confere `role === "admin"` no servidor.

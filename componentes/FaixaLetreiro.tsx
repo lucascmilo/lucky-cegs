@@ -10,7 +10,7 @@ type PropsFaixaLetreiro = {
 const FRASES = ["LUCKY CEGS", "PEDIDOS ABERTOS", "PHOTOCARDS, ÁLBUNS LEVES, CACARECOS"];
 
 // === Seção: Grupo de frases ===
-// O grupo é repetido duas vezes para a animação dar a volta sem emenda (a cópia fica oculta para leitores de tela).
+// Repetido duas vezes para a animação dar a volta sem emenda.
 function GrupoFrases({ oculto = false }: { oculto?: boolean }) {
   return (
     <span className="faixaLetreiro__grupo" aria-hidden={oculto || undefined}>

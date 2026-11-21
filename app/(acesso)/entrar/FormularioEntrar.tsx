@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { authClient } from "@/lib/auth-client";
-import { limparUser, traduzirErroAutenticacao } from "../mensagensErro";
+import { limparUser, traduzirErroAutenticacao } from "@/lib/mensagensErro";
 import "@/estilos/paginas/acesso/Formulario.css";
 
 // === Seção: Formulário de login ===

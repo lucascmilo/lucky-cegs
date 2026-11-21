@@ -2,7 +2,7 @@ import BarraSuperior from "@/componentes/BarraSuperior";
 import Cabecalho from "@/componentes/Cabecalho";
 import Rodape from "@/componentes/Rodape";
 
-// === Seção: Layout das páginas do site (com barra, cabeçalho e rodapé) ===
+// === Seção: Layout das páginas do site ===
 export default function LayoutSite({ children }: LayoutProps<"/">) {
   return (
     <>

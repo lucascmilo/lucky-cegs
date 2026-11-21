@@ -23,7 +23,6 @@ function ListaLinksRodape({ papel }: { papel: Papel }) {
   );
 }
 
-// Lê a sessão no servidor para mostrar os links do perfil (visitante, joiner ou GOM)
 async function LinksRodapeComSessao() {
   const usuario = await obterUsuarioAtual();
   return <ListaLinksRodape papel={usuario?.papel ?? null} />;

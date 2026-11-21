@@ -1,0 +1,414 @@
+/* === Seção: Página Termos da comunidade === */
+.termos {
+  /* 1 px do protótipo, encolhendo em telas mais estreitas que 1440 px */
+  --px-faixa: min(1px, 100vw / 1440);
+  padding-bottom: 42px;
+}
+
+/* === Seção: Faixa de título === */
+.termos__faixa {
+  overflow: hidden;
+  border-block: 1px solid var(--cor-preto);
+  background-color: var(--cor-creme);
+}
+
+.termos__faixaConteudo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
+  height: calc(var(--px-faixa) * 328);
+  margin-inline: auto;
+}
+
+.termos__titulo {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fonte-titulo);
+  font-size: max(36px, var(--px-faixa) * 80);
+  font-weight: 400;
+  line-height: 0.781;
+  letter-spacing: 0.01em;
+  color: var(--cor-preto);
+}
+
+.termos__tituloRosa {
+  color: var(--cor-rosa);
+}
+
+.termos__subtitulo {
+  margin-top: calc(var(--px-faixa) * 24);
+  font-size: max(14px, var(--px-faixa) * 16);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* === Seção: Colagem da faixa === */
+.termos__colagem {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--px-faixa) * -45);
+  transform: translateY(-45.64%);
+  width: calc(var(--px-faixa) * 385);
+  aspect-ratio: 385 / 264;
+}
+
+.termos__colagem > * {
+  position: absolute;
+  height: auto;
+}
+
+.termos__quadradoAzul {
+  left: 32.727%;
+  top: 0;
+  width: 57.143%;
+  height: 64.394%;
+  border: 1px solid var(--cor-preto);
+  background: var(--cor-azul-colagem);
+}
+
+.termos__photocard {
+  left: 0;
+  top: 12.121%;
+  width: 60.26%;
+}
+
+.termos__estrela {
+  left: 54.545%;
+  top: 3.03%;
+  width: 45.455%;
+}
+
+.termos__brilho {
+  width: 5.195%;
+  transform: rotate(20deg);
+  transform-origin: 0 0;
+}
+
+.termos__brilhoUm {
+  left: 35.325%;
+  top: 3.03%;
+}
+
+.termos__brilhoDois {
+  left: 60.779%;
+  top: 68.182%;
+}
+
+/* === Seção: Conteúdo === */
+.termos__conteudo {
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
+  margin-inline: auto;
+}
+
+.termos__introducao {
+  margin-top: 53px;
+  padding: 24px 48px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 23px;
+  text-align: justify;
+  background-color: var(--cor-branco);
+}
+
+.termos__corpo {
+  display: grid;
+  grid-template-columns: 255px minmax(0, 1fr);
+  align-items: start;
+  gap: 77px;
+  margin-top: 35px;
+}
+
+/* === Seção: Cartão de regras === */
+.termos__cartao {
+  margin-right: -2px;
+  padding: 40px 35px 42.5px 33px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 20px;
+  background-color: var(--cor-branco);
+}
+
+.termos__secao + .termos__secao {
+  margin-top: 24px;
+}
+
+.termos__secao:nth-child(n + 3) {
+  margin-top: 28px;
+}
+
+.termos__secao {
+  scroll-margin-top: 24px;
+}
+
+.termos__tituloSecao {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 24px;
+  color: var(--cor-preto);
+}
+
+.termos__numeroSecao {
+  flex: 0 0 40px;
+  font-family: var(--fonte-pixel);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--cor-rosa);
+}
+
+.termos__itens {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+  line-height: 23px;
+  text-align: justify;
+  hyphens: auto;
+  text-wrap: pretty;
+}
+
+.termos__secao:first-child .termos__itens {
+  margin-top: 14px;
+}
+
+/* Estrela numa coluna própria: o texto justificado sempre começa depois dela */
+.termos__itens li {
+  position: relative;
+  padding-left: 1.4em;
+}
+
+.termos__itens li::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+}
+
+.termos__itens strong {
+  font-weight: 700;
+}
+
+/* === Seção: Índice dos Termos === */
+.indiceTermos {
+  position: sticky;
+  top: 24px;
+  padding: 18.5px 12px 16.5px 20px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 20px;
+  background-color: var(--cor-branco);
+}
+
+.indiceTermos__lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.indiceTermos__item {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  color: var(--cor-preto);
+  text-decoration: none;
+}
+
+.indiceTermos__numero {
+  flex: 0 0 44px;
+  font-family: var(--fonte-pixel);
+  font-size: 18px;
+  line-height: 20px;
+  color: var(--cor-rosa);
+}
+
+.indiceTermos__titulo {
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 17px;
+  white-space: pre-line;
+  transition: color 0.15s ease;
+}
+
+.indiceTermos__item:hover .indiceTermos__titulo {
+  color: var(--cor-rosa-escuro);
+}
+
+.indiceTermos__itemAtivo .indiceTermos__titulo {
+  color: var(--cor-rosa);
+}
+
+/* === Seção: Celular e tablet: barra de abas === */
+@media (max-width: 860px) {
+  .indiceTermos {
+    top: 0;
+    z-index: 5;
+    margin-inline: calc(-1 * var(--margem-lateral));
+    padding: 0;
+    border: 0;
+    border-block: 1px solid var(--cor-preto);
+    border-radius: 0;
+    background-color: var(--cor-bege-claro);
+  }
+
+  .indiceTermos__lista {
+    display: flex;
+    gap: 8px;
+    padding: 10px var(--margem-lateral);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .indiceTermos__lista::-webkit-scrollbar {
+    display: none;
+  }
+
+  .indiceTermos__item {
+    gap: 8px;
+    height: 36px;
+    padding: 0 14px;
+    border: 1px solid var(--cor-preto);
+    border-radius: var(--raio-pilula);
+    background: var(--cor-branco);
+    white-space: nowrap;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .indiceTermos__numero {
+    flex: none;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .indiceTermos__titulo {
+    font-size: 14px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .indiceTermos__itemAtivo {
+    background: var(--cor-rosa);
+  }
+
+  .indiceTermos__itemAtivo .indiceTermos__titulo,
+  .indiceTermos__itemAtivo .indiceTermos__numero {
+    color: var(--cor-branco);
+  }
+
+  .indiceTermos__itemAtivo:hover .indiceTermos__titulo {
+    color: var(--cor-branco);
+  }
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 1240px) {
+  .termos__colagem {
+    right: 0;
+  }
+
+  .termos__corpo {
+    gap: 40px;
+  }
+
+  .termos__cartao {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 1000px) {
+  .termos__introducao,
+  .termos__itens {
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .termos__corpo {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .termos__cartao {
+    padding: 32px 28px;
+  }
+}
+
+@media (max-width: 860px) {
+  /* minmax(0, …) deixa a barra de abas rolar por dentro, sem alargar a coluna */
+  .termos__corpo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .termos__cartao {
+    padding: 28px 26px 32px;
+  }
+
+  .termos__secao {
+    scroll-margin-top: 76px;
+  }
+}
+
+@media (max-width: 600px) {
+  .termos__faixaConteudo {
+    height: auto;
+    padding: 32px 0 24px;
+  }
+
+  .termos__titulo {
+    font-size: clamp(30px, 10.4vw, 52px);
+    line-height: 0.82;
+  }
+
+  .termos__subtitulo {
+    margin-top: 12px;
+    font-size: 15px;
+  }
+
+  .termos__colagem {
+    position: relative;
+    top: auto;
+    right: auto;
+    align-self: center;
+    transform: none;
+    width: min(78%, 280px);
+    margin-top: 20px;
+  }
+
+  .termos__introducao {
+    margin-top: 24px;
+    padding: 18px 20px;
+    border-radius: 16px;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .termos__corpo {
+    margin-top: 20px;
+  }
+
+  .termos__cartao {
+    padding: 24px 18px 28px;
+    border-radius: 16px;
+  }
+
+  .termos__tituloSecao {
+    font-size: 17px;
+  }
+
+  .termos__numeroSecao {
+    flex-basis: 34px;
+    font-size: 16px;
+  }
+
+  .termos__itens {
+    font-size: 15px;
+    line-height: 22px;
+  }
+}

@@ -1,6 +1,5 @@
-/* === Seção: Variáveis globais (cores, fontes e medidas) === */
+/* === Seção: Variáveis globais === */
 :root {
-  /* Cores principais */
   --cor-rosa: #ea4f80;
   --cor-rosa-vivo: #e24c7c;
   --cor-rosa-escuro: #c2185b;
@@ -15,23 +14,21 @@
   --cor-creme: #fdf6ec;
   --cor-borda-bege: #d8d2ca;
   --cor-amarelo: #ffe27a;
+  --cor-azul-colagem: #bed9f2;
   --cor-menta: #9fe3d2;
   --cor-texto: #1a1718;
   --cor-erro: #b3154f;
 
-  /* Fontes (definidas em app/layout.tsx via next/font) */
   --fonte-texto: var(--fonte-figtree), system-ui, sans-serif;
   --fonte-titulo: var(--fonte-archivo-black), "Arial Black", sans-serif;
   --fonte-cursiva: var(--fonte-pinyon-script), cursive;
   --fonte-pixel: var(--fonte-silkscreen), monospace;
 
-  /* Medidas */
   --largura-conteudo: 1170px;
   --margem-lateral: 16px;
   --raio-pilula: 999px;
 
-  /* Textura granulada do fundo bege */
-  --textura-ruido: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+  --textura-ruido: url("/imagens/textura-fundo.png");
 }
 
 @media (min-width: 640px) {
@@ -55,6 +52,7 @@ body {
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -95,12 +93,51 @@ button {
   cursor: pointer;
 }
 
-/* === Seção: Layout das páginas do site (barra, cabeçalho, conteúdo e rodapé) === */
-/* O conteúdo ocupa o espaço que sobra, para o rodapé ficar sempre no fim da tela */
+/* === Seção: Layout das páginas do site === */
 .layoutSite__principal {
   display: flex;
   flex: 1;
   flex-direction: column;
+}
+
+/* === Seção: Barra de rolagem === */
+/* Só no Firefox: no Chrome, scrollbar-color desativaria as regras ::-webkit-scrollbar */
+@supports (-moz-appearance: none) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--cor-rosa) var(--cor-bege-claro);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cor-bege-claro);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-rosa) padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cor-rosa-escuro);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--cor-rosa-profundo);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--cor-bege-claro);
 }
 
 /* === Seção: Acessibilidade === */
@@ -128,5 +165,9 @@ button {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
   }
 }

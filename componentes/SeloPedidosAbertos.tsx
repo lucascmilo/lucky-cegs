@@ -1,8 +1,8 @@
 import { juntarClasses } from "@/lib/classes";
 import "@/estilos/componentes/SeloPedidosAbertos.css";
 
-// === Seção: Forma da estrela explodida (SVG) ===
-// Polígono com pontas alternando entre o raio externo (49) e o interno (36), num quadro de 100 × 100.
+// === Seção: Forma da estrela explodida ===
+// Pontas alternando entre o raio externo (49) e o interno (36), num quadro de 100 × 100.
 const QUANTIDADE_PONTAS = 18;
 
 function gerarPontosEstrela() {

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { authClient } from "@/lib/auth-client";
 import { DOMINIO_EMAIL_INTERNO, PADRAO_USER, TAMANHO_MINIMO_SENHA } from "@/lib/configuracoes";
-import { limparUser, traduzirErroAutenticacao } from "../mensagensErro";
+import { limparUser, traduzirErroAutenticacao } from "@/lib/mensagensErro";
 import "@/estilos/paginas/acesso/Formulario.css";
 
 // === Seção: Tipos ===
@@ -18,7 +18,7 @@ type CamposFormulario = {
 
 type ErrosCampos = Partial<Record<keyof CamposFormulario | "termos", string>>;
 
-// === Seção: Validação no navegador (o servidor valida de novo) ===
+// === Seção: Validação no navegador ===
 function validarCampos(campos: CamposFormulario, aceitouTermos: boolean): ErrosCampos {
   const erros: ErrosCampos = {};
   const userLimpo = limparUser(campos.user);

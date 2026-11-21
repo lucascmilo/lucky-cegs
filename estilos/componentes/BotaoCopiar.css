@@ -25,7 +25,7 @@
   height: 16px;
 }
 
-/* === Seção: Variante escura (barra superior: 106 × 25) === */
+/* === Seção: Variante escura === */
 .botaoCopiar__escuro {
   width: 106px;
   height: 25px;
@@ -38,7 +38,7 @@
   background: #2c2829;
 }
 
-/* === Seção: Variante rosa (card do rodapé: 106 × 25) === */
+/* === Seção: Variante rosa === */
 .botaoCopiar__rosa {
   width: 106px;
   height: 25px;

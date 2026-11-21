@@ -2,23 +2,39 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { PLAYLIST } from "@/lib/configuracoes";
-import { IconePausa, IconePlay, IconeVolume } from "./Icones";
+import { IconeAnterior, IconePausa, IconePlay, IconeProxima, IconeVolume } from "./Icones";
 import "@/estilos/componentes/PlayerMusica.css";
 
 const VOLUME_INICIAL = 0.15;
+// Ao voltar com mais desse tempo tocado, a música recomeça em vez de ir para a anterior
+const SEGUNDOS_PARA_RECOMECAR = 3;
+
+function formatarTempo(segundos: number) {
+  if (!Number.isFinite(segundos) || segundos < 0) return "0:00";
+  const minutos = Math.floor(segundos / 60);
+  const resto = Math.floor(segundos % 60);
+  return `${minutos}:${String(resto).padStart(2, "0")}`;
+}
 
 // === Seção: Player de música da barra superior ===
 export default function PlayerMusica() {
   const referenciaAudio = useRef<HTMLAudioElement>(null);
-  // Guarda se a próxima faixa deve começar a tocar sozinha ao trocar de música
+  // Guarda se a nova faixa deve começar a tocar sozinha ao trocar de música
   const continuarTocando = useRef(false);
   const [indiceMusica, setIndiceMusica] = useState(0);
   const [tocando, setTocando] = useState(false);
   const [volume, setVolume] = useState(VOLUME_INICIAL);
+  const [tempoAtual, setTempoAtual] = useState(0);
+  const [duracao, setDuracao] = useState(0);
 
   const musicaAtual = PLAYLIST[indiceMusica];
+  const progresso = duracao > 0 ? (tempoAtual / duracao) * 100 : 0;
 
-  // Mantém o volume do elemento de áudio igual ao do controle
+  // Recarrega os metadados: a duração pode ter sido lida antes de o React ligar os eventos
+  useEffect(() => {
+    referenciaAudio.current?.load();
+  }, []);
+
   useEffect(() => {
     if (referenciaAudio.current) referenciaAudio.current.volume = volume;
   }, [volume]);
@@ -40,47 +56,85 @@ export default function PlayerMusica() {
     }
   }
 
-  function tocarProxima() {
+  function trocarFaixa(passo: 1 | -1) {
     const audio = referenciaAudio.current;
     // "ended" deixa o áudio pausado, então ao terminar uma faixa a próxima também deve tocar
     continuarTocando.current = Boolean(audio && (!audio.paused || audio.ended));
-    setIndiceMusica((atual) => (atual + 1) % PLAYLIST.length);
+    setTempoAtual(0);
+    setDuracao(0);
+    setIndiceMusica((atual) => (atual + passo + PLAYLIST.length) % PLAYLIST.length);
+  }
+
+  function voltar() {
+    const audio = referenciaAudio.current;
+    if (audio && audio.currentTime > SEGUNDOS_PARA_RECOMECAR) {
+      audio.currentTime = 0;
+      return;
+    }
+    trocarFaixa(-1);
+  }
+
+  function avancarPara(segundos: number) {
+    if (referenciaAudio.current) referenciaAudio.current.currentTime = segundos;
+    setTempoAtual(segundos);
   }
 
   return (
     <div className="playerMusica__player">
-      {/* === Seção: Áudio (o estado "tocando" acompanha os eventos do próprio elemento) === */}
+      {/* === Seção: Áudio === */}
       <audio
         ref={referenciaAudio}
         src={musicaAtual.arquivo}
-        preload="none"
-        onEnded={tocarProxima}
+        preload="metadata"
+        onEnded={() => trocarFaixa(1)}
         onPause={() => setTocando(false)}
         onPlay={() => setTocando(true)}
+        onTimeUpdate={(evento) => setTempoAtual(evento.currentTarget.currentTime)}
+        onDurationChange={(evento) => setDuracao(evento.currentTarget.duration)}
       />
 
-      {/* === Seção: Botão tocar/pausar === */}
-      <button
-        type="button"
-        className="playerMusica__botaoTocar"
-        onClick={alternarReproducao}
-        aria-label={tocando ? "Pausar música" : "Tocar música"}
-      >
-        {tocando ? <IconePausa tamanho={13} /> : <IconePlay />}
-      </button>
-
-      {/* === Seção: Faixa atual (clicar no nome pula para a próxima música) === */}
-      <div className="playerMusica__faixa">
-        <span className="playerMusica__status">{tocando ? "Tocando" : "Em pausa"}</span>
+      {/* === Seção: Controles === */}
+      <div className="playerMusica__controles">
+        <button type="button" className="playerMusica__botaoPular" onClick={voltar} aria-label="Música anterior">
+          <IconeAnterior />
+        </button>
         <button
           type="button"
-          className="playerMusica__titulo"
-          onClick={tocarProxima}
-          title="Próxima música"
-          aria-label={`${musicaAtual.artista} - ${musicaAtual.titulo}. Clique para a próxima música`}
+          className="playerMusica__botaoTocar"
+          onClick={alternarReproducao}
+          aria-label={tocando ? "Pausar música" : "Tocar música"}
         >
-          {musicaAtual.artista} - {musicaAtual.titulo}
+          {tocando ? <IconePausa tamanho={13} /> : <IconePlay />}
         </button>
+        <button type="button" className="playerMusica__botaoPular" onClick={() => trocarFaixa(1)} aria-label="Próxima música">
+          <IconeProxima />
+        </button>
+      </div>
+
+      {/* === Seção: Faixa atual, tempo e progresso === */}
+      <div className="playerMusica__faixa">
+        <div className="playerMusica__linhaStatus">
+          <span className="playerMusica__status">{tocando ? "Tocando" : "Em pausa"}</span>
+          <span className="playerMusica__tempo">
+            {formatarTempo(tempoAtual)} / {formatarTempo(duracao)}
+          </span>
+        </div>
+        <span className="playerMusica__titulo" title={`${musicaAtual.artista} - ${musicaAtual.titulo}`}>
+          {musicaAtual.artista} - {musicaAtual.titulo}
+        </span>
+        <input
+          type="range"
+          min={0}
+          max={duracao || 0}
+          step={0.1}
+          value={Math.min(tempoAtual, duracao || 0)}
+          onChange={(evento) => avancarPara(Number(evento.target.value))}
+          disabled={!duracao}
+          className="playerMusica__progresso"
+          aria-label="Posição da música"
+          aria-valuetext={`${formatarTempo(tempoAtual)} de ${formatarTempo(duracao)}`}
+          style={{ "--preenchimento": `${progresso}%` } as CSSProperties}
+        />
       </div>
 
       {/* === Seção: Volume === */}
@@ -95,7 +149,6 @@ export default function PlayerMusica() {
           value={volume}
           onChange={(evento) => setVolume(Number(evento.target.value))}
           className="playerMusica__controleVolume"
-          // A parte rosa da barra acompanha o volume
           style={{ "--preenchimento": `${volume * 100}%` } as CSSProperties}
         />
       </label>

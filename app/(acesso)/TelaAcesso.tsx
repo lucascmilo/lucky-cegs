@@ -13,7 +13,7 @@ type PropsTelaAcesso = {
   children: ReactNode;
 };
 
-// === Seção: Estrutura das telas de acesso (colagem + cartão-postal) ===
+// === Seção: Estrutura das telas de acesso ===
 export default function TelaAcesso({ variante, saudacao, titulo, children }: PropsTelaAcesso) {
   return (
     <div className="telaAcesso__tela">

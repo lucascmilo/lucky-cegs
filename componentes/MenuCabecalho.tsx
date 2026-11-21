@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
 import { juntarClasses } from "@/lib/classes";
 import { obterLinksNavegacao } from "@/lib/navegacao";
 import type { UsuarioAtual } from "@/lib/sessao";
 import coracaoBranco from "@/public/imagens/coracao-branco.png";
 import { IconeMenu } from "./Icones";
+import MenuUsuario from "./MenuUsuario";
 import "@/estilos/componentes/Cabecalho.css";
 
 // === Seção: Tipos ===
@@ -19,26 +19,16 @@ type PropsMenuCabecalho = {
   carregando?: boolean;
 };
 
-// === Seção: Menu do cabeçalho (links + conta) ===
+// === Seção: Menu do cabeçalho ===
 export default function MenuCabecalho({ usuario, carregando = false }: PropsMenuCabecalho) {
   const caminhoAtual = usePathname();
-  const roteador = useRouter();
   const [menuAberto, setMenuAberto] = useState(false);
-  const [saindo, setSaindo] = useState(false);
 
   const links = obterLinksNavegacao(usuario?.papel ?? null);
 
   // "/" só fica ativo na própria página inicial; os demais também nas subpáginas
   function linkEstaAtivo(destino: string) {
     return destino === "/" ? caminhoAtual === "/" : caminhoAtual.startsWith(destino);
-  }
-
-  async function sairDaConta() {
-    setSaindo(true);
-    await authClient.signOut();
-    roteador.push("/");
-    roteador.refresh();
-    setSaindo(false);
   }
 
   return (
@@ -80,18 +70,10 @@ export default function MenuCabecalho({ usuario, carregando = false }: PropsMenu
         </ul>
       </nav>
 
-      {/* === Seção: Conta (entrar / sair) === */}
+      {/* === Seção: Conta === */}
       <div className={juntarClasses("cabecalho__conta", carregando && "cabecalho__contaCarregando")}>
         {usuario ? (
-          <button type="button" className="cabecalho__botaoConta" onClick={sairDaConta} disabled={saindo}>
-            <span className="cabecalho__circuloCoracao">
-              <Image src={coracaoBranco} alt="" className="cabecalho__coracaoBotao" />
-            </span>
-            <span className="cabecalho__textoConta">
-              <span className="cabecalho__nomeUsuario">@{usuario.user}</span>
-              <span>{saindo ? "Saindo..." : "Sair"}</span>
-            </span>
-          </button>
+          <MenuUsuario usuario={usuario} />
         ) : (
           <Link href="/entrar" className="cabecalho__botaoConta">
             <span className="cabecalho__circuloCoracao">

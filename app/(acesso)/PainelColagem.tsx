@@ -31,7 +31,7 @@ type Peca =
   | "modelo";
 
 // === Seção: Ordem das camadas ===
-// Mesma ordem das camadas do protótipo em cada tela: a última peça fica por cima.
+// Ordem das camadas em cada tela: a última peça fica por cima.
 const CAMADAS: Record<VarianteAcesso, Peca[]> = {
   entrar: ["codigoBarras", "cd", "coracao", "brilhos", "etiquetas", "chaveiro", "polaroid", "modelo", "selo"],
   criarConta: [
@@ -96,7 +96,7 @@ function renderizarPeca(peca: Peca, ehEntrar: boolean): ReactNode {
   }
 }
 
-// === Seção: Painel de colagem (lado esquerdo das telas de acesso) ===
+// === Seção: Painel de colagem ===
 export default function PainelColagem({ variante }: { variante: VarianteAcesso }) {
   const ehEntrar = variante === "entrar";
 
@@ -106,7 +106,7 @@ export default function PainelColagem({ variante }: { variante: VarianteAcesso }
       <FaixaLetreiro variante="rosa" className="painelColagem__letreiroTopo" />
       <FaixaLetreiro variante="preta" className="painelColagem__letreiroBase" />
 
-      {/* === Seção: Palco (754 × 926, proporção fixa do protótipo) === */}
+      {/* === Seção: Palco === */}
       <div className="painelColagem__palco">
         <span className="painelColagem__circulo" />
 

@@ -27,7 +27,7 @@ export default function PaginaInicial() {
           </div>
         </div>
 
-        {/* === Seção: Colagem (camadas na ordem do protótipo) === */}
+        {/* === Seção: Colagem === */}
         <div className="inicio__colagem">
           <Image
             src={colagemInicio}

@@ -6,11 +6,9 @@ const nextConfig: NextConfig = {
   },
   cacheComponents: true,
   partialPrefetching: true,
-  // Esconde o ícone do Next no canto da tela durante o desenvolvimento
-  // (erros de compilação e de execução continuam aparecendo).
+  // Esconde o ícone do Next durante o desenvolvimento
   devIndicators: false,
-  // Qualidade 90 para as imagens otimizadas pelo next/image (o padrão é 75).
-  // Como a lista só tem 90, qualquer <Image> sem "quality" também sai com 90.
+  // Todas as imagens saem com qualidade 90 (o padrão é 75)
   images: {
     qualities: [90],
   },

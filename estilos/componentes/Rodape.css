@@ -1,7 +1,4 @@
-/* === Seção: Rodapé ===
-   Medidas do protótipo (frame de 1440 px): altura 309, começa em Y 926.
-   Marca em Y 1057, links em Y 1173 (espaço de 30), card do Pix em X 945, Y 984 (360 × 150),
-   assinatura em Y 1158. */
+/* === Seção: Rodapé === */
 .rodape {
   background: var(--cor-preto);
   color: var(--cor-branco);
@@ -30,7 +27,6 @@
 .rodape__marcaContorno {
   font-family: var(--fonte-titulo);
   font-size: min(86px, 5.97vw);
-  /* line-height igual à altura das maiúsculas: topo da caixa = topo das letras */
   line-height: 0.703;
   color: transparent;
   -webkit-text-stroke: 1.5px var(--cor-rosa);

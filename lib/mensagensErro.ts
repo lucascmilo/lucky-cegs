@@ -1,5 +1,12 @@
 // === Seção: Tradução dos erros do Better Auth ===
-export function traduzirErroAutenticacao(codigo: string | undefined, contexto: "entrar" | "criarConta") {
+type ContextoErro = "entrar" | "criarConta";
+
+const MENSAGEM_PADRAO: Record<ContextoErro, string> = {
+  entrar: "Não foi possível entrar agora. Tente novamente.",
+  criarConta: "Não foi possível criar a conta agora. Tente novamente.",
+};
+
+export function traduzirErroAutenticacao(codigo: string | undefined, contexto: ContextoErro) {
   const codigoNormalizado = (codigo ?? "").toUpperCase();
 
   if (codigoNormalizado.includes("INVALID_USERNAME_OR_PASSWORD") || codigoNormalizado.includes("INVALID_EMAIL_OR_PASSWORD")) {
@@ -21,12 +28,9 @@ export function traduzirErroAutenticacao(codigo: string | undefined, contexto: "
     return "Muitas tentativas seguidas. Espere um pouco e tente de novo.";
   }
 
-  return contexto === "entrar"
-    ? "Não foi possível entrar agora. Tente novamente."
-    : "Não foi possível criar a conta agora. Tente novamente.";
+  return MENSAGEM_PADRAO[contexto];
 }
 
-// Remove o "@" do começo e espaços do user digitado
 export function limparUser(valor: string) {
   return valor.trim().replace(/^@+/, "");
 }

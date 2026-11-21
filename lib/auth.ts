@@ -20,8 +20,7 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        // O e-mail é sempre interno (<username>@lucky-cegs.local) e definido aqui no servidor,
-        // para ninguém cadastrar um e-mail qualquer chamando a API direto.
+        // E-mail sempre interno, definido no servidor (ninguém escolhe e-mail pela API).
         // Cadastros sem username são recusados.
         before: async (usuario) => {
           if (typeof usuario.username !== "string" || !usuario.username) {

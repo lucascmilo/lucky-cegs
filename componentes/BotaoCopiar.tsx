@@ -18,7 +18,6 @@ type PropsBotaoCopiar = {
 export default function BotaoCopiar({ texto, variante = "escuro", className }: PropsBotaoCopiar) {
   const [copiado, setCopiado] = useState(false);
 
-  // Volta o texto para "Copiar" alguns instantes depois de copiar
   useEffect(() => {
     if (!copiado) return;
     const temporizador = setTimeout(() => setCopiado(false), TEMPO_MENSAGEM_COPIADO);
@@ -30,7 +29,7 @@ export default function BotaoCopiar({ texto, variante = "escuro", className }: P
       await navigator.clipboard.writeText(texto);
       setCopiado(true);
     } catch {
-      // Sem permissão de área de transferência: o botão só não mostra "Copiado!"
+      // Sem acesso à área de transferência: só não mostra "Copiado!"
     }
   }
 

@@ -26,6 +26,7 @@ const linksGom: LinkNavegacao[] = [
   { rotulo: "Caixas", destino: "/caixas" },
   { rotulo: "Proofs", destino: "/proofs" },
   { rotulo: "Sem dono", destino: "/sem-dono" },
+  { rotulo: "Termos", destino: "/termos" },
 ];
 
 export function obterLinksNavegacao(papel: Papel): LinkNavegacao[] {
