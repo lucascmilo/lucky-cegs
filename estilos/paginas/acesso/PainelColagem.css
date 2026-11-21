@@ -1,0 +1,265 @@
+/* === Seção: Painel ===
+   Medidas do protótipo (frame de 1440 × 926): painel rosa de 754 × 926.
+   O "palco" mantém essa proporção; as posições abaixo são % do palco e os textos usam cqw,
+   então a colagem inteira escala sem perder a composição.
+   Os comentários "X · Y · L × A" trazem as medidas originais do protótipo, em px. */
+.painelColagem__painel {
+  /* 1 px do protótipo na escala atual do palco (usado pelas faixas dos letreiros).
+     As unidades cq são resolvidas nos filhos, em relação a este painel. */
+  --px-palco: calc(min(100cqh, 100cqw * 926 / 754) / 926);
+  position: relative;
+  overflow: hidden;
+  container-type: size;
+  background-color: var(--cor-rosa);
+  background-image: radial-gradient(circle, var(--cor-rosa-pontos) 1.3px, transparent 1.6px);
+  background-size: 22px 22px;
+  /* Borda de 1 px do lado de fora do painel (depois dos 754 px) */
+  box-shadow: 1px 0 0 var(--cor-preto);
+}
+
+/* === Seção: Letreiros (topo: 46 px + linha de 1 px; base: a partir de Y 879) === */
+.painelColagem__letreiroTopo,
+.painelColagem__letreiroBase {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.painelColagem__letreiroTopo {
+  top: 0;
+}
+
+.painelColagem__letreiroBase {
+  bottom: 0;
+}
+
+/* === Seção: Palco (754 × 926, proporção fixa do protótipo) === */
+.painelColagem__palco {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 2;
+  width: min(100cqw, 100cqh * 754 / 926);
+  aspect-ratio: 754 / 926;
+  container-type: inline-size;
+  transform: translateX(-50%);
+}
+
+.painelColagem__palco > * {
+  position: absolute;
+  height: auto;
+}
+
+/* === Seção: Círculo rosa-claro === */
+/* X 392,87 · Y 89,32 · 418,53 × 418,53 */
+.painelColagem__circulo {
+  left: 52.105%;
+  top: 9.646%;
+  width: 55.508%;
+  aspect-ratio: 1;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-rosa-claro);
+}
+
+/* === Seção: Título ===
+   Archivo Black 123 px. "LUCKY" com topo das letras em Y 111,65 (X 49,93);
+   "CEGS" com topo das letras em Y 217,05 (X 45,94). */
+.painelColagem__titulo {
+  left: 6.093%;
+  top: 12.057%;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fonte-titulo);
+  font-size: 16.313cqw;
+  /* line-height igual à altura das maiúsculas: topo da caixa = topo das letras */
+  line-height: 0.703;
+  letter-spacing: 0.02em;
+}
+
+.painelColagem__tituloLucky {
+  padding-left: 0.033em;
+  color: var(--cor-preto);
+}
+
+.painelColagem__tituloCegs {
+  margin-top: 0.154em;
+  color: var(--cor-branco);
+  -webkit-text-stroke: 0.424cqw var(--cor-preto);
+  paint-order: stroke fill;
+}
+
+/* === Seção: Etiquetas pretas (Figtree 800 15 px, giradas pelo canto superior esquerdo) === */
+.painelColagem__etiqueta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.956cqw;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: var(--cor-preto);
+  box-shadow: 0.398cqw 0.531cqw 0.796cqw rgba(0, 0, 0, 0.25);
+  font-size: 1.989cqw;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--cor-branco);
+  white-space: nowrap;
+  transform-origin: 0 0;
+}
+
+/* X 439,42 · Y 167,33 · 219,71 × 29,83 · -3° */
+.painelColagem__etiquetaUm {
+  left: 58.279%;
+  top: 18.07%;
+  width: 29.139%;
+  transform: rotate(3deg);
+}
+
+/* X 453,4 · Y 214,07 · 192,83 × 29,83 · 2° */
+.painelColagem__etiquetaDois {
+  left: 60.133%;
+  top: 23.118%;
+  width: 25.574%;
+  transform: rotate(-2deg);
+}
+
+/* === Seção: Decorações === */
+/* X 388 · Y 77 · 34 × 38 */
+.painelColagem__brilhoRosa {
+  left: 51.459%;
+  top: 8.315%;
+  width: 4.509%;
+}
+
+/* X 28 · Y 296 · 26 × 26 */
+.painelColagem__coracao {
+  left: 3.714%;
+  top: 31.965%;
+  width: 3.448%;
+}
+
+/* X 317,69 · Y 336,49 · 162,18 × 162,18 */
+.painelColagem__selo {
+  left: 42.134%;
+  top: 36.338%;
+  width: 21.509%;
+}
+
+.painelColagem__brilhoAmarelo {
+  width: 2.653%;
+}
+
+.painelColagem__brilhoAmareloMaior {
+  width: 2.918%;
+}
+
+/* === Seção: Variante Criar conta === */
+/* X 530,33 · Y 257,79 · -20° */
+.painelColagem__criarConta .painelColagem__brilhoUm {
+  left: 70.889%;
+  top: 27.829%;
+  transform: rotate(20deg);
+}
+
+/* X 20 · Y 485,8 · 22 × 26,4 */
+.painelColagem__criarConta .painelColagem__brilhoDois {
+  left: 2.653%;
+  top: 52.462%;
+}
+
+/* X 241,76 · Y 320 · 79,46 × 80 */
+.painelColagem__criarConta .painelColagem__cd {
+  left: 32.064%;
+  top: 34.557%;
+  width: 10.538%;
+}
+
+/* X 43,94 · Y 363,22 · 188,5 × 207,5 */
+.painelColagem__criarConta .painelColagem__polaroid {
+  left: 5.828%;
+  top: 39.225%;
+  width: 25%;
+}
+
+/* X 118,13 · Y 511 · 153 × 186,5 */
+.painelColagem__criarConta .painelColagem__chaveiro {
+  left: 15.643%;
+  top: 55.184%;
+  width: 20.304%;
+}
+
+/* X 175,17 · Y 483 · 370,5 × 370,5 */
+.painelColagem__criarConta .painelColagem__adesivo {
+  left: 23.21%;
+  top: 52.16%;
+  width: 49.297%;
+}
+
+/* X 44,12 · Y 780,77 · 162,28 × 73,54 */
+.painelColagem__criarConta .painelColagem__codigoBarras {
+  left: 5.836%;
+  top: 84.341%;
+  width: 21.523%;
+}
+
+/* X 464,29 · Y 260,71 · 289 × 665,5 (termina no fim da tela) */
+.painelColagem__criarConta .painelColagem__modelo {
+  left: 61.577%;
+  top: 28.154%;
+  width: 38.329%;
+  z-index: 3;
+}
+
+/* === Seção: Variante Entrar === */
+/* X 0 · Y 296 · 518 × 630 (termina no fim da tela) */
+.painelColagem__entrar .painelColagem__modelo {
+  left: 0%;
+  top: 31.965%;
+  width: 68.7%;
+  z-index: 1;
+}
+
+.painelColagem__entrar .painelColagem__selo {
+  z-index: 2;
+}
+
+/* X 560 · Y 256 · -20° */
+.painelColagem__entrar .painelColagem__brilhoUm {
+  left: 74.735%;
+  top: 27.937%;
+  transform: rotate(20deg);
+}
+
+/* X 697 · Y 518,8 · 22 × 26,4 */
+.painelColagem__entrar .painelColagem__brilhoDois {
+  left: 92.44%;
+  top: 56.026%;
+}
+
+/* X 639,77 · Y 282 · 79,46 × 80 */
+.painelColagem__entrar .painelColagem__cd {
+  left: 84.85%;
+  top: 30.454%;
+  width: 10.538%;
+}
+
+/* X 499,87 · Y 391,22 · 189 × 209 */
+.painelColagem__entrar .painelColagem__polaroid {
+  left: 66.296%;
+  top: 42.248%;
+  width: 25.066%;
+}
+
+/* X 573,95 · Y 539,06 · 153,05 × 186,94 */
+.painelColagem__entrar .painelColagem__chaveiro {
+  left: 76.121%;
+  top: 58.214%;
+  width: 20.298%;
+}
+
+/* X 540 · Y 781 · 162,28 × 73,54 */
+.painelColagem__entrar .painelColagem__codigoBarras {
+  left: 71.618%;
+  top: 84.341%;
+  width: 21.523%;
+}

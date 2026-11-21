@@ -1,0 +1,116 @@
+/* === Seção: Player (começa em X 905 e termina em X 1305: 400 px) === */
+.playerMusica__player {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  width: 400px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* === Seção: Botão tocar/pausar === */
+.playerMusica__botaoTocar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cor-rosa);
+  color: var(--cor-branco);
+  transition: transform 0.15s ease;
+}
+
+.playerMusica__botaoTocar:hover {
+  transform: scale(1.08);
+}
+
+/* === Seção: Faixa atual === */
+.playerMusica__faixa {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  font-family: var(--fonte-pixel);
+  line-height: 15px;
+  text-transform: uppercase;
+}
+
+.playerMusica__status {
+  font-size: 14px;
+  color: var(--cor-menta);
+}
+
+.playerMusica__titulo {
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--cor-branco);
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* === Seção: Volume (ícone em X 1180, barra de X 1206 a X 1305) === */
+.playerMusica__volume {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+  color: var(--cor-branco);
+}
+
+.playerMusica__iconeVolume {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.playerMusica__controleVolume {
+  width: 99px;
+  height: 8px;
+  margin: 0;
+  border-radius: var(--raio-pilula);
+  background: linear-gradient(
+    to right,
+    var(--cor-rosa) 0 var(--preenchimento, 15%),
+    var(--cor-branco) var(--preenchimento, 15%) 100%
+  );
+  appearance: none;
+  cursor: pointer;
+}
+
+.playerMusica__controleVolume::-webkit-slider-thumb {
+  width: 15px;
+  height: 15px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cor-rosa);
+  appearance: none;
+}
+
+.playerMusica__controleVolume::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cor-rosa);
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 480px) {
+  .playerMusica__player {
+    width: 100%;
+  }
+
+  .playerMusica__controleVolume {
+    width: 64px;
+  }
+}

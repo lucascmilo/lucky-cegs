@@ -1,0 +1,52 @@
+/* === Seção: Botão de copiar === */
+.botaoCopiar {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border-radius: var(--raio-pilula);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.botaoCopiar:active {
+  transform: scale(0.96);
+}
+
+.botaoCopiar__icone {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+/* === Seção: Variante escura (barra superior: 106 × 25) === */
+.botaoCopiar__escuro {
+  width: 106px;
+  height: 25px;
+  background: var(--cor-preto-suave);
+  border: 1px solid #5a5557;
+  color: var(--cor-branco);
+}
+
+.botaoCopiar__escuro:hover {
+  background: #2c2829;
+}
+
+/* === Seção: Variante rosa (card do rodapé: 106 × 25) === */
+.botaoCopiar__rosa {
+  width: 106px;
+  height: 25px;
+  background: transparent;
+  border: 1px solid #8f1d47;
+  color: var(--cor-preto);
+}
+
+.botaoCopiar__rosa:hover {
+  background: rgba(255, 255, 255, 0.18);
+}

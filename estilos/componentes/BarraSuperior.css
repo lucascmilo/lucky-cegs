@@ -1,0 +1,78 @@
+/* === Seção: Barra superior ===
+   Medidas do protótipo (frame de 1440 px): altura 70, conteúdo de X 135 a X 1305. */
+.barraSuperior {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+.barraSuperior__conteudo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 24px;
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
+  min-height: 70px;
+  margin-inline: auto;
+  padding-block: 10px;
+}
+
+/* === Seção: Pix (rótulo X 135, e-mail X 270, Copiar X 518) === */
+.barraSuperior__pix {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.barraSuperior__rotuloPix {
+  width: 135px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.barraSuperior__emailPix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 233px;
+  height: 25px;
+  margin-right: 15px;
+  padding: 0 12px;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  color: var(--cor-preto);
+  font-size: 14px;
+  font-weight: 700;
+  user-select: all;
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 1000px) {
+  .barraSuperior__rotuloPix {
+    width: auto;
+    margin-right: 14px;
+  }
+}
+
+@media (max-width: 860px) {
+  .barraSuperior__conteudo {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .barraSuperior__rotuloPix {
+    display: none;
+  }
+
+  .barraSuperior__emailPix {
+    flex: 1;
+    width: auto;
+    margin-right: 10px;
+  }
+
+  .barraSuperior__pix {
+    width: 100%;
+  }
+}

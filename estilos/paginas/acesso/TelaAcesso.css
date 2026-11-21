@@ -1,0 +1,164 @@
+/* === Seção: Tela (duas colunas) ===
+   Painel rosa à esquerda e cartão-postal centralizado à direita.
+   A largura do painel mantém a proporção do protótipo (754 × 926) e é a menor entre
+   81,425% da altura da janela (754 / 926) e 52,361% da largura (754 / 1440). */
+.telaAcesso__tela {
+  display: grid;
+  grid-template-columns: min(52.361vw, 81.425svh) minmax(0, 1fr);
+  min-height: 100svh;
+}
+
+.telaAcesso__tela > aside {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 100svh;
+}
+
+/* === Seção: Área do cartão === */
+.telaAcesso__areaCartao {
+  display: grid;
+  place-items: center;
+  padding: 24px 32px;
+}
+
+/* === Seção: Cartão-postal ===
+   Protótipo: 560 × 710 (Criar conta) e 560 × 625 (Entrar).
+   --px-cartao vale "1 px do protótipo": 1px no celular e no tablet; no desktop,
+   1/560 da largura do cartão, para tudo dentro dele escalar junto (ver fim do arquivo). */
+.telaAcesso__cartao {
+  --px-cartao: 1px;
+  position: relative;
+  width: min(100%, 560px);
+  border-radius: 4px;
+  background: var(--cor-creme);
+  /* Borda escura de 1 px desenhada por dentro, sem ocupar espaço */
+  box-shadow:
+    inset 0 0 0 1px #3b3536,
+    0 2px 4px rgba(0, 0, 0, 0.06),
+    0 22px 44px -10px rgba(60, 40, 30, 0.3);
+}
+
+/* Borda rosa de 4 px a 13 px da borda do cartão; conteúdo a 28,5 px da borda rosa */
+.telaAcesso__molduraRosa {
+  margin: calc(var(--px-cartao) * 13);
+  padding: calc(var(--px-cartao) * 24.4) calc(var(--px-cartao) * 28.5) calc(var(--px-cartao) * 46.6);
+  border: calc(var(--px-cartao) * 4) solid var(--cor-rosa);
+  border-radius: 2px;
+}
+
+/* === Seção: Topo do cartão === */
+.telaAcesso__marca {
+  font-size: calc(var(--px-cartao) * 16);
+  font-weight: 700;
+  line-height: calc(var(--px-cartao) * 20);
+  color: var(--cor-preto);
+}
+
+/* Carimbo (a imagem já vem girada 10°) */
+.telaAcesso__carimbo {
+  position: absolute;
+  top: calc(var(--px-cartao) * 15);
+  left: calc(var(--px-cartao) * 343);
+  width: calc(var(--px-cartao) * 183.4);
+  height: auto;
+  pointer-events: none;
+}
+
+.telaAcesso__saudacao {
+  margin-top: calc(var(--px-cartao) * 17.6);
+  font-family: var(--fonte-cursiva);
+  font-size: calc(var(--px-cartao) * 38);
+  line-height: calc(var(--px-cartao) * 40);
+  color: var(--cor-rosa-vivo);
+}
+
+.telaAcesso__titulo {
+  margin-top: calc(var(--px-cartao) * -3.5);
+  font-family: var(--fonte-titulo);
+  font-size: calc(var(--px-cartao) * 58);
+  font-weight: 400;
+  line-height: calc(var(--px-cartao) * 55);
+  letter-spacing: 0.02em;
+  color: var(--cor-preto);
+}
+
+/* === Seção: Variante Entrar === */
+.telaAcesso__cartaoEntrar .telaAcesso__saudacao {
+  margin-top: calc(var(--px-cartao) * 26.6);
+}
+
+.telaAcesso__cartaoEntrar .telaAcesso__titulo {
+  margin-top: calc(var(--px-cartao) * -3.2);
+  font-size: calc(var(--px-cartao) * 61);
+}
+
+/* === Seção: Cartão proporcional (layout em duas colunas) ===
+   Com 926 px de altura ou mais, o cartão tem o tamanho do protótipo. Em janelas mais baixas
+   ele diminui por inteiro, na mesma proporção que o painel rosa.
+   Largura = menor entre 560 px, a largura livre e 60,474% da altura (560 / 926). */
+@media (min-width: 1001px) {
+  .telaAcesso__areaCartao {
+    container-type: size;
+  }
+
+  .telaAcesso__cartao {
+    /* As unidades cqw são resolvidas nos filhos, em relação ao próprio cartão */
+    --px-cartao: calc(100cqw / 560);
+    width: min(560px, 100cqw, 60.474svh);
+    container-type: inline-size;
+  }
+}
+
+/* === Seção: Responsivo (painel em cima, formulário embaixo) === */
+@media (max-width: 1000px) {
+  .telaAcesso__tela {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .telaAcesso__tela > aside {
+    position: relative;
+    height: min(112vw, 540px);
+    box-shadow: 0 1px 0 var(--cor-preto);
+  }
+
+  .telaAcesso__areaCartao {
+    padding: 32px var(--margem-lateral) 48px;
+  }
+}
+
+@media (max-width: 600px) {
+  .telaAcesso__molduraRosa {
+    margin: 9px;
+    padding: 20px 18px 30px;
+    border-width: 3px;
+  }
+
+  .telaAcesso__marca {
+    max-width: 55%;
+    font-size: 13px;
+    line-height: 17px;
+  }
+
+  .telaAcesso__carimbo {
+    top: 6px;
+    right: 4px;
+    left: auto;
+    width: 127px;
+  }
+
+  .telaAcesso__saudacao,
+  .telaAcesso__cartaoEntrar .telaAcesso__saudacao {
+    margin-top: 16px;
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  .telaAcesso__titulo,
+  .telaAcesso__cartaoEntrar .telaAcesso__titulo {
+    margin-top: 0;
+    font-size: clamp(40px, 12.5vw, 56px);
+    line-height: 0.95;
+  }
+}

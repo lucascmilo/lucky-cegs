@@ -1,0 +1,221 @@
+/* === Seção: Formulário ===
+   Usado dentro do cartão-postal (TelaAcesso.css). As medidas usam --px-cartao,
+   então o formulário escala junto com o cartão no desktop. */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  margin-top: calc(var(--px-cartao) * 28.9);
+}
+
+.formulario__grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(var(--px-cartao) * 42.4) calc(var(--px-cartao) * 27);
+}
+
+.formulario__gradeUmaColuna {
+  grid-template-columns: 1fr;
+}
+
+/* === Seção: Campo === */
+.formulario__campo {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--px-cartao) * 6.6);
+}
+
+.formulario__rotulo {
+  font-size: calc(var(--px-cartao) * 16);
+  font-weight: 700;
+  line-height: calc(var(--px-cartao) * 20);
+  color: var(--cor-preto);
+}
+
+.formulario__entrada {
+  width: 100%;
+  height: calc(var(--px-cartao) * 45);
+  padding: 0 calc(var(--px-cartao) * 12);
+  border: 1.2px solid var(--cor-preto);
+  border-radius: calc(var(--px-cartao) * 12);
+  background: var(--cor-branco);
+  font-size: calc(var(--px-cartao) * 12);
+  color: var(--cor-preto);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.formulario__entrada::placeholder {
+  color: #4a4547;
+}
+
+.formulario__entrada:focus {
+  outline: none;
+  border-color: var(--cor-rosa-escuro);
+  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
+}
+
+.formulario__entrada[aria-invalid="true"] {
+  border-color: var(--cor-erro);
+}
+
+.formulario__dica {
+  font-size: calc(var(--px-cartao) * 11);
+  color: var(--cor-erro);
+}
+
+/* === Seção: Aceite dos termos === */
+.formulario__aceite {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--px-cartao) * 14);
+  margin-top: calc(var(--px-cartao) * 30);
+  font-size: calc(var(--px-cartao) * 14);
+  font-weight: 700;
+  line-height: calc(var(--px-cartao) * 18);
+  cursor: pointer;
+}
+
+.formulario__caixaSelecao {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: calc(var(--px-cartao) * 24);
+  height: calc(var(--px-cartao) * 24);
+  margin: 0;
+  border: 1.2px solid var(--cor-preto);
+  border-radius: calc(var(--px-cartao) * 5);
+  background: var(--cor-branco);
+  appearance: none;
+  cursor: pointer;
+}
+
+.formulario__caixaSelecao:checked {
+  border-color: var(--cor-rosa-escuro);
+  background: var(--cor-rosa-escuro);
+}
+
+/* Marca de "visto" desenhada com bordas */
+.formulario__caixaSelecao:checked::after {
+  content: "";
+  width: calc(var(--px-cartao) * 6);
+  height: calc(var(--px-cartao) * 11);
+  margin-top: -2px;
+  border: solid var(--cor-branco);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.formulario__dicaTermos {
+  margin-top: calc(var(--px-cartao) * 8);
+  padding-left: calc(var(--px-cartao) * 38);
+}
+
+.formulario__linkTermos {
+  color: var(--cor-rosa-escuro);
+  text-underline-offset: 2px;
+}
+
+/* === Seção: Mensagem de erro === */
+.formulario__mensagemErro {
+  margin-top: calc(var(--px-cartao) * 22);
+  padding: calc(var(--px-cartao) * 10) calc(var(--px-cartao) * 14);
+  border: 1px solid var(--cor-erro);
+  border-radius: 10px;
+  background: rgba(234, 79, 128, 0.1);
+  font-size: calc(var(--px-cartao) * 13);
+  font-weight: 600;
+  color: var(--cor-erro);
+}
+
+/* === Seção: Botão principal === */
+.formulario__botaoPrincipal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: calc(var(--px-cartao) * 50);
+  margin-top: calc(var(--px-cartao) * 30);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--raio-pilula);
+  background: linear-gradient(180deg, #d6487a 0%, #c42a62 45%, var(--cor-rosa-profundo) 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.12),
+    0 9px 16px -4px rgba(0, 0, 0, 0.3);
+  font-size: calc(var(--px-cartao) * 16);
+  font-weight: 700;
+  color: var(--cor-branco);
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease;
+}
+
+.formulario__botaoPrincipal:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.formulario__botaoPrincipal:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.formulario__botaoPrincipal:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+/* === Seção: Rodapé do cartão === */
+.formulario__divisoria {
+  height: 1px;
+  margin: calc(var(--px-cartao) * 30) 0 0;
+  border: 0;
+  background: var(--cor-preto);
+}
+
+.formulario__alternarConta {
+  margin-top: calc(var(--px-cartao) * 21.4);
+  font-size: calc(var(--px-cartao) * 16);
+  line-height: calc(var(--px-cartao) * 20);
+  color: var(--cor-preto);
+}
+
+.formulario__alternarConta a {
+  font-weight: 700;
+  text-underline-offset: 2px;
+}
+
+/* === Seção: Variante Entrar (sem caixa de seleção, espaçamentos próprios) === */
+.formulario__formularioEntrar {
+  margin-top: calc(var(--px-cartao) * 33.9);
+}
+
+.formulario__formularioEntrar .formulario__botaoPrincipal {
+  margin-top: calc(var(--px-cartao) * 40);
+}
+
+.formulario__formularioEntrar .formulario__alternarConta {
+  margin-top: calc(var(--px-cartao) * 22.4);
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 600px) {
+  .formulario,
+  .formulario__formularioEntrar {
+    margin-top: 26px;
+  }
+
+  .formulario__grade {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  /* 16 px evita o zoom automático do iPhone ao focar o campo */
+  .formulario__entrada {
+    font-size: 16px;
+  }
+
+  .formulario__aceite {
+    align-items: flex-start;
+  }
+}

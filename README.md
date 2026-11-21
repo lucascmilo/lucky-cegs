@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lucky Cegs
 
-## Getting Started
+Site para organizar CEGs (compras em grupo) de photocards, álbuns e cacarecos.
+Next.js (App Router) + TypeScript, Neon (Postgres) com Drizzle, Better Auth e Cloudinary.
 
-First, run the development server:
+## Como rodar
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra <http://localhost:3000>.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+O arquivo `.env` precisa de: `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`,
+`NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `NEXT_PUBLIC_CLOUDINARY_API_KEY`, `CLOUDINARY_API_KEY`
+e `CLOUDINARY_API_SECRET`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Depois de alterar `db/schema.ts`, aplique no banco com `npx drizzle-kit push`.
 
-## Learn More
+## Estrutura
 
-To learn more about Next.js, take a look at the following resources:
+| Pasta / arquivo | O que tem |
+|---|---|
+| `app/(site)/` | Páginas com barra superior, cabeçalho e rodapé (tela inicial) |
+| `app/(acesso)/` | Telas de Entrar e Criar conta (colagem + cartão-postal) |
+| `app/api/` | Rotas do Better Auth e da assinatura de upload do Cloudinary |
+| `componentes/` | Componentes compartilhados (cabeçalho, rodapé, player, ícones…) |
+| `estilos/` | CSS: `globais.css`, `componentes/` e `paginas/` |
+| `lib/` | Autenticação, sessão, navegação por perfil e dados fixos da loja |
+| `db/` e `auth-schema.ts` | Conexão e tabelas (Drizzle) |
+| `proxy.ts` | Redireciona quem já está logado para fora de Entrar/Criar conta |
+| `public/imagens/`, `public/musicas/` | Imagens do protótipo e músicas do player |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Convenções
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Tudo em português**: rotas, arquivos, componentes, funções, variáveis e classes CSS.
+- **CSS sem Tailwind e sem CSS Modules**: cada componente importa o seu arquivo de `estilos/`.
+  Como as classes são globais, todas levam o nome do componente como prefixo
+  (`cabecalho__logo`, `painelColagem__modelo`). Para juntar classes condicionais, use
+  `juntarClasses` (`lib/classes.ts`).
+- **Comentários de seção** no topo de cada bloco, em TSX e CSS
+  (`{/* === Seção: Cabeçalho === */}`, `/* === Seção: Cabeçalho === */`).
+- **Medidas do protótipo**: os comentários dos CSS trazem as posições originais do Figma
+  (frame de 1440 px). As telas escalam a partir delas com variáveis que valem
+  "1 px do protótipo": `--px-hero` (tela inicial), `--px-palco` (colagem) e
+  `--px-cartao` (cartão das telas de acesso).
+- **Segurança**: toda ação da GOM confere `role === "admin"` no servidor.

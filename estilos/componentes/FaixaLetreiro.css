@@ -1,0 +1,67 @@
+/* === Seção: Faixa ===
+   Medidas do protótipo: Silkscreen 14 px sem espaçamento extra.
+   Faixa rosa (topo): 46 px + linha de 1 px, linha de base do texto em Y 28.
+   Faixa preta (base): de Y 879 a Y 926, linha de base do texto em Y 911.
+   --px-palco vale 1 px do protótipo na escala atual da colagem (definido no painel),
+   para as faixas encolherem junto com a colagem em telas menores. */
+.faixaLetreiro__faixa {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  font-family: var(--fonte-pixel);
+  font-size: calc(var(--px-palco, 1px) * 14);
+  line-height: calc(var(--px-palco, 1px) * 18);
+  white-space: nowrap;
+}
+
+.faixaLetreiro__rosa {
+  height: calc(var(--px-palco, 1px) * 47);
+  background: var(--cor-rosa);
+  border-bottom: 1px solid var(--cor-preto);
+  color: var(--cor-preto);
+}
+
+.faixaLetreiro__preta {
+  height: calc(var(--px-palco, 1px) * 47);
+  padding-top: calc(var(--px-palco, 1px) * 7);
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+/* === Seção: Trilho animado === */
+.faixaLetreiro__trilho {
+  display: flex;
+  width: max-content;
+  animation: deslizar 38s linear infinite;
+}
+
+.faixaLetreiro__preta .faixaLetreiro__trilho {
+  animation-direction: reverse;
+}
+
+.faixaLetreiro__grupo {
+  display: flex;
+}
+
+/* Texto em X 15; estrela 26,4 px depois do texto; próximo texto 27,5 px depois da estrela */
+.faixaLetreiro__item {
+  display: inline-flex;
+  align-items: center;
+  padding-left: calc(var(--px-palco, 1px) * 15);
+}
+
+.faixaLetreiro__estrela {
+  padding-left: calc(var(--px-palco, 1px) * 26.4);
+  padding-right: calc(var(--px-palco, 1px) * 12.5);
+  font-family: var(--fonte-texto);
+  font-size: calc(var(--px-palco, 1px) * 14);
+}
+
+@keyframes deslizar {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

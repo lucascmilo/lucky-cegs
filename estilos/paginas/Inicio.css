@@ -1,0 +1,179 @@
+/* === Seção: Hero ===
+   Medidas do protótipo (frame de 1440 px). O hero começa em Y 150 (barra 70 + cabeçalho 80)
+   e tem 776 px de altura até o rodapé.
+   --px-hero vale "1 px do protótipo" na escala atual. Ele é o menor entre:
+   - 1 px (nunca maior que o protótipo);
+   - 100vw / 1440 (encolhe em telas mais estreitas que 1440 px);
+   - (100svh - 150px) / 776 (encolhe em janelas baixas, para o hero inteiro caber na tela
+     junto com a barra e o cabeçalho; só o rodapé fica para baixo).
+   O mínimo é 0,5 px, para os textos não ficarem pequenos demais em janelas muito baixas. */
+.inicio__hero {
+  --px-hero: max(0.5px, min(1px, 100vw / 1440, (100svh - 150px) / 776));
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+/* Texto alinhado à esquerda (com o logo) e colagem à direita (com o botão Entrar) */
+.inicio__conteudo {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
+  min-height: calc(var(--px-hero) * 776);
+  margin-inline: auto;
+}
+
+/* === Seção: Texto de apresentação === */
+.inicio__texto {
+  flex: 0 1 auto;
+  min-width: 0;
+  /* "LUCKY" começa em Y 337 → 187 px abaixo do topo do hero */
+  padding-top: calc(var(--px-hero) * 187);
+  padding-bottom: calc(var(--px-hero) * 48);
+}
+
+.inicio__titulo {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fonte-titulo);
+  font-size: calc(var(--px-hero) * 130);
+  font-weight: 400;
+  /* line-height igual à altura das maiúsculas: o topo da caixa coincide com o topo das letras */
+  line-height: 0.703;
+  letter-spacing: 0.02em;
+}
+
+/* "LUCKY" em X 139,24 */
+.inicio__tituloPreto {
+  padding-left: 0.033em;
+  color: var(--cor-preto);
+}
+
+/* "CEGS" em X 135, Y 456,32 (119,32 px abaixo de "LUCKY") */
+.inicio__tituloRosa {
+  margin-top: 0.215em;
+  color: var(--cor-rosa);
+}
+
+/* Texto em X 139, Y 596, Figtree 20 px, entrelinha 24 e uma linha em branco entre os blocos */
+.inicio__descricao {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+  margin-top: calc(var(--px-hero) * 48);
+  padding-left: calc(var(--px-hero) * 4);
+  font-size: max(14px, var(--px-hero) * 20);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--cor-texto);
+}
+
+.inicio__listaServicos {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.inicio__listaServicos li::before {
+  content: "★ ";
+}
+
+/* === Seção: Colagem ===
+   Caixa da colagem: X 717 → 1366, Y 173 → 928 (649 × 755), passando 61 px da margem direita
+   (ou menos, se a margem da página for menor, para a colagem nunca ser cortada).
+   Camadas, em % da caixa:
+   - imagem da colagem: X 743, Y 218, 562 × 710
+   - photocard: X 743, Y 218, 170 × 170
+   - código de barras: X 717, Y 490, 162,28 × 73,54
+   - selo "Pedidos abertos": X 1203, Y 173, 162,18 × 162,18 */
+.inicio__colagem {
+  position: relative;
+  flex: none;
+  align-self: flex-end;
+  width: calc(var(--px-hero) * 649);
+  aspect-ratio: 649 / 755;
+  margin-right: calc(
+    -1 * min(var(--px-hero) * 61, (100cqw - min(100cqw - 2 * var(--margem-lateral), var(--largura-conteudo))) / 2)
+  );
+  /* A colagem passa 3 px por baixo do rodapé (o hero corta o excesso): assim o contorno
+     branco da base da modelo fica escondido e o rodapé não ganha uma linha branca. */
+  margin-bottom: calc(var(--px-hero) * -3);
+}
+
+.inicio__colagem > * {
+  position: absolute;
+  height: auto;
+}
+
+.inicio__imagemColagem {
+  left: 4.006%;
+  top: 5.96%;
+  width: 86.595%;
+}
+
+.inicio__photocard {
+  left: 4.006%;
+  top: 5.96%;
+  width: 26.194%;
+}
+
+.inicio__codigoBarras {
+  left: 0;
+  top: 41.987%;
+  width: 25.005%;
+}
+
+.inicio__selo {
+  left: 74.884%;
+  top: 0;
+  width: 24.989%;
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 860px) {
+  .inicio__conteudo {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 8px;
+    min-height: 0;
+  }
+
+  .inicio__texto {
+    padding: 48px 0 0;
+    text-align: center;
+  }
+
+  .inicio__titulo {
+    align-items: center;
+    font-size: clamp(64px, 17vw, 110px);
+  }
+
+  .inicio__tituloPreto {
+    padding-left: 0;
+  }
+
+  .inicio__descricao {
+    align-items: center;
+    margin-top: 32px;
+    padding-left: 0;
+    font-size: 17px;
+  }
+
+  .inicio__colagem {
+    justify-self: center;
+    align-self: end;
+    width: min(100% + 16px, 649px);
+    margin-right: -16px;
+    margin-bottom: -2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .inicio__descricao {
+    font-size: 16px;
+  }
+}
