@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { SeloNovo } from "@/componentes/Novidade";
+import TextoCortado from "@/componentes/TextoCortado";
 import type { ItemCaixa } from "@/lib/caixas";
 import { juntarClasses } from "@/lib/classes";
 import { formatarReais } from "@/lib/formatacao";
+import { BotaoDetalhes } from "./JanelaDetalhes";
 import FotoItem from "./FotoItem";
 import { EtiquetaMeu, NomePessoa, PilulaEtapa } from "./PecasItem";
 
@@ -50,8 +52,8 @@ function CartaoIndividual({ item, caixaId }: { item: ItemCaixa; caixaId: number 
       <FotoItem publicId={item.fotoId} descricao={`Foto de ${item.nome}`} className="cartaoIndividual__foto" />
       <FotoItem publicId={item.proofWhId} descricao={`Balança de ${item.nome}`} className="cartaoIndividual__foto" />
 
-      <h3 className="cartaoIndividual__nome" title={item.nome}>
-        {item.nome}
+      <h3 className="cartaoIndividual__nome">
+        <TextoCortado texto={item.nome} />
       </h3>
       {item.dono && (
         <p className="cartaoIndividual__dono">
@@ -65,12 +67,12 @@ function CartaoIndividual({ item, caixaId }: { item: ItemCaixa; caixaId: number 
 
       {meu && (
         <div className="cartaoIndividual__rodape">
-          <span className="cartaoIndividual__falta">
-            {item.faltaPagar > 0 ? `Falta ${formatarReais(item.faltaPagar)}` : "Tudo pago"}
-          </span>
-          <Link href="/meus-itens" className="cartaoIndividual__detalhes">
-            Detalhes
-          </Link>
+          {item.faltaPagar > 0 ? (
+            <span className="cartaoIndividual__falta">Falta {formatarReais(item.faltaPagar)}</span>
+          ) : (
+            <span className="cartaoIndividual__falta cartaoIndividual__tudoPago">Tudo pago</span>
+          )}
+          <BotaoDetalhes itemId={item.id} className="cartaoIndividual__detalhes" />
         </div>
       )}
     </article>

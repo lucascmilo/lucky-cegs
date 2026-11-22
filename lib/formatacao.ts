@@ -36,3 +36,29 @@ export function nomeOrigem(origem: string | null) {
   if (!origem) return null;
   return ORIGENS[origem.trim().toUpperCase()] ?? origem;
 }
+
+// === Seção: Quantidades do item ("5 PCS", "1 ÁLBUM"…) ===
+type Quantidades = { qtdPc: number; qtdPostcard: number; qtdAlbum: number };
+
+export function descreverQuantidades({ qtdPc, qtdPostcard, qtdAlbum }: Quantidades) {
+  const partes: string[] = [];
+  if (qtdPc > 0) partes.push(qtdPc === 1 ? "1 PC" : `${qtdPc} PCS`);
+  if (qtdPostcard > 0) partes.push(qtdPostcard === 1 ? "1 POSTCARD" : `${qtdPostcard} POSTCARDS`);
+  if (qtdAlbum > 0) partes.push(qtdAlbum === 1 ? "1 ÁLBUM" : `${qtdAlbum} ÁLBUNS`);
+  return partes;
+}
+
+// === Seção: Data curta (dia/mês; com o ano quando não é o ano atual) ===
+const formatadorDiaMes = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", timeZone: "America/Sao_Paulo" });
+const formatadorDiaMesAno = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "2-digit",
+  timeZone: "America/Sao_Paulo",
+});
+const formatadorAno = new Intl.DateTimeFormat("pt-BR", { year: "numeric", timeZone: "America/Sao_Paulo" });
+
+export function formatarDataCurta(data: Date, agora = new Date()) {
+  const mesmoAno = formatadorAno.format(data) === formatadorAno.format(agora);
+  return (mesmoAno ? formatadorDiaMes : formatadorDiaMesAno).format(data);
+}

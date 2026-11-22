@@ -1,23 +1,33 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { obterCaixa, obterCaixasAbertas, obterItensCaixa } from "@/lib/caixas";
+import { Suspense } from "react";
+import Carregando from "@/componentes/Carregando";
+import { obterCaixa, obterCaixasAbertas, obterItensCaixa, obterNomeCaixa } from "@/lib/caixas";
 import { exigirUsuario } from "@/lib/sessao";
 import TelaCaixa from "../_caixa/TelaCaixa";
 
 // === Seção: Título da aba com o nome da caixa ===
 export async function generateMetadata({ params }: PageProps<"/caixas/[id]">): Promise<Metadata> {
-  const caixa = await obterCaixa(Number((await params).id));
-  return { title: `${caixa?.nome ?? "Caixa"} · Lucky Cegs` };
+  const nome = await obterNomeCaixa(Number((await params).id));
+  return { title: `${nome ?? "Caixa"} · Lucky Cegs` };
 }
 
 // === Seção: Página de uma caixa ===
+// Tudo que depende do login e do banco fica dentro do Suspense: a navegação mostra o carregamento na hora.
+export default function PaginaCaixa(props: PageProps<"/caixas/[id]">) {
+  return (
+    <Suspense fallback={<Carregando />}>
+      <ConteudoCaixa {...props} />
+    </Suspense>
+  );
+}
+
 // O joiner vê todos os itens da caixa; valores e pagamentos só das próprias partes.
-export default async function PaginaCaixa({ params, searchParams }: PageProps<"/caixas/[id]">) {
+async function ConteudoCaixa({ params, searchParams }: PageProps<"/caixas/[id]">) {
   const { id: idTexto } = await params;
   const usuario = await exigirUsuario(`/caixas/${idTexto}`);
 
-  const id = Number(idTexto);
-  const caixa = await obterCaixa(id);
+  const caixa = await obterCaixa(Number(idTexto));
   if (!caixa) notFound();
 
   const [caixasAbertas, itens, parametros] = await Promise.all([

@@ -89,3 +89,11 @@ export const claim = pgTable("claim", {
   status: statusClaim("status").notNull().default("pedido"),
   criadoEm: timestamp("criado_em").notNull().defaultNow(),
 });
+// === Seção: Histórico de etapas do item ===
+// Uma linha por mudança de etapa (as telas da GOM gravam junto com registro.situacao)
+export const historicoEtapa = pgTable("historico_etapa", {
+  id: serial("id").primaryKey(),
+  registroId: integer("registro_id").notNull().references(() => registro.id, { onDelete: "cascade" }),
+  situacao: situacao("situacao").notNull(),
+  data: timestamp("data").notNull().defaultNow(),
+});

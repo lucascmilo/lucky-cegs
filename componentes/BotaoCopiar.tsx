@@ -10,7 +10,7 @@ const TEMPO_MENSAGEM_COPIADO = 1800;
 // === Seção: Tipos ===
 type PropsBotaoCopiar = {
   texto: string;
-  variante?: "escuro" | "rosa";
+  variante?: "escuro" | "rosa" | "claro";
   className?: string;
 };
 

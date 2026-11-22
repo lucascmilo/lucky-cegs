@@ -8,6 +8,7 @@ import brilhoAmarelo from "@/public/imagens/brilho-amarelo.png";
 import fotoCaixas from "@/public/imagens/caixas-foto.png";
 import codigoBarras from "@/public/imagens/codigo-barras.png";
 import coracaoBranco from "@/public/imagens/coracao-branco.png";
+import NomeCaixa from "./NomeCaixa";
 
 type PropsFaixaCaixa = {
   caixa: DetalheCaixa;
@@ -24,7 +25,7 @@ export default function FaixaCaixa({ caixa, caixasAbertas }: PropsFaixaCaixa) {
       <div className="caixaTopo__conteudo">
         {/* === Seção: Nome e origem === */}
         <h1 className="caixaTopo__titulo">
-          {caixa.nome}
+          <NomeCaixa nome={caixa.nome} />
           {origem && <span className="caixaTopo__origem">{origem.toLowerCase()}</span>}
         </h1>
 

@@ -1,11 +1,21 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import CartaoAviso from "@/componentes/CartaoAviso";
+import Carregando from "@/componentes/Carregando";
 import { obterCaixaPadrao } from "@/lib/caixas";
 import { exigirUsuario } from "@/lib/sessao";
 
 // === Seção: /caixas abre a caixa mais recente do joiner ===
-export default async function PaginaCaixas() {
+export default function PaginaCaixas() {
+  return (
+    <Suspense fallback={<Carregando />}>
+      <CaixaPadrao />
+    </Suspense>
+  );
+}
+
+async function CaixaPadrao() {
   const usuario = await exigirUsuario("/caixas");
 
   const id = await obterCaixaPadrao(usuario.id);

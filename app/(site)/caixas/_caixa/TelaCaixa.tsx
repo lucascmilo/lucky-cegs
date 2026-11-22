@@ -3,7 +3,9 @@ import { RegistroVisita } from "@/componentes/Novidade";
 import type { CaixaAberta, DetalheCaixa, ItemCaixa, PessoaItem } from "@/lib/caixas";
 import { juntarClasses } from "@/lib/classes";
 import CartaoSet from "./CartaoSet";
+import { ABAS_DETALHES, montarDetalheItem } from "./detalheItem";
 import FaixaCaixa from "./FaixaCaixa";
+import { ProvedorDetalhes } from "./JanelaDetalhes";
 import PedidosIndividuais, { CARTOES_POR_VEZ } from "./PedidosIndividuais";
 import "@/estilos/paginas/Caixa.css";
 
@@ -20,6 +22,8 @@ type ParametrosCaixa = {
   filtro?: string | string[];
   busca?: string | string[];
   mostrar?: string | string[];
+  item?: string | string[];
+  aba?: string | string[];
 };
 
 type PropsTelaCaixa = {
@@ -84,8 +88,12 @@ export default function TelaCaixa({ caixa, caixasAbertas, itens, eu, parametros 
       ? []
       : doFiltro.filter((item) => item.totalPessoas <= 1).sort((a, b) => Number(eMeu(b)) - Number(eMeu(a)));
 
+  // Janela de detalhes: só para itens do próprio joiner (os dados já vão prontos para o navegador)
+  const detalhes = Object.fromEntries(itens.filter(eMeu).map((item) => [item.id, montarDetalheItem(item, caixa.nome)]));
+  const abaPedida = ABAS_DETALHES.find((a) => a.id === textoDe(parametros.aba))?.id ?? "fotos";
+
   return (
-    <>
+    <ProvedorDetalhes detalhes={detalhes} itemInicial={Number(textoDe(parametros.item)) || null} abaInicial={abaPedida}>
       <RegistroVisita caixaId={caixa.id} />
       <FaixaCaixa caixa={caixa} caixasAbertas={caixasAbertas} />
 
@@ -180,6 +188,6 @@ export default function TelaCaixa({ caixa, caixasAbertas, itens, eu, parametros 
           </div>
         )}
       </div>
-    </>
+    </ProvedorDetalhes>
   );
 }

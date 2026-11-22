@@ -1,8 +1,9 @@
 import { and, asc, desc, eq, inArray, ne, or } from "drizzle-orm";
+import { cacheLife, cacheTag } from "next/cache";
 import { cache } from "react";
 import { user } from "@/auth-schema";
 import { db } from "@/db";
-import { caixa, parte, registro } from "@/db/schema";
+import { caixa, historicoEtapa, parte, registro } from "@/db/schema";
 import type { EtapaCaixa, EtapaItem } from "@/lib/etapas";
 import { obterCaixasRecentes, somarNaoPago } from "@/lib/joiner";
 
@@ -35,6 +36,8 @@ export type ItemCaixa = {
   nome: string;
   grupo: string | null;
   qtdPc: number;
+  qtdPostcard: number;
+  qtdAlbum: number;
   situacao: EtapaItem;
   situacaoAtualizadaEm: Date;
   fotoId: string | null;
@@ -45,6 +48,8 @@ export type ItemCaixa = {
   totalPessoas: number;
   dono: PessoaItem | null;
   faltaPagar: number;
+  // Datas de cada etapa (só nos itens do próprio joiner)
+  historico: { situacao: EtapaItem; data: Date }[];
 };
 
 // === Seção: Caixa que abre em /caixas ===
@@ -90,6 +95,8 @@ export async function obterItensCaixa(caixaId: number, userId: string): Promise<
       nome: registro.nome,
       grupo: registro.grupo,
       qtdPc: registro.qtdPc,
+      qtdPostcard: registro.qtdPostcard,
+      qtdAlbum: registro.qtdAlbum,
       situacao: registro.situacao,
       situacaoAtualizadaEm: registro.situacaoAtualizadaEm,
       fotoId: registro.fotoId,
@@ -133,6 +140,16 @@ export async function obterItensCaixa(caixaId: number, userId: string): Promise<
     .where(and(eq(parte.userId, userId), inArray(parte.registroId, idsRegistros)))
     .orderBy(asc(parte.id));
 
+  // Datas das etapas, só dos itens em que o joiner tem parte
+  const idsMeus = [...new Set(minhas.map((p) => p.registroId))];
+  const historicos = idsMeus.length
+    ? await db
+        .select({ registroId: historicoEtapa.registroId, situacao: historicoEtapa.situacao, data: historicoEtapa.data })
+        .from(historicoEtapa)
+        .where(inArray(historicoEtapa.registroId, idsMeus))
+        .orderBy(asc(historicoEtapa.data))
+    : [];
+
   return registros.map((r) => {
     const porPessoa = new Map<string, PessoaItem>();
     for (const p of pessoas.filter((p) => p.registroId === r.id)) {
@@ -162,10 +179,24 @@ export async function obterItensCaixa(caixaId: number, userId: string): Promise<
       totalPessoas: todasPessoas.length,
       dono: todasPessoas[0] ?? null,
       faltaPagar: minhasPartes.reduce((total, p) => total + somarNaoPago(p), 0),
+      historico: historicos
+        .filter((h) => h.registroId === r.id)
+        .map((h) => ({ situacao: h.situacao, data: h.data })),
     };
   });
 }
 
 function paraNumero(valor: string | null) {
   return valor === null ? null : Number(valor);
+}
+
+// === Seção: Nome da caixa para o título da aba ===
+// Em cache (o título não espera o banco a cada navegação). A etiqueta permite atualizar quando a GOM renomear.
+export async function obterNomeCaixa(id: number) {
+  "use cache";
+  cacheLife("hours");
+  cacheTag(`caixa-${id}`);
+  if (!Number.isInteger(id)) return null;
+  const [encontrada] = await db.select({ nome: caixa.nome }).from(caixa).where(eq(caixa.id, id));
+  return encontrada?.nome ?? null;
 }

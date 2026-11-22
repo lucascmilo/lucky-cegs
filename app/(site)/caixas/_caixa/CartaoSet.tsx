@@ -1,6 +1,8 @@
-import Link from "next/link";
 import { SeloNovo } from "@/componentes/Novidade";
+import TextoCortado from "@/componentes/TextoCortado";
 import type { ItemCaixa, MinhaParte, PessoaItem } from "@/lib/caixas";
+import { descreverQuantidades } from "@/lib/formatacao";
+import { BotaoDetalhes } from "./JanelaDetalhes";
 import FotoItem from "./FotoItem";
 import { EtiquetaMeu, NomePessoa, PilulaEtapa, ValorPagamento } from "./PecasItem";
 
@@ -23,11 +25,15 @@ export default function CartaoSet({ item, eu, caixaId }: PropsCartaoSet) {
       {/* === Seção: Informações === */}
       <div className="cartaoSet__info">
         {item.grupo && <p className="cartaoSet__grupo">{item.grupo}</p>}
-        <h3 className="cartaoSet__nome" title={item.nome}>
-          {item.nome}
+        <h3 className="cartaoSet__nome">
+          <TextoCortado texto={item.nome} />
         </h3>
         <div className="cartaoSet__pilulas">
-          <span className="pilulaContorno">{item.qtdPc} PCS</span>
+          {descreverQuantidades(item).map((texto) => (
+            <span key={texto} className="pilulaContorno">
+              {texto}
+            </span>
+          ))}
           <span className="pilulaContorno">
             {item.totalPessoas} {item.totalPessoas === 1 ? "joiner" : "joiners"}
           </span>
@@ -44,7 +50,7 @@ export default function CartaoSet({ item, eu, caixaId }: PropsCartaoSet) {
           ))}
         </ul>
 
-        {item.minhasPartes.length > 0 && <MinhasPartes partes={item.minhasPartes} eu={eu} />}
+        {item.minhasPartes.length > 0 && <MinhasPartes itemId={item.id} partes={item.minhasPartes} eu={eu} />}
       </div>
     </article>
   );
@@ -63,16 +69,20 @@ function Versoes({ versoes }: { versoes: (string | null)[] }) {
 }
 
 // === Seção: Caixa rosa com as partes do próprio joiner ===
-function MinhasPartes({ partes, eu }: { partes: MinhaParte[]; eu: Pick<PessoaItem, "nome" | "user"> }) {
+type PropsMinhasPartes = {
+  itemId: number;
+  partes: MinhaParte[];
+  eu: Pick<PessoaItem, "nome" | "user">;
+};
+
+function MinhasPartes({ itemId, partes, eu }: PropsMinhasPartes) {
   return (
     <div className="minhasPartes">
       <div className="minhasPartes__topo">
         <EtiquetaMeu />
         <NomePessoa pessoa={eu} />
         <Versoes versoes={partes.map((p) => p.membro)} />
-        <Link href="/meus-itens" className="minhasPartes__detalhes">
-          Detalhes
-        </Link>
+        <BotaoDetalhes itemId={itemId} className="minhasPartes__detalhes" />
       </div>
 
       <div className="minhasPartes__rolagem">

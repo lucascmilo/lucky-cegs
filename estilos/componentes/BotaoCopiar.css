@@ -50,3 +50,17 @@
 .botaoCopiar__rosa:hover {
   background: rgba(255, 255, 255, 0.18);
 }
+
+/* === Seção: Variante clara (sobre fundos claros, como a janela de detalhes) === */
+.botaoCopiar__claro {
+  width: 106px;
+  height: 25px;
+  background: var(--cor-branco);
+  border: 1px solid var(--cor-preto);
+  color: var(--cor-preto);
+}
+
+.botaoCopiar__claro:hover {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}

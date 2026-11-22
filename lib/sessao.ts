@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { cache } from "react";
 import { auth } from "@/lib/auth";
 import { enderecoEntrar, type Papel } from "@/lib/navegacao";
@@ -15,6 +16,8 @@ export type UsuarioAtual = {
 // Lê a sessão do Better Auth e devolve só o necessário para a interface.
 // "cache" faz cabeçalho, rodapé e página dividirem uma única leitura por requisição.
 export const obterUsuarioAtual = cache(async (): Promise<UsuarioAtual | null> => {
+  // Marca a leitura como dinâmica: o Better Auth usa a data atual, o que não pode acontecer no pré-render
+  await connection();
   const sessao = await auth.api.getSession({ headers: await headers() });
   if (!sessao) return null;
 

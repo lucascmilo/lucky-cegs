@@ -35,10 +35,10 @@ export function NomePessoa({ pessoa }: { pessoa: Pick<PessoaItem, "nome" | "user
 
 // === Seção: Valor com situação de pagamento ===
 // Valor vazio = "a definir": mostra "-" e fica pendente
-export function ValorPagamento({ valor, pago }: { valor: number | null; pago: boolean }) {
+export function ValorPagamento({ valor, pago }: { valor: number | string | null; pago: boolean }) {
   return (
     <span className="valorPagamento">
-      <span className="valorPagamento__numero">{valor === null ? "-" : formatarReais(valor)}</span>
+      <span className="valorPagamento__numero">{valor === null ? "-" : typeof valor === "string" ? valor : formatarReais(valor)}</span>
       {pago ? (
         <span className="valorPagamento__selo valorPagamento__pago">
           <IconeCheck />
