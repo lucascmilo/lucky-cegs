@@ -1,0 +1,611 @@
+/* === Seção: Escala da tela === */
+.casaGom {
+  /* A estrutura e os títulos ficam 15% menores */
+  --px-pagina: calc(var(--px-caixa) * 0.85);
+  --cor-borda-postal: #ec4f79;
+  --cor-papel-postal: #fff8f0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+/* === Seção: Faixa creme do topo === */
+.casaGom__faixa {
+  background: #fff4e8;
+  border-bottom: 1px solid var(--cor-preto);
+}
+
+.casaGom__faixaConteudo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
+  height: calc(var(--px-faixa) * 328);
+  margin-inline: auto;
+}
+
+.casaGom__cursiva {
+  position: relative;
+  top: -0.02em;
+  margin-left: 0.12em;
+  font-family: var(--fonte-cursiva);
+  font-size: 0.45em;
+  letter-spacing: 0;
+  color: var(--cor-preto);
+}
+
+/* O texto não passa por baixo da colagem */
+.casaGom__descricao {
+  max-width: calc(100% - var(--px-pagina) * 344 - 24px);
+}
+
+/* === Seção: Colagem da faixa === */
+.casaGom__colagem {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--px-pagina) * -30);
+  width: calc(var(--px-pagina) * 344);
+  aspect-ratio: 344 / 266;
+  transform: translateY(-50%);
+}
+
+.casaGom__colagem > * {
+  position: absolute;
+  height: auto;
+}
+
+.casaGom__quadrado {
+  left: 29.07%;
+  top: 0;
+  width: 63.95%;
+  height: 63.91%;
+  border: 1px solid var(--cor-preto);
+  background: var(--cor-azul-colagem);
+}
+
+.casaGom__foto {
+  left: 0;
+  top: 19.17%;
+  width: 55.23%;
+  box-shadow: var(--sombra-cartao);
+}
+
+.casaGom__cd {
+  left: 76.74%;
+  top: 48.87%;
+  width: 23.26%;
+}
+
+.casaGom__brilhoUm {
+  left: 19.19%;
+  top: 6.77%;
+  width: 6.4%;
+}
+
+.casaGom__brilhoDois {
+  left: 58.43%;
+  top: 85.71%;
+  width: 9.88%;
+}
+
+/* === Seção: Conteúdo === */
+.casaGom__conteudo {
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
+  margin-inline: auto;
+  padding: calc(var(--px-pagina) * 60) 0 calc(var(--px-pagina) * 68);
+}
+
+.casaGom__aviso {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px calc(var(--px-pagina) * 30);
+  margin-left: calc(var(--px-pagina) * 15);
+  font-size: max(14px, var(--px-caixa) * 15);
+  font-weight: 500;
+}
+
+.casaGom__etiqueta {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 14px;
+  background: var(--cor-preto);
+  box-shadow: 3px 3px 0 rgba(21, 18, 20, 0.18);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cor-branco);
+  transform: rotate(-2deg);
+}
+
+/* === Seção: Fichário (lista de caixas + cartão-postal) === */
+.fichario {
+  display: grid;
+  grid-template-columns: calc(var(--px-pagina) * 250) minmax(0, 1fr);
+  gap: calc(var(--px-pagina) * 30);
+  margin-top: calc(var(--px-pagina) * 50);
+}
+
+.fichario__lista {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 20px 16px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 16px;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+}
+
+.fichario__rotulo {
+  font-family: var(--fonte-pixel);
+  font-size: 13px;
+  color: var(--cor-rosa-texto);
+}
+
+.fichario__lista [role="tablist"] {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.fichario__aba {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 12px;
+  background: var(--cor-branco);
+  text-align: left;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.fichario__aba:hover {
+  background: var(--cor-rosa-claro);
+}
+
+.fichario__abaAtiva,
+.fichario__abaAtiva:hover {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+.fichario__nomeCaixa {
+  font-family: var(--fonte-titulo);
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.fichario__situacao {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b6466;
+}
+
+.fichario__situacaoChegou {
+  color: #0f6b33;
+}
+
+.fichario__abaAtiva .fichario__situacao {
+  color: #d8d2ca;
+}
+
+.fichario__abaAtiva .fichario__situacaoChegou {
+  color: #bdebd0;
+}
+
+/* === Seção: Cartão-postal === */
+.postal {
+  min-width: 0;
+  padding: calc(var(--px-pagina) * 13) calc(var(--px-pagina) * 15);
+  border: 1px solid var(--cor-preto);
+  border-radius: 6px;
+  background: var(--cor-papel-postal);
+  box-shadow: var(--sombra-cartao);
+}
+
+.postal__borda {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  align-items: center;
+  gap: calc(var(--px-pagina) * 36);
+  min-height: calc(var(--px-pagina) * 560);
+  padding: calc(var(--px-pagina) * 36) calc(var(--px-pagina) * 30);
+  border: 3px solid var(--cor-borda-postal);
+}
+
+.postal__linha {
+  align-self: stretch;
+  background: var(--cor-preto);
+}
+
+.postal__ladoFoto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.postal__foto {
+  width: 100%;
+  aspect-ratio: 502 / 386;
+  border: 0;
+  border-radius: 2px;
+  background: var(--cor-preto);
+}
+
+.postal__baixar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.postal__baixar:hover {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+.postal__fotoEmBreve {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  aspect-ratio: 502 / 386;
+  padding: 24px;
+  border: 1.5px dashed var(--cor-preto);
+  background: var(--cor-bege-claro) var(--textura-ruido);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: #5c5658;
+}
+
+.postal__fotoEmBreveTitulo {
+  font-family: var(--fonte-pixel);
+  font-size: 15px;
+  color: var(--cor-rosa-texto);
+}
+
+/* === Seção: Verso do cartão-postal === */
+.postal__texto {
+  align-self: start;
+  min-width: 0;
+  padding-top: calc(var(--px-pagina) * 10);
+  padding-bottom: calc(var(--px-pagina) * 130);
+}
+
+.postal__marca {
+  font-size: max(13px, var(--px-caixa) * 16);
+  font-weight: 700;
+}
+
+.postal__titulo {
+  margin-top: 12px;
+  font-family: var(--fonte-titulo);
+  font-size: max(24px, var(--px-pagina) * 35);
+  font-weight: 400;
+  line-height: 1.05;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.postal__cursiva {
+  margin-top: 2px;
+  font-family: var(--fonte-cursiva);
+  font-size: max(24px, var(--px-pagina) * 34);
+  line-height: 1.2;
+  color: var(--cor-rosa-texto);
+}
+
+.postal__para {
+  margin-top: 22px;
+  font-size: max(14px, var(--px-caixa) * 16);
+  font-weight: 500;
+}
+
+.postal__chegada {
+  white-space: nowrap;
+}
+
+.postal__itens {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.postal__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: max(14px, var(--px-caixa) * 16);
+  font-weight: 700;
+  text-align: left;
+  text-transform: lowercase;
+}
+
+.postal__coracao {
+  flex-shrink: 0;
+  color: var(--cor-rosa);
+}
+
+.postal__nomeItem {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: underline transparent;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+/* A setinha mostra que o item abre os detalhes */
+.postal__setaItem {
+  flex-shrink: 0;
+  opacity: 0.45;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.postal__item:hover .postal__nomeItem {
+  text-decoration-color: var(--cor-rosa);
+}
+
+.postal__item:hover .postal__setaItem {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+.postal__mais {
+  margin-top: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cor-rosa-texto);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.postal__dica {
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b6466;
+}
+
+.postal__carimbo {
+  position: absolute;
+  right: calc(var(--px-pagina) * 44);
+  bottom: calc(var(--px-pagina) * 40);
+  width: calc(var(--px-pagina) * 170);
+  height: auto;
+  pointer-events: none;
+}
+
+/* === Seção: Aviso quando nenhuma caixa chegou === */
+.postalVazio {
+  margin-top: calc(var(--px-pagina) * 50);
+}
+
+.postalVazio__espacoFoto {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  aspect-ratio: 502 / 386;
+  border: 1.5px dashed var(--cor-preto);
+  background: var(--cor-bege-claro) var(--textura-ruido);
+}
+
+.postalVazio__polaroide {
+  display: block;
+  width: 120px;
+  padding: 10px 10px 34px;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+  transform: rotate(-5deg);
+}
+
+.postalVazio__polaroideFoto {
+  display: block;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at 50% 42%, var(--cor-rosa) 0 14px, transparent 15px),
+    var(--cor-rosa-suave);
+}
+
+.postalVazio__legendaFoto {
+  font-family: var(--fonte-pixel);
+  font-size: 12px;
+  color: #6b6466;
+}
+
+.postalVazio__titulo {
+  margin-top: 12px;
+  font-family: var(--fonte-titulo);
+  font-size: max(22px, var(--px-pagina) * 32);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.postalVazio__descricao {
+  max-width: 380px;
+  margin-top: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #3d3739;
+}
+
+.postalVazio__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.postalVazio__acoes .botao {
+  height: 44px;
+  padding: 0 22px;
+}
+
+/* Carimbo de borracha batido no canto do cartão */
+.postalVazio__carimbo {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  padding: 8px 14px;
+  border: 4px double var(--cor-rosa);
+  border-radius: 6px;
+  font-family: var(--fonte-pixel);
+  font-size: 14px;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
+  text-align: center;
+  color: var(--cor-rosa);
+  opacity: 0.85;
+  transform: rotate(-12deg);
+  animation: carimbar 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) 0.25s both;
+}
+
+@keyframes carimbar {
+  from {
+    opacity: 0;
+    transform: rotate(-12deg) scale(1.6);
+  }
+  to {
+    opacity: 0.85;
+    transform: rotate(-12deg) scale(1);
+  }
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 1100px) {
+  .casaGom__colagem {
+    right: 0;
+  }
+}
+
+/* A lista de caixas vira uma fileira de abas acima do cartão */
+@media (max-width: 1000px) {
+  .fichario {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .fichario__lista {
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .fichario__lista [role="tablist"] {
+    flex-direction: row;
+    margin-top: 10px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    /* Esmaece a borda direita para indicar que dá para rolar as abas */
+    mask-image: linear-gradient(90deg, #000 calc(100% - 32px), transparent);
+  }
+
+  .fichario__lista [role="tablist"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fichario__aba {
+    min-width: 170px;
+  }
+}
+
+/* O cartão-postal fica em pé: foto em cima, verso embaixo */
+@media (max-width: 760px) {
+  .postal {
+    padding: 8px;
+  }
+
+  .postal__borda {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    min-height: 0;
+    padding: 18px 16px 24px;
+  }
+
+  .postal__linha {
+    height: 1px;
+  }
+
+  .postal__texto {
+    padding: 0 0 90px;
+  }
+
+  .postal__carimbo {
+    right: 16px;
+    bottom: 18px;
+    width: 120px;
+  }
+
+  .postalVazio__carimbo {
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .casaGom__faixaConteudo {
+    height: auto;
+    padding: 32px 0 28px;
+  }
+
+  .casaGom__descricao {
+    max-width: none;
+  }
+
+  .casaGom__cursiva {
+    font-size: 0.6em;
+  }
+
+  .casaGom__colagem {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: min(300px, 86%);
+    margin: 28px auto 0;
+  }
+
+  .casaGom__aviso {
+    margin-left: 0;
+  }
+}

@@ -99,7 +99,8 @@
 }
 
 /* === Seção: Responsivo === */
-@media (max-width: 1000px) {
+/* Empilha só em pé: celular deitado mantém a colagem ao lado do formulário */
+@media (max-width: 1000px) and (orientation: portrait), (max-width: 640px) {
   .telaAcesso__tela {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
@@ -116,7 +117,8 @@
   }
 }
 
-@media (max-width: 600px) {
+/* Cartão compacto: celular em pé ou deitado (ao lado da colagem o cartão fica estreito) */
+@media (max-width: 600px), (orientation: landscape) and (max-height: 540px) {
   .telaAcesso__molduraRosa {
     margin: 9px;
     padding: 20px 18px 30px;

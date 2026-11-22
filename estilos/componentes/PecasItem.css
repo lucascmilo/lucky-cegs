@@ -4,30 +4,30 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: calc(var(--px-caixa, 1px) * 95);
-  height: calc(var(--px-caixa, 1px) * 25);
-  padding: 0 calc(var(--px-caixa, 1px) * 12);
+  min-width: calc(var(--px-caixa) * 95);
+  height: calc(var(--px-caixa) * 25);
+  padding: 0 calc(var(--px-caixa) * 12);
   border: 1px solid var(--cor-preto);
   border-radius: var(--raio-pilula);
   background: var(--cor-branco);
-  font-size: max(12px, var(--px-caixa, 1px) * 12);
+  font-size: max(12px, var(--px-caixa) * 12);
   font-weight: 700;
   color: var(--cor-preto);
   white-space: nowrap;
 }
 
 .pilulaContorno__versao {
-  min-width: calc(var(--px-caixa, 1px) * 70);
+  min-width: calc(var(--px-caixa) * 70);
 }
 
 .etiquetaMeu {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: calc(var(--px-caixa, 1px) * 5);
-  width: calc(var(--px-caixa, 1px) * 60);
-  height: calc(var(--px-caixa, 1px) * 20);
-  border-radius: calc(var(--px-caixa, 1px) * 4);
+  gap: calc(var(--px-caixa) * 5);
+  width: calc(var(--px-caixa) * 60);
+  height: calc(var(--px-caixa) * 20);
+  border-radius: calc(var(--px-caixa) * 4);
   background: var(--cor-preto);
   font-family: var(--fonte-pixel);
   font-size: 11px;
@@ -40,7 +40,7 @@
 
 .nomePessoa {
   text-transform: lowercase;
-  font-size: max(12px, var(--px-caixa, 1px) * 16);
+  font-size: max(12px, var(--px-caixa) * 16);
   color: var(--cor-preto);
 }
 
@@ -52,8 +52,8 @@
   display: inline-flex;
   font-variant-numeric: tabular-nums;
   align-items: center;
-  gap: calc(var(--px-caixa, 1px) * 10);
-  font-size: max(12px, var(--px-caixa, 1px) * 13);
+  gap: calc(var(--px-caixa) * 10);
+  font-size: max(12px, var(--px-caixa) * 13);
   font-weight: 700;
 }
 
@@ -63,28 +63,28 @@
   justify-content: center;
   gap: 6px;
   padding: 0 8px;
-  height: calc(var(--px-caixa, 1px) * 20);
+  height: calc(var(--px-caixa) * 20);
   border-radius: var(--raio-pilula);
   font-size: 10px;
   font-weight: 700;
 }
 
 .valorPagamento__pago {
-  min-width: calc(var(--px-caixa, 1px) * 53);
+  min-width: calc(var(--px-caixa) * 53);
   border: 1px solid #5aa548;
   background: #dcf3d3;
   color: #2d6a1f;
 }
 
 .valorPagamento__emBreve {
-  min-width: calc(var(--px-caixa, 1px) * 72);
+  min-width: calc(var(--px-caixa) * 72);
   border: 1px dashed #8a8486;
   background: var(--cor-bege-claro);
   color: #5c5658;
 }
 
 .valorPagamento__pendente {
-  min-width: calc(var(--px-caixa, 1px) * 72);
+  min-width: calc(var(--px-caixa) * 72);
   border: 1px dashed var(--cor-rosa-texto);
   background: var(--cor-branco);
   color: var(--cor-rosa-texto);
@@ -115,7 +115,7 @@
   overflow: hidden;
   border: 1px solid var(--cor-preto);
   border-left: 15px solid var(--cor-rosa);
-  border-radius: calc(var(--px-caixa, 1px) * 8);
+  border-radius: calc(var(--px-caixa) * 8);
   background: var(--cor-bege-claro);
 }
 
@@ -136,12 +136,12 @@
 
 .fotoItem__lupa {
   position: absolute;
-  top: calc(var(--px-caixa, 1px) * 6);
-  right: calc(var(--px-caixa, 1px) * 8);
+  top: calc(var(--px-caixa) * 6);
+  right: calc(var(--px-caixa) * 8);
   display: grid;
   place-items: center;
-  width: calc(var(--px-caixa, 1px) * 40);
-  height: calc(var(--px-caixa, 1px) * 40);
+  width: calc(var(--px-caixa) * 40);
+  height: calc(var(--px-caixa) * 40);
   padding: 0;
   border: 1px solid var(--cor-preto);
   border-radius: 50%;
@@ -207,13 +207,13 @@ html:has(.fotoItem__janela[open]) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: calc(var(--px-caixa, 1px) * 154);
-  height: calc(var(--px-caixa, 1px) * 40);
-  padding: 0 calc(var(--px-caixa, 1px) * 20);
+  min-width: calc(var(--px-caixa) * 154);
+  height: calc(var(--px-caixa) * 40);
+  padding: 0 calc(var(--px-caixa) * 20);
   border: 1px solid var(--cor-preto);
   border-radius: var(--raio-pilula);
   background: var(--cor-branco);
-  font-size: max(12px, var(--px-caixa, 1px) * 15);
+  font-size: max(12px, var(--px-caixa) * 15);
   font-weight: 700;
   color: var(--cor-preto);
   text-decoration: none;
@@ -236,5 +236,23 @@ html:has(.fotoItem__janela[open]) {
     height: 38px;
     padding: 0 18px;
     font-size: 14px;
+  }
+}
+
+/* === Seção: Espiral de caderno no topo de um cartão === */
+/* O cartão precisa de position: relative */
+.espiralCaderno {
+  position: absolute;
+  top: calc(var(--px-caixa) * -15);
+  left: calc(var(--px-caixa) * 20);
+  right: calc(var(--px-caixa) * 21);
+  height: calc(var(--px-caixa) * 30);
+  background: url("/imagens/espiral-caderno.webp") left center / auto 100% round no-repeat;
+}
+
+@media (max-width: 860px) {
+  .espiralCaderno {
+    left: 14px;
+    right: 14px;
   }
 }

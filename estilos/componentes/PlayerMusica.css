@@ -1,10 +1,11 @@
 /* === Seção: Player === */
+/* Ocupa o que sobra ao lado do Pix (até 456px); só desce para outra linha se sobrar menos de 400px */
 .playerMusica__player {
   display: flex;
+  flex: 1 1 400px;
   align-items: center;
   gap: 17px;
-  width: 456px;
-  max-width: 100%;
+  max-width: 456px;
   min-width: 0;
 }
 
@@ -190,10 +191,21 @@
 }
 
 /* === Seção: Responsivo === */
+/* Em telas de toque o volume é o do aparelho: fica só o botão de silenciar */
+@media (pointer: coarse) {
+  .playerMusica__player {
+    flex-basis: 300px;
+  }
+
+  .playerMusica__controleVolume {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
   .playerMusica__player {
     gap: 12px;
-    width: 100%;
+    max-width: none;
   }
 
   .playerMusica__controleVolume {

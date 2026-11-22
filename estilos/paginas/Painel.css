@@ -1,0 +1,555 @@
+/* === Seção: Hero do painel (base em Inicio.css) === */
+.painelHero .inicio__texto {
+  padding-top: calc(var(--px-hero) * 150);
+}
+
+.painelHero .inicio__titulo {
+  font-size: calc(var(--px-hero) * 120);
+}
+
+.painelHero .inicio__imagemColagem {
+  width: 88.247%;
+}
+
+.painelHero .inicio__codigoBarras {
+  top: 42.098%;
+  width: 24.685%;
+}
+
+.painelHero__botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--px-hero) * 17);
+  margin-top: calc(var(--px-hero) * 24);
+}
+
+.painelHero__botoes .botao {
+  width: max(190px, var(--px-hero) * 250);
+  height: max(44px, var(--px-hero) * 50);
+  font-size: max(14px, var(--px-hero) * 16);
+}
+
+/* === Seção: Escala das seções entre o hero e o rodapé === */
+.painel__secoes {
+  /* A estrutura e os títulos ficam 10% menores */
+  --px-pagina: calc(var(--px-caixa) * 0.9);
+}
+
+@media (min-width: 861px) {
+  .painel__secoes .inicioJoiner__faixaQuadrados {
+    min-height: calc(var(--px-pagina) * 630);
+    padding-block: calc(var(--px-pagina) * 85);
+  }
+
+  .painel__secoes .inicioJoiner__titulo {
+    font-size: calc(var(--px-pagina) * 62);
+  }
+
+  .painel__secoes .painel__tituloProofs {
+    font-size: calc(var(--px-pagina) * 48);
+  }
+}
+
+/* === Seção: Quem falta pagar e caixas em andamento === */
+.painel__quadros {
+  display: grid;
+  grid-template-columns: minmax(0, 670fr) minmax(0, 450fr);
+  align-items: end;
+  gap: calc(var(--px-pagina) * 40);
+  width: min(100%, var(--largura-conteudo));
+}
+
+.painel__coluna {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.painel__colunaCaixas {
+  align-items: stretch;
+}
+
+.painel__tituloDireita {
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* === Seção: Tabela "Quem falta pagar" === */
+.faltaPagar {
+  position: relative;
+  margin-top: calc(var(--px-pagina) * 46);
+  padding: 34px 22px 10px 23px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 16px;
+  background: #fbf9f6;
+  box-shadow: var(--sombra-cartao);
+}
+
+.faltaPagar__tabela {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.faltaPagar__tabela th,
+.faltaPagar__tabela td {
+  padding: 0;
+  text-align: left;
+}
+
+.faltaPagar__tabela thead th {
+  height: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  vertical-align: top;
+}
+
+.faltaPagar__tabela thead th:first-child {
+  width: 34.4%;
+}
+
+/* Valores alinhados à direita, como o total */
+.faltaPagar__tabela thead th:not(:first-child),
+.faltaPagar__tabela td {
+  text-align: right;
+}
+
+.faltaPagar__tabela tbody tr,
+.faltaPagar__tabela tfoot tr {
+  height: 41px;
+  border-top: 1px dashed #d6d3d3;
+}
+
+.faltaPagar__tabela tfoot tr {
+  border-top: 1px solid var(--cor-preto);
+}
+
+.faltaPagar__tabela tfoot th {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.faltaPagar__tabela tbody th {
+  overflow: hidden;
+  padding-right: 8px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.faltaPagar__tabela tbody td {
+  font-weight: 600;
+}
+
+.faltaPagar__user {
+  font-weight: 700;
+}
+
+.faltaPagar__total {
+  font-weight: 800 !important;
+  color: var(--cor-rosa-texto);
+}
+
+.faltaPagar__emBreve {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b6466;
+}
+
+.faltaPagar__verMais,
+.andamento__verMais {
+  display: flex;
+  height: 36px;
+  margin: 12px auto;
+  padding: 0 18px;
+  font-size: 13px;
+}
+
+.faltaPagar__vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 44px 24px 36px;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.faltaPagar__vazioEtiqueta,
+.andamento__vazioEtiqueta {
+  font-family: var(--fonte-pixel);
+  font-size: 13px;
+  color: var(--cor-rosa-texto);
+}
+
+/* === Seção: Caixas em andamento === */
+.andamento {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: calc(var(--px-pagina) * 46) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.andamento__cartao {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(var(--px-pagina) * 120);
+  padding: calc(var(--px-pagina) * 21) calc(var(--px-pagina) * 28) 16px calc(var(--px-pagina) * 27);
+  border: 1px solid var(--cor-preto);
+  border-radius: 14px;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.andamento__cartao:hover {
+  transform: translateY(-2px);
+}
+
+.andamento__nome {
+  padding-right: 150px;
+  font-family: var(--fonte-titulo);
+  font-size: 20px;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.andamento__etapa {
+  position: absolute;
+  top: 18px;
+  right: 28px;
+  min-width: 0;
+  height: 26px;
+  padding: 0 12px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.andamento__progresso {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.andamento__barra,
+.andamento__barraCheia {
+  height: 8px;
+  border-radius: 4px;
+  background: #e9e4de;
+}
+
+.andamento__barraCheia {
+  background: var(--cor-rosa);
+}
+
+.andamento__itens {
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.andamento__vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: calc(var(--px-pagina) * 46);
+  padding: 32px 24px;
+  border: 1.5px dashed var(--cor-preto);
+  border-radius: 14px;
+  background: var(--cor-branco);
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.andamento__vazio .botao {
+  height: 40px;
+  margin-top: 8px;
+  padding: 0 20px;
+}
+
+/* === Seção: Proofs para subir === */
+.painel__faixaProofs {
+  padding-block: calc(var(--px-pagina) * 46);
+}
+
+.painel__cartaoProofs {
+  width: min(100%, var(--largura-conteudo));
+  min-height: 0;
+  padding: calc(var(--px-pagina) * 40) calc(var(--px-pagina) * 35) calc(var(--px-pagina) * 44);
+}
+
+.painel__topoProofs {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.painel__tituloProofs {
+  font-size: 48px;
+}
+
+.painel__verTodas {
+  height: 40px;
+  padding: 0 18px;
+  font-size: 14px;
+}
+
+.painel__proofs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: calc(var(--px-pagina) * 23);
+  margin: calc(var(--px-pagina) * 30) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.painel__proofs > li {
+  width: calc(var(--px-pagina) * 162);
+}
+
+.painel__proof {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  aspect-ratio: 162 / 200;
+  padding: 12px;
+  border: 2px dotted var(--cor-rosa);
+  background: #fdfbf9;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.painel__proof:hover {
+  border-style: solid;
+  background: var(--cor-rosa-suave);
+}
+
+.painel__proofIcone {
+  color: var(--cor-rosa-texto);
+  transition: transform 0.2s ease;
+}
+
+.painel__proof:hover .painel__proofIcone {
+  transform: translateY(-3px);
+}
+
+.painel__proofUser {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.painel__proofCaixa {
+  font-size: 10px;
+  font-weight: 600;
+  color: #6b6466;
+}
+
+/* === Seção: Aviso quando todas as proofs subiram === */
+.proofsEmDia {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  align-items: center;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.proofsEmDia__leque {
+  position: relative;
+  height: 220px;
+}
+
+/* Polaroides em leque, já com a foto revelada */
+.proofsEmDia__polaroide {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: 120px;
+  padding: 9px 9px 30px;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+  transform-origin: 50% 100%;
+}
+
+.proofsEmDia__polaroide:nth-child(1) {
+  transform: translateX(-50%) rotate(-14deg) translateX(-62px);
+}
+
+.proofsEmDia__polaroide:nth-child(2) {
+  z-index: 1;
+  transform: translateX(-50%) rotate(2deg);
+}
+
+.proofsEmDia__polaroide:nth-child(3) {
+  transform: translateX(-50%) rotate(16deg) translateX(62px);
+}
+
+.proofsEmDia__foto {
+  display: block;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at 50% 40%, var(--cor-branco) 0 9px, transparent 10px),
+    linear-gradient(160deg, #f6a9c1, var(--cor-rosa));
+}
+
+.proofsEmDia__polaroide:nth-child(2) .proofsEmDia__foto {
+  background:
+    radial-gradient(circle at 50% 40%, var(--cor-branco) 0 9px, transparent 10px),
+    linear-gradient(160deg, #dceaf9, #9fc3e8);
+}
+
+.proofsEmDia__selo {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  z-index: 2;
+  padding: 7px 12px;
+  border: 4px double #2d6a1f;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.85);
+  font-family: var(--fonte-pixel);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: #2d6a1f;
+  white-space: nowrap;
+  transform: translateX(-50%) rotate(-8deg);
+}
+
+.proofsEmDia__etiqueta {
+  font-family: var(--fonte-pixel);
+  font-size: 13px;
+  color: var(--cor-rosa-texto);
+}
+
+.proofsEmDia__titulo {
+  margin-top: 10px;
+  font-family: var(--fonte-titulo);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.proofsEmDia__descricao {
+  max-width: 440px;
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #3d3739;
+}
+
+.proofsEmDia__botao {
+  height: 44px;
+  margin-top: 20px;
+  padding: 0 22px;
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 1100px) {
+  .painel__proofs {
+    gap: 16px;
+  }
+
+  .painel__proofs > li {
+    width: 140px;
+  }
+}
+
+@media (max-width: 960px) {
+  .painel__quadros {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 56px;
+  }
+
+  .painel__tituloDireita {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 860px) {
+  .painelHero__botoes {
+    justify-content: center;
+    margin-top: 32px;
+  }
+
+  .painel__tituloProofs {
+    font-size: 36px;
+  }
+
+  .painel__proofs {
+    margin-top: 24px;
+  }
+
+  .proofsEmDia {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    text-align: center;
+  }
+
+  .proofsEmDia__descricao {
+    margin-inline: auto;
+  }
+}
+
+/* A tabela cabe inteira no celular: o @ fica em cima do nome */
+@media (max-width: 600px) {
+  .faltaPagar {
+    padding-inline: 16px;
+  }
+
+  .painel__proofs {
+    gap: 12px;
+  }
+
+  .painel__proofs > li {
+    width: calc(50% - 6px);
+  }
+
+  .faltaPagar__tabela {
+    font-size: 12px;
+  }
+
+  .faltaPagar__tabela thead th {
+    font-size: 12px;
+  }
+
+  .faltaPagar__tabela thead th:first-child {
+    width: 30%;
+  }
+
+  .faltaPagar__tabela tbody th {
+    line-height: 1.25;
+    white-space: normal;
+  }
+
+  .faltaPagar__user {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .painel__topoProofs {
+    flex-direction: column;
+  }
+}

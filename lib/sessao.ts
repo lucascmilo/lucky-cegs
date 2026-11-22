@@ -24,7 +24,8 @@ export const obterUsuarioAtual = cache(async (): Promise<UsuarioAtual | null> =>
   const { user } = sessao;
   return {
     id: user.id,
-    nome: user.name,
+    // Nomes aparecem sempre em minúsculas no site
+    nome: user.name.toLowerCase(),
     user: user.username ?? "",
     papel: user.role === "admin" ? "admin" : "user",
   };
@@ -35,5 +36,13 @@ export const obterUsuarioAtual = cache(async (): Promise<UsuarioAtual | null> =>
 export async function exigirUsuario(paginaAtual: string) {
   const usuario = await obterUsuarioAtual();
   if (!usuario) redirect(enderecoEntrar(paginaAtual));
+  return usuario;
+}
+
+// === Seção: Página só da GOM ===
+// Quem não é GOM volta para o início.
+export async function exigirGom(paginaAtual: string) {
+  const usuario = await exigirUsuario(paginaAtual);
+  if (usuario.papel !== "admin") redirect("/");
   return usuario;
 }

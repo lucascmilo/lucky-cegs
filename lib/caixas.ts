@@ -158,7 +158,7 @@ export async function obterItensCaixa(caixaId: number, userId: string): Promise<
   return registros.map((r) => {
     const porPessoa = new Map<string, PessoaItem>();
     for (const p of pessoas.filter((p) => p.registroId === r.id)) {
-      const pessoa = porPessoa.get(p.userId) ?? { userId: p.userId, nome: p.nome, user: p.user ?? "", versoes: [] };
+      const pessoa = porPessoa.get(p.userId) ?? { userId: p.userId, nome: p.nome.toLowerCase(), user: p.user ?? "", versoes: [] };
       if (p.membro) pessoa.versoes.push(p.membro);
       porPessoa.set(p.userId, pessoa);
     }

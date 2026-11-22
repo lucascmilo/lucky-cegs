@@ -47,10 +47,19 @@
 }
 
 /* === Seção: Responsivo === */
+/* Em telas médias sobra só "Pix", para o Pix e o player caberem numa linha */
 @media (max-width: 1000px) {
+  .barraSuperior__conteudo {
+    column-gap: 16px;
+  }
+
   .barraSuperior__rotuloPix {
     width: auto;
     margin-right: 14px;
+  }
+
+  .barraSuperior__marca {
+    display: none;
   }
 }
 

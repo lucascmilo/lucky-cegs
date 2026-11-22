@@ -10,7 +10,9 @@ export default function BarraSuperior() {
       <div className="barraSuperior__conteudo">
         {/* === Seção: Pix === */}
         <div className="barraSuperior__pix">
-          <span className="barraSuperior__rotuloPix">LUCKY CEGS | Pix</span>
+          <span className="barraSuperior__rotuloPix">
+            <span className="barraSuperior__marca">LUCKY CEGS | </span>Pix
+          </span>
           <span className="barraSuperior__emailPix">{EMAIL_PIX}</span>
           <BotaoCopiar texto={EMAIL_PIX} />
         </div>

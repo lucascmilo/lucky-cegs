@@ -58,6 +58,11 @@ const formatadorDiaMesAno = new Intl.DateTimeFormat("pt-BR", {
 });
 const formatadorAno = new Intl.DateTimeFormat("pt-BR", { year: "numeric", timeZone: "America/Sao_Paulo" });
 
+// Sempre com o ano (ex.: 19/11/26)
+export function formatarData(data: Date) {
+  return formatadorDiaMesAno.format(data);
+}
+
 export function formatarDataCurta(data: Date, agora = new Date()) {
   const mesmoAno = formatadorAno.format(data) === formatadorAno.format(agora);
   return (mesmoAno ? formatadorDiaMes : formatadorDiaMesAno).format(data);

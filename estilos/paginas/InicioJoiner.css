@@ -28,7 +28,7 @@
 
 /* === Seção: Cartão das seções === */
 .inicioJoiner__cartao {
-  width: min(100%, 1160px);
+  width: min(100%, var(--largura-conteudo));
   min-height: 460px;
   padding: 0 44px;
   border: 1px solid var(--cor-preto);

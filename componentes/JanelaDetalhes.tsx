@@ -20,10 +20,18 @@ type PropsProvedorDetalhes = {
   detalhes: Record<number, DetalheItem>;
   itemInicial: number | null;
   abaInicial: AbaDetalhes;
+  // Só a aba Fotos, sem Status e Pagamento
+  somenteFotos?: boolean;
   children: ReactNode;
 };
 
-export function ProvedorDetalhes({ detalhes, itemInicial, abaInicial, children }: PropsProvedorDetalhes) {
+export function ProvedorDetalhes({
+  detalhes,
+  itemInicial,
+  abaInicial,
+  somenteFotos = false,
+  children,
+}: PropsProvedorDetalhes) {
   const [aberto, setAberto] = useState<{ id: number; aba: AbaDetalhes } | null>(
     itemInicial && detalhes[itemInicial] ? { id: itemInicial, aba: abaInicial } : null,
   );
@@ -46,17 +54,27 @@ export function ProvedorDetalhes({ detalhes, itemInicial, abaInicial, children }
   return (
     <ContextoDetalhes.Provider value={abrir}>
       {children}
-      {detalhe && aberto && <JanelaDetalhes key={detalhe.id} detalhe={detalhe} abaInicial={aberto.aba} aoFechar={fechar} />}
+      {detalhe && aberto && (
+        <JanelaDetalhes
+          key={detalhe.id}
+          detalhe={detalhe}
+          abaInicial={somenteFotos ? "fotos" : aberto.aba}
+          somenteFotos={somenteFotos}
+          aoFechar={fechar}
+        />
+      )}
     </ContextoDetalhes.Provider>
   );
 }
 
 // === Seção: Botão "Detalhes" ===
-export function BotaoDetalhes({ itemId, className }: { itemId: number; className: string }) {
+type PropsBotaoDetalhes = { itemId: number; className: string; children?: ReactNode };
+
+export function BotaoDetalhes({ itemId, className, children = "Detalhes" }: PropsBotaoDetalhes) {
   const abrir = useContext(ContextoDetalhes);
   return (
     <button type="button" className={className} onClick={() => abrir(itemId)} aria-haspopup="dialog">
-      Detalhes
+      {children}
     </button>
   );
 }
@@ -66,12 +84,13 @@ export function BotaoDetalhes({ itemId, className }: { itemId: number; className
 type PropsJanelaDetalhes = {
   detalhe: DetalheItem;
   abaInicial: AbaDetalhes;
+  somenteFotos: boolean;
   aoFechar: () => void;
 };
 
 const DURACAO_FECHAR = 180;
 
-function JanelaDetalhes({ detalhe, abaInicial, aoFechar }: PropsJanelaDetalhes) {
+function JanelaDetalhes({ detalhe, abaInicial, somenteFotos, aoFechar }: PropsJanelaDetalhes) {
   const referenciaJanela = useRef<HTMLDialogElement>(null);
   const [aba, setAba] = useState(abaInicial);
   const [fechando, setFechando] = useState(false);
@@ -130,32 +149,39 @@ function JanelaDetalhes({ detalhe, abaInicial, aoFechar }: PropsJanelaDetalhes) 
         </div>
 
         {/* === Seção: Abas === */}
-        <div className="janelaDetalhes__abas" role="tablist" aria-label="Detalhes do item">
-          {ABAS_DETALHES.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              role="tab"
-              id={`aba-${item.id}`}
-              aria-selected={aba === item.id}
-              aria-controls={`painel-${item.id}`}
-              tabIndex={aba === item.id ? 0 : -1}
-              className={juntarClasses("janelaDetalhes__aba", aba === item.id && "janelaDetalhes__abaAtiva")}
-              onClick={() => trocarAba(item.id)}
-              onKeyDown={(evento) => {
-                // Setas trocam de aba, como esperado em abas acessíveis
-                const passo = evento.key === "ArrowRight" ? 1 : evento.key === "ArrowLeft" ? -1 : 0;
-                if (!passo) return;
-                const indice = ABAS_DETALHES.findIndex((a) => a.id === aba);
-                trocarAba(ABAS_DETALHES[(indice + passo + ABAS_DETALHES.length) % ABAS_DETALHES.length].id);
-              }}
-            >
-              {item.rotulo}
-            </button>
-          ))}
-        </div>
+        {!somenteFotos && (
+          <div className="janelaDetalhes__abas" role="tablist" aria-label="Detalhes do item">
+            {ABAS_DETALHES.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                role="tab"
+                id={`aba-${item.id}`}
+                aria-selected={aba === item.id}
+                aria-controls={`painel-${item.id}`}
+                tabIndex={aba === item.id ? 0 : -1}
+                className={juntarClasses("janelaDetalhes__aba", aba === item.id && "janelaDetalhes__abaAtiva")}
+                onClick={() => trocarAba(item.id)}
+                onKeyDown={(evento) => {
+                  // Setas trocam de aba, como esperado em abas acessíveis
+                  const passo = evento.key === "ArrowRight" ? 1 : evento.key === "ArrowLeft" ? -1 : 0;
+                  if (!passo) return;
+                  const indice = ABAS_DETALHES.findIndex((a) => a.id === aba);
+                  trocarAba(ABAS_DETALHES[(indice + passo + ABAS_DETALHES.length) % ABAS_DETALHES.length].id);
+                }}
+              >
+                {item.rotulo}
+              </button>
+            ))}
+          </div>
+        )}
 
-        <div className="janelaDetalhes__painel" role="tabpanel" id={`painel-${aba}`} aria-labelledby={`aba-${aba}`}>
+        <div
+          className="janelaDetalhes__painel"
+          role={somenteFotos ? undefined : "tabpanel"}
+          id={`painel-${aba}`}
+          aria-labelledby={somenteFotos ? undefined : `aba-${aba}`}
+        >
           {aba === "fotos" && <PainelFotos detalhe={detalhe} />}
           {aba === "status" && <PainelStatus detalhe={detalhe} />}
           {aba === "pagamento" && <PainelPagamento detalhe={detalhe} />}
@@ -170,7 +196,11 @@ function PainelFotos({ detalhe }: { detalhe: DetalheItem }) {
   return (
     <div className="janelaDetalhes__fotos">
       <FotoItem publicId={detalhe.fotoId} descricao={`Foto de ${detalhe.nome}`} className="janelaDetalhes__foto" />
-      <FotoItem publicId={detalhe.proofWhId} descricao={`Balança de ${detalhe.nome}`} className="janelaDetalhes__foto" />
+      <FotoItem
+        publicId={detalhe.proofWhId}
+        descricao={`Balança de ${detalhe.nome}`}
+        className="janelaDetalhes__foto"
+      />
     </div>
   );
 }

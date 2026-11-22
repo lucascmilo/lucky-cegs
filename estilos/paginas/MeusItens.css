@@ -1,7 +1,5 @@
-/* === Seção: Escala da tela (como na tela de caixas) === */
+/* === Seção: Escala da tela === */
 .meusItens {
-  /* Peças pequenas (textos, pílulas, botões, ícones) seguem o modelo de 1440 */
-  --px-caixa: max(0.8px, min(1px, var(--largura-tela) / 1440));
   /* A estrutura da página (larguras, espaços, colagem) fica 10% menor */
   --px-pagina: calc(var(--px-caixa) * 0.9);
   --cor-falta-pagar: #9e1517;
@@ -19,7 +17,7 @@
 
 .meusItens__faixaConteudo {
   position: relative;
-  width: min(100% - 2 * var(--margem-lateral), var(--px-pagina) * 1170);
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   min-height: calc(var(--px-pagina) * 360);
   margin-inline: auto;
   padding: calc(var(--px-pagina) * 63) 0 calc(var(--px-pagina) * 56);
@@ -101,7 +99,7 @@
   display: flex;
   flex-direction: column;
   gap: calc(var(--px-pagina) * 80);
-  width: min(100% - 2 * var(--margem-lateral), var(--px-pagina) * 1160);
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   margin-inline: auto;
   padding: calc(var(--px-pagina) * 82) 0 calc(var(--px-pagina) * 81);
 }
@@ -113,15 +111,6 @@
   border-radius: calc(var(--px-pagina) * 14);
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
-}
-
-.cartaoMeusItens__espiral {
-  position: absolute;
-  top: calc(var(--px-caixa) * -15);
-  left: calc(var(--px-caixa) * 20);
-  right: calc(var(--px-caixa) * 21);
-  height: calc(var(--px-caixa) * 30);
-  background: url("/imagens/espiral-caderno.webp") left center / auto 100% round no-repeat;
 }
 
 .cartaoMeusItens__topo {
@@ -402,11 +391,6 @@
 
   .cartaoMeusItens {
     padding: 30px 14px 16px;
-  }
-
-  .cartaoMeusItens__espiral {
-    left: 14px;
-    right: 14px;
   }
 
   /* No celular a pílula da etapa passa para baixo do nome */

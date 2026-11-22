@@ -1,14 +1,16 @@
-import { desc, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import { db } from "@/db";
 import { caixa, parte, registro } from "@/db/schema";
 import { obterItensCaixa, type DetalheCaixa, type ItemCaixa } from "@/lib/caixas";
+import type { EtapaCaixa } from "@/lib/etapas";
 
 // === Seção: Tipos ===
 export type CaixaComMeusItens = { caixa: DetalheCaixa; itens: ItemCaixa[] };
 
 // === Seção: Itens do joiner agrupados por caixa ===
 // Da caixa mais recente para a mais antiga. Valores e pagamentos são só das partes do próprio joiner.
-export async function obterMeusItens(userId: string): Promise<CaixaComMeusItens[]> {
+// "etapa" limita às caixas nessa etapa (ex.: só as que chegaram na casa da GOM)
+export async function obterMeusItens(userId: string, etapa?: EtapaCaixa): Promise<CaixaComMeusItens[]> {
   const idsCaixas = db
     .selectDistinct({ id: registro.caixaId })
     .from(parte)
@@ -18,7 +20,7 @@ export async function obterMeusItens(userId: string): Promise<CaixaComMeusItens[
   const caixas = await db
     .select({ id: caixa.id, nome: caixa.nome, origem: caixa.origem, situacao: caixa.situacao })
     .from(caixa)
-    .where(inArray(caixa.id, idsCaixas))
+    .where(and(inArray(caixa.id, idsCaixas), etapa ? eq(caixa.situacao, etapa) : undefined))
     .orderBy(desc(caixa.criadaEm));
 
   const grupos = await Promise.all(

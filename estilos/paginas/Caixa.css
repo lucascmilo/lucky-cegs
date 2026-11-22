@@ -1,10 +1,4 @@
 /* === Seção: Faixa azul do topo === */
-.caixaTopo,
-.caixaItens {
-  /* Escala da tela: 1px em 1440, encolhe junto com a tela até 80% */
-  --px-caixa: max(0.8px, min(1px, var(--largura-tela) / 1440));
-}
-
 .caixaTopo {
   background: var(--cor-azul-colagem);
   border-bottom: 1px solid var(--cor-preto);
@@ -12,7 +6,7 @@
 
 .caixaTopo__conteudo {
   position: relative;
-  width: min(100% - 2 * var(--margem-lateral), var(--px-caixa) * 1170);
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   min-height: calc(var(--px-caixa) * 340);
   margin-inline: auto;
   padding: calc(var(--px-caixa) * 53) 0 calc(var(--px-caixa) * 52);
@@ -151,7 +145,7 @@
 
 /* === Seção: Área dos itens === */
 .caixaItens {
-  width: min(100% - 2 * var(--margem-lateral), var(--px-caixa) * 1170);
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   margin-inline: auto;
   padding: calc(var(--px-caixa) * 53) 0 calc(var(--px-caixa) * 32);
 }
@@ -162,7 +156,6 @@
   align-items: center;
   justify-content: space-between;
   gap: calc(var(--px-caixa) * 16);
-  max-width: calc(var(--px-caixa) * 1160);
 }
 
 .caixaItens__filtros {
@@ -236,7 +229,6 @@
 }
 
 .caixaItens__secao {
-  max-width: calc(var(--px-caixa) * 1160);
   margin-top: calc(var(--px-caixa) * 42);
 }
 
@@ -266,7 +258,6 @@
   flex-direction: column;
   align-items: center;
   gap: calc(var(--px-caixa) * 10);
-  max-width: calc(var(--px-caixa) * 1160);
   margin-top: calc(var(--px-caixa) * 42);
   padding: calc(var(--px-caixa) * 48) calc(var(--px-caixa) * 24);
   font-size: max(12px, var(--px-caixa) * 16);

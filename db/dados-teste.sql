@@ -127,6 +127,62 @@ FROM (VALUES
 JOIN caixa c ON c.nome = v.caixa AND c.observacao = 'Observação teste'
 WHERE NOT EXISTS (SELECT 1 FROM registro r WHERE r.caixa_id = c.id AND r.nome = v.nome AND r.sem_dono);
 
+-- === Seção: Caixas na casa da GOM (Casa da GOM e painel) ===
+-- "Caixa 2 JP" recebe a proof do joiner de teste; "Caixa 9 KR" fica sem foto ("Foto em breve").
+-- As outras pessoas ficam sem proof, para aparecerem em "Proofs para subir" no painel.
+DO $$
+DECLARE
+  eu text := (SELECT id FROM "user" WHERE username = 'tonddoii');
+  outra1 text := (SELECT id FROM "user" WHERE username = 'jellisyujeu');
+  outra2 text := (SELECT id FROM "user" WHERE username = 'geowooo');
+  caixa_com_foto int;
+  caixa_sem_foto int;
+  linha record;
+  item int;
+BEGIN
+  IF EXISTS (SELECT 1 FROM caixa WHERE nome = 'Caixa 2 JP' AND observacao = 'Observação teste') THEN
+    RETURN;
+  END IF;
+
+  INSERT INTO caixa (nome, origem, warehouse, situacao, situacao_atualizada_em, abertura, observacao, criada_em)
+  VALUES ('Caixa 2 JP', 'JP', 'Warehouse Teste', 'casa_gom', now() - interval '3 days', current_date - 70, 'Observação teste', now() - interval '70 days')
+  RETURNING id INTO caixa_com_foto;
+
+  INSERT INTO caixa (nome, origem, warehouse, situacao, situacao_atualizada_em, abertura, observacao, criada_em)
+  VALUES ('Caixa 9 KR', 'KR', 'Warehouse Teste', 'casa_gom', now() - interval '6 days', current_date - 90, 'Observação teste', now() - interval '90 days')
+  RETURNING id INTO caixa_sem_foto;
+
+  FOR linha IN
+    SELECT * FROM (VALUES
+      (caixa_com_foto, eu, 'tws dohoon last bell', 'TWS', 'Dohoon', 22.00, 5.00, 3.50, true, true, true),
+      (caixa_com_foto, eu, 'harua mom showcase', '&TEAM', 'Harua', 38.11, 6.00, 3.00, true, true, false),
+      (caixa_com_foto, eu, 'harua mom set', '&TEAM', 'Harua', 25.00, 4.00, 2.50, true, true, true),
+      (caixa_com_foto, eu, 'harua mom units 7-set', '&TEAM', 'Harua', 31.00, 4.50, 2.00, true, false, false),
+      (caixa_com_foto, eu, 'k mom pob ktown4u', '&TEAM', 'K', 18.00, 3.00, 1.50, true, true, true),
+      (caixa_com_foto, eu, 'nicholas mom lucky draw', '&TEAM', 'Nicholas', 27.00, 4.00, 2.00, true, true, true),
+      (caixa_com_foto, outra1, 'yuma mom showcase', '&TEAM', 'Yuma', 38.11, 6.00, 3.00, true, true, true),
+      (caixa_com_foto, outra2, 'jo mom set', '&TEAM', 'Jo', 25.00, 4.00, 2.50, true, true, false),
+      (caixa_sem_foto, eu, 'karina whiplash pob', 'aespa', 'Karina', 29.90, 5.00, 4.00, true, true, false),
+      (caixa_sem_foto, eu, 'winter dirty work lucky draw', 'aespa', 'Winter', 33.00, 5.00, 4.00, true, true, true),
+      (caixa_sem_foto, outra1, 'ningning whiplash pob', 'aespa', 'Ningning', 29.90, 5.00, 4.00, true, false, false)
+    ) AS v(caixa_id, user_id, nome, grupo, membro, venda, inter, taxa, venda_pago, inter_pago, taxa_pago)
+  LOOP
+    INSERT INTO registro (caixa_id, tipo, situacao, situacao_atualizada_em, nome, grupo, qtd_pc, qtd_itens, compra)
+    VALUES (linha.caixa_id, 'individual', 'casa_gom', now() - interval '2 days', linha.nome, linha.grupo, 1, 1, linha.venda - 5)
+    RETURNING id INTO item;
+
+    INSERT INTO parte (registro_id, user_id, membro, venda, inter, taxa, venda_pago, inter_pago, taxa_pago)
+    VALUES (item, linha.user_id, linha.membro, linha.venda, linha.inter, linha.taxa, linha.venda_pago, linha.inter_pago, linha.taxa_pago);
+  END LOOP;
+END $$;
+
+-- Proof da Caixa 2 JP para o joiner de teste (a foto fica no Cloudinary em testes/proof-exemplo)
+INSERT INTO proof_gom (caixa_id, user_id, foto_id, criada_em)
+SELECT c.id, u.id, 'testes/proof-exemplo', now() - interval '2 days'
+FROM caixa c, "user" u
+WHERE c.nome = 'Caixa 2 JP' AND c.observacao = 'Observação teste' AND u.username = 'tonddoii'
+ON CONFLICT (caixa_id, user_id) DO NOTHING;
+
 -- === Seção: Datas das etapas dos itens de teste ===
 -- Cria uma data para cada etapa já percorrida, 9 dias antes da seguinte (a última é a mudança atual).
 -- Pode rodar sozinho depois do "npx drizzle-kit push" que cria a tabela historico_etapa.
@@ -139,6 +195,7 @@ WHERE e.ordem <= array_position(enum_range(NULL::situacao), r.situacao)
   AND NOT EXISTS (SELECT 1 FROM historico_etapa h WHERE h.registro_id = r.id);
 
 -- === Seção: Apagar dados de teste ===
--- Rode só estas duas linhas quando quiser limpar (as partes saem junto com os itens):
+-- Rode só estas três linhas quando quiser limpar (as partes saem junto com os itens):
 -- DELETE FROM registro WHERE caixa_id IN (SELECT id FROM caixa WHERE observacao = 'Observação teste');
+-- DELETE FROM proof_gom WHERE caixa_id IN (SELECT id FROM caixa WHERE observacao = 'Observação teste');
 -- DELETE FROM caixa WHERE observacao = 'Observação teste';

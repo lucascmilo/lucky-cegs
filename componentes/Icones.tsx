@@ -170,3 +170,20 @@ export function IconeFechar({ className, tamanho = 18 }: PropsIcone) {
     </svg>
   );
 }
+
+// === Seção: Baixar e enviar arquivo ===
+export function IconeBaixar({ className, tamanho = 16 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M8 2.5v7.5m0 0L4.75 6.75M8 10l3.25-3.25M2.75 13.25h10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconeEnviar({ className, tamanho = 20 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M10 13V3.5m0 0L6 7.5m4-4 4 4M3.5 12.5v3a1.5 1.5 0 0 0 1.5 1.5h10a1.5 1.5 0 0 0 1.5-1.5v-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}

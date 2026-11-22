@@ -1,7 +1,5 @@
-/* === Seção: Escala da tela (como na tela de caixas) === */
+/* === Seção: Escala da tela === */
 .semDono {
-  /* Peças pequenas (textos, pílulas, botões, ícones) seguem o modelo de 1440 */
-  --px-caixa: max(0.8px, min(1px, var(--largura-tela) / 1440));
   /* A estrutura da página (larguras, espaços, colagem) fica 10% menor */
   --px-pagina: calc(var(--px-caixa) * 0.9);
   display: flex;
@@ -20,7 +18,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: min(100% - 2 * var(--margem-lateral), var(--px-pagina) * 1170);
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   height: calc(var(--px-caixa) * 328);
   margin-inline: auto;
 }
@@ -70,7 +68,7 @@
 
 /* === Seção: Conteúdo === */
 .semDono__conteudo {
-  width: min(100% - 2 * var(--margem-lateral), var(--px-pagina) * 1170);
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   margin-inline: auto;
   padding: calc(var(--px-caixa) * 53) 0 calc(var(--px-pagina) * 73);
 }
@@ -78,7 +76,6 @@
 /* === Seção: Como funciona a claim === */
 /* Mesmo cartão da introdução dos Termos */
 .semDono__comoFunciona {
-  max-width: calc(var(--px-pagina) * 1160);
   border: 1px solid var(--cor-preto);
   border-radius: 20px;
   background: var(--cor-branco);
@@ -133,7 +130,6 @@
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: calc(var(--px-pagina) * 1160);
   height: 52px;
   margin-top: calc(var(--px-pagina) * 28);
   padding: 0 6px 0 20px;
@@ -194,7 +190,6 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: calc(var(--px-pagina) * 32);
-  max-width: calc(var(--px-pagina) * 1160);
   margin: calc(var(--px-pagina) * 40) 0 0;
   padding: 0;
   list-style: none;
@@ -348,7 +343,6 @@
   display: grid;
   grid-template-columns: calc(var(--px-pagina) * 300) minmax(0, 1fr);
   overflow: hidden;
-  max-width: calc(var(--px-pagina) * 1160);
   margin-top: calc(var(--px-pagina) * 40);
   border: 1px solid var(--cor-preto);
   border-radius: 16px;

@@ -40,6 +40,8 @@
   --largura-tela: calc(100vw / var(--zoom));
   /* Escala das faixas de título: 1px em 1440, encolhe em telas estreitas */
   --px-faixa: min(1px, var(--largura-tela) / 1440);
+  /* Escala das telas: 1px em 1440, encolhe junto com a tela até 80% */
+  --px-caixa: max(0.8px, min(1px, var(--largura-tela) / 1440));
 }
 
 @media (min-width: 640px) {
@@ -434,6 +436,7 @@ button {
 
 .tituloFaixa__subtitulo {
   margin-top: calc(var(--px-faixa) * 24);
+  text-wrap: pretty;
   font-size: max(14px, var(--px-faixa) * 16);
   font-weight: 500;
   line-height: 1.2;

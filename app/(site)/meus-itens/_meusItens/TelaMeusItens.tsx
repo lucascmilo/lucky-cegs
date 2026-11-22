@@ -110,7 +110,7 @@ function CartaoCaixa({ grupo, detalhes }: { grupo: CaixaComMeusItens; detalhes: 
 
   return (
     <section className="cartaoMeusItens" aria-labelledby={idTitulo}>
-      <span className="cartaoMeusItens__espiral" aria-hidden="true" />
+      <span className="espiralCaderno" aria-hidden="true" />
       <div className="cartaoMeusItens__topo">
         <h2 id={idTitulo} className="cartaoMeusItens__titulo">
           {grupo.caixa.nome}
@@ -197,7 +197,7 @@ function SemItens({ filtro }: { filtro: Filtro | null }) {
 
   return (
     <div className="meusItens__vazio">
-      <span className="cartaoMeusItens__espiral" aria-hidden="true" />
+      <span className="espiralCaderno" aria-hidden="true" />
       <p className="meusItens__vazioEtiqueta">{textos.etiqueta}</p>
       <p className="meusItens__vazioTexto">{textos.texto}</p>
       {filtro === null ? (
