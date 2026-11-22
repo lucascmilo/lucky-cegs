@@ -14,7 +14,7 @@ function gerarPontosEstrela() {
   return pontos.join(" ");
 }
 
-const PONTOS_ESTRELA = gerarPontosEstrela();
+export const PONTOS_ESTRELA = gerarPontosEstrela();
 
 // === Seção: Selo "Pedidos abertos" ===
 export default function SeloPedidosAbertos({ className }: { className?: string }) {

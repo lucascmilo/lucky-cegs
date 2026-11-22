@@ -6,8 +6,8 @@ import { user } from "../auth-schema";
 // === Seção: Enums ===
 // Situação do item (6 etapas)
 export const situacao = pgEnum("situacao", ["esperando", "comprado", "warehouse", "otw", "brasil", "casa_gom"]);
-// Situação da caixa (5 etapas)
-export const situacaoCaixa = pgEnum("situacao_caixa", ["warehouse", "otw", "brasil", "esperando_taxa", "casa_gom"]);
+// Situação da caixa (4 etapas)
+export const situacaoCaixa = pgEnum("situacao_caixa", ["warehouse", "otw", "brasil", "casa_gom"]);
 export const tipoRegistro = pgEnum("tipo_registro", ["individual", "set"]);
 export const statusClaim = pgEnum("status_claim", ["pedido", "aceito", "recusado"]);
 
@@ -43,6 +43,8 @@ export const registro = pgTable("registro", {
   situacaoAtualizadaEm: timestamp("situacao_atualizada_em").notNull().defaultNow(),
   nome: text("nome").notNull(),
   grupo: text("grupo"),
+  // Membro do grupo, para itens sem dono (nas partes fica em parte.membro)
+  membro: text("membro"),
   pesoKg: numeric("peso_kg", { precision: 7, scale: 3 }),
   qtdPc: integer("qtd_pc").notNull().default(0),
   qtdPostcard: integer("qtd_postcard").notNull().default(0),
@@ -89,6 +91,7 @@ export const claim = pgTable("claim", {
   status: statusClaim("status").notNull().default("pedido"),
   criadoEm: timestamp("criado_em").notNull().defaultNow(),
 });
+
 // === Seção: Histórico de etapas do item ===
 // Uma linha por mudança de etapa (as telas da GOM gravam junto com registro.situacao)
 export const historicoEtapa = pgTable("historico_etapa", {

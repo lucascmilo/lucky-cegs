@@ -1,8 +1,10 @@
-import { IconeCheck, IconeCoracao, IconeRelogio } from "@/componentes/Icones";
 import type { PessoaItem } from "@/lib/caixas";
 import { juntarClasses } from "@/lib/classes";
+import type { EstadoPagamento } from "@/lib/detalheItem";
 import { obterEtapaItem, type EtapaItem } from "@/lib/etapas";
 import { formatarReais } from "@/lib/formatacao";
+import { IconeCheck, IconeCoracao, IconeRelogio } from "./Icones";
+import "@/estilos/componentes/PecasItem.css";
 
 // === Seção: Etiqueta "MEU" ===
 export function EtiquetaMeu({ className }: { className?: string }) {
@@ -33,23 +35,31 @@ export function NomePessoa({ pessoa }: { pessoa: Pick<PessoaItem, "nome" | "user
   );
 }
 
+// === Seção: Selo de pagamento ===
+export function SeloPagamento({ estado }: { estado: EstadoPagamento }) {
+  if (estado === "pago") {
+    return (
+      <span className="valorPagamento__selo valorPagamento__pago">
+        <IconeCheck />
+        Pago
+      </span>
+    );
+  }
+  return (
+    <span className={juntarClasses("valorPagamento__selo", estado === "emBreve" ? "valorPagamento__emBreve" : "valorPagamento__pendente")}>
+      <IconeRelogio />
+      {estado === "emBreve" ? "Em breve" : "Pendente"}
+    </span>
+  );
+}
+
 // === Seção: Valor com situação de pagamento ===
-// Valor vazio = "a definir": mostra "-" e fica pendente
-export function ValorPagamento({ valor, pago }: { valor: number | string | null; pago: boolean }) {
+// Valor vazio = "a definir": mostra "-" e fica pendente (ou "Em breve", no caso da taxa)
+export function ValorPagamento({ valor, estado }: { valor: number | string | null; estado: EstadoPagamento }) {
   return (
     <span className="valorPagamento">
       <span className="valorPagamento__numero">{valor === null ? "-" : typeof valor === "string" ? valor : formatarReais(valor)}</span>
-      {pago ? (
-        <span className="valorPagamento__selo valorPagamento__pago">
-          <IconeCheck />
-          Pago
-        </span>
-      ) : (
-        <span className="valorPagamento__selo valorPagamento__pendente">
-          <IconeRelogio />
-          Pendente
-        </span>
-      )}
+      <SeloPagamento estado={estado} />
     </span>
   );
 }

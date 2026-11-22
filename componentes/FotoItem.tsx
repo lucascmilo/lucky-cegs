@@ -2,8 +2,9 @@
 
 import { CldImage } from "next-cloudinary";
 import { useRef } from "react";
-import { IconeFechar, IconeLupa } from "@/componentes/Icones";
 import { juntarClasses } from "@/lib/classes";
+import { IconeFechar, IconeLupa } from "./Icones";
+import "@/estilos/componentes/PecasItem.css";
 
 type PropsFotoItem = {
   publicId: string | null;

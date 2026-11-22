@@ -2,14 +2,14 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import BotaoCopiar from "@/componentes/BotaoCopiar";
-import { IconeCheck, IconeCoracao, IconeFechar, IconeRelogio } from "@/componentes/Icones";
+import { IconeCheck, IconeCoracao, IconeFechar } from "@/componentes/Icones";
 import TextoCortado from "@/componentes/TextoCortado";
 import { juntarClasses } from "@/lib/classes";
 import { EMAIL_PIX } from "@/lib/configuracoes";
-import { ABAS_DETALHES, type AbaDetalhes, type DetalheItem } from "./detalheItem";
-import FotoItem from "./FotoItem";
-import { EtiquetaMeu, PilulaEtapa } from "./PecasItem";
-import "@/estilos/paginas/JanelaDetalhes.css";
+import { ABAS_DETALHES, type AbaDetalhes, type DetalheItem } from "@/lib/detalheItem";
+import FotoItem from "@/componentes/FotoItem";
+import { EtiquetaMeu, PilulaEtapa, SeloPagamento } from "@/componentes/PecasItem";
+import "@/estilos/componentes/JanelaDetalhes.css";
 
 // === Seção: Controle da janela ===
 // Os detalhes dos itens do joiner já vêm com a página: a janela abre na hora, sem ir ao servidor.
@@ -214,17 +214,7 @@ function PainelPagamento({ detalhe }: { detalhe: DetalheItem }) {
           <li key={linha.rotulo} className="pagamentoItem__linha">
             <span className="pagamentoItem__rotulo">{linha.rotulo}</span>
             <span className="pagamentoItem__valor">{linha.valor}</span>
-            {linha.pago ? (
-              <span className="valorPagamento__selo valorPagamento__pago">
-                <IconeCheck />
-                Pago
-              </span>
-            ) : (
-              <span className="valorPagamento__selo valorPagamento__pendente">
-                <IconeRelogio />
-                Pendente
-              </span>
-            )}
+            <SeloPagamento estado={linha.estado} />
           </li>
         ))}
       </ul>

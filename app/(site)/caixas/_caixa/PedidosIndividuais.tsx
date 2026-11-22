@@ -4,9 +4,10 @@ import TextoCortado from "@/componentes/TextoCortado";
 import type { ItemCaixa } from "@/lib/caixas";
 import { juntarClasses } from "@/lib/classes";
 import { formatarReais } from "@/lib/formatacao";
-import { BotaoDetalhes } from "./JanelaDetalhes";
-import FotoItem from "./FotoItem";
-import { EtiquetaMeu, NomePessoa, PilulaEtapa } from "./PecasItem";
+import { BotaoDetalhes } from "@/componentes/JanelaDetalhes";
+import FotoItem from "@/componentes/FotoItem";
+import { IconeCheck } from "@/componentes/Icones";
+import { EtiquetaMeu, NomePessoa, PilulaEtapa } from "@/componentes/PecasItem";
 
 export const CARTOES_POR_VEZ = 4;
 
@@ -70,7 +71,9 @@ function CartaoIndividual({ item, caixaId }: { item: ItemCaixa; caixaId: number 
           {item.faltaPagar > 0 ? (
             <span className="cartaoIndividual__falta">Falta {formatarReais(item.faltaPagar)}</span>
           ) : (
-            <span className="cartaoIndividual__falta cartaoIndividual__tudoPago">Tudo pago</span>
+            <span className="cartaoIndividual__falta cartaoIndividual__tudoPago">
+              <IconeCheck tamanho={11} /> Pago
+            </span>
           )}
           <BotaoDetalhes itemId={item.id} className="cartaoIndividual__detalhes" />
         </div>

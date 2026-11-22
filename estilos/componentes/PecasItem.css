@@ -1,0 +1,221 @@
+/* === Seção: Peças comuns dos itens === */
+.pilulaContorno,
+.pilulaEtapa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: calc(var(--px-caixa, 1px) * 95);
+  height: calc(var(--px-caixa, 1px) * 25);
+  padding: 0 calc(var(--px-caixa, 1px) * 12);
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: max(12px, var(--px-caixa, 1px) * 12);
+  font-weight: 700;
+  color: var(--cor-preto);
+  white-space: nowrap;
+}
+
+.pilulaContorno__versao {
+  min-width: calc(var(--px-caixa, 1px) * 70);
+}
+
+.etiquetaMeu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--px-caixa, 1px) * 5);
+  width: calc(var(--px-caixa, 1px) * 60);
+  height: calc(var(--px-caixa, 1px) * 20);
+  border-radius: calc(var(--px-caixa, 1px) * 4);
+  background: var(--cor-preto);
+  font-family: var(--fonte-pixel);
+  font-size: 11px;
+  color: var(--cor-branco);
+}
+
+.etiquetaMeu__coracao {
+  color: var(--cor-rosa);
+}
+
+.nomePessoa {
+  text-transform: lowercase;
+  font-size: max(12px, var(--px-caixa, 1px) * 16);
+  color: var(--cor-preto);
+}
+
+.nomePessoa__user {
+  font-weight: 500;
+}
+
+.valorPagamento {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+  align-items: center;
+  gap: calc(var(--px-caixa, 1px) * 10);
+  font-size: max(12px, var(--px-caixa, 1px) * 13);
+  font-weight: 700;
+}
+
+.valorPagamento__selo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 8px;
+  height: calc(var(--px-caixa, 1px) * 20);
+  border-radius: var(--raio-pilula);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.valorPagamento__pago {
+  min-width: calc(var(--px-caixa, 1px) * 53);
+  border: 1px solid #5aa548;
+  background: #dcf3d3;
+  color: #2d6a1f;
+}
+
+.valorPagamento__emBreve {
+  min-width: calc(var(--px-caixa, 1px) * 72);
+  border: 1px dashed #8a8486;
+  background: var(--cor-bege-claro);
+  color: #5c5658;
+}
+
+.valorPagamento__pendente {
+  min-width: calc(var(--px-caixa, 1px) * 72);
+  border: 1px dashed var(--cor-rosa-texto);
+  background: var(--cor-branco);
+  color: var(--cor-rosa-texto);
+}
+
+/* === Seção: Foto do item === */
+.fotoItem {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--cor-preto);
+  border-left: 15px solid var(--cor-rosa);
+  border-radius: calc(var(--px-caixa, 1px) * 8);
+  background: var(--cor-bege-claro);
+}
+
+.fotoItem__imagem {
+  object-fit: cover;
+}
+
+.fotoItem__vazia {
+  display: grid;
+  place-items: center;
+}
+
+.fotoItem__semFoto {
+  font-family: var(--fonte-pixel);
+  font-size: 11px;
+  color: #6b6466;
+}
+
+.fotoItem__lupa {
+  position: absolute;
+  top: calc(var(--px-caixa, 1px) * 6);
+  right: calc(var(--px-caixa, 1px) * 8);
+  display: grid;
+  place-items: center;
+  width: calc(var(--px-caixa, 1px) * 40);
+  height: calc(var(--px-caixa, 1px) * 40);
+  padding: 0;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-branco);
+  color: var(--cor-preto);
+  transition: transform 0.15s ease;
+}
+
+.fotoItem__lupa:hover {
+  transform: scale(1.08);
+}
+
+.fotoItem__janela {
+  width: min(92vw, 1000px);
+  overscroll-behavior: contain;
+  max-height: 90svh;
+  padding: 0;
+  overflow: visible;
+  border: 1px solid var(--cor-preto);
+  border-radius: 16px;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+}
+
+html:has(.fotoItem__janela[open]) {
+  overflow: hidden;
+}
+
+.fotoItem__janela::backdrop {
+  background: rgba(21, 18, 20, 0.6);
+}
+
+.fotoItem__ampliada {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: calc(90svh - 2px);
+  border-radius: 15px;
+  object-fit: contain;
+}
+
+.fotoItem__fechar {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-rosa);
+  color: var(--cor-branco);
+}
+
+.fotoItem__fechar:hover {
+  background: var(--cor-rosa-escuro);
+}
+
+/* === Seção: Pílula de escolha (caixas abertas e filtros; a ativa fica preta) === */
+.pilulaSelecao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: calc(var(--px-caixa, 1px) * 154);
+  height: calc(var(--px-caixa, 1px) * 40);
+  padding: 0 calc(var(--px-caixa, 1px) * 20);
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: max(12px, var(--px-caixa, 1px) * 15);
+  font-weight: 700;
+  color: var(--cor-preto);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.pilulaSelecao:hover {
+  background: var(--cor-rosa-claro);
+}
+
+.pilulaSelecao__ativa,
+.pilulaSelecao__ativa:hover {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+@media (max-width: 860px) {
+  .pilulaSelecao {
+    min-width: 0;
+    height: 38px;
+    padding: 0 18px;
+    font-size: 14px;
+  }
+}

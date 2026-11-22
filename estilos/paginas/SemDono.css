@@ -1,0 +1,609 @@
+/* === Seção: Escala da tela (como na tela de caixas) === */
+.semDono {
+  /* Peças pequenas (textos, pílulas, botões, ícones) seguem o modelo de 1440 */
+  --px-caixa: max(0.8px, min(1px, var(--largura-tela) / 1440));
+  /* A estrutura da página (larguras, espaços, colagem) fica 10% menor */
+  --px-pagina: calc(var(--px-caixa) * 0.9);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+/* === Seção: Faixa verde do topo === */
+.semDono__faixa {
+  background: #b8f0e6;
+  border-bottom: 1px solid var(--cor-preto);
+}
+
+/* Título e subtítulo no mesmo estilo da página de Termos */
+.semDono__faixaConteudo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: min(100% - 2 * var(--margem-lateral), var(--px-pagina) * 1170);
+  height: calc(var(--px-caixa) * 328);
+  margin-inline: auto;
+}
+
+.semDono__titulo {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fonte-titulo);
+  font-size: max(36px, var(--px-caixa) * 80);
+  font-weight: 400;
+  line-height: 0.781;
+  letter-spacing: 0.01em;
+  color: var(--cor-preto);
+}
+
+.semDono__tituloRosa {
+  color: var(--cor-rosa);
+}
+
+.semDono__descricao {
+  margin-top: calc(var(--px-caixa) * 24);
+  font-size: max(14px, var(--px-caixa) * 16);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* === Seção: Colagem da faixa === */
+.semDono__colagem {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--px-pagina) * -37);
+  width: calc(var(--px-pagina) * 351);
+  aspect-ratio: 351 / 308;
+  /* Centraliza pelo que aparece: o chaveiro tem uma sobra transparente embaixo */
+  transform: translateY(-44.4%);
+}
+
+.semDono__colagem > * {
+  position: absolute;
+}
+
+.semDono__quadrado {
+  left: 28.49%;
+  top: 0;
+  width: 62.68%;
+  height: 55.19%;
+  border: 1px solid var(--cor-preto);
+}
+
+.semDono__foto {
+  left: 0;
+  top: 16.56%;
+  width: 54.13%;
+  height: auto;
+  border: 6px solid var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+}
+
+.semDono__chaveiro {
+  left: 56.41%;
+  top: 39.29%;
+  width: 43.6%;
+  height: auto;
+}
+
+/* === Seção: Conteúdo === */
+.semDono__conteudo {
+  width: min(100% - 2 * var(--margem-lateral), var(--px-pagina) * 1170);
+  margin-inline: auto;
+  padding: calc(var(--px-caixa) * 53) 0 calc(var(--px-pagina) * 73);
+}
+
+/* === Seção: Como funciona a claim === */
+/* Mesmo cartão da introdução dos Termos */
+.semDono__comoFunciona {
+  max-width: calc(var(--px-pagina) * 1160);
+  border: 1px solid var(--cor-preto);
+  border-radius: 20px;
+  background: var(--cor-branco);
+}
+
+.semDono__comoFuncionaTitulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 48px;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 24px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.semDono__comoFuncionaTitulo::-webkit-details-marker {
+  display: none;
+}
+
+.semDono__seta {
+  flex-shrink: 0;
+  width: max(22px, var(--px-caixa) * 30);
+  height: auto;
+  transition: transform 0.25s ease;
+}
+
+.semDono__comoFunciona[open] .semDono__seta {
+  transform: rotate(180deg);
+}
+
+/* Passos com a estrela dos Termos */
+.semDono__passos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0 48px 24px;
+  list-style: none;
+  font-size: 16px;
+  line-height: 23px;
+}
+
+.semDono__passos li {
+  position: relative;
+  padding-left: 1.4em;
+}
+
+.semDono__passos li::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+}
+
+/* === Seção: Busca === */
+.semDono__busca {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: calc(var(--px-pagina) * 1160);
+  height: 52px;
+  margin-top: calc(var(--px-pagina) * 28);
+  padding: 0 6px 0 20px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+}
+
+.semDono__busca:focus-within {
+  border-color: var(--cor-rosa-escuro);
+  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
+}
+
+.semDono__campoBusca {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+}
+
+.semDono__campoBusca::placeholder {
+  color: #6b6466;
+}
+
+.semDono__botaoBusca {
+  flex-shrink: 0;
+  height: 40px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-preto);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cor-branco);
+  transition: background-color 0.3s ease;
+}
+
+.semDono__botaoBusca:hover {
+  background: #2a2628;
+}
+
+.semDono__resultadoBusca {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.semDono__resultadoBusca a {
+  color: var(--cor-rosa-texto);
+  text-underline-offset: 3px;
+}
+
+/* === Seção: Lista de cartões === */
+.semDono__lista {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: calc(var(--px-pagina) * 32);
+  max-width: calc(var(--px-pagina) * 1160);
+  margin: calc(var(--px-pagina) * 40) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.semDono__verMais {
+  display: flex;
+  width: 206px;
+  height: 40px;
+  margin: calc(var(--px-pagina) * 33) auto 0;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.15s ease;
+}
+
+.semDono__verMais:hover {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+/* === Seção: Cartão de item sem dono === */
+.cartaoSemDono {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: calc(var(--px-pagina) * 22) calc(var(--px-pagina) * 17) calc(var(--px-pagina) * 18);
+  border: 1px solid var(--cor-preto);
+  border-radius: calc(var(--px-pagina) * 16);
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+}
+
+.cartaoSemDono__foto {
+  height: calc(var(--px-pagina) * 154);
+  border-left-width: 11px;
+  border-radius: 6px;
+}
+
+.cartaoSemDono__foto + .cartaoSemDono__foto {
+  margin-top: calc(var(--px-pagina) * 10);
+}
+
+.cartaoSemDono__foto .fotoItem__lupa {
+  top: calc(var(--px-pagina) * 5);
+  right: calc(var(--px-pagina) * 6);
+  width: max(28px, var(--px-caixa) * 30);
+  height: max(28px, var(--px-caixa) * 30);
+}
+
+.cartaoSemDono__foto .fotoItem__lupa svg {
+  width: 14px;
+  height: auto;
+}
+
+.cartaoSemDono__nome {
+  margin-top: calc(var(--px-pagina) * 15);
+  font-family: var(--fonte-titulo);
+  font-size: max(14px, var(--px-caixa) * 16);
+  font-weight: 400;
+  line-height: 1.2;
+  text-transform: lowercase;
+}
+
+.cartaoSemDono__grupo {
+  margin-top: calc(var(--px-pagina) * 6);
+  font-size: max(12px, var(--px-caixa) * 13);
+  font-weight: 600;
+}
+
+.cartaoSemDono__pilulas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--px-caixa) * 8) calc(var(--px-caixa) * 18);
+  margin-top: calc(var(--px-pagina) * 18);
+}
+
+/* As pílulas acompanham o tamanho do texto */
+.cartaoSemDono__pilulas .pilulaEtapa,
+.cartaoSemDono__pilulas .pilulaContorno {
+  min-width: 0;
+  padding: 0 12px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.cartaoSemDono__preco {
+  margin-top: calc(var(--px-pagina) * 15);
+  font-family: var(--fonte-titulo);
+  font-size: max(20px, var(--px-caixa) * 25);
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+.cartaoSemDono__custos {
+  margin-top: 2px;
+  margin-bottom: calc(var(--px-pagina) * 19);
+  font-size: max(12px, var(--px-caixa) * 13);
+  font-weight: 600;
+}
+
+/* === Seção: Botão "Quero esse" === */
+.botaoQueroEsse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: max(36px, var(--px-caixa) * 35);
+  margin-top: auto;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--raio-pilula);
+  background: linear-gradient(180deg, #d6487a 0%, #c42a62 45%, var(--cor-rosa-profundo) 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -3px 0 rgba(21, 18, 20, 0.12),
+    0 6px 12px -4px rgba(21, 18, 20, 0.3);
+  font-size: max(13px, var(--px-caixa) * 13);
+  font-weight: 700;
+  color: var(--cor-branco);
+  text-decoration: none;
+  transition:
+    filter 0.3s ease,
+    transform 0.15s ease;
+}
+
+.botaoQueroEsse:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.botaoQueroEsse:disabled {
+  opacity: 0.75;
+  cursor: progress;
+}
+
+.botaoQueroEsse__enviado {
+  border: 1px solid var(--cor-preto);
+  background: #bdebd0;
+  box-shadow: none;
+  color: var(--cor-preto);
+}
+
+.botaoQueroEsse__erro {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cor-erro);
+}
+
+/* === Seção: Aviso sem itens === */
+.semDonoVazio {
+  display: grid;
+  grid-template-columns: calc(var(--px-pagina) * 300) minmax(0, 1fr);
+  overflow: hidden;
+  max-width: calc(var(--px-pagina) * 1160);
+  margin-top: calc(var(--px-pagina) * 40);
+  border: 1px solid var(--cor-preto);
+  border-radius: 16px;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+}
+
+.semDonoVazio__arte {
+  position: relative;
+  min-height: 290px;
+  border-right: 1.5px dashed var(--cor-preto);
+  background: #b8f0e6;
+}
+
+/* Selo de 240px no centro da arte; as medidas abaixo são relativas a ele */
+.semDonoVazio__selo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 240px;
+  height: 240px;
+  transform: translate(-50%, -50%);
+}
+
+.semDonoVazio__anel {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  animation: semDonoGiro 28s linear infinite;
+}
+
+.semDonoVazio__anel text {
+  font-family: var(--fonte-pixel);
+  font-size: 12px;
+  fill: var(--cor-preto);
+}
+
+/* Disco branco deslocado atrás do rosa, como um adesivo descolando */
+.semDonoVazio__sombra,
+.semDonoVazio__circulo {
+  position: absolute;
+  top: 34px;
+  left: 34px;
+  width: 172px;
+  height: 172px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+}
+
+.semDonoVazio__sombra {
+  background: var(--cor-branco);
+  transform: translate(9px, 9px);
+}
+
+.semDonoVazio__circulo {
+  background: var(--cor-rosa);
+}
+
+.semDonoVazio__prego {
+  position: absolute;
+  top: 46px;
+  left: 120px;
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-amarelo);
+  transform: translate(-50%, -50%);
+}
+
+/* O aro do chaveiro (54% da largura, 6% da altura da imagem) fica no prego e balança dali */
+.semDonoVazio__chaveiro {
+  position: absolute;
+  top: 35px;
+  left: 39px;
+  width: 150px;
+  height: auto;
+  transform-origin: 54% 6%;
+  animation: semDonoBalanco 3.6s ease-in-out infinite alternate;
+  filter: drop-shadow(0 10px 12px rgba(21, 18, 20, 0.22));
+}
+
+@keyframes semDonoGiro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes semDonoBalanco {
+  from {
+    transform: rotate(-7deg);
+  }
+  to {
+    transform: rotate(7deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .semDonoVazio__chaveiro,
+  .semDonoVazio__anel {
+    animation: none;
+  }
+}
+
+.semDonoVazio__conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 36px clamp(24px, 5%, 56px);
+}
+
+.semDonoVazio__etiqueta {
+  padding: 5px 12px 4px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-rosa-suave);
+  font-family: var(--fonte-pixel);
+  font-size: 13px;
+  color: var(--cor-rosa-texto);
+}
+
+.semDonoVazio__titulo {
+  margin-top: 16px;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(26px, var(--px-caixa) * 34, 34px);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.semDonoVazio__texto {
+  max-width: 440px;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #3d3739;
+}
+
+.semDonoVazio__botao {
+  min-width: 170px;
+  height: 44px;
+  margin-top: 22px;
+  padding: 0 24px;
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 1100px) {
+  .semDono__colagem {
+    right: 0;
+  }
+}
+
+@media (max-width: 1000px) {
+  .semDono__lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .semDono__faixaConteudo {
+    height: auto;
+    padding: 32px 0 28px;
+  }
+
+  .semDono__comoFuncionaTitulo {
+    padding: 18px 20px;
+    font-size: 16px;
+  }
+
+  .semDono__passos {
+    padding: 0 20px 20px;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .semDono__colagem {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: min(300px, 86%);
+    margin: 28px auto 0;
+  }
+
+  .semDono__lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .semDono__titulo {
+    font-size: clamp(28px, 9.5vw, 46px);
+    line-height: 0.82;
+  }
+
+  .semDono__descricao {
+    margin-top: 12px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 560px) {
+  .semDono__lista {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .cartaoSemDono__foto {
+    height: auto;
+    aspect-ratio: 3 / 2;
+  }
+
+  .semDonoVazio {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .semDonoVazio__arte {
+    min-height: 280px;
+    border-right: 0;
+    border-bottom: 1.5px dashed var(--cor-preto);
+  }
+
+  .semDonoVazio__conteudo {
+    align-items: center;
+    padding: 28px 20px 30px;
+    text-align: center;
+  }
+}

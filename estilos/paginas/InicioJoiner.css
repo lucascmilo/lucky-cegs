@@ -160,7 +160,7 @@
 
 .caixaResumo__progresso {
   display: grid;
-  grid-template-columns: repeat(5, 37px);
+  grid-template-columns: repeat(4, 48px);
   gap: 8px;
   margin-top: 20px;
 }

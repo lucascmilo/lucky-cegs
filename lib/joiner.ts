@@ -1,7 +1,7 @@
 import { desc, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { caixa, parte, registro } from "@/db/schema";
-import type { EtapaCaixa } from "@/lib/etapas";
+import { taxaDefinida, type EtapaCaixa } from "@/lib/etapas";
 
 // === Seção: Tipos ===
 export type CaixaResumo = {
@@ -42,11 +42,18 @@ export async function obterFaltaPagar(userId: string) {
       vendaPago: parte.vendaPago,
       interPago: parte.interPago,
       taxaPago: parte.taxaPago,
+      situacaoCaixa: caixa.situacao,
     })
     .from(parte)
+    .innerJoin(registro, eq(parte.registroId, registro.id))
+    .innerJoin(caixa, eq(registro.caixaId, caixa.id))
     .where(eq(parte.userId, userId));
 
-  return partes.reduce((total, p) => total + somarNaoPago(p), 0);
+  // A taxa só conta depois que a caixa chega ao Brasil
+  return partes.reduce(
+    (total, p) => total + somarNaoPago(taxaDefinida(p.situacaoCaixa) ? p : { ...p, taxa: null }),
+    0,
+  );
 }
 
 // === Seção: Caixas mais recentes do joiner ===

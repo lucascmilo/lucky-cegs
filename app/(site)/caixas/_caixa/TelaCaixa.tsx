@@ -3,9 +3,9 @@ import { RegistroVisita } from "@/componentes/Novidade";
 import type { CaixaAberta, DetalheCaixa, ItemCaixa, PessoaItem } from "@/lib/caixas";
 import { juntarClasses } from "@/lib/classes";
 import CartaoSet from "./CartaoSet";
-import { ABAS_DETALHES, montarDetalheItem } from "./detalheItem";
+import { ABAS_DETALHES, montarDetalheItem } from "@/lib/detalheItem";
 import FaixaCaixa from "./FaixaCaixa";
-import { ProvedorDetalhes } from "./JanelaDetalhes";
+import { ProvedorDetalhes } from "@/componentes/JanelaDetalhes";
 import PedidosIndividuais, { CARTOES_POR_VEZ } from "./PedidosIndividuais";
 import "@/estilos/paginas/Caixa.css";
 

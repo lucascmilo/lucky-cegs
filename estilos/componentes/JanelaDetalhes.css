@@ -387,6 +387,7 @@ html:has(.janelaDetalhes[open]) {
   min-width: 62px;
 }
 
+.pagamentoItem__linha .valorPagamento__emBreve,
 .pagamentoItem__linha .valorPagamento__pendente {
   min-width: 78px;
 }

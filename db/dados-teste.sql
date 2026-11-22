@@ -28,7 +28,7 @@ BEGIN
   RETURNING id INTO caixa2;
 
   INSERT INTO caixa (nome, origem, warehouse, situacao, situacao_atualizada_em, abertura, observacao)
-  VALUES ('Caixa 7 PH', 'PH', 'Warehouse Teste', 'esperando_taxa', now() - interval '12 days', current_date - 45, 'Observação teste')
+  VALUES ('Caixa 7 PH', 'PH', 'Warehouse Teste', 'brasil', now() - interval '12 days', current_date - 45, 'Observação teste')
   RETURNING id INTO caixa3;
 
   -- === Seção: Sets da Caixa 4 JP (divididos entre várias pessoas) ===
@@ -44,7 +44,7 @@ BEGIN
     (item, outra2, 'Ver. 5', 25.90, 4.50, 3.00, true, true, false);
 
   INSERT INTO registro (caixa_id, tipo, situacao, situacao_atualizada_em, nome, grupo, peso_kg, qtd_pc, qtd_itens, compra)
-  VALUES (caixa1, 'set', 'warehouse', now() - interval '8 days',
+  VALUES (caixa1, 'set', 'otw', now() - interval '8 days',
     'Set Teste', 'Grupo Teste com um Nome Longo Demais', 0.120, 3, 3, 60.00)
   RETURNING id INTO item;
   INSERT INTO parte (registro_id, user_id, membro, venda, inter, taxa, venda_pago, inter_pago, taxa_pago) VALUES
@@ -60,14 +60,14 @@ BEGIN
   VALUES (item, eu, 'Membro Teste', 38.11, 6.00, 3.00, true, true, false);
 
   INSERT INTO registro (caixa_id, tipo, situacao, situacao_atualizada_em, nome, grupo, qtd_pc, qtd_itens, compra)
-  VALUES (caixa1, 'individual', 'comprado', now() - interval '9 days',
+  VALUES (caixa1, 'individual', 'otw', now() - interval '9 days',
     'Item Teste com um nome enorme para ver as reticências funcionando no card', 'Grupo Teste', 2, 2, 50.00)
   RETURNING id INTO item;
   INSERT INTO parte (registro_id, user_id, membro, venda, inter, taxa, venda_pago, inter_pago, taxa_pago)
   VALUES (item, eu, 'Membro Teste', 52.40, 7.80, 4.20, true, true, false);
 
   INSERT INTO registro (caixa_id, tipo, situacao, situacao_atualizada_em, nome, grupo, qtd_pc, qtd_itens, compra)
-  VALUES (caixa1, 'individual', 'esperando', now() - interval '15 days', 'Item Teste Três', 'Grupo Teste', 1, 1, 20.00)
+  VALUES (caixa1, 'individual', 'otw', now() - interval '15 days', 'Item Teste Três', 'Grupo Teste', 1, 1, 20.00)
   RETURNING id INTO item;
   INSERT INTO parte (registro_id, user_id, membro, venda, inter, taxa, venda_pago, inter_pago, taxa_pago)
   VALUES (item, eu, 'Membro Teste', 22.00, NULL, NULL, true, false, false);
@@ -79,7 +79,7 @@ BEGIN
   VALUES (item, outra1, 'Membro Teste', 30.00, 5.00, 3.00, true, true, false);
 
   INSERT INTO registro (caixa_id, tipo, situacao, situacao_atualizada_em, nome, grupo, qtd_pc, qtd_itens, compra)
-  VALUES (caixa1, 'individual', 'warehouse', now() - interval '10 days',
+  VALUES (caixa1, 'individual', 'otw', now() - interval '10 days',
     'Item Teste com um nome muito longo de outra pessoa para testar', 'Grupo Teste', 3, 3, 40.00)
   RETURNING id INTO item;
   INSERT INTO parte (registro_id, user_id, membro, venda, inter, taxa, venda_pago, inter_pago, taxa_pago)
@@ -110,6 +110,22 @@ BEGIN
   INSERT INTO parte (registro_id, user_id, membro, venda, inter, taxa, venda_pago, inter_pago, taxa_pago)
   VALUES (item, eu, 'Membro Teste', 33.00, 5.00, 2.50, true, true, false);
 END $$;
+
+-- === Seção: Itens sem dono de teste ===
+-- Cada item fica numa caixa com etapa que combina com a dele (warehouse, OTW ou No Brasil).
+INSERT INTO registro (caixa_id, tipo, situacao, situacao_atualizada_em, nome, grupo, membro, qtd_pc, qtd_itens, sem_dono, preco_sem_dono)
+SELECT c.id, 'individual', v.situacao::situacao, now() - interval '2 days', v.nome, v.grupo, v.membro, 1, 1, true, v.preco
+FROM (VALUES
+  ('Caixa 12 KR', 'to us hanjin compact version', 'TWS', 'Hanjin', 'warehouse', 25.00),
+  ('Caixa 12 KR', 'supernova giselle lucky draw', 'aespa', 'Giselle', 'comprado', 38.00),
+  ('Caixa 12 KR', 'hot sauce jaemin pob', 'NCT DREAM', 'Jaemin', 'esperando', 29.90),
+  ('Caixa 4 JP', 'velvet summer lucky draw', 'Red Velvet', 'Irene', 'otw', 31.00),
+  ('Caixa 4 JP', 'lemonade karina lucky draw com um nome bem comprido', 'aespa', 'Karina', 'otw', 45.00),
+  ('Caixa 7 PH', 'made my night compact', 'LE SSERAFIM', 'Eunchae', 'brasil', 35.00),
+  ('Caixa 7 PH', 'item sem dono sete', 'Grupo Teste', 'Membro Teste', 'brasil', 18.50)
+) AS v(caixa, nome, grupo, membro, situacao, preco)
+JOIN caixa c ON c.nome = v.caixa AND c.observacao = 'Observação teste'
+WHERE NOT EXISTS (SELECT 1 FROM registro r WHERE r.caixa_id = c.id AND r.nome = v.nome AND r.sem_dono);
 
 -- === Seção: Datas das etapas dos itens de teste ===
 -- Cria uma data para cada etapa já percorrida, 9 dias antes da seguinte (a última é a mudança atual).

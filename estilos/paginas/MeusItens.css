@@ -1,0 +1,462 @@
+/* === Seção: Escala da tela (como na tela de caixas) === */
+.meusItens {
+  /* Peças pequenas (textos, pílulas, botões, ícones) seguem o modelo de 1440 */
+  --px-caixa: max(0.8px, min(1px, var(--largura-tela) / 1440));
+  /* A estrutura da página (larguras, espaços, colagem) fica 10% menor */
+  --px-pagina: calc(var(--px-caixa) * 0.9);
+  --cor-falta-pagar: #9e1517;
+  --divisoria-item: 1px dashed #d6d3d3;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+/* === Seção: Faixa azul do topo === */
+.meusItens__faixa {
+  background: var(--cor-azul-colagem);
+  border-bottom: 1px solid var(--cor-preto);
+}
+
+.meusItens__faixaConteudo {
+  position: relative;
+  width: min(100% - 2 * var(--margem-lateral), var(--px-pagina) * 1170);
+  min-height: calc(var(--px-pagina) * 360);
+  margin-inline: auto;
+  padding: calc(var(--px-pagina) * 63) 0 calc(var(--px-pagina) * 56);
+}
+
+.meusItens__titulo {
+  font-family: var(--fonte-titulo);
+  font-size: calc(var(--px-caixa) * 72);
+  font-weight: 400;
+  line-height: calc(var(--px-caixa) * 58);
+  color: var(--cor-preto);
+}
+
+.meusItens__filtros {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--px-caixa) * 16);
+  margin-top: calc(var(--px-caixa) * 44);
+}
+
+/* === Seção: Colagem da faixa === */
+.meusItens__colagem {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--px-pagina) * -43);
+  width: calc(var(--px-pagina) * 433);
+  aspect-ratio: 433.33 / 305.77;
+  transform: translateY(-50%);
+}
+
+.meusItens__colagem > * {
+  position: absolute;
+}
+
+.meusItens__quadrado {
+  left: 38.31%;
+  top: 0;
+  width: 50.77%;
+  height: 55.6%;
+  border: 1px solid var(--cor-preto);
+  background: var(--cor-rosa);
+}
+
+.meusItens__estrela {
+  left: 0;
+  top: 43.17%;
+  width: 40.1%;
+  height: auto;
+  aspect-ratio: 1;
+  overflow: visible;
+}
+
+.meusItens__estrela polygon {
+  fill: var(--cor-branco);
+  stroke: var(--cor-preto);
+  stroke-width: 0.8;
+  stroke-linejoin: round;
+}
+
+.meusItens__foto {
+  left: 15.23%;
+  top: 16.68%;
+  width: 43.85%;
+  height: auto;
+  box-shadow: var(--sombra-cartao);
+}
+
+.meusItens__adesivo {
+  left: 49.39%;
+  top: 16.68%;
+  width: 50.62%;
+  height: auto;
+}
+
+/* === Seção: Conteúdo === */
+.meusItens__conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--px-pagina) * 80);
+  width: min(100% - 2 * var(--margem-lateral), var(--px-pagina) * 1160);
+  margin-inline: auto;
+  padding: calc(var(--px-pagina) * 82) 0 calc(var(--px-pagina) * 81);
+}
+
+/* === Seção: Cartão da caixa (folha de caderno) === */
+.cartaoMeusItens {
+  position: relative;
+  padding: calc(var(--px-pagina) * 36) calc(var(--px-pagina) * 21) calc(var(--px-pagina) * 24) calc(var(--px-pagina) * 20);
+  border-radius: calc(var(--px-pagina) * 14);
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+}
+
+.cartaoMeusItens__espiral {
+  position: absolute;
+  top: calc(var(--px-caixa) * -15);
+  left: calc(var(--px-caixa) * 20);
+  right: calc(var(--px-caixa) * 21);
+  height: calc(var(--px-caixa) * 30);
+  background: url("/imagens/espiral-caderno.webp") left center / auto 100% round no-repeat;
+}
+
+.cartaoMeusItens__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: calc(var(--px-pagina) * 34);
+  margin-bottom: calc(var(--px-pagina) * 16);
+}
+
+.cartaoMeusItens__titulo {
+  min-width: 0;
+  font-family: var(--fonte-titulo);
+  font-size: max(22px, var(--px-pagina) * 30);
+  font-weight: 400;
+  line-height: 1.1;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+/* As pílulas acompanham o tamanho do texto */
+.cartaoMeusItens .pilulaEtapa {
+  flex-shrink: 0;
+  min-width: 0;
+  height: max(22px, var(--px-caixa) * 26);
+  padding: 0 12px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.linhaMeuItem__etapa {
+  justify-self: start;
+  width: max-content;
+}
+
+.cartaoMeusItens__lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* === Seção: Linha de um item === */
+.linhaMeuItem {
+  border-top: var(--divisoria-item);
+}
+
+.linhaMeuItem__resumo {
+  display: grid;
+  grid-template-columns:
+    calc(var(--px-caixa) * 46) minmax(0, 423fr) calc(var(--px-caixa) * 136) minmax(0, 336fr)
+    calc(var(--px-caixa) * 111) calc(var(--px-caixa) * 30);
+  align-items: center;
+  min-height: calc(var(--px-caixa) * 79);
+  padding: calc(var(--px-pagina) * 8) calc(var(--px-pagina) * 14) calc(var(--px-pagina) * 8) 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.linhaMeuItem__resumo::-webkit-details-marker {
+  display: none;
+}
+
+.linhaMeuItem__resumo:focus-visible {
+  outline: 2px solid var(--cor-rosa-escuro);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.linhaMeuItem__miniatura {
+  overflow: hidden;
+  aspect-ratio: 1;
+  border: 1px solid var(--cor-borda-bege);
+  border-radius: 6px;
+  background: var(--cor-bege-claro) var(--textura-ruido);
+}
+
+.linhaMeuItem__miniatura img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.linhaMeuItem__textos {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-left: calc(var(--px-pagina) * 23);
+  padding-right: 16px;
+  font-size: max(14px, var(--px-caixa) * 16);
+  line-height: 1.2;
+}
+
+.linhaMeuItem__nome {
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+.linhaMeuItem__grupo {
+  overflow: hidden;
+  margin-top: 2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.linhaMeuItem__valor {
+  grid-column: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: max(14px, var(--px-caixa) * 16);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.linhaMeuItem__falta {
+  color: var(--cor-falta-pagar);
+}
+
+.linhaMeuItem__pago {
+  color: #0f6b33;
+}
+
+
+.linhaMeuItem__seta {
+  grid-column: 6;
+  width: 100%;
+  height: auto;
+  transition: transform 0.25s ease;
+}
+
+.linhaMeuItem[open] .linhaMeuItem__seta {
+  transform: rotate(180deg);
+}
+
+/* === Seção: Linha aberta (Item, Inter e Taxa) === */
+.linhaMeuItem__aberta {
+  display: grid;
+  grid-template-columns: minmax(0, 875fr) calc(var(--px-caixa) * 115);
+  column-gap: calc(var(--px-pagina) * 46);
+  align-items: start;
+  margin-top: calc(var(--px-pagina) * 5);
+  padding: 0 calc(var(--px-pagina) * 14) 0 calc(var(--px-pagina) * 69);
+}
+
+.linhaMeuItem__pagamentos {
+  margin: 0;
+}
+
+.linhaMeuItem__pagamento {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: calc(var(--px-caixa) * 40);
+  border-top: var(--divisoria-item);
+  box-sizing: border-box;
+  font-size: max(14px, var(--px-caixa) * 15);
+  font-weight: 700;
+}
+
+.linhaMeuItem__pagamento dd {
+  margin: 0;
+}
+
+.linhaMeuItem__pagamento .valorPagamento {
+  gap: calc(var(--px-caixa) * 15);
+  font-size: max(14px, var(--px-caixa) * 15);
+}
+
+.linhaMeuItem__pagamento .valorPagamento__selo {
+  min-width: calc(var(--px-caixa) * 69);
+  height: calc(var(--px-caixa) * 23);
+}
+
+.linhaMeuItem__pagamento .valorPagamento__pendente {
+  border-color: var(--cor-falta-pagar);
+  color: var(--cor-falta-pagar);
+}
+
+.linhaMeuItem__detalhes {
+  height: calc(var(--px-caixa) * 30);
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: max(13px, var(--px-caixa) * 14);
+  font-weight: 600;
+  color: var(--cor-preto);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.linhaMeuItem__detalhes:hover {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+/* === Seção: Aviso sem itens === */
+.meusItens__vazio {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px 40px;
+  border-radius: calc(var(--px-pagina) * 14);
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+  text-align: center;
+}
+
+.meusItens__vazioEtiqueta {
+  font-family: var(--fonte-pixel);
+  font-size: 15px;
+  color: var(--cor-rosa-texto);
+}
+
+.meusItens__vazioTexto {
+  max-width: 420px;
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.meusItens__vazioBotao {
+  width: 180px;
+  height: 40px;
+  margin-top: 20px;
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 1100px) {
+  .meusItens__colagem {
+    right: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .meusItens__faixaConteudo {
+    padding-top: 40px;
+  }
+
+  .meusItens__titulo {
+    font-size: clamp(44px, 12vw, 72px);
+    line-height: 0.85;
+  }
+
+  .meusItens__filtros {
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .meusItens__colagem {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: min(340px, 92%);
+    margin: 28px auto 0;
+  }
+
+  .meusItens__conteudo {
+    gap: 56px;
+    padding-top: 52px;
+  }
+
+  .cartaoMeusItens {
+    padding: 30px 14px 16px;
+  }
+
+  .cartaoMeusItens__espiral {
+    left: 14px;
+    right: 14px;
+  }
+
+  /* No celular a pílula da etapa passa para baixo do nome */
+  .linhaMeuItem__resumo {
+    grid-template-columns: 46px minmax(0, 1fr) auto 24px;
+    grid-template-areas:
+      "foto textos valor seta"
+      "foto etapa valor seta";
+    column-gap: 12px;
+    row-gap: 6px;
+    padding: 14px 0;
+  }
+
+  .linhaMeuItem__miniatura {
+    grid-area: foto;
+    align-self: center;
+  }
+
+  .linhaMeuItem__textos {
+    grid-area: textos;
+    margin-left: 0;
+    padding-right: 0;
+  }
+
+  .linhaMeuItem__etapa {
+    grid-area: etapa;
+    justify-self: start;
+  }
+
+  .linhaMeuItem__valor {
+    grid-area: valor;
+  }
+
+  .linhaMeuItem__seta {
+    grid-area: seta;
+  }
+
+  .linhaMeuItem__aberta {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 12px;
+    margin-top: 0;
+    padding: 0 0 14px 58px;
+  }
+
+  .linhaMeuItem__detalhes {
+    justify-self: start;
+    width: 115px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 560px) {
+  .linhaMeuItem__aberta {
+    padding-left: 0;
+  }
+
+  .linhaMeuItem__pagamento .valorPagamento {
+    gap: 10px;
+  }
+}

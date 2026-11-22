@@ -4,7 +4,7 @@ import { cache } from "react";
 import { user } from "@/auth-schema";
 import { db } from "@/db";
 import { caixa, historicoEtapa, parte, registro } from "@/db/schema";
-import type { EtapaCaixa, EtapaItem } from "@/lib/etapas";
+import { etapaItemNaCaixa, taxaDefinida, type EtapaCaixa, type EtapaItem } from "@/lib/etapas";
 import { obterCaixasRecentes, somarNaoPago } from "@/lib/joiner";
 
 // === Seção: Tipos ===
@@ -107,6 +107,11 @@ export async function obterItensCaixa(caixaId: number, userId: string): Promise<
     .orderBy(asc(registro.id));
 
   if (registros.length === 0) return [];
+
+  // Antes da caixa chegar ao Brasil a taxa ainda não existe: fica "a definir"
+  const [daCaixa] = await db.select({ situacao: caixa.situacao }).from(caixa).where(eq(caixa.id, caixaId));
+  const comTaxa = daCaixa ? taxaDefinida(daCaixa.situacao) : false;
+
   const idsRegistros = registros.map((r) => r.id);
 
   // Quem tem parte em cada item, sem nenhum valor
@@ -166,14 +171,16 @@ export async function obterItensCaixa(caixaId: number, userId: string): Promise<
         membro: p.membro,
         venda: paraNumero(p.venda),
         inter: paraNumero(p.inter),
-        taxa: paraNumero(p.taxa),
+        taxa: comTaxa ? paraNumero(p.taxa) : null,
         vendaPago: p.vendaPago,
         interPago: p.interPago,
-        taxaPago: p.taxaPago,
+        taxaPago: comTaxa && p.taxaPago,
       }));
 
     return {
       ...r,
+      // O item acompanha a etapa da caixa depois que ela sai da warehouse
+      situacao: daCaixa ? etapaItemNaCaixa(r.situacao, daCaixa.situacao) : r.situacao,
       outrasPessoas: todasPessoas.filter((p) => p.userId !== userId),
       minhasPartes,
       totalPessoas: todasPessoas.length,

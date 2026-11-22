@@ -18,7 +18,14 @@ export type EtapaDetalhe = {
   estado: "feita" | "atual" | "futura";
 };
 
-export type LinhaPagamento = { rotulo: string; valor: string; pago: boolean };
+// "emBreve": o valor ainda não existe (a GOM ainda não lançou). "pendente": tem valor e não foi pago
+export type EstadoPagamento = "pago" | "pendente" | "emBreve";
+
+export function estadoDoValor(valor: number | null, pago: boolean): EstadoPagamento {
+  if (pago) return "pago";
+  return valor === null ? "emBreve" : "pendente";
+}
+export type LinhaPagamento = { rotulo: string; valor: string; estado: EstadoPagamento };
 
 // Tudo já formatado no servidor: a janela só desenha
 export type DetalheItem = {
@@ -32,6 +39,8 @@ export type DetalheItem = {
   etapas: EtapaDetalhe[];
   pagamento: LinhaPagamento[];
   faltaPagar: string | null;
+  // Sem nada pendente (o que ainda não existe não conta): aparece como pago
+  tudoPago: boolean;
 };
 
 // === Seção: Montagem dos dados ===
@@ -53,6 +62,8 @@ export function montarDetalheItem(item: ItemCaixa, nomeCaixa: string): DetalheIt
     };
   });
 
+  const pagamento = linhasPagamento(item.minhasPartes);
+
   return {
     id: item.id,
     nome: item.nome,
@@ -62,13 +73,19 @@ export function montarDetalheItem(item: ItemCaixa, nomeCaixa: string): DetalheIt
     fotoId: item.fotoId,
     proofWhId: item.proofWhId,
     etapas,
-    pagamento: [
-      somarCampo(item.minhasPartes, "Item", "venda", "vendaPago"),
-      somarCampo(item.minhasPartes, "Inter", "inter", "interPago"),
-      somarCampo(item.minhasPartes, "Taxa", "taxa", "taxaPago"),
-    ],
+    pagamento,
     faltaPagar: item.faltaPagar > 0 ? formatarReais(item.faltaPagar) : null,
+    tudoPago: pagamento.every((linha) => linha.estado !== "pendente"),
   };
+}
+
+// Item, inter e taxa somados das partes do joiner
+function linhasPagamento(partes: MinhaParte[]): LinhaPagamento[] {
+  return [
+    somarCampo(partes, "Item", "venda", "vendaPago"),
+    somarCampo(partes, "Inter", "inter", "interPago"),
+    somarCampo(partes, "Taxa", "taxa", "taxaPago"),
+  ];
 }
 
 // Soma o campo de todas as partes do joiner no item; só fica "Pago" se todas estiverem pagas.
@@ -80,9 +97,11 @@ function somarCampo(
   campoPago: "vendaPago" | "interPago" | "taxaPago",
 ): LinhaPagamento {
   const valores = partes.map((p) => p[campo]).filter((v): v is number => v !== null);
+  const pago = partes.length > 0 && partes.every((p) => p[campoPago]);
+  const soma = valores.length ? valores.reduce((total, v) => total + v, 0) : null;
   return {
     rotulo,
-    valor: valores.length ? formatarReais(valores.reduce((total, v) => total + v, 0)) : "-",
-    pago: partes.length > 0 && partes.every((p) => p[campoPago]),
+    valor: soma === null ? "-" : formatarReais(soma),
+    estado: estadoDoValor(soma, pago),
   };
 }

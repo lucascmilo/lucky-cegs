@@ -2,9 +2,10 @@ import { SeloNovo } from "@/componentes/Novidade";
 import TextoCortado from "@/componentes/TextoCortado";
 import type { ItemCaixa, MinhaParte, PessoaItem } from "@/lib/caixas";
 import { descreverQuantidades } from "@/lib/formatacao";
-import { BotaoDetalhes } from "./JanelaDetalhes";
-import FotoItem from "./FotoItem";
-import { EtiquetaMeu, NomePessoa, PilulaEtapa, ValorPagamento } from "./PecasItem";
+import { BotaoDetalhes } from "@/componentes/JanelaDetalhes";
+import FotoItem from "@/componentes/FotoItem";
+import { EtiquetaMeu, NomePessoa, PilulaEtapa, ValorPagamento } from "@/componentes/PecasItem";
+import { estadoDoValor } from "@/lib/detalheItem";
 
 // === Seção: Cartão de um set (item dividido entre várias pessoas) ===
 type PropsCartaoSet = {
@@ -100,13 +101,13 @@ function MinhasPartes({ itemId, partes, eu }: PropsMinhasPartes) {
               <tr key={p.id}>
                 <td data-rotulo="MEMBRO">{p.membro ?? "-"}</td>
                 <td data-rotulo="VALOR">
-                  <ValorPagamento valor={p.venda} pago={p.vendaPago} />
+                  <ValorPagamento valor={p.venda} estado={estadoDoValor(p.venda, p.vendaPago)} />
                 </td>
                 <td data-rotulo="INTER">
-                  <ValorPagamento valor={p.inter} pago={p.interPago} />
+                  <ValorPagamento valor={p.inter} estado={estadoDoValor(p.inter, p.interPago)} />
                 </td>
                 <td data-rotulo="TAXA">
-                  <ValorPagamento valor={p.taxa} pago={p.taxaPago} />
+                  <ValorPagamento valor={p.taxa} estado={estadoDoValor(p.taxa, p.taxaPago)} />
                 </td>
               </tr>
             ))}
