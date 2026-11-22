@@ -143,7 +143,6 @@
   overflow-wrap: anywhere;
 }
 
-/* As pílulas acompanham o tamanho do texto */
 .cartaoMeusItens .pilulaEtapa {
   flex-shrink: 0;
   min-width: 0;
@@ -179,6 +178,14 @@
   padding: calc(var(--px-pagina) * 8) calc(var(--px-pagina) * 14) calc(var(--px-pagina) * 8) 0;
   list-style: none;
   cursor: pointer;
+}
+
+.linhaMeuItem__nome {
+  transition: color 0.2s ease;
+}
+
+.linhaMeuItem__resumo:hover .linhaMeuItem__nome {
+  color: var(--cor-rosa-texto);
 }
 
 .linhaMeuItem__resumo::-webkit-details-marker {

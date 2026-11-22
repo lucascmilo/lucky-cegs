@@ -1,7 +1,5 @@
 /* === Seção: Página Termos da comunidade === */
 .termos {
-  /* Escala da faixa do título: encolhe em telas estreitas */
-  --px-faixa: min(1px, 100vw / 1440);
   padding-bottom: 42px;
 }
 
@@ -20,28 +18,6 @@
   width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   height: calc(var(--px-faixa) * 328);
   margin-inline: auto;
-}
-
-.termos__titulo {
-  display: flex;
-  flex-direction: column;
-  font-family: var(--fonte-titulo);
-  font-size: max(36px, var(--px-faixa) * 80);
-  font-weight: 400;
-  line-height: 0.781;
-  letter-spacing: 0.01em;
-  color: var(--cor-preto);
-}
-
-.termos__tituloRosa {
-  color: var(--cor-rosa);
-}
-
-.termos__subtitulo {
-  margin-top: calc(var(--px-faixa) * 24);
-  font-size: max(14px, var(--px-faixa) * 16);
-  font-weight: 500;
-  line-height: 1.2;
 }
 
 /* === Seção: Colagem da faixa === */
@@ -177,18 +153,6 @@
 
 .termos__secao:first-child .termos__itens {
   margin-top: 14px;
-}
-
-/* Estrela numa coluna própria: o texto justificado sempre começa depois dela */
-.termos__itens li {
-  position: relative;
-  padding-left: 1.4em;
-}
-
-.termos__itens li::before {
-  content: "★";
-  position: absolute;
-  left: 0;
 }
 
 .termos__itens strong {
@@ -365,16 +329,6 @@
   .termos__faixaConteudo {
     height: auto;
     padding: 32px 0 24px;
-  }
-
-  .termos__titulo {
-    font-size: clamp(28px, 9.5vw, 46px);
-    line-height: 0.82;
-  }
-
-  .termos__subtitulo {
-    margin-top: 12px;
-    font-size: 15px;
   }
 
   .termos__colagem {

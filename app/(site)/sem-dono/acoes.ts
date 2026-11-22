@@ -6,7 +6,7 @@ import { db } from "@/db";
 import { claim, registro } from "@/db/schema";
 import { obterUsuarioAtual } from "@/lib/sessao";
 
-export type ResultadoPedido = { ok: true } | { ok: false; erro: string };
+type ResultadoPedido = { ok: true } | { ok: false; erro: string };
 
 // === Seção: Pedir um item sem dono ("Quero esse") ===
 // Só joiners logados. Não dá para desistir depois; a GOM confirma por ordem dos pedidos.

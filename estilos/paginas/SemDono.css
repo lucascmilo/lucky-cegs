@@ -15,7 +15,6 @@
   border-bottom: 1px solid var(--cor-preto);
 }
 
-/* Título e subtítulo no mesmo estilo da página de Termos */
 .semDono__faixaConteudo {
   position: relative;
   display: flex;
@@ -26,26 +25,8 @@
   margin-inline: auto;
 }
 
-.semDono__titulo {
-  display: flex;
-  flex-direction: column;
-  font-family: var(--fonte-titulo);
-  font-size: max(36px, var(--px-caixa) * 80);
-  font-weight: 400;
-  line-height: 0.781;
-  letter-spacing: 0.01em;
-  color: var(--cor-preto);
-}
-
-.semDono__tituloRosa {
-  color: var(--cor-rosa);
-}
-
-.semDono__descricao {
-  margin-top: calc(var(--px-caixa) * 24);
-  font-size: max(14px, var(--px-caixa) * 16);
-  font-weight: 500;
-  line-height: 1.2;
+.semDono__faixaConteudo .tituloFaixa__subtitulo {
+  max-width: calc(100% - var(--px-pagina) * 351 - 24px);
 }
 
 /* === Seção: Colagem da faixa === */
@@ -114,6 +95,11 @@
   line-height: 24px;
   list-style: none;
   cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.semDono__comoFuncionaTitulo:hover {
+  color: var(--cor-rosa-texto);
 }
 
 .semDono__comoFuncionaTitulo::-webkit-details-marker {
@@ -131,7 +117,6 @@
   transform: rotate(180deg);
 }
 
-/* Passos com a estrela dos Termos */
 .semDono__passos {
   display: flex;
   flex-direction: column;
@@ -141,17 +126,6 @@
   list-style: none;
   font-size: 16px;
   line-height: 23px;
-}
-
-.semDono__passos li {
-  position: relative;
-  padding-left: 1.4em;
-}
-
-.semDono__passos li::before {
-  content: "★";
-  position: absolute;
-  left: 0;
 }
 
 /* === Seção: Busca === */
@@ -260,8 +234,8 @@
   border-radius: 6px;
 }
 
-.cartaoSemDono__foto + .cartaoSemDono__foto {
-  margin-top: calc(var(--px-pagina) * 10);
+.cartaoSemDono__fotos {
+  gap: calc(var(--px-pagina) * 10);
 }
 
 .cartaoSemDono__foto .fotoItem__lupa {
@@ -298,7 +272,6 @@
   margin-top: calc(var(--px-pagina) * 18);
 }
 
-/* As pílulas acompanham o tamanho do texto */
 .cartaoSemDono__pilulas .pilulaEtapa,
 .cartaoSemDono__pilulas .pilulaContorno {
   min-width: 0;
@@ -390,7 +363,6 @@
   background: #b8f0e6;
 }
 
-/* Selo de 240px no centro da arte; as medidas abaixo são relativas a ele */
 .semDonoVazio__selo {
   position: absolute;
   top: 50%;
@@ -413,7 +385,6 @@
   fill: var(--cor-preto);
 }
 
-/* Disco branco deslocado atrás do rosa, como um adesivo descolando */
 .semDonoVazio__sombra,
 .semDonoVazio__circulo {
   position: absolute;
@@ -447,7 +418,7 @@
   transform: translate(-50%, -50%);
 }
 
-/* O aro do chaveiro (54% da largura, 6% da altura da imagem) fica no prego e balança dali */
+/* O chaveiro balança a partir do aro, que fica no prego */
 .semDonoVazio__chaveiro {
   position: absolute;
   top: 35px;
@@ -537,11 +508,6 @@
 }
 
 @media (max-width: 860px) {
-  .semDono__faixaConteudo {
-    height: auto;
-    padding: 32px 0 28px;
-  }
-
   .semDono__comoFuncionaTitulo {
     padding: 18px 20px;
     font-size: 16px;
@@ -553,6 +519,23 @@
     line-height: 22px;
   }
 
+  .semDono__lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+/* Como em Termos: a colagem só desce para baixo do título no celular */
+@media (max-width: 600px) {
+  .semDono__faixaConteudo {
+    height: auto;
+    padding: 32px 0 28px;
+  }
+
+  .semDono__faixaConteudo .tituloFaixa__subtitulo {
+    max-width: none;
+  }
+
   .semDono__colagem {
     position: relative;
     top: auto;
@@ -561,34 +544,12 @@
     width: min(300px, 86%);
     margin: 28px auto 0;
   }
-
-  .semDono__lista {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-  }
-}
-
-@media (max-width: 600px) {
-  .semDono__titulo {
-    font-size: clamp(28px, 9.5vw, 46px);
-    line-height: 0.82;
-  }
-
-  .semDono__descricao {
-    margin-top: 12px;
-    font-size: 15px;
-  }
 }
 
 @media (max-width: 560px) {
   .semDono__lista {
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
-  }
-
-  .cartaoSemDono__foto {
-    height: auto;
-    aspect-ratio: 3 / 2;
   }
 
   .semDonoVazio {

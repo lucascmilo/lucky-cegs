@@ -59,3 +59,20 @@ export default function FotoItem({ publicId, descricao, className }: PropsFotoIt
     </div>
   );
 }
+
+// === Seção: Foto do item e foto da balança ===
+// Uma embaixo da outra; em telas estreitas ficam lado a lado
+type PropsFotosDoItem = {
+  item: { nome: string; fotoId: string | null; proofWhId: string | null };
+  className: string;
+  classeFoto: string;
+};
+
+export function FotosDoItem({ item, className, classeFoto }: PropsFotosDoItem) {
+  return (
+    <div className={juntarClasses("fotosDoItem", className)}>
+      <FotoItem publicId={item.fotoId} descricao={`Foto de ${item.nome}`} className={classeFoto} />
+      <FotoItem publicId={item.proofWhId} descricao={`Balança de ${item.nome}`} className={classeFoto} />
+    </div>
+  );
+}

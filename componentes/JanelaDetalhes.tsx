@@ -2,13 +2,13 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import BotaoCopiar from "@/componentes/BotaoCopiar";
+import FotoItem from "@/componentes/FotoItem";
 import { IconeCheck, IconeCoracao, IconeFechar } from "@/componentes/Icones";
+import { EtiquetaMeu, PilulaEtapa, SeloPagamento } from "@/componentes/PecasItem";
 import TextoCortado from "@/componentes/TextoCortado";
 import { juntarClasses } from "@/lib/classes";
 import { EMAIL_PIX } from "@/lib/configuracoes";
 import { ABAS_DETALHES, type AbaDetalhes, type DetalheItem } from "@/lib/detalheItem";
-import FotoItem from "@/componentes/FotoItem";
-import { EtiquetaMeu, PilulaEtapa, SeloPagamento } from "@/componentes/PecasItem";
 import "@/estilos/componentes/JanelaDetalhes.css";
 
 // === Seção: Controle da janela ===

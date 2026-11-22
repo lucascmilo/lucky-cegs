@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { authClient } from "@/lib/auth-client";
@@ -8,6 +7,7 @@ import { TAMANHO_MINIMO_SENHA } from "@/lib/configuracoes";
 import { limparUser, traduzirErroAutenticacao } from "@/lib/mensagensErro";
 import { destinoDepoisDoLogin } from "@/lib/navegacao";
 import EntradaSenha from "../EntradaSenha";
+import LinkAcesso from "../LinkAcesso";
 import "@/estilos/paginas/acesso/Formulario.css";
 
 // === Seção: Formulário de login ===
@@ -87,7 +87,7 @@ export default function FormularioEntrar() {
       <hr className="formulario__divisoria" />
 
       <p className="formulario__alternarConta">
-        Ainda não tem uma conta? <Link href="/criar-conta">Criar conta</Link>
+        Ainda não tem uma conta? <LinkAcesso para="/criar-conta">Criar conta</LinkAcesso>
       </p>
     </form>
   );

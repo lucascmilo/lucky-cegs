@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import FotoItem from "@/componentes/FotoItem";
+import { FotosDoItem } from "@/componentes/FotoItem";
 import { IconeSetaBaixo } from "@/componentes/Icones";
 import { PilulaEtapa } from "@/componentes/PecasItem";
 import TextoCortado from "@/componentes/TextoCortado";
-import { formatarReais } from "@/lib/formatacao";
+import { formatarReais, normalizarBusca } from "@/lib/formatacao";
+import { textoDoParametro } from "@/lib/navegacao";
 import { textoCustosExtras, type ItemSemDono } from "@/lib/semDono";
 import chaveiro from "@/public/imagens/chaveiro.png";
 import fotoSemDono from "@/public/imagens/sem-dono-foto.png";
@@ -21,25 +22,16 @@ type PropsTelaSemDono = {
   parametros: ParametrosSemDono;
 };
 
-function textoDe(valor: string | string[] | undefined) {
-  return (Array.isArray(valor) ? valor[0] : valor) ?? "";
-}
-
-// Ignora maiúsculas e acentos
-function normalizar(texto: string) {
-  return texto.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().trim();
-}
-
 // === Seção: Tela de itens sem dono ===
 export default function TelaSemDono({ itens, logado, parametros }: PropsTelaSemDono) {
-  const busca = textoDe(parametros.busca).trim();
-  const mostrar = Math.max(CARTOES_POR_VEZ, Number(textoDe(parametros.mostrar)) || CARTOES_POR_VEZ);
+  const busca = textoDoParametro(parametros.busca).trim();
+  const mostrar = Math.max(CARTOES_POR_VEZ, Number(textoDoParametro(parametros.mostrar)) || CARTOES_POR_VEZ);
 
   // A busca procura no nome, grupo, membro e caixa ("caixa 5" mostra só os da Caixa 5)
-  const termo = normalizar(busca);
+  const termo = normalizarBusca(busca);
   const encontrados = termo
     ? itens.filter((item) =>
-        [item.nome, item.grupo, item.membro, item.nomeCaixa].some((texto) => texto && normalizar(texto).includes(termo)),
+        [item.nome, item.grupo, item.membro, item.nomeCaixa].some((texto) => texto && normalizarBusca(texto).includes(termo)),
       )
     : itens;
   const restantes = encontrados.length - mostrar;
@@ -57,11 +49,11 @@ export default function TelaSemDono({ itens, logado, parametros }: PropsTelaSemD
       {/* === Seção: Faixa do topo === */}
       <section className="semDono__faixa">
         <div className="semDono__faixaConteudo">
-          <h1 className="semDono__titulo">
+          <h1 className="tituloFaixa">
             <span>ITENS</span>
-            <span className="semDono__tituloRosa">sem dono</span>
+            <span className="tituloFaixa__rosa">sem dono</span>
           </h1>
-          <p className="semDono__descricao">Itens que sobraram nas caixas. Peça claim e a GOM confirma no seu privado.</p>
+          <p className="tituloFaixa__subtitulo">Itens que sobraram nas caixas. Peça claim e a GOM confirma no seu privado.</p>
 
           <div className="semDono__colagem" aria-hidden="true">
             <span className="semDono__quadrado fundoPontosRosa" />
@@ -78,7 +70,7 @@ export default function TelaSemDono({ itens, logado, parametros }: PropsTelaSemD
             Como funciona a claim
             <IconeSetaBaixo className="semDono__seta" tamanho={30} />
           </summary>
-          <ol className="semDono__passos">
+          <ol className="semDono__passos listaEstrelas">
             <li>
               Toque em <strong>Quero esse</strong> no item.
             </li>
@@ -149,8 +141,7 @@ function CartaoSemDono({ item, logado }: { item: ItemSemDono; logado: boolean })
 
   return (
     <article className="cartaoSemDono">
-      <FotoItem publicId={item.fotoId} descricao={`Foto de ${item.nome}`} className="cartaoSemDono__foto" />
-      <FotoItem publicId={item.proofWhId} descricao={`Balança de ${item.nome}`} className="cartaoSemDono__foto" />
+      <FotosDoItem item={item} className="cartaoSemDono__fotos" classeFoto="cartaoSemDono__foto" />
 
       <h2 className="cartaoSemDono__nome">
         <TextoCortado texto={item.nome} />
@@ -187,7 +178,6 @@ function SemItens({ buscando }: { buscando: boolean }) {
 
   return (
     <div className="semDonoVazio" role="status">
-      {/* Selo com texto girando em volta e o chaveiro pendurado no prego */}
       <div className="semDonoVazio__arte" aria-hidden="true">
         <div className="semDonoVazio__selo">
           <svg className="semDonoVazio__anel" viewBox="0 0 240 240">

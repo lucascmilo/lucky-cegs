@@ -1,11 +1,13 @@
 import Link from "next/link";
+import { ProvedorDetalhes } from "@/componentes/JanelaDetalhes";
 import { RegistroVisita } from "@/componentes/Novidade";
 import type { CaixaAberta, DetalheCaixa, ItemCaixa, PessoaItem } from "@/lib/caixas";
 import { juntarClasses } from "@/lib/classes";
-import CartaoSet from "./CartaoSet";
 import { ABAS_DETALHES, montarDetalheItem } from "@/lib/detalheItem";
+import { normalizarBusca } from "@/lib/formatacao";
+import { textoDoParametro } from "@/lib/navegacao";
+import CartaoSet from "./CartaoSet";
 import FaixaCaixa from "./FaixaCaixa";
-import { ProvedorDetalhes } from "@/componentes/JanelaDetalhes";
 import PedidosIndividuais, { CARTOES_POR_VEZ } from "./PedidosIndividuais";
 import "@/estilos/paginas/Caixa.css";
 
@@ -35,11 +37,6 @@ type PropsTelaCaixa = {
 };
 
 // === Seção: Busca ===
-// Ignora maiúsculas e acentos ("japao" encontra "Japão")
-function normalizar(texto: string) {
-  return texto.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().trim();
-}
-
 function itemCombina(item: ItemCaixa, busca: string) {
   const textos = [
     item.nome,
@@ -49,18 +46,14 @@ function itemCombina(item: ItemCaixa, busca: string) {
     item.dono?.nome,
     item.dono?.user,
   ];
-  return textos.some((texto) => texto && normalizar(texto).includes(busca));
-}
-
-function textoDe(valor: string | string[] | undefined) {
-  return (Array.isArray(valor) ? valor[0] : valor) ?? "";
+  return textos.some((texto) => texto && normalizarBusca(texto).includes(busca));
 }
 
 // === Seção: Tela de uma caixa ===
 export default function TelaCaixa({ caixa, caixasAbertas, itens, eu, parametros }: PropsTelaCaixa) {
-  const filtro: Filtro = FILTROS.find((f) => f.id === textoDe(parametros.filtro))?.id ?? "todos";
-  const busca = textoDe(parametros.busca).trim();
-  const mostrar = Math.max(CARTOES_POR_VEZ, Number(textoDe(parametros.mostrar)) || CARTOES_POR_VEZ);
+  const filtro: Filtro = FILTROS.find((f) => f.id === textoDoParametro(parametros.filtro))?.id ?? "todos";
+  const busca = textoDoParametro(parametros.busca).trim();
+  const mostrar = Math.max(CARTOES_POR_VEZ, Number(textoDoParametro(parametros.mostrar)) || CARTOES_POR_VEZ);
 
   // Monta o endereço mantendo filtro e busca (o "Ver mais" volta ao início quando eles mudam)
   function endereco(mudancas: { filtro?: Filtro; mostrar?: number; limparBusca?: boolean }) {
@@ -78,7 +71,7 @@ export default function TelaCaixa({ caixa, caixasAbertas, itens, eu, parametros 
   const sets = itens.filter((item) => item.totalPessoas > 1);
   const contagens: Record<Filtro, number> = { todos: itens.length, meus: itens.filter(eMeu).length, sets: sets.length };
 
-  const termo = normalizar(busca);
+  const termo = normalizarBusca(busca);
   const encontrados = termo ? itens.filter((item) => itemCombina(item, termo)) : itens;
   const doFiltro = filtro === "meus" ? encontrados.filter(eMeu) : encontrados;
   const setsVisiveis = doFiltro.filter((item) => item.totalPessoas > 1);
@@ -90,10 +83,10 @@ export default function TelaCaixa({ caixa, caixasAbertas, itens, eu, parametros 
 
   // Janela de detalhes: só para itens do próprio joiner (os dados já vão prontos para o navegador)
   const detalhes = Object.fromEntries(itens.filter(eMeu).map((item) => [item.id, montarDetalheItem(item, caixa.nome)]));
-  const abaPedida = ABAS_DETALHES.find((a) => a.id === textoDe(parametros.aba))?.id ?? "fotos";
+  const abaPedida = ABAS_DETALHES.find((a) => a.id === textoDoParametro(parametros.aba))?.id ?? "fotos";
 
   return (
-    <ProvedorDetalhes detalhes={detalhes} itemInicial={Number(textoDe(parametros.item)) || null} abaInicial={abaPedida}>
+    <ProvedorDetalhes detalhes={detalhes} itemInicial={Number(textoDoParametro(parametros.item)) || null} abaInicial={abaPedida}>
       <RegistroVisita caixaId={caixa.id} />
       <FaixaCaixa caixa={caixa} caixasAbertas={caixasAbertas} />
 

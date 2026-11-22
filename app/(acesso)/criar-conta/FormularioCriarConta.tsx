@@ -8,6 +8,7 @@ import { DOMINIO_EMAIL_INTERNO, PADRAO_USER, TAMANHO_MINIMO_SENHA } from "@/lib/
 import { limparUser, MENSAGEM_USER_INVALIDO, traduzirErroAutenticacao } from "@/lib/mensagensErro";
 import { destinoDepoisDoLogin } from "@/lib/navegacao";
 import EntradaSenha from "../EntradaSenha";
+import LinkAcesso from "../LinkAcesso";
 import "@/estilos/paginas/acesso/Formulario.css";
 
 // === Seção: Tipos ===
@@ -160,7 +161,7 @@ export default function FormularioCriarConta() {
       <hr className="formulario__divisoria" />
 
       <p className="formulario__alternarConta">
-        Já tem uma conta? <Link href="/entrar">Entrar</Link>
+        Já tem uma conta? <LinkAcesso para="/entrar">Entrar</LinkAcesso>
       </p>
     </form>
   );

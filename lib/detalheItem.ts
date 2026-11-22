@@ -10,7 +10,7 @@ export const ABAS_DETALHES: { id: AbaDetalhes; rotulo: string }[] = [
   { id: "pagamento", rotulo: "Pagamento" },
 ];
 
-export type EtapaDetalhe = {
+type EtapaDetalhe = {
   id: EtapaItem;
   rotulo: string;
   descricao: string;
@@ -25,7 +25,7 @@ export function estadoDoValor(valor: number | null, pago: boolean): EstadoPagame
   if (pago) return "pago";
   return valor === null ? "emBreve" : "pendente";
 }
-export type LinhaPagamento = { rotulo: string; valor: string; estado: EstadoPagamento };
+type LinhaPagamento = { rotulo: string; valor: string; estado: EstadoPagamento };
 
 // Tudo já formatado no servidor: a janela só desenha
 export type DetalheItem = {

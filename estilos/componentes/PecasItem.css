@@ -90,6 +90,25 @@
   color: var(--cor-rosa-texto);
 }
 
+/* === Seção: Foto do item e foto da balança === */
+.fotosDoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (max-width: 560px) {
+  .fotosDoItem {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fotosDoItem > .fotoItem {
+    height: auto;
+    aspect-ratio: 1;
+  }
+}
+
 /* === Seção: Foto do item === */
 .fotoItem {
   position: relative;

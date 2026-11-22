@@ -291,8 +291,6 @@
 }
 
 .cartaoSet__fotos {
-  display: flex;
-  flex-direction: column;
   align-self: center;
   gap: calc(var(--px-caixa) * 22);
 }
@@ -498,8 +496,8 @@
   border-left-width: calc(var(--px-caixa) * 11);
 }
 
-.cartaoIndividual__foto + .cartaoIndividual__foto {
-  margin-top: calc(var(--px-caixa) * 10);
+.cartaoIndividual__fotos {
+  gap: calc(var(--px-caixa) * 10);
 }
 
 .cartaoIndividual__foto .fotoItem__lupa {
@@ -697,10 +695,6 @@
     border-radius: 16px;
   }
 
-  .cartaoSet__fotos {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .cartaoSet__nome {
     font-size: 22px;
   }
@@ -756,8 +750,4 @@
     min-height: 0;
   }
 
-  .cartaoIndividual__foto {
-    height: auto;
-    aspect-ratio: 3 / 2;
-  }
 }

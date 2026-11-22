@@ -10,6 +10,7 @@ import { juntarClasses } from "@/lib/classes";
 import { ABAS_DETALHES, montarDetalheItem, type DetalheItem } from "@/lib/detalheItem";
 import { obterEtapaCaixa } from "@/lib/etapas";
 import type { CaixaComMeusItens } from "@/lib/meusItens";
+import { textoDoParametro } from "@/lib/navegacao";
 import adesivo from "@/public/imagens/adesivo-accidentally.png";
 import fotoMeusItens from "@/public/imagens/meus-itens-foto.png";
 import "@/estilos/componentes/PecasItem.css";
@@ -35,13 +36,9 @@ type PropsTelaMeusItens = {
   parametros: ParametrosMeusItens;
 };
 
-function textoDe(valor: string | string[] | undefined) {
-  return (Array.isArray(valor) ? valor[0] : valor) ?? "";
-}
-
 // === Seção: Tela "Meus itens" ===
 export default function TelaMeusItens({ caixas, parametros }: PropsTelaMeusItens) {
-  const filtroAtual = FILTROS.find((f) => f.id === textoDe(parametros.filtro)) ?? FILTROS[0];
+  const filtroAtual = FILTROS.find((f) => f.id === textoDoParametro(parametros.filtro)) ?? FILTROS[0];
   const todosItens = caixas.flatMap((grupo) => grupo.itens);
 
   const caixasVisiveis = caixas
@@ -52,10 +49,10 @@ export default function TelaMeusItens({ caixas, parametros }: PropsTelaMeusItens
   const detalhes: Record<number, DetalheItem> = Object.fromEntries(
     caixas.flatMap((grupo) => grupo.itens.map((item) => [item.id, montarDetalheItem(item, grupo.caixa.nome)])),
   );
-  const abaPedida = ABAS_DETALHES.find((a) => a.id === textoDe(parametros.aba))?.id ?? "fotos";
+  const abaPedida = ABAS_DETALHES.find((a) => a.id === textoDoParametro(parametros.aba))?.id ?? "fotos";
 
   return (
-    <ProvedorDetalhes detalhes={detalhes} itemInicial={Number(textoDe(parametros.item)) || null} abaInicial={abaPedida}>
+    <ProvedorDetalhes detalhes={detalhes} itemInicial={Number(textoDoParametro(parametros.item)) || null} abaInicial={abaPedida}>
       <div className="meusItens">
         {/* === Seção: Faixa do topo === */}
         <section className="meusItens__faixa">

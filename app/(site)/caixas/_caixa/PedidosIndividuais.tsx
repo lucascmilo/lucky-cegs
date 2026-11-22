@@ -1,13 +1,13 @@
 import Link from "next/link";
+import { FotosDoItem } from "@/componentes/FotoItem";
+import { IconeCheck } from "@/componentes/Icones";
+import { BotaoDetalhes } from "@/componentes/JanelaDetalhes";
 import { SeloNovo } from "@/componentes/Novidade";
+import { EtiquetaMeu, NomePessoa, PilulaEtapa } from "@/componentes/PecasItem";
 import TextoCortado from "@/componentes/TextoCortado";
 import type { ItemCaixa } from "@/lib/caixas";
 import { juntarClasses } from "@/lib/classes";
 import { formatarReais } from "@/lib/formatacao";
-import { BotaoDetalhes } from "@/componentes/JanelaDetalhes";
-import FotoItem from "@/componentes/FotoItem";
-import { IconeCheck } from "@/componentes/Icones";
-import { EtiquetaMeu, NomePessoa, PilulaEtapa } from "@/componentes/PecasItem";
 
 export const CARTOES_POR_VEZ = 4;
 
@@ -50,8 +50,7 @@ function CartaoIndividual({ item, caixaId }: { item: ItemCaixa; caixaId: number 
     <article className={juntarClasses("cartaoIndividual", meu && "cartaoIndividual__meu")}>
       {meu && <EtiquetaMeu className="cartaoIndividual__etiqueta" />}
 
-      <FotoItem publicId={item.fotoId} descricao={`Foto de ${item.nome}`} className="cartaoIndividual__foto" />
-      <FotoItem publicId={item.proofWhId} descricao={`Balança de ${item.nome}`} className="cartaoIndividual__foto" />
+      <FotosDoItem item={item} className="cartaoIndividual__fotos" classeFoto="cartaoIndividual__foto" />
 
       <h3 className="cartaoIndividual__nome">
         <TextoCortado texto={item.nome} />

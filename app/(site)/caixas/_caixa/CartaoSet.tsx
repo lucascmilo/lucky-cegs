@@ -1,11 +1,11 @@
+import { FotosDoItem } from "@/componentes/FotoItem";
+import { BotaoDetalhes } from "@/componentes/JanelaDetalhes";
 import { SeloNovo } from "@/componentes/Novidade";
+import { EtiquetaMeu, NomePessoa, PilulaEtapa, ValorPagamento } from "@/componentes/PecasItem";
 import TextoCortado from "@/componentes/TextoCortado";
 import type { ItemCaixa, MinhaParte, PessoaItem } from "@/lib/caixas";
-import { descreverQuantidades } from "@/lib/formatacao";
-import { BotaoDetalhes } from "@/componentes/JanelaDetalhes";
-import FotoItem from "@/componentes/FotoItem";
-import { EtiquetaMeu, NomePessoa, PilulaEtapa, ValorPagamento } from "@/componentes/PecasItem";
 import { estadoDoValor } from "@/lib/detalheItem";
+import { descreverQuantidades } from "@/lib/formatacao";
 
 // === Seção: Cartão de um set (item dividido entre várias pessoas) ===
 type PropsCartaoSet = {
@@ -18,10 +18,7 @@ export default function CartaoSet({ item, eu, caixaId }: PropsCartaoSet) {
   return (
     <article className="cartaoSet">
       {/* === Seção: Fotos === */}
-      <div className="cartaoSet__fotos">
-        <FotoItem publicId={item.fotoId} descricao={`Foto de ${item.nome}`} className="cartaoSet__foto" />
-        <FotoItem publicId={item.proofWhId} descricao={`Balança de ${item.nome}`} className="cartaoSet__foto" />
-      </div>
+      <FotosDoItem item={item} className="cartaoSet__fotos" classeFoto="cartaoSet__foto" />
 
       {/* === Seção: Informações === */}
       <div className="cartaoSet__info">

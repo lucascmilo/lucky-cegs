@@ -9,6 +9,7 @@ type LinkNavegacao = {
 // === Seção: Links por perfil ===
 const linksVisitante: LinkNavegacao[] = [
   { rotulo: "Início", destino: "/" },
+  { rotulo: "Sem dono", destino: "/sem-dono" },
   { rotulo: "Termos", destino: "/termos" },
 ];
 
@@ -48,4 +49,10 @@ export function destinoSeguro(voltar: string | null) {
 
 export function destinoDepoisDoLogin() {
   return destinoSeguro(new URLSearchParams(window.location.search).get("voltar"));
+}
+
+// === Seção: Parâmetros do endereço ===
+// ?filtro=a&filtro=b chega como lista: vale o primeiro
+export function textoDoParametro(valor: string | string[] | undefined) {
+  return (Array.isArray(valor) ? valor[0] : valor) ?? "";
 }

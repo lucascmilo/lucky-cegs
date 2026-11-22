@@ -20,11 +20,11 @@ export default function PaginaTermos() {
       {/* === Seção: Faixa de título === */}
       <section className="termos__faixa">
         <div className="termos__faixaConteudo">
-          <h1 className="termos__titulo">
+          <h1 className="tituloFaixa">
             <span>TERMOS</span>
-            <span className="termos__tituloRosa">da comunidade</span>
+            <span className="tituloFaixa__rosa">da comunidade</span>
           </h1>
-          <p className="termos__subtitulo">As regras da LUCKY CEGS, num lugar só.</p>
+          <p className="tituloFaixa__subtitulo">As regras da LUCKY CEGS, num lugar só.</p>
 
           <div className="termos__colagem" aria-hidden="true">
             <span className="termos__quadradoAzul" />
@@ -54,7 +54,7 @@ export default function PaginaTermos() {
                   <span className="termos__numeroSecao">{secao.numero}</span>
                   {secao.titulo}
                 </h2>
-                <ul className="termos__itens">
+                <ul className="termos__itens listaEstrelas">
                   {secao.itens.map((item, indice) => (
                     <li key={indice}>{item}</li>
                   ))}

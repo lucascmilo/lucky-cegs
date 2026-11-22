@@ -62,3 +62,9 @@ export function formatarDataCurta(data: Date, agora = new Date()) {
   const mesmoAno = formatadorAno.format(data) === formatadorAno.format(agora);
   return (mesmoAno ? formatadorDiaMes : formatadorDiaMesAno).format(data);
 }
+
+// === Seção: Busca ===
+// Ignora maiúsculas e acentos ("japao" encontra "Japão")
+export function normalizarBusca(texto: string) {
+  return texto.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().trim();
+}

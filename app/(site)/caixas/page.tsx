@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import CartaoAviso from "@/componentes/CartaoAviso";
 import Carregando from "@/componentes/Carregando";
+import CartaoAviso from "@/componentes/CartaoAviso";
 import { obterCaixaPadrao } from "@/lib/caixas";
 import { exigirUsuario } from "@/lib/sessao";
 

@@ -38,6 +38,8 @@
   --zoom: 1;
   --altura-tela: calc(100svh / var(--zoom));
   --largura-tela: calc(100vw / var(--zoom));
+  /* Escala das faixas de título: 1px em 1440, encolhe em telas estreitas */
+  --px-faixa: min(1px, var(--largura-tela) / 1440);
 }
 
 @media (min-width: 640px) {
@@ -412,4 +414,52 @@ button {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
   }
+}
+
+/* === Seção: Título das faixas (Termos e Sem dono) === */
+.tituloFaixa {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fonte-titulo);
+  font-size: max(36px, var(--px-faixa) * 80);
+  font-weight: 400;
+  line-height: 0.781;
+  letter-spacing: 0.01em;
+  color: var(--cor-preto);
+}
+
+.tituloFaixa__rosa {
+  color: var(--cor-rosa);
+}
+
+.tituloFaixa__subtitulo {
+  margin-top: calc(var(--px-faixa) * 24);
+  font-size: max(14px, var(--px-faixa) * 16);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+@media (max-width: 600px) {
+  .tituloFaixa {
+    font-size: clamp(28px, 9.5vw, 46px);
+    line-height: 0.82;
+  }
+
+  .tituloFaixa__subtitulo {
+    margin-top: 12px;
+    font-size: 15px;
+  }
+}
+
+/* === Seção: Lista com estrelas (Termos e Sem dono) === */
+/* A estrela fica numa coluna própria: o texto sempre começa depois dela */
+.listaEstrelas li {
+  position: relative;
+  padding-left: 1.4em;
+}
+
+.listaEstrelas li::before {
+  content: "★";
+  position: absolute;
+  left: 0;
 }

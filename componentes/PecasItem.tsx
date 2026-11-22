@@ -54,7 +54,7 @@ export function SeloPagamento({ estado }: { estado: EstadoPagamento }) {
 }
 
 // === Seção: Valor com situação de pagamento ===
-// Valor vazio = "a definir": mostra "-" e fica pendente (ou "Em breve", no caso da taxa)
+// Valor vazio (a GOM ainda não lançou) aparece como "-"
 export function ValorPagamento({ valor, estado }: { valor: number | string | null; estado: EstadoPagamento }) {
   return (
     <span className="valorPagamento">
