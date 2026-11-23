@@ -35,3 +35,4 @@ export const TAMANHO_USER = { minimo: 3, maximo: 15 };
 export const PADRAO_USER = new RegExp(`^[a-zA-Z0-9_]{${TAMANHO_USER.minimo},${TAMANHO_USER.maximo}}$`);
 
 export const TAMANHO_MINIMO_SENHA = 8;
+export const TAMANHO_MAXIMO_NOME = 40;

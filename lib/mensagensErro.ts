@@ -1,17 +1,19 @@
 import { TAMANHO_MINIMO_SENHA, TAMANHO_USER } from "@/lib/configuracoes";
 
 // === Seção: Tradução dos erros do Better Auth ===
-type ContextoErro = "entrar" | "criarConta";
+type ContextoErro = "entrar" | "criarConta" | "senha";
 
 export const MENSAGEM_USER_INVALIDO = `Use de ${TAMANHO_USER.minimo} a ${TAMANHO_USER.maximo} caracteres: letras, números ou _.`;
 
 const MENSAGEM_PADRAO: Record<ContextoErro, string> = {
   entrar: "Não foi possível entrar agora. Tente novamente.",
   criarConta: "Não foi possível criar a conta agora. Tente novamente.",
+  senha: "Não foi possível trocar a senha agora. Tente novamente.",
 };
 
 // Cada linha: trechos do código de erro → mensagem mostrada
 const TRADUCOES: [string[], string][] = [
+  [["INVALID_PASSWORD"], "A senha atual não confere."],
   [["INVALID_USERNAME_OR_PASSWORD", "INVALID_EMAIL_OR_PASSWORD"], "User ou senha incorretos."],
   [["USERNAME_IS_ALREADY_TAKEN", "USER_ALREADY_EXISTS"], "Esse user já tem uma conta. Tente entrar."],
   [["USERNAME_TOO_SHORT", "USERNAME_TOO_LONG", "INVALID_USERNAME"], `User inválido. ${MENSAGEM_USER_INVALIDO}`],

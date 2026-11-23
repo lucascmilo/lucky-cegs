@@ -1,5 +1,5 @@
 import {
-  pgTable, pgEnum, serial, integer, text, numeric, boolean, timestamp, date, unique,
+  pgTable, pgEnum, serial, integer, text, numeric, boolean, timestamp, date, unique, index,
 } from "drizzle-orm/pg-core";
 import { user } from "../auth-schema";
 
@@ -100,3 +100,26 @@ export const historicoEtapa = pgTable("historico_etapa", {
   situacao: situacao("situacao").notNull(),
   data: timestamp("data").notNull().defaultNow(),
 });
+
+// === Seção: Notificações ===
+// "claim_pedido" vai só para a GOM; os outros tipos vão para os joiners
+export const tipoNotificacao = pgEnum("tipo_notificacao", [
+  "claim_pedido",
+  "claim_aceito",
+  "claim_recusado",
+  "proof",
+  "taxa",
+  "frete",
+  "etapa_caixa",
+]);
+
+export const notificacao = pgTable("notificacao", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  tipo: tipoNotificacao("tipo").notNull(),
+  texto: text("texto").notNull(),
+  // Página que abre ao clicar
+  link: text("link"),
+  lida: boolean("lida").notNull().default(false),
+  criadaEm: timestamp("criada_em").notNull().defaultNow(),
+}, (t) => [index("notificacao_user_idx").on(t.userId, t.criadaEm)]);

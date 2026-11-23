@@ -13,7 +13,7 @@ export default function SecaoCasaDaGom() {
           <p className="inicioJoiner__texto">
             Quando a caixa chega, a GOM tira uma foto com todos{" "}
             <br />
-            os seus itens juntos e ela fica guardada no seu fichário.
+            os seus itens juntos e a foto fica guardada no seu fichário.
           </p>
         </div>
 

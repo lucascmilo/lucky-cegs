@@ -93,7 +93,7 @@ function FicharioVazio() {
       carimbo={["AGUARDANDO", "ENTREGA"]}
       titulo="Seu fichário está vazio"
       cursiva="nada chegou ainda"
-      descricao="Quando uma caixa sua chegar na casa da GOM, ela tira uma foto com todos os seus itens e o cartão aparece aqui."
+      descricao="Quando uma caixa sua chegar na casa da GOM, a GOM tira uma foto com todos os seus itens e o cartão aparece aqui."
       acoes={
         <>
           <Link href="/meus-itens" className="botao botao__rosa">

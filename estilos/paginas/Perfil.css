@@ -1,0 +1,351 @@
+/* === Seção: Escala da tela === */
+.perfil {
+  --px-pagina: calc(var(--px-caixa) * 0.9);
+  /* Campos no mesmo tamanho dos formulários de Entrar e Criar conta */
+  --px-cartao: var(--px-caixa);
+  --cor-sucesso: #17695a;
+  --cor-texto-suave: #4a4547;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-bottom: calc(var(--px-pagina) * 72);
+}
+
+/* === Seção: Faixa lilás do topo === */
+.perfil__faixa {
+  border-bottom: 1px solid var(--cor-preto);
+  background-color: #e2dcf5;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.55) 2px, transparent 2.5px);
+  background-size: 24px 24px;
+}
+
+.perfil__faixaConteudo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
+  height: calc(var(--px-caixa) * 328);
+  margin-inline: auto;
+}
+
+.perfil__textoFaixa {
+  max-width: calc(100% - var(--px-pagina) * 420 - 24px);
+}
+
+/* === Seção: Cartão de membro === */
+.perfil__cartao {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--px-pagina) * 24);
+  display: flex;
+  flex-direction: column;
+  width: calc(var(--px-pagina) * 380);
+  aspect-ratio: 380 / 240;
+  border: 1px solid var(--cor-preto);
+  border-radius: calc(var(--px-pagina) * 18);
+  background: #fff4e8;
+  box-shadow: 0 18px 36px -8px rgba(21, 18, 20, 0.28);
+  transform: translateY(-50%) rotate(-4deg);
+}
+
+/* Fita adesiva segurando o cartão na faixa */
+.perfil__fita {
+  position: absolute;
+  top: calc(var(--px-pagina) * -15);
+  left: 50%;
+  width: calc(var(--px-pagina) * 104);
+  height: calc(var(--px-pagina) * 28);
+  background: rgba(255, 226, 122, 0.88);
+  box-shadow: 0 1px 2px rgba(21, 18, 20, 0.12);
+  transform: translateX(-50%) rotate(5deg);
+}
+
+.perfil__brilho {
+  position: absolute;
+  top: calc(var(--px-pagina) * -30);
+  right: calc(var(--px-pagina) * -26);
+  width: calc(var(--px-pagina) * 30);
+  height: auto;
+  transform: rotate(18deg);
+}
+
+.perfil__cartaoTopo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 26%;
+  padding: 0 calc(var(--px-pagina) * 20);
+  border-bottom: 1px solid var(--cor-preto);
+  border-radius: calc(var(--px-pagina) * 17) calc(var(--px-pagina) * 17) 0 0;
+}
+
+.perfil__cartaoMarca {
+  font-family: var(--fonte-titulo);
+  font-size: max(14px, var(--px-pagina) * 20);
+  letter-spacing: 0.02em;
+  color: var(--cor-branco);
+  text-shadow: 0 1px 0 rgba(21, 18, 20, 0.35);
+}
+
+.perfil__cartaoTipo {
+  padding: 3px 10px 2px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-family: var(--fonte-pixel);
+  font-size: max(10px, var(--px-pagina) * 12);
+  color: var(--cor-preto);
+}
+
+.perfil__cartaoCorpo {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: calc(var(--px-pagina) * 18);
+  min-width: 0;
+  padding: 0 calc(var(--px-pagina) * 22);
+}
+
+.perfil__avatar {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: calc(var(--px-pagina) * 70);
+  height: calc(var(--px-pagina) * 70);
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-rosa);
+  font-family: var(--fonte-titulo);
+  font-size: calc(var(--px-pagina) * 32);
+  color: var(--cor-preto);
+}
+
+.perfil__identidade {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--px-pagina) * 6);
+  min-width: 0;
+}
+
+.perfil__cartaoNome,
+.perfil__cartaoUser {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.perfil__cartaoNome {
+  font-family: var(--fonte-titulo);
+  font-size: max(17px, var(--px-pagina) * 25);
+  line-height: 1.05;
+}
+
+.perfil__cartaoUser {
+  font-size: max(13px, var(--px-pagina) * 16);
+  font-weight: 700;
+  color: var(--cor-texto-suave);
+}
+
+.perfil__cartaoRodape {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 calc(var(--px-pagina) * 22) calc(var(--px-pagina) * 16);
+}
+
+.perfil__codigoBarras {
+  width: calc(var(--px-pagina) * 96);
+  height: auto;
+}
+
+.perfil__desde {
+  font-family: var(--fonte-pixel);
+  font-size: max(10px, var(--px-pagina) * 12);
+  color: var(--cor-texto-suave);
+}
+
+/* === Seção: Ficha com os dados === */
+.perfil__conteudo {
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
+  margin: calc(var(--px-pagina) * 56) auto 0;
+}
+
+.perfil__ficha {
+  padding: 0 calc(var(--px-pagina) * 44);
+  border: 1px solid var(--cor-preto);
+  border-radius: calc(var(--px-pagina) * 22);
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+}
+
+.perfil__linha {
+  display: grid;
+  grid-template-columns: calc(var(--px-pagina) * 330) minmax(0, 1fr);
+  gap: calc(var(--px-pagina) * 64);
+  padding: calc(var(--px-pagina) * 40) 0;
+}
+
+.perfil__linha + .perfil__linha {
+  border-top: 1.5px dashed var(--cor-borda-bege);
+}
+
+.perfil__tituloLinha {
+  font-family: var(--fonte-titulo);
+  font-size: max(20px, var(--px-pagina) * 26);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.perfil__descricao {
+  max-width: 34ch;
+  margin-top: calc(var(--px-pagina) * 12);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--cor-texto-suave);
+  text-wrap: pretty;
+}
+
+.perfil__campos {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--px-pagina) * 22);
+  max-width: 620px;
+}
+
+.perfil__duasColunas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(var(--px-pagina) * 22);
+}
+
+.perfil__ajuda {
+  font-size: max(12px, var(--px-cartao) * 12);
+  color: var(--cor-texto-suave);
+}
+
+/* Campo do user com o "@" fixo na frente */
+.perfil__envoltorioArroba {
+  position: relative;
+  display: block;
+}
+
+.perfil__arroba {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--px-cartao) * 14);
+  font-weight: 700;
+  color: var(--cor-texto-suave);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.perfil__entradaArroba {
+  padding-left: calc(var(--px-cartao) * 14 + 16px);
+}
+
+/* === Seção: Botão e aviso de salvo === */
+.perfil__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px 16px;
+}
+
+.perfil__aviso {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cor-sucesso);
+}
+
+.perfil__aviso:empty {
+  display: none;
+}
+
+.perfil__aviso svg {
+  box-sizing: content-box;
+  padding: 4px;
+  border-radius: 50%;
+  background: var(--cor-menta);
+  color: var(--cor-preto);
+}
+
+.perfil__botao {
+  height: 44px;
+  padding: 0 24px;
+  font-size: 15px;
+}
+
+.perfil__botao:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 900px) {
+  .perfil__ficha {
+    padding: 0 24px;
+  }
+
+  .perfil__linha {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 28px 0;
+  }
+
+  .perfil__campos {
+    max-width: none;
+  }
+}
+
+/* Em telas estreitas o cartão desce para baixo do título */
+@media (max-width: 760px) {
+  .perfil__faixaConteudo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 34px;
+    height: auto;
+    padding: 34px 0 44px;
+  }
+
+  .perfil__textoFaixa {
+    max-width: none;
+  }
+
+  .perfil__cartao {
+    --px-pagina: min(1px, (100vw - 2 * var(--margem-lateral) - 24px) / 380);
+    position: relative;
+    top: auto;
+    right: auto;
+    align-self: center;
+    transform: rotate(-3deg);
+  }
+
+  .perfil__conteudo {
+    margin-top: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .perfil__ficha {
+    padding: 0 18px;
+    border-radius: 18px;
+  }
+
+  .perfil__duasColunas {
+    grid-template-columns: 1fr;
+  }
+
+  .perfil__acoes {
+    justify-content: stretch;
+  }
+
+  .perfil__botao {
+    width: 100%;
+  }
+}

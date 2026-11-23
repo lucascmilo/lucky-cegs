@@ -5,6 +5,7 @@ import { refresh } from "next/cache";
 import { db } from "@/db";
 import { caixa, parte, proofGom, registro } from "@/db/schema";
 import { cloudinary } from "@/lib/cloudinaryServidor";
+import { notificar } from "@/lib/notificacoes";
 import { obterUsuarioAtual } from "@/lib/sessao";
 
 type Resultado = { ok: true } | { ok: false; erro: string };
@@ -52,6 +53,18 @@ export async function salvarProof(caixaId: number, userId: string, fotoId: strin
     .onConflictDoUpdate({ target: [proofGom.caixaId, proofGom.userId], set: { fotoId, criadaEm: new Date() } });
 
   if (anterior && anterior.fotoId !== fotoId) await apagarFoto(anterior.fotoId);
+
+  const [dados] = await db.select({ nome: caixa.nome }).from(caixa).where(eq(caixa.id, caixaId));
+  await notificar([
+    {
+      userId,
+      tipo: "proof",
+      texto: anterior
+        ? `A proof da caixa ${dados?.nome ?? ""} foi trocada por uma foto nova.`
+        : `A proof da caixa ${dados?.nome ?? ""} chegou. Seus itens estão na casa da GOM.`,
+      link: `/casa-da-gom?caixa=${caixaId}`,
+    },
+  ]);
   refresh();
   return { ok: true };
 }

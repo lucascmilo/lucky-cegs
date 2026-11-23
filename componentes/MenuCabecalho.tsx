@@ -6,15 +6,18 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { juntarClasses } from "@/lib/classes";
 import { obterLinksNavegacao } from "@/lib/navegacao";
+import type { CaixaDeEntrada } from "@/lib/notificacoes";
 import type { UsuarioAtual } from "@/lib/sessao";
 import coracaoBranco from "@/public/imagens/coracao-branco.png";
 import { IconeMenu } from "./Icones";
 import MenuUsuario from "./MenuUsuario";
+import SinoNotificacoes from "./SinoNotificacoes";
 import "@/estilos/componentes/Cabecalho.css";
 
 // === Seção: Tipos ===
 type PropsMenuCabecalho = {
   usuario: UsuarioAtual | null;
+  notificacoes?: CaixaDeEntrada | null;
   // Enquanto a sessão carrega, o botão de conta fica invisível (sem piscar "Entrar")
   carregando?: boolean;
   // Endereço atual, para marcar o link ativo (fica vazio enquanto carrega)
@@ -28,7 +31,7 @@ export function MenuCabecalhoComCaminho(props: Omit<PropsMenuCabecalho, "caminho
 }
 
 // === Seção: Menu do cabeçalho ===
-export default function MenuCabecalho({ usuario, carregando = false, caminhoAtual }: PropsMenuCabecalho) {
+export default function MenuCabecalho({ usuario, notificacoes, carregando = false, caminhoAtual }: PropsMenuCabecalho) {
   const [menuAberto, setMenuAberto] = useState(false);
 
   const links = obterLinksNavegacao(usuario?.papel ?? null);
@@ -81,7 +84,10 @@ export default function MenuCabecalho({ usuario, carregando = false, caminhoAtua
       {/* === Seção: Conta === */}
       <div className={juntarClasses("cabecalho__conta", carregando && "cabecalho__contaCarregando")}>
         {usuario ? (
-          <MenuUsuario usuario={usuario} />
+          <div className="cabecalho__contaLogada">
+            {notificacoes && <SinoNotificacoes {...notificacoes} gom={usuario.papel === "admin"} />}
+            <MenuUsuario usuario={usuario} />
+          </div>
         ) : (
           <Link href="/entrar" className="cabecalho__botaoConta" aria-label="Entrar para ver suas caixas">
             <span className="cabecalho__circuloCoracao">

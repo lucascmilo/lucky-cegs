@@ -204,3 +204,37 @@ export function IconeLixeira({ className, tamanho = 16 }: PropsIcone) {
     </svg>
   );
 }
+
+// === Seção: Ícone de sino (notificações) ===
+export function IconeSino({ className, tamanho = 20 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path
+        d="M10 2.6a5 5 0 0 0-5 5v2.9c0 .7-.3 1.4-.8 1.9l-.9.9c-.3.3-.1.9.4.9h12.6c.5 0 .7-.6.4-.9l-.9-.9a2.7 2.7 0 0 1-.8-1.9V7.6a5 5 0 0 0-5-5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path d="M8 16.2a2.1 2.1 0 0 0 4 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+// === Seção: Ícones das notificações ===
+export function IconeEtiqueta({ className, tamanho = 16 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M2.5 3.5v3.6c0 .4.2.8.4 1l5.6 5.6a1 1 0 0 0 1.4 0l3.4-3.4a1 1 0 0 0 0-1.4L7.7 3.3a1.4 1.4 0 0 0-1-.4H3.1a.6.6 0 0 0-.6.6Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+      <circle cx="5.4" cy="5.8" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function IconeCaixa({ className, tamanho = 16 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="m8 1.8 5.5 2.7v7L8 14.2l-5.5-2.7v-7L8 1.8Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+      <path d="M2.5 4.5 8 7.2l5.5-2.7M8 7.2v7" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+    </svg>
+  );
+}

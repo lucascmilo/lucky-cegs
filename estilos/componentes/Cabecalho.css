@@ -97,6 +97,12 @@
   flex-shrink: 0;
 }
 
+.cabecalho__contaLogada {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
 .cabecalho__contaCarregando {
   visibility: hidden;
 }
@@ -371,6 +377,10 @@
 
   .cabecalho__setaMenu {
     margin-left: -23px;
+  }
+
+  .cabecalho__contaLogada {
+    gap: 12px;
   }
 }
 
