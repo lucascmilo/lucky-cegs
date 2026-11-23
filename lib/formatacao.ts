@@ -38,12 +38,13 @@ export function nomeOrigem(origem: string | null) {
 }
 
 // === Seção: Quantidades do item ("5 PCS", "1 ÁLBUM"…) ===
-type Quantidades = { qtdPc: number; qtdPostcard: number; qtdAlbum: number };
+type Quantidades = { qtdPc: number; qtdPostcard: number; qtdSmini: number; qtdAlbum: number };
 
-export function descreverQuantidades({ qtdPc, qtdPostcard, qtdAlbum }: Quantidades) {
+export function descreverQuantidades({ qtdPc, qtdPostcard, qtdSmini, qtdAlbum }: Quantidades) {
   const partes: string[] = [];
   if (qtdPc > 0) partes.push(qtdPc === 1 ? "1 PC" : `${qtdPc} PCS`);
   if (qtdPostcard > 0) partes.push(qtdPostcard === 1 ? "1 POSTCARD" : `${qtdPostcard} POSTCARDS`);
+  if (qtdSmini > 0) partes.push(qtdSmini === 1 ? "1 SMINI" : `${qtdSmini} SMINIS`);
   if (qtdAlbum > 0) partes.push(qtdAlbum === 1 ? "1 ÁLBUM" : `${qtdAlbum} ÁLBUNS`);
   return partes;
 }

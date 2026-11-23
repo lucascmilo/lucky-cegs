@@ -15,6 +15,7 @@ type EstadoReprodutor = {
   tempoAtual: number;
   duracao: number;
   volume: number;
+  mudo: boolean;
 };
 
 const ESTADO_INICIAL: EstadoReprodutor = {
@@ -23,6 +24,7 @@ const ESTADO_INICIAL: EstadoReprodutor = {
   tempoAtual: 0,
   duracao: 0,
   volume: VOLUME_INICIAL,
+  mudo: false,
 };
 
 // Guardado na janela (e não no módulo) para sobreviver a recargas de código no dev.
@@ -143,9 +145,19 @@ export function avancarPara(segundos: number) {
   atualizarEstado({ tempoAtual: segundos });
 }
 
+// Mexer no volume tira o silêncio
 export function definirVolume(volume: number) {
-  obterAudio().volume = volume;
-  atualizarEstado({ volume });
+  const elemento = obterAudio();
+  elemento.volume = volume;
+  elemento.muted = false;
+  atualizarEstado({ volume, mudo: false });
+}
+
+// No iPhone o volume do site não muda (é sempre o do aparelho), mas silenciar funciona
+export function alternarMudo() {
+  const elemento = obterAudio();
+  elemento.muted = !elemento.muted;
+  atualizarEstado({ mudo: elemento.muted });
 }
 
 // === Seção: Começar a tocar ao abrir o site (uma vez só) ===

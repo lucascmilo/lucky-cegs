@@ -86,7 +86,7 @@
 .sino__topo {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 12px;
   padding: 16px 18px 14px;
   border-bottom: 1.5px dashed var(--cor-borda-bege);
@@ -97,6 +97,31 @@
   font-family: var(--fonte-titulo);
   font-size: 18px;
   font-weight: 400;
+}
+
+.sino__limpar {
+  margin-left: auto;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: 12px;
+  font-weight: 700;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.sino__limpar:hover {
+  background: var(--cor-rosa-claro);
+}
+
+.sino__limparConfirmar,
+.sino__limparConfirmar:hover {
+  border-color: var(--cor-erro);
+  background: var(--cor-erro);
+  color: var(--cor-branco);
 }
 
 .sino__selo {

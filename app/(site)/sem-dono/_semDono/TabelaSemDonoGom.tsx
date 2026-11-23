@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
-import { FotosDoItem } from "@/componentes/FotoItem";
-import { IconeCamera, IconeFechar, IconeLixeira, IconeLupa } from "@/componentes/Icones";
+import { useState, useTransition } from "react";
+import { IconeCamera, IconeLixeira, IconeLupa } from "@/componentes/Icones";
 import JanelaConfirmar from "@/componentes/JanelaConfirmar";
+import JanelaFotos, { temFoto as possuiFoto } from "@/componentes/JanelaFotos";
 import { formatarReais, normalizarBusca } from "@/lib/formatacao";
 import type { ItemSemDonoGom } from "@/lib/semDonoGom";
 import { apagarItemSemDono, darItemSemDono } from "../acoes";
@@ -100,7 +100,7 @@ function LinhaItem({ item }: { item: ItemSemDonoGom }) {
   const [enviando, iniciarEnvio] = useTransition();
   const joiner = item.pedidos.find((p) => p.userId === escolhido);
   const outros = item.pedidos.length - 1;
-  const temFoto = Boolean(item.fotoId || item.proofWhId);
+  const temFoto = possuiFoto(item);
 
   function abrir(qual: "dar" | "apagar") {
     setErro(null);
@@ -120,7 +120,7 @@ function LinhaItem({ item }: { item: ItemSemDonoGom }) {
       <td data-rotulo="Foto">
         <button
           type="button"
-          className="semDonoGom__camera"
+          className="botaoCamera"
           onClick={() => setJanela("fotos")}
           disabled={!temFoto}
           aria-label={temFoto ? `Ver fotos de ${item.nome}` : `${item.nome} ainda sem foto`}
@@ -226,41 +226,5 @@ function LinhaItem({ item }: { item: ItemSemDonoGom }) {
         )}
       </td>
     </tr>
-  );
-}
-
-// === Seção: Fotos do item (abre pela câmera) ===
-function JanelaFotos({ item, aoFechar }: { item: ItemSemDonoGom; aoFechar: () => void }) {
-  const referencia = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    referencia.current?.showModal();
-  }, []);
-
-  return (
-    <dialog
-      ref={referencia}
-      className="janelaConfirmar semDonoGom__janelaFotos"
-      aria-label={`Fotos de ${item.nome}`}
-      onClose={aoFechar}
-      onClick={(evento) => {
-        if (evento.target === evento.currentTarget) evento.currentTarget.close();
-      }}
-    >
-      <div className="janelaConfirmar__conteudo">
-        <div className="semDonoGom__topoFotos">
-          <h2 className="janelaConfirmar__titulo">{item.nome}</h2>
-          <button
-            type="button"
-            className="semDonoGom__fecharFotos"
-            onClick={() => referencia.current?.close()}
-            aria-label="Fechar fotos"
-          >
-            <IconeFechar />
-          </button>
-        </div>
-        <FotosDoItem item={item} className="semDonoGom__fotos" classeFoto="semDonoGom__foto" />
-      </div>
-    </dialog>
   );
 }

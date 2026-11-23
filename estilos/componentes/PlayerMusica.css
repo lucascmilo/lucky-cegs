@@ -153,6 +153,24 @@
   color: var(--cor-branco);
 }
 
+.playerMusica__botaoMudo {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin: -6px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  transition: color 0.15s ease;
+}
+
+.playerMusica__botaoMudo:hover {
+  color: var(--cor-rosa);
+}
+
 .playerMusica__iconeVolume {
   flex-shrink: 0;
   width: 16px;
@@ -195,6 +213,12 @@
 @media (pointer: coarse) {
   .playerMusica__player {
     flex-basis: 300px;
+  }
+
+  .playerMusica__botaoMudo {
+    width: 40px;
+    height: 40px;
+    margin: -10px;
   }
 
   .playerMusica__controleVolume {

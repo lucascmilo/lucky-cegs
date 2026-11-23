@@ -267,7 +267,6 @@ html:has(.janelaDetalhes[open]) {
   background: var(--cor-rosa);
 }
 
-/* Anel rosa pulsando em volta da etapa atual */
 .linhaTempo__atual .linhaTempo__marcador::before {
   content: "";
   position: absolute;
@@ -357,7 +356,6 @@ html:has(.janelaDetalhes[open]) {
   list-style: none;
 }
 
-/* Rótulo à esquerda, valor no meio e situação do pagamento à direita */
 .pagamentoItem__linha {
   display: grid;
   grid-template-columns: 1fr auto 1fr;

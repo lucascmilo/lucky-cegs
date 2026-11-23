@@ -48,7 +48,6 @@
   transform: translateY(-50%) rotate(-4deg);
 }
 
-/* Fita adesiva segurando o cartão na faixa */
 .perfil__fita {
   position: absolute;
   top: calc(var(--px-pagina) * -15);

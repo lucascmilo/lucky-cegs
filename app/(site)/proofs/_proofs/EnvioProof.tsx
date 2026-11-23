@@ -4,40 +4,12 @@ import { useId, useState, useTransition, type DragEvent, type ReactNode } from "
 import { IconeEnviar } from "@/componentes/Icones";
 import JanelaConfirmar from "@/componentes/JanelaConfirmar";
 import { juntarClasses } from "@/lib/classes";
+import { conferirFoto, enviarFoto } from "@/lib/envioFoto";
 import { removerProof, salvarProof } from "../acoes";
 
 const PASTA = "proofs";
-const TAMANHO_MAXIMO = 15 * 1024 * 1024;
 
 type Joiner = { caixaId: number; userId: string };
-
-// === Seção: Envio da foto para o Cloudinary ===
-// O servidor assina o envio (só a GOM consegue) e a foto vai direto do navegador para o Cloudinary.
-async function enviarFoto(arquivo: File) {
-  const timestamp = Math.round(Date.now() / 1000);
-  const assinatura = await fetch("/api/sign-cloudinary-params", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ paramsToSign: { folder: PASTA, timestamp } }),
-  });
-  if (!assinatura.ok) throw new Error("Não foi possível autorizar o envio. Entre de novo e tente outra vez.");
-  const { signature } = await assinatura.json();
-
-  const dados = new FormData();
-  dados.append("file", arquivo);
-  dados.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY ?? "");
-  dados.append("timestamp", String(timestamp));
-  dados.append("folder", PASTA);
-  dados.append("signature", signature);
-
-  const resposta = await fetch(
-    `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-    { method: "POST", body: dados },
-  );
-  if (!resposta.ok) throw new Error("A foto não subiu. Confira a internet e tente de novo.");
-  const { public_id } = await resposta.json();
-  return public_id as string;
-}
 
 // Confere o arquivo, envia e liga a foto ao joiner
 function useEnvioProof({ caixaId, userId }: Joiner) {
@@ -46,13 +18,13 @@ function useEnvioProof({ caixaId, userId }: Joiner) {
 
   function enviar(arquivo: File | undefined) {
     if (!arquivo) return;
-    if (!arquivo.type.startsWith("image/")) return setErro("Escolha uma imagem (JPG, PNG ou WEBP).");
-    if (arquivo.size > TAMANHO_MAXIMO) return setErro("A foto passa de 15 MB. Escolha uma menor.");
+    const problema = conferirFoto(arquivo);
+    if (problema) return setErro(problema);
 
     setErro(null);
     iniciarEnvio(async () => {
       try {
-        const resultado = await salvarProof(caixaId, userId, await enviarFoto(arquivo));
+        const resultado = await salvarProof(caixaId, userId, await enviarFoto(arquivo, PASTA));
         if (!resultado.ok) setErro(resultado.erro);
       } catch (falha) {
         setErro(falha instanceof Error ? falha.message : "A foto não subiu. Tente de novo.");

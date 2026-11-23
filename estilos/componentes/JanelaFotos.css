@@ -1,0 +1,41 @@
+/* === Seção: Fotos do item (janela da câmera) === */
+.janelaConfirmar.janelaFotos {
+  width: min(100% - 2 * var(--margem-lateral), 640px);
+}
+
+.janelaFotos__topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  text-transform: lowercase;
+}
+
+.janelaFotos__fechar {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-branco);
+}
+
+.janelaFotos .janelaFotos__fotos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.janelaFotos .janelaFotos__foto {
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+
+@media (max-width: 600px) {
+  .janelaFotos .janelaFotos__fotos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

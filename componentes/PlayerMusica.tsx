@@ -3,6 +3,7 @@
 import { useEffect, type CSSProperties } from "react";
 import { PLAYLIST } from "@/lib/configuracoes";
 import {
+  alternarMudo,
   alternarReproducao,
   avancarPara,
   definirVolume,
@@ -24,7 +25,8 @@ function formatarTempo(segundos: number) {
 // === Seção: Player de música da barra superior ===
 // Só controla o áudio único do site (lib/reprodutorMusica), sem ter um áudio próprio.
 export default function PlayerMusica() {
-  const { indice, tocando, tempoAtual, duracao, volume } = useReprodutorMusica();
+  const { indice, tocando, tempoAtual, duracao, volume, mudo } = useReprodutorMusica();
+  const semSom = mudo || volume === 0;
   const musicaAtual = PLAYLIST[indice];
   const progresso = duracao > 0 ? (tempoAtual / duracao) * 100 : 0;
 
@@ -79,9 +81,16 @@ export default function PlayerMusica() {
       </div>
 
       {/* === Seção: Volume === */}
-      <label className="playerMusica__volume">
-        <IconeVolume mudo={volume === 0} className="playerMusica__iconeVolume" />
-        <span className="somenteLeitorTela">Volume</span>
+      <div className="playerMusica__volume">
+        <button
+          type="button"
+          className="playerMusica__botaoMudo"
+          onClick={alternarMudo}
+          aria-label={mudo ? "Ligar o som" : "Tirar o som"}
+          aria-pressed={mudo}
+        >
+          <IconeVolume mudo={semSom} className="playerMusica__iconeVolume" />
+        </button>
         <input
           type="range"
           min={0}
@@ -90,9 +99,10 @@ export default function PlayerMusica() {
           value={volume}
           onChange={(evento) => definirVolume(Number(evento.target.value))}
           className="playerMusica__controleVolume"
-          style={{ "--preenchimento": `${volume * 100}%` } as CSSProperties}
+          aria-label="Volume"
+          style={{ "--preenchimento": `${mudo ? 0 : volume * 100}%` } as CSSProperties}
         />
-      </label>
+      </div>
     </div>
   );
 }

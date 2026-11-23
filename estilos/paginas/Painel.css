@@ -110,7 +110,6 @@
   width: 34.4%;
 }
 
-/* Valores alinhados à direita, como o total */
 .faltaPagar__tabela thead th:not(:first-child),
 .faltaPagar__tabela td {
   text-align: right;
@@ -379,7 +378,6 @@
   height: 220px;
 }
 
-/* Polaroides em leque, já com a foto revelada */
 .proofsEmDia__polaroide {
   position: absolute;
   top: 20px;
@@ -551,5 +549,102 @@
 
   .painel__topoProofs {
     flex-direction: column;
+  }
+}
+
+/* === Seção: Contas dos joiners === */
+.painel__faixaContas {
+  min-height: 0;
+  padding-block: calc(var(--px-pagina) * 46);
+}
+
+.painel__cartaoContas {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: calc(var(--px-pagina) * 48);
+  min-height: 0;
+  padding: calc(var(--px-pagina) * 40) calc(var(--px-pagina) * 44);
+}
+
+.painel__tituloContas {
+  font-size: 48px;
+  white-space: nowrap;
+}
+
+.contasJoiners__texto {
+  max-width: 60ch;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #4a4547;
+  text-wrap: pretty;
+}
+
+.contasJoiners__linha {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.contasJoiners__campo {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font: inherit;
+  font-size: 16px;
+}
+
+.contasJoiners__campo:focus-visible {
+  border-color: var(--cor-rosa-escuro);
+  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
+  outline: none;
+}
+
+.contasJoiners__campo[aria-invalid="true"] {
+  border-color: var(--cor-erro);
+}
+
+.contasJoiners__botao {
+  min-width: 180px;
+  height: 48px;
+  padding: 0 22px;
+  font-size: 15px;
+}
+
+.contasJoiners__botao:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contasJoiners__erro {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cor-erro);
+}
+
+@media (max-width: 860px) {
+  .painel__cartaoContas {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .painel__tituloContas {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 560px) {
+  .contasJoiners__linha {
+    flex-direction: column;
+  }
+
+  .contasJoiners__botao {
+    width: 100%;
   }
 }

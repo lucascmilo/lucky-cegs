@@ -48,6 +48,7 @@ export const registro = pgTable("registro", {
   pesoKg: numeric("peso_kg", { precision: 7, scale: 3 }),
   qtdPc: integer("qtd_pc").notNull().default(0),
   qtdPostcard: integer("qtd_postcard").notNull().default(0),
+  qtdSmini: integer("qtd_smini").notNull().default(0),
   qtdAlbum: integer("qtd_album").notNull().default(0),
   qtdItens: integer("qtd_itens").notNull().default(0),
   compra: numeric("compra", { precision: 10, scale: 2 }),
@@ -56,6 +57,8 @@ export const registro = pgTable("registro", {
   semDono: boolean("sem_dono").notNull().default(false),
   precoSemDono: numeric("preco_sem_dono", { precision: 10, scale: 2 }),
   criadoEm: timestamp("criado_em").notNull().defaultNow(),
+  // Última vez que a GOM salvou o item (aparece na janela "Editar item")
+  atualizadoEm: timestamp("atualizado_em").notNull().defaultNow(),
 });
 
 // === Seção: Parte (o que cada joiner tem de um registro) ===
@@ -72,6 +75,12 @@ export const parte = pgTable("parte", {
   vendaPago: boolean("venda_pago").notNull().default(false),
   interPago: boolean("inter_pago").notNull().default(false),
   taxaPago: boolean("taxa_pago").notNull().default(false),
+  // Quanto do registro fica com essa pessoa (num set de 7 PCs, uma pode ter 5 e outra 2)
+  qtdPc: integer("qtd_pc").notNull().default(0),
+  qtdPostcard: integer("qtd_postcard").notNull().default(0),
+  qtdSmini: integer("qtd_smini").notNull().default(0),
+  qtdAlbum: integer("qtd_album").notNull().default(0),
+  qtdItens: integer("qtd_itens").notNull().default(0),
 });
 
 // === Seção: Proof da GOM (foto dos itens do joiner) ===
@@ -111,6 +120,10 @@ export const tipoNotificacao = pgEnum("tipo_notificacao", [
   "taxa",
   "frete",
   "etapa_caixa",
+  // Item excluído ou joiner tirado de um set
+  "item",
+  // Aviso escrito pela GOM para os joiners de uma caixa
+  "aviso",
 ]);
 
 export const notificacao = pgTable("notificacao", {

@@ -72,6 +72,11 @@ export default function FormularioEntrar() {
         </label>
       </div>
 
+      <p className="formulario__esqueceu">
+        Esqueceu a senha? Peça para a GOM no grupo: ela manda uma senha provisória e você troca em Meu perfil depois de
+        entrar.
+      </p>
+
       {/* === Seção: Erro === */}
       {erro && (
         <p className="formulario__mensagemErro" role="alert">

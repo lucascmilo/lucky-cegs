@@ -254,3 +254,12 @@
 .formulario__botaoOlho[aria-pressed="true"] {
   color: var(--cor-rosa-texto);
 }
+
+/* === Seção: Senha esquecida (Entrar) === */
+.formulario__esqueceu {
+  margin-top: calc(var(--px-cartao) * 12);
+  font-size: max(12px, var(--px-cartao) * 12);
+  line-height: 1.4;
+  color: #4a4547;
+  text-wrap: pretty;
+}

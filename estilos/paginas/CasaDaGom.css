@@ -366,7 +366,6 @@
   transition: text-decoration-color 0.2s ease;
 }
 
-/* A setinha mostra que o item abre os detalhes */
 .postal__setaItem {
   flex-shrink: 0;
   opacity: 0.45;
@@ -485,7 +484,6 @@
   padding: 0 22px;
 }
 
-/* Carimbo de borracha batido no canto do cartão */
 .postalVazio__carimbo {
   position: absolute;
   top: 18px;

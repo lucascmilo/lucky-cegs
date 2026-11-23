@@ -37,6 +37,7 @@ export type ItemCaixa = {
   grupo: string | null;
   qtdPc: number;
   qtdPostcard: number;
+  qtdSmini: number;
   qtdAlbum: number;
   situacao: EtapaItem;
   situacaoAtualizadaEm: Date;
@@ -96,6 +97,7 @@ export async function obterItensCaixa(caixaId: number, userId: string): Promise<
       grupo: registro.grupo,
       qtdPc: registro.qtdPc,
       qtdPostcard: registro.qtdPostcard,
+      qtdSmini: registro.qtdSmini,
       qtdAlbum: registro.qtdAlbum,
       situacao: registro.situacao,
       situacaoAtualizadaEm: registro.situacaoAtualizadaEm,

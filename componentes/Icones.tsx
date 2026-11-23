@@ -238,3 +238,38 @@ export function IconeCaixa({ className, tamanho = 16 }: PropsIcone) {
     </svg>
   );
 }
+
+// === Seção: Ícones da planilha da GOM ===
+export function IconeLapis({ className, tamanho = 14 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M10.6 2.9a1.5 1.5 0 0 1 2.1 0l.4.4a1.5 1.5 0 0 1 0 2.1L6 12.5l-3.3.8.8-3.3 7.1-7.1Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+      <path d="m9.3 4.2 2.5 2.5" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
+  );
+}
+
+export function IconeMais({ className, tamanho = 14 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconeMenos({ className, tamanho = 14 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconeMegafone({ className, tamanho = 18 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M3 8.2v3.6a1 1 0 0 0 1 1h2.2l6.6 3.6V3.6L6.2 7.2H4a1 1 0 0 0-1 1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      <path d="m6.4 12.8.9 3.6M15.5 7.5a3.4 3.4 0 0 1 0 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}

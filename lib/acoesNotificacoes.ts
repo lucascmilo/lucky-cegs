@@ -17,3 +17,12 @@ export async function marcarNotificacoesLidas() {
     .where(and(eq(notificacao.userId, usuario.id), eq(notificacao.lida, false)));
   refresh();
 }
+
+// === Seção: Limpar as notificações ===
+// Apaga todas as notificações da própria conta
+export async function limparNotificacoes() {
+  const usuario = await obterUsuarioAtual();
+  if (!usuario) return;
+  await db.delete(notificacao).where(eq(notificacao.userId, usuario.id));
+  refresh();
+}

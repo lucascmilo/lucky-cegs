@@ -18,7 +18,7 @@ export default function ListaCaixasAndamento({ caixas }: { caixas: CaixaAndament
       <div className="andamento__vazio">
         <p className="andamento__vazioEtiqueta">NENHUMA CAIXA A CAMINHO</p>
         <p>Todas as caixas já chegaram na sua casa.</p>
-        <Link href="/caixas/nova" className="botao botao__preto">
+        <Link href="/caixas?nova=1" className="botao botao__preto">
           + Nova caixa
         </Link>
       </div>

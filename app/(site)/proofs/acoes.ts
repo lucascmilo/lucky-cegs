@@ -60,8 +60,8 @@ export async function salvarProof(caixaId: number, userId: string, fotoId: strin
       userId,
       tipo: "proof",
       texto: anterior
-        ? `A proof da caixa ${dados?.nome ?? ""} foi trocada por uma foto nova.`
-        : `A proof da caixa ${dados?.nome ?? ""} chegou. Seus itens estão na casa da GOM.`,
+        ? `A proof da ${dados?.nome ?? "caixa"} foi trocada por uma foto nova.`
+        : `A proof da ${dados?.nome ?? "caixa"} chegou. Seus itens estão na casa da GOM.`,
       link: `/casa-da-gom?caixa=${caixaId}`,
     },
   ]);

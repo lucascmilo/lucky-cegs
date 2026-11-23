@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState, useTransition, type FormEvent, type ReactNode } from "react";
+import { useAvisoAoSair } from "@/lib/useAvisoAoSair";
 import EntradaSenha from "@/componentes/EntradaSenha";
 import { IconeCheck } from "@/componentes/Icones";
 import { authClient } from "@/lib/auth-client";
@@ -49,6 +50,8 @@ export default function TelaPerfil({ usuario, nomeSalvo, desde }: PropsTelaPerfi
   const [rascunhoUser, setRascunhoUser] = useState(usuario.user);
 
   const textos = TEXTOS[usuario.papel];
+  useAvisoAoSair(rascunhoNome.trim() !== nomeSalvo || limparUser(rascunhoUser) !== usuario.user);
+
   const nomeCartao = rascunhoNome.trim() || nomeSalvo;
   const userCartao = limparUser(rascunhoUser) || usuario.user;
 
@@ -150,7 +153,6 @@ function LinhaFicha({ titulo, descricao, aoEnviar, children, rodape }: PropsLinh
   );
 }
 
-// Botão de salvar com o aviso de "salvo" ao lado
 function RodapeSalvar({ rotulo, enviando, desativado, aviso }: { rotulo: string; enviando: boolean; desativado: boolean; aviso: string | null }) {
   return (
     <>
@@ -285,6 +287,7 @@ function SecaoSenha({ textos }: { textos: Textos }) {
   const [erros, setErros] = useState<Partial<Record<keyof CamposSenha | "geral", string>>>({});
   const [aviso, setAviso] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
+  useAvisoAoSair(Object.values(campos).some(Boolean));
 
   function atualizar(campo: keyof CamposSenha, valor: string) {
     setCampos((anteriores) => ({ ...anteriores, [campo]: valor }));

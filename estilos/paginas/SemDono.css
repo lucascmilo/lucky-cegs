@@ -74,7 +74,6 @@
 }
 
 /* === Seção: Como funciona a claim === */
-/* Mesmo cartão da introdução dos Termos */
 .semDono__comoFunciona {
   border: 1px solid var(--cor-preto);
   border-radius: 20px;
@@ -619,7 +618,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Cada título fica no meio da sua coluna, e os itens se centralizam embaixo dele ("Dar para" fica à esquerda) */
 .semDonoGom__tabela thead th:nth-child(1) {
   width: 7.9%;
 }
@@ -673,29 +671,8 @@
   font-weight: 500;
 }
 
-.semDonoGom__camera {
-  display: inline-grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 8px;
-  background: var(--cor-rosa);
-  color: var(--cor-branco);
-  transition:
-    background-color 0.2s ease,
-    transform 0.15s ease;
-}
 
-.semDonoGom__camera:hover:not(:disabled) {
-  background: var(--cor-rosa-escuro);
-  transform: translateY(-1px);
-}
 
-.semDonoGom__camera:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
 
 .semDonoGom__nome {
   overflow: hidden;
@@ -758,7 +735,6 @@
   color: var(--cor-branco);
 }
 
-/* Apagar o anúncio (item vendido por fora) */
 .semDonoGom__apagar {
   display: inline-grid;
   place-items: center;
@@ -778,42 +754,6 @@
   border-color: var(--cor-erro);
   background: var(--cor-erro);
   color: var(--cor-branco);
-}
-
-/* Fotos do item, abertas pela câmera */
-.janelaConfirmar.semDonoGom__janelaFotos {
-  width: min(100% - 2 * var(--margem-lateral), 640px);
-}
-
-.semDonoGom__topoFotos {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  text-transform: lowercase;
-}
-
-.semDonoGom__fecharFotos {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
-  background: var(--cor-branco);
-}
-
-.semDonoGom__janelaFotos .semDonoGom__fotos {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.semDonoGom__janelaFotos .semDonoGom__foto {
-  height: auto;
-  aspect-ratio: 4 / 3;
 }
 
 .semDonoGom__escolher:disabled,
@@ -909,9 +849,5 @@
 @media (max-width: 600px) {
   .semDono__faixaGom .semDono__faixaConteudo {
     height: auto;
-  }
-
-  .semDonoGom__janelaFotos .semDonoGom__fotos {
-    grid-template-columns: minmax(0, 1fr);
   }
 }

@@ -1,0 +1,1108 @@
+/* === Seção: Janelas da GOM (item e caixa) === */
+/* Tudo em 80% do desenho; textos e áreas de toque têm tamanho mínimo */
+.janelaGom {
+  --px-janela: calc(var(--px-caixa) * 0.8);
+  --cor-texto-suave: #4a4547;
+  --cor-pago: #006329;
+  width: min(100% - 2 * var(--margem-lateral), var(--px-janela) * 1160);
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--cor-preto);
+  border-radius: 22px;
+  background: #fbf9f6;
+  box-shadow: 0 30px 70px -20px rgba(21, 18, 20, 0.5);
+  color: var(--cor-texto);
+  overscroll-behavior: contain;
+}
+
+.janelaGom::backdrop {
+  background: rgba(21, 18, 20, 0.4);
+  backdrop-filter: blur(3px);
+}
+
+.janelaGom[open] {
+  animation: janelaGomEntra 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes janelaGomEntra {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+}
+
+.janelaGom__conteudo {
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--px-janela) * 35) calc(var(--px-janela) * 35) calc(var(--px-janela) * 38);
+}
+
+.janelaGom__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.janelaGom__titulo {
+  font-family: var(--fonte-titulo);
+  font-size: max(28px, var(--px-janela) * 55);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.janelaGom__fechar {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: max(40px, var(--px-janela) * 60);
+  height: max(40px, var(--px-janela) * 60);
+  padding: 0;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-branco);
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.janelaGom__fechar:hover {
+  background: var(--cor-rosa-claro);
+  transform: rotate(90deg);
+}
+
+.janelaGom__editando {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: max(40px, var(--px-janela) * 50);
+  margin-top: calc(var(--px-janela) * 36);
+  padding: 8px calc(var(--px-janela) * 20);
+  border-radius: 12px;
+  background: var(--cor-rosa-suave);
+  font-size: max(13px, var(--px-janela) * 14);
+  font-weight: 700;
+}
+
+.janelaGom__editando svg {
+  flex-shrink: 0;
+}
+
+.janelaGom__linha {
+  margin-top: calc(var(--px-janela) * 50);
+}
+
+.janelaGom__tres {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px calc(var(--px-janela) * 34);
+}
+
+.janelaGom__campo {
+  display: flex;
+  flex-direction: column;
+  gap: max(8px, var(--px-janela) * 14);
+  min-width: 0;
+}
+
+.janelaGom__rotulo {
+  padding: 0;
+  font-size: max(16px, var(--px-janela) * 22);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.janelaGom__rotuloPequeno {
+  padding: 0;
+  font-size: max(14px, var(--px-janela) * 19);
+  font-weight: 700;
+}
+
+.janelaGom__entrada {
+  width: 100%;
+  height: max(44px, var(--px-janela) * 50);
+  padding: 0 14px;
+  border: 1.2px solid var(--cor-preto);
+  border-radius: 12px;
+  background-color: var(--cor-branco);
+  font: inherit;
+  font-size: 16px;
+  color: var(--cor-preto);
+}
+
+.janelaGom__entrada.seletorGom {
+  height: max(44px, var(--px-janela) * 50);
+  padding-right: 40px;
+  border-radius: 12px;
+}
+
+.janelaGom__entradaAlta.seletorGom {
+  height: max(48px, var(--px-janela) * 60);
+}
+
+.janelaGom__entradaAlta {
+  height: max(48px, var(--px-janela) * 60);
+}
+
+.janelaGom__entrada::placeholder {
+  color: #6b6466;
+}
+
+.janelaGom__entrada:focus-visible {
+  border-color: var(--cor-rosa-escuro);
+  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
+  outline: none;
+}
+
+.janelaGom__entrada[aria-invalid="true"] {
+  border-color: var(--cor-erro);
+  background-color: #fff6f9;
+}
+
+.janelaGom__reais {
+  position: relative;
+  display: block;
+}
+
+.janelaGom__simbolo {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  font-weight: 700;
+  color: var(--cor-texto-suave);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.janelaGom__entradaReais {
+  padding-left: 44px;
+  font-variant-numeric: tabular-nums;
+}
+
+.janelaGom__ajuda {
+  font-size: 13px;
+  color: var(--cor-texto-suave);
+}
+
+.janelaGom__erro {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cor-erro);
+}
+
+.janelaGom__inteira {
+  grid-column: 1 / -1;
+}
+
+/* === Seção: Fotos (soltar ou escolher) === */
+.janelaGom__fotos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, calc(var(--px-janela) * 520)));
+  gap: 18px calc(var(--px-janela) * 27);
+}
+
+.janelaGom__soltar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: max(80px, var(--px-janela) * 100);
+  padding: 0 14px;
+  border: 1.5px dashed var(--cor-preto);
+  border-radius: 14px;
+  background: var(--cor-branco);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.janelaGom__soltarArrastando {
+  border-color: var(--cor-rosa-escuro);
+  background: var(--cor-rosa-suave);
+}
+
+/* A área tem altura fixa: trocar "Solte a foto" pela miniatura não mexe no resto da janela */
+.janelaGom__soltar[aria-busy="true"] {
+  cursor: progress;
+}
+
+.janelaGom__escolherFoto {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 14px;
+  align-self: stretch;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  color: var(--cor-preto);
+}
+
+.janelaGom__escolherFoto svg {
+  flex-shrink: 0;
+  color: var(--cor-rosa-escuro);
+}
+
+.janelaGom__textoFoto {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--cor-texto-suave);
+}
+
+.janelaGom__textoFoto > * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.janelaGom__textoFoto strong {
+  font-size: 15px;
+  color: var(--cor-preto);
+}
+
+.janelaGom__miniatura {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 8px;
+  background: var(--cor-bege-claro);
+  object-fit: cover;
+}
+
+.janelaGom__acoesFoto {
+  display: flex;
+  gap: 6px;
+}
+
+.janelaGom__botaoFoto {
+  display: inline-grid;
+  place-items: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: 14px;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.janelaGom__botaoFoto:hover:not(:disabled) {
+  background: var(--cor-rosa-claro);
+}
+
+/* === Seção: Quantidades === */
+.janelaGom__grupoCampos {
+  min-width: 0;
+  margin-inline: 0;
+  padding: 0;
+  border: 0;
+}
+
+.janelaGom__grupoCampos > legend {
+  margin-bottom: calc(var(--px-janela) * 12);
+}
+
+.janelaGom__quantidades {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, calc(var(--px-janela) * 200)));
+  gap: 16px calc(var(--px-janela) * 23);
+}
+
+.janelaGom__contadorCampo {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--px-janela) * 12);
+  min-width: 0;
+}
+
+.janelaGom__contador {
+  display: flex;
+  align-items: center;
+  height: max(44px, var(--px-janela) * 50);
+  border: 1.2px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  overflow: hidden;
+}
+
+.janelaGom__contador:focus-within {
+  border-color: var(--cor-rosa-escuro);
+  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
+}
+
+.janelaGom__passo {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 44px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transition: background-color 0.15s ease;
+}
+
+.janelaGom__passo:hover:not(:disabled) {
+  background: var(--cor-rosa-claro);
+}
+
+.janelaGom__passo:disabled {
+  color: #b9b3b5;
+  cursor: not-allowed;
+}
+
+.janelaGom__numero {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-size: 17px;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* === Seção: Lucro (calculado) === */
+.janelaGom__lucro {
+  display: flex;
+  align-items: center;
+  height: max(48px, var(--px-janela) * 60);
+  padding: 0 16px;
+  border: 1.2px solid var(--cor-preto);
+  border-radius: 12px;
+  background: #fff4e8;
+  font-family: var(--fonte-titulo);
+  font-size: max(16px, var(--px-janela) * 20);
+  font-variant-numeric: tabular-nums;
+}
+
+.janelaGom__lucroNegativo {
+  color: var(--cor-erro);
+}
+
+/* === Seção: Individual ou set === */
+.janelaGom__tipo {
+  display: flex;
+  gap: calc(var(--px-janela) * 20);
+  margin-top: calc(var(--px-janela) * 51);
+}
+
+.janelaGom__botaoTipo {
+  height: max(48px, var(--px-janela) * 60);
+  padding: 0 calc(var(--px-janela) * 30);
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: max(15px, var(--px-janela) * 17);
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.janelaGom__botaoTipo:first-child {
+  min-width: calc(var(--px-janela) * 220);
+}
+
+.janelaGom__botaoTipo:last-child {
+  min-width: calc(var(--px-janela) * 155);
+}
+
+.janelaGom__botaoTipo:hover {
+  background: var(--cor-rosa-claro);
+}
+
+.janelaGom__botaoTipoAtivo,
+.janelaGom__botaoTipoAtivo:hover {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+/* === Seção: Joiners (uma linha por pessoa) === */
+.janelaGom__joiners {
+  --colunas-joiner: minmax(0, 303fr) minmax(0, 167fr) repeat(3, minmax(0, 155fr)) max(40px, var(--px-janela) * 45);
+  display: flex;
+  flex-direction: column;
+  gap: max(12px, var(--px-janela) * 16);
+  margin-top: calc(var(--px-janela) * 34);
+}
+
+/* No item individual não tem o X */
+.janelaGom__joiners:not(.janelaGom__joinersSet) {
+  --colunas-joiner: minmax(0, 303fr) minmax(0, 167fr) repeat(3, minmax(0, 155fr));
+}
+
+.janelaGom__cabecalhoJoiners,
+.janelaGom__linhaJoiner {
+  display: grid;
+  grid-template-columns: var(--colunas-joiner);
+  align-items: center;
+  column-gap: calc(var(--px-janela) * 14);
+}
+
+.janelaGom__cabecalhoJoiners {
+  margin-bottom: calc(var(--px-janela) * -4);
+  font-size: max(14px, var(--px-janela) * 19);
+  font-weight: 700;
+}
+
+.janelaGom__joiner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.janelaGom__celula {
+  display: block;
+  min-width: 0;
+}
+
+/* Rótulo de cada campo: só no celular, quando o cabeçalho some */
+.janelaGom__rotuloCelula {
+  display: none;
+}
+
+.janelaGom__entradaLinha {
+  height: max(44px, var(--px-janela) * 50);
+  padding: 0 calc(var(--px-janela) * 14);
+}
+
+.janelaGom__reaisCompacto .janelaGom__simbolo {
+  left: calc(var(--px-janela) * 12);
+  font-size: 13px;
+}
+
+.janelaGom__reaisCompacto .janelaGom__entradaReais {
+  padding-left: max(32px, var(--px-janela) * 36);
+  padding-right: 6px;
+}
+
+.janelaGom__valorPago {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--px-janela) * 12);
+}
+
+.janelaGom__valorPago .janelaGom__reais {
+  flex: 1;
+  min-width: 0;
+}
+
+.janelaGom__pago {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: max(24px, var(--px-janela) * 30);
+  height: max(24px, var(--px-janela) * 30);
+  margin: 0;
+  border: 1.5px solid var(--cor-preto);
+  border-radius: 6px;
+  background: var(--cor-branco);
+  appearance: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.12s ease;
+}
+
+.janelaGom__pago::after {
+  content: "";
+  width: 60%;
+  height: 60%;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m2.5 6.2 2.4 2.4 4.6-5' fill='none' stroke='%23fff' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transform: scale(0);
+  transition: transform 0.18s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.janelaGom__pago:hover:not(:disabled, :checked) {
+  background: var(--cor-rosa-claro);
+}
+
+.janelaGom__pago:checked {
+  background: var(--cor-preto);
+}
+
+.janelaGom__pago:checked::after {
+  transform: scale(1);
+}
+
+.janelaGom__pago:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.janelaGom__pago:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.janelaGom__tirarJoiner {
+  display: grid;
+  place-items: center;
+  width: max(40px, var(--px-janela) * 45);
+  height: max(40px, var(--px-janela) * 45);
+  padding: 0;
+  border: 1px solid var(--cor-preto);
+  border-radius: 10px;
+  background: var(--cor-branco);
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.janelaGom__tirarJoiner:hover:not(:disabled) {
+  border-color: var(--cor-erro);
+  background: var(--cor-erro);
+  color: var(--cor-branco);
+}
+
+.janelaGom__tirarJoiner:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.janelaGom__ficaCom {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding-left: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.janelaGom__ficaCom::-webkit-scrollbar {
+  display: none;
+}
+
+.janelaGom__ficaComRotulo {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cor-texto-suave);
+}
+
+.janelaGom__contadorCompacto {
+  flex-direction: row;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+}
+
+.janelaGom__contadorCompacto .janelaGom__rotuloPequeno {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.janelaGom__contadorCompacto .janelaGom__contador {
+  width: 96px;
+  height: 34px;
+}
+
+.janelaGom__contadorCompacto .janelaGom__passo {
+  width: 30px;
+}
+
+.janelaGom__contadorCompacto .janelaGom__numero {
+  font-size: 14px;
+}
+
+.janelaGom__conferencia {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cor-erro);
+}
+
+.janelaGom__conferenciaCerta {
+  color: var(--cor-pago);
+}
+
+.janelaGom__adicionarJoiner {
+  align-self: flex-start;
+  width: max(220px, var(--px-janela) * 304);
+  height: max(44px, var(--px-janela) * 50);
+  padding: 0 22px;
+  font-size: max(14px, var(--px-janela) * 16);
+}
+
+/* === Seção: Botões === */
+.janelaGom__erroGeral {
+  margin-top: 28px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--cor-rosa-suave);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cor-erro);
+}
+
+.janelaGom__botoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: calc(var(--px-janela) * 44);
+  padding-top: calc(var(--px-janela) * 28);
+  border-top: 1.5px dashed rgba(21, 18, 20, 0.3);
+}
+
+.janelaGom__botao {
+  min-width: max(140px, var(--px-janela) * 180);
+  height: max(46px, var(--px-janela) * 60);
+}
+
+.janelaGom__botoesEditar .janelaGom__botaoSalvar,
+.janelaGom__botoesEditar .janelaCaixa__botaoCriar {
+  min-width: max(220px, var(--px-janela) * 410);
+  margin-left: auto;
+}
+
+.janelaGom__botoesEditar {
+  justify-content: flex-start;
+}
+
+.janelaGom__botaoExcluir {
+  border-style: dashed;
+  border-color: var(--cor-erro);
+  background: var(--cor-branco);
+  color: var(--cor-erro);
+}
+
+.janelaGom__botaoExcluir:hover:not(:disabled) {
+  background: var(--cor-erro);
+  color: var(--cor-branco);
+}
+
+.janelaGom__botaoExcluir:disabled {
+  cursor: not-allowed;
+}
+
+.janelaGom__botao:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+@media (max-width: 900px) {
+  .janelaGom__quantidades {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .janelaGom {
+    max-height: calc(100dvh - 16px);
+    border-radius: 18px;
+  }
+
+  .janelaGom__conteudo {
+    padding: 20px 18px 22px;
+  }
+
+  .janelaGom__titulo {
+    font-size: 26px;
+  }
+
+  .janelaGom__fechar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .janelaGom__linha {
+    margin-top: 28px;
+  }
+
+  .janelaGom__tres,
+  .janelaGom__fotos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Cada pessoa vira um cartão: joiner e membro em cima, os valores embaixo */
+  .janelaGom__cabecalhoJoiners {
+    display: none;
+  }
+
+  .janelaGom__joinersSet .janelaGom__joiner {
+    padding: 14px;
+    border: 1px solid var(--cor-preto);
+    border-radius: 14px;
+    background: var(--cor-branco);
+  }
+
+  .janelaGom__linhaJoiner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .janelaGom__celulaJoiner {
+    grid-column: 1 / -1;
+  }
+
+  .janelaGom__rotuloCelula {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .janelaGom__tirarJoiner {
+    align-self: end;
+    justify-self: end;
+  }
+
+  .janelaGom__adicionarJoiner {
+    width: 100%;
+  }
+
+  .janelaGom__quantidades {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .janelaGom__tipo {
+    margin-top: 28px;
+  }
+
+  .janelaGom__botaoTipo {
+    flex: 1;
+    min-width: 0 !important;
+  }
+
+  .janelaGom__botoes {
+    flex-direction: column-reverse;
+  }
+
+  .janelaGom__botao {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .janelaGom__linhaJoiner,
+  .janelaGom__quantidades {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .janelaGom[open] {
+    animation: none;
+  }
+
+  .janelaGom__fechar:hover {
+    transform: none;
+  }
+}
+
+.janelaGom__criarConta {
+  align-self: flex-start;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px dashed var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: 13px;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.janelaGom__criarConta:hover:not(:disabled) {
+  background: var(--cor-rosa-claro);
+}
+
+.janelaGom__criarConta:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+/* === Seção: Janela "Nova caixa" / "Editar caixa" === */
+.janelaCaixa__nome {
+  display: flex;
+  align-items: center;
+  height: max(48px, var(--px-janela) * 60);
+  border: 1.2px solid var(--cor-preto);
+  border-radius: 12px;
+  background: var(--cor-branco);
+  font-weight: 700;
+  overflow: hidden;
+}
+
+.janelaCaixa__nome:focus-within {
+  border-color: var(--cor-rosa-escuro);
+  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
+}
+
+.janelaCaixa__nomeErro {
+  border-color: var(--cor-erro);
+  background: #fff6f9;
+}
+
+.janelaCaixa__prefixo,
+.janelaCaixa__sufixo {
+  padding: 0 14px;
+  font-family: var(--fonte-titulo);
+  font-size: max(15px, var(--px-janela) * 17);
+  letter-spacing: 0.04em;
+  color: var(--cor-texto-suave);
+}
+
+.janelaCaixa__numero {
+  width: 5.5ch;
+  height: 100%;
+  border: 0;
+  border-inline: 1.5px dashed rgba(21, 18, 20, 0.25);
+  outline: none;
+  background: transparent;
+  font-family: var(--fonte-titulo);
+  font-size: max(17px, var(--px-janela) * 20);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.janelaCaixa__origens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: max(10px, var(--px-janela) * 24);
+}
+
+.janelaCaixa__origem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: max(120px, var(--px-janela) * 160);
+  height: max(46px, var(--px-janela) * 60);
+  padding: 0 18px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: max(14px, var(--px-janela) * 17);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.janelaCaixa__origem:hover {
+  background: var(--cor-rosa-claro);
+}
+
+.janelaCaixa__origemAtiva,
+.janelaCaixa__origemAtiva:hover {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+.janelaCaixa__origem:focus-within {
+  outline: 2px solid var(--cor-rosa-escuro);
+  outline-offset: 2px;
+}
+
+.janelaCaixa__duas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, calc(var(--px-janela) * 530)));
+  gap: 18px calc(var(--px-janela) * 30);
+}
+
+.janelaCaixa__data {
+  font-variant-numeric: tabular-nums;
+}
+
+.janelaCaixa__observacao {
+  height: max(120px, var(--px-janela) * 180);
+  padding: 14px;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.janelaCaixa__previa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: max(120px, var(--px-janela) * 160);
+  margin-top: calc(var(--px-janela) * 50);
+  padding: calc(var(--px-janela) * 28) calc(var(--px-janela) * 29) calc(var(--px-janela) * 28) calc(var(--px-janela) * 28);
+  border: 1px solid var(--cor-preto);
+  border-radius: 14px;
+  background: #bfd9f2;
+}
+
+.janelaCaixa__textoPrevia {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--px-janela) * 8);
+  min-width: 0;
+}
+
+.janelaCaixa__etiqueta {
+  font-family: var(--fonte-pixel);
+  font-size: max(12px, var(--px-janela) * 16);
+}
+
+.janelaCaixa__nomePrevia {
+  font-family: var(--fonte-titulo);
+  font-size: max(22px, var(--px-janela) * 35);
+  font-weight: 400;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.janelaCaixa__detalhes {
+  font-size: max(13px, var(--px-janela) * 16);
+  font-weight: 700;
+}
+
+.janelaCaixa__codigo {
+  flex-shrink: 0;
+  width: calc(var(--px-janela) * 232);
+  height: auto;
+}
+
+.janelaCaixa__botaoCriar {
+  min-width: max(170px, var(--px-janela) * 228);
+}
+
+.janelaCaixa__avisoExcluir {
+  margin-top: 10px;
+}
+
+@media (max-width: 700px) {
+  .janelaCaixa__duas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .janelaCaixa__origens {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .janelaCaixa__origem {
+    min-width: 0;
+  }
+
+  .janelaCaixa__previa {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .janelaCaixa__codigo {
+    width: 160px;
+  }
+}
+
+/* === Seção: Janela "Aviso da caixa" === */
+.janelaAviso {
+  width: min(100% - 2 * var(--margem-lateral), var(--px-janela) * 820);
+}
+
+.janelaAviso__vazio {
+  margin-top: 24px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--cor-texto-suave);
+}
+
+.janelaAviso__para {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.janelaAviso__joiner {
+  flex: 1 1 200px;
+  height: max(46px, var(--px-janela) * 60);
+  border-radius: var(--raio-pilula);
+}
+
+.janelaAviso__sugestoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.janelaAviso__sugestao {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px dashed var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: 13px;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.janelaAviso__sugestao:hover {
+  background: var(--cor-rosa-claro);
+}
+
+.janelaAviso__mensagem {
+  height: max(110px, var(--px-janela) * 150);
+  padding: 14px;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.janelaAviso__quaseCheio {
+  font-weight: 700;
+  color: var(--cor-erro);
+}
+
+.janelaAviso__previa {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: calc(var(--px-janela) * 40);
+  padding: 14px;
+  border: 1.5px dashed var(--cor-borda-bege);
+  border-radius: 16px;
+  background: #fff4e8;
+}
+
+.janelaAviso__previaRotulo {
+  font-family: var(--fonte-pixel);
+  font-size: 12px;
+  color: var(--cor-texto-suave);
+}
+
+.janelaAviso__notificacao {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 11px;
+  background: var(--cor-rosa-suave);
+}
+
+.janelaAviso__icone {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-rosa);
+}
+
+.janelaAviso__textoNotificacao {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--cor-texto-suave);
+}
+
+.janelaAviso__textoNotificacao strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--cor-preto);
+  overflow-wrap: anywhere;
+}
+
+.janelaAviso__enviar {
+  min-width: max(200px, var(--px-janela) * 260);
+}

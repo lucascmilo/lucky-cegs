@@ -21,7 +21,7 @@ export default function TelaSemDonoGom({ dados }: { dados: SemDonoGom }) {
           "pedidos de claim esperando",
         )}`}
         acao={
-          <Link href="/itens/novo" className="botao botao__rosa semDono__acao">
+          <Link href="/caixas?novo=1" className="botao botao__rosa semDono__acao">
             + Adicionar item
           </Link>
         }
@@ -39,7 +39,7 @@ export default function TelaSemDonoGom({ dados }: { dados: SemDonoGom }) {
               <p className="semDonoVazio__texto">
                 Quando um item sobrar numa caixa, ele aparece aqui com os pedidos de claim dos joiners.
               </p>
-              <Link href="/itens/novo" className="botao botao__rosa semDonoVazio__botao">
+              <Link href="/caixas?novo=1" className="botao botao__rosa semDonoVazio__botao">
                 + Adicionar item
               </Link>
             </div>

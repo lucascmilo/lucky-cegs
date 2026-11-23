@@ -36,3 +36,6 @@ export const PADRAO_USER = new RegExp(`^[a-zA-Z0-9_]{${TAMANHO_USER.minimo},${TA
 
 export const TAMANHO_MINIMO_SENHA = 8;
 export const TAMANHO_MAXIMO_NOME = 40;
+
+// === Seção: Avisos da GOM para os joiners de uma caixa ===
+export const TAMANHO_MAXIMO_AVISO = 280;

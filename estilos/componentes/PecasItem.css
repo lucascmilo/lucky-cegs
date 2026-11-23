@@ -256,3 +256,29 @@ html:has(.fotoItem__janela[open]) {
     right: 14px;
   }
 }
+
+/* === Seção: Botão da câmera (tabelas da GOM) === */
+.botaoCamera {
+  display: inline-grid;
+  place-items: center;
+  width: max(28px, var(--px-caixa) * 30);
+  height: max(28px, var(--px-caixa) * 30);
+  border: 1px solid var(--cor-preto);
+  border-radius: 8px;
+  background: var(--cor-rosa);
+  color: var(--cor-branco);
+  vertical-align: middle;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.botaoCamera:hover:not(:disabled) {
+  background: var(--cor-rosa-escuro);
+  transform: translateY(-1px);
+}
+
+.botaoCamera:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

@@ -339,14 +339,14 @@ button {
     inset: -11px -6px;
   }
 
-  .semDonoGom__camera,
+  .botaoCamera,
   .semDonoGom__apagar,
   .postal__item,
   .postal__mais {
     position: relative;
   }
 
-  .semDonoGom__camera::before,
+  .botaoCamera::before,
   .semDonoGom__apagar::before {
     content: "";
     position: absolute;

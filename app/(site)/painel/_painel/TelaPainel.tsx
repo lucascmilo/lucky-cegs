@@ -4,9 +4,11 @@ import FaixaLetreiro from "@/componentes/FaixaLetreiro";
 import { IconeEnviar } from "@/componentes/Icones";
 import SeloPedidosAbertos from "@/componentes/SeloPedidosAbertos";
 import type { CaixaAndamento, JoinerDevendo, ProofPendente } from "@/lib/painel";
+import type { JoinerOpcao } from "@/lib/planilhaCaixa";
 import codigoBarras from "@/public/imagens/codigo-barras.png";
 import colagemPainel from "@/public/imagens/painel-colagem.webp";
 import photocardPainel from "@/public/imagens/painel-photocard.png";
+import ContasJoiners from "./ContasJoiners";
 import ListaCaixasAndamento from "./ListaCaixasAndamento";
 import TabelaFaltaPagar from "./TabelaFaltaPagar";
 import "@/estilos/componentes/PecasItem.css";
@@ -20,11 +22,12 @@ type PropsTelaPainel = {
   devendo: JoinerDevendo[];
   caixas: CaixaAndamento[];
   proofs: ProofPendente[];
+  joiners: JoinerOpcao[];
 };
 
 // === Seção: Tela inicial da GOM ===
 // Mesmo hero da tela inicial, com o título e as ações da GOM
-export default function TelaPainel({ devendo, caixas, proofs }: PropsTelaPainel) {
+export default function TelaPainel({ devendo, caixas, proofs, joiners }: PropsTelaPainel) {
   return (
     <>
       <section className="inicio__hero painelHero">
@@ -45,10 +48,10 @@ export default function TelaPainel({ devendo, caixas, proofs }: PropsTelaPainel)
             </div>
 
             <div className="painelHero__botoes">
-              <Link href="/caixas/nova" className="botao botao__rosa">
+              <Link href="/caixas?nova=1" className="botao botao__rosa">
                 + Nova caixa
               </Link>
-              <Link href="/itens/novo" className="botao botao__rosa">
+              <Link href="/caixas?novo=1" className="botao botao__rosa">
                 + Adicionar item
               </Link>
             </div>
@@ -128,13 +131,23 @@ export default function TelaPainel({ devendo, caixas, proofs }: PropsTelaPainel)
             )}
           </div>
         </section>
+
+        {/* === Seção: Contas dos joiners (senha esquecida e conta nova) === */}
+        <section className="inicioJoiner__faixa fundoAzulejos painel__faixaContas">
+          <div className="inicioJoiner__cartao painel__cartaoContas">
+            <h2 className="inicioJoiner__titulo painel__tituloContas">
+              CONTAS DOS
+              <span className="inicioJoiner__tituloRosa">JOINERS</span>
+            </h2>
+            <ContasJoiners joiners={joiners} />
+          </div>
+        </section>
       </div>
     </>
   );
 }
 
 // === Seção: Aviso quando todas as proofs já subiram ===
-// Três polaroides em leque, já reveladas, com o selo "tudo em dia"
 function ProofsEmDia() {
   return (
     <div className="proofsEmDia" role="status">

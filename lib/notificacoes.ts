@@ -72,7 +72,7 @@ export async function obterNotificacoes(userId: string): Promise<CaixaDeEntrada>
   };
 }
 
-// === Seção: Avisos de caixa (para as telas da GOM que mudam etapa e valores) ===
+// === Seção: Aviso de mudança de etapa da caixa ===
 async function obterCaixaEJoiners(caixaId: number) {
   const [dados] = await db.select({ nome: caixa.nome }).from(caixa).where(eq(caixa.id, caixaId));
   if (!dados) return null;
@@ -93,23 +93,8 @@ export async function notificarEtapaCaixa(caixaId: number, etapa: EtapaCaixa) {
     dados.userIds.map((userId) => ({
       userId,
       tipo: "etapa_caixa",
-      texto: `A caixa ${dados.nome} mudou de etapa: ${rotulo}.`,
+      texto: `A ${dados.nome} mudou de etapa: ${rotulo}.`,
       link: `/caixas/${caixaId}`,
-    })),
-  );
-}
-
-// A GOM lançou a taxa ou o frete (inter) da caixa; sem lista, avisa todos os joiners dela
-export async function notificarValorLancado(caixaId: number, tipo: "taxa" | "frete", userIds?: string[]) {
-  const dados = await obterCaixaEJoiners(caixaId);
-  if (!dados) return;
-  const valor = tipo === "taxa" ? "A taxa" : "O frete";
-  await notificar(
-    (userIds ?? dados.userIds).map((userId) => ({
-      userId,
-      tipo,
-      texto: `${valor} da caixa ${dados.nome} chegou. O valor já está em Meus itens.`,
-      link: "/meus-itens",
     })),
   );
 }
