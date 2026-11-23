@@ -1,6 +1,14 @@
 import AvisoFlutuante from "@/componentes/AvisoFlutuante";
 import { formatarReais } from "@/lib/formatacao";
-import { CATEGORIAS, formatarPeso, resumirCaixa, type CaixaGom, type JoinerOpcao, type RegistroGom } from "@/lib/planilhaCaixa";
+import {
+  CATEGORIAS,
+  formatarPeso,
+  resumirCaixa,
+  type AvisoEnviado,
+  type CaixaGom,
+  type JoinerOpcao,
+  type RegistroGom,
+} from "@/lib/planilhaCaixa";
 import FaixaCaixaGom from "./FaixaCaixaGom";
 import PlanilhaCaixa from "./PlanilhaCaixa";
 import "@/estilos/componentes/PecasItem.css";
@@ -12,6 +20,7 @@ type PropsTelaCaixaGom = {
   caixas: CaixaGom[];
   registros: RegistroGom[];
   joiners: JoinerOpcao[];
+  avisos: AvisoEnviado[];
   abrirNovoItem: boolean;
   abrirNovaCaixa: boolean;
   inicialPlanilha: { busca: string; ordem: string; filtro: string };
@@ -24,6 +33,7 @@ export default function TelaCaixaGom({
   caixas,
   registros,
   joiners,
+  avisos,
   abrirNovoItem,
   abrirNovaCaixa,
   inicialPlanilha,
@@ -47,6 +57,7 @@ export default function TelaCaixaGom({
         caixas={caixas}
         joiners={joiners}
         joinersDaCaixa={joinersDaCaixa}
+        avisos={avisos}
         totalRegistros={registros.length}
         abrirNovoItem={abrirNovoItem}
         abrirNovaCaixa={abrirNovaCaixa}

@@ -30,6 +30,9 @@ export type CaixaGom = {
 
 export type JoinerOpcao = { id: string; user: string; nome: string };
 
+// "para" vazio = todos os joiners da caixa
+export type AvisoEnviado = { id: number; texto: string; para: string | null; enviados: number; quando: string };
+
 export type ParteGom = {
   id: number;
   user: string;

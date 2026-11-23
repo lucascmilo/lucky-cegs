@@ -1,9 +1,9 @@
 "use client";
 
 import { CldImage } from "next-cloudinary";
-import { Fragment, useEffect, useState, useTransition, type CSSProperties } from "react";
-import { IconeCamera, IconeLapis, IconeLupa } from "@/componentes/Icones";
+import { Fragment, useEffect, useRef, useState, useTransition, type CSSProperties } from "react";
 import { mostrarAviso } from "@/componentes/AvisoFlutuante";
+import { IconeCamera, IconeLupa } from "@/componentes/Icones";
 import JanelaFotos, { temFoto } from "@/componentes/JanelaFotos";
 import { juntarClasses } from "@/lib/classes";
 import { obterEtapaItem, type EtapaItem } from "@/lib/etapas";
@@ -13,12 +13,23 @@ import {
   resumirCaixa,
   type CaixaGom,
   type JoinerOpcao,
-  type ParteGom,
-  type Quantidades,
   type RegistroGom,
 } from "@/lib/planilhaCaixa";
 import { desfazerMover, moverItens, type EstadoItem } from "../acoes";
 import JanelaItem from "./JanelaItem";
+import { chamar } from "@/lib/conexao";
+import {
+  BolinhaEtapa,
+  BotaoEditar,
+  CelulasQuantidade,
+  Dinheiro,
+  LinhaParte,
+  Marcar,
+  ValorPago,
+  Vazio,
+  formatarDinheiro,
+  formatarKg,
+} from "./PecasPlanilha";
 
 export type Ordem = "item" | "joiner";
 
@@ -83,6 +94,12 @@ type PropsPlanilha = {
 
 export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inicial }: PropsPlanilha) {
   const [editando, setEditando] = useState<RegistroGom | null>(null);
+  const [vezEditar, setVezEditar] = useState(0);
+
+  function editar(registro: RegistroGom) {
+    setEditando(registro);
+    setVezEditar((anterior) => anterior + 1);
+  }
   const [busca, setBusca] = useState(inicial.busca);
   const [ordem, setOrdem] = useState<Ordem>(inicial.ordem === "joiner" ? "joiner" : "item");
   const [filtro, setFiltro] = useState<Filtro>(FILTROS_VALIDOS.includes(inicial.filtro) ? (inicial.filtro as Filtro) : "todos");
@@ -105,6 +122,28 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
     }, 10000);
     return () => window.clearTimeout(tempo);
   }, [aviso]);
+
+  // === Atalhos: "/" vai para a busca; Esc limpa a seleção ===
+  // Não atrapalham quem está digitando num campo nem funcionam com uma janela aberta
+  const campoBusca = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    function aoApertar(evento: KeyboardEvent) {
+      if (evento.ctrlKey || evento.metaKey || evento.altKey || document.querySelector("dialog[open]")) return;
+      // Caixa de marcar não é campo de texto: depois de marcar um item, o Esc continua limpando a seleção
+      const alvo = evento.target;
+      const digitando =
+        alvo instanceof HTMLElement &&
+        (alvo.isContentEditable || alvo.matches("textarea, select, input:not([type='checkbox']):not([type='radio'])"));
+      if (digitando) return;
+      if (evento.key === "/") {
+        evento.preventDefault();
+        campoBusca.current?.focus();
+      }
+      if (evento.key === "Escape") setSelecionados(new Set());
+    }
+    document.addEventListener("keydown", aoApertar);
+    return () => document.removeEventListener("keydown", aoApertar);
+  }, []);
 
   // Guarda busca, ordem e filtro no endereço sem recarregar a página
   useEffect(() => {
@@ -176,7 +215,7 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
     const quantos = idsSelecionados.length;
     const nomeDestino = outrasCaixas.find((c) => String(c.id) === destino)?.nome ?? "outra caixa";
     iniciar(async () => {
-      const resultado = await moverItens(idsSelecionados, Number(destino));
+      const resultado = await chamar(() => moverItens(idsSelecionados, Number(destino)));
       if (!resultado.ok) return setErro(resultado.erro);
       setSelecionados(new Set());
       setDestino("");
@@ -189,7 +228,7 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
     if (!desfazer) return;
     setErro(null);
     iniciarDesfazer(async () => {
-      const resultado = await desfazerMover(desfazer);
+      const resultado = await chamar(() => desfazerMover(desfazer));
       if (!resultado.ok) return setErro(resultado.erro);
       setDesfazer(null);
       setAviso("Pronto, os itens voltaram para onde estavam.");
@@ -216,15 +255,28 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
             Buscar item ou joiner
           </label>
           <input
+            ref={campoBusca}
             id="busca-planilha"
             className="planilhaGom__campoBusca"
             type="search"
+            enterKeyHint="search"
+            aria-keyshortcuts="/"
             value={busca}
             onChange={(evento) => mudarBusca(evento.target.value)}
+            onKeyDown={(evento) => {
+              // No celular, "Buscar" fecha o teclado (a lista já filtra enquanto digita); Esc apaga a busca
+              if (evento.key === "Enter") evento.currentTarget.blur();
+              if (evento.key === "Escape" && busca) mudarBusca("");
+            }}
             placeholder="Buscar item ou joiner…"
             autoComplete="off"
             spellCheck={false}
           />
+          {!busca && (
+            <kbd className="planilhaGom__atalho" title="Atalho: aperte / para buscar">
+              /
+            </kbd>
+          )}
         </div>
         <div className="planilhaGom__ordem" role="group" aria-label="Ordem da planilha">
           {(["item", "joiner"] as const).map((opcao) => (
@@ -409,7 +461,7 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
                           <span className="planilhaGom__pessoas">
                             · {registro.partes.length} {registro.partes.length === 1 ? "joiner" : "joiners"}
                           </span>
-                          <BotaoEditar nome={registro.nome} aoClicar={() => setEditando(registro)} />
+                          <BotaoEditar nome={registro.nome} aoClicar={() => editar(registro)} />
                         </span>
                       </th>
                       <td data-rotulo="Valor" />
@@ -436,7 +488,7 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
                       <span className="planilhaGom__nomeTexto" title={registro.nome}>
                         {registro.nome}
                       </span>
-                      <BotaoEditar nome={registro.nome} aoClicar={() => setEditando(registro)} />
+                      <BotaoEditar nome={registro.nome} aoClicar={() => editar(registro)} />
                     </span>
                   </th>
                   <td data-rotulo="Joiner" className="planilhaGom__joiner planilhaGom__alinharEsquerda">
@@ -507,7 +559,7 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
 
       {editando && (
         <JanelaItem
-          key={editando.id}
+          key={`${editando.id}-${vezEditar}`}
           caixa={caixa}
           caixas={caixas}
           joiners={joiners}
@@ -522,126 +574,6 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
   );
 }
 
-// === Seção: Peças da tabela ===
-// Bolinha com a cor da etapa; o nome da etapa fica no texto escondido e na dica ao passar o mouse
-function BolinhaEtapa({ situacao }: { situacao: EtapaItem }) {
-  const etapa = obterEtapaItem(situacao);
-  return (
-    <span className="planilhaGom__corEtapa" style={{ "--cor-etapa": etapa.cor } as CSSProperties} title={etapa.rotulo}>
-      <span className="somenteLeitorTela">{etapa.rotulo}: </span>
-    </span>
-  );
-}
-
-function LinhaParte({ parte, marcado }: { parte: ParteGom; marcado: boolean }) {
-  return (
-    <tr className={juntarClasses("planilhaGom__linhaParte", marcado && "planilhaGom__selecionada")}>
-      <td className="planilhaGom__celulaMarcar" />
-      <td className="planilhaGom__celulaFotos" />
-      <td className="planilhaGom__membro planilhaGom__alinharEsquerda">{parte.membro ?? <Vazio />}</td>
-      <td data-rotulo="Joiner" className="planilhaGom__joiner planilhaGom__alinharEsquerda">
-        @{parte.user}
-      </td>
-      <td data-rotulo="Valor">
-        <ValorPago valor={parte.venda} pago={parte.vendaPago} />
-      </td>
-      <td className="planilhaGom__celulaVazia" />
-      <td data-rotulo="Inter">
-        <ValorPago valor={parte.inter} pago={parte.interPago} />
-      </td>
-      <td data-rotulo="Taxa">
-        <ValorPago valor={parte.taxa} pago={parte.taxaPago} />
-      </td>
-      <td className="planilhaGom__celulaVazia" />
-      <CelulasQuantidade quantidades={parte.quantidades} />
-    </tr>
-  );
-}
-
-function CelulasQuantidade({ quantidades }: { quantidades: Quantidades }) {
-  return CATEGORIAS.map((categoria) => (
-    <td
-      key={categoria.id}
-      data-rotulo={categoria.sigla}
-      className={juntarClasses("planilhaGom__qtd", quantidades[categoria.id] === 0 && "planilhaGom__zero")}
-    >
-      {quantidades[categoria.id]}
-    </td>
-  ));
-}
-
-// Verde = pago, vermelho = a pagar (o texto escondido diz o mesmo para leitores de tela)
-function ValorPago({ valor, pago }: { valor: number | null; pago: boolean }) {
-  if (valor === null) return <Vazio rotulo="A definir" />;
-  return (
-    <span className={pago ? "planilhaGom__pago" : "planilhaGom__aPagar"}>
-      <Dinheiro valor={valor} />
-      <span className="somenteLeitorTela">{pago ? " (pago)" : " (a pagar)"}</span>
-    </span>
-  );
-}
-
-function Vazio({ rotulo = "Vazio" }: { rotulo?: string }) {
-  return (
-    <span className="planilhaGom__vazio" aria-label={rotulo}>
-      -
-    </span>
-  );
-}
-
-function formatarDinheiro(valor: number | null) {
-  return valor === null ? <Vazio /> : <Dinheiro valor={valor} />;
-}
-
-// "R$" e o número separados: com valores muito altos, o número desce para a linha de baixo
-// em vez de invadir a coluna vizinha
-const formatadorValor = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const formatadorKg = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
-
-function Dinheiro({ valor }: { valor: number }) {
-  return (
-    <span className="planilhaGom__dinheiro">
-      <span className="planilhaGom__moeda">R$</span>
-      <wbr />
-      <span className="planilhaGom__numero">{formatadorValor.format(valor)}</span>
-    </span>
-  );
-}
-
-function formatarKg(kg: number | null) {
-  return kg === null ? <Vazio /> : formatadorKg.format(kg);
-}
-
-// === Seção: Caixa de marcar ===
-// A área de toque é a célula inteira; a caixa desenhada fica no meio
-type PropsMarcar = { marcado: boolean; parcial?: boolean; aoMudar: () => void; rotulo: string; desabilitado?: boolean };
-
-function Marcar({ marcado, parcial = false, aoMudar, rotulo, desabilitado }: PropsMarcar) {
-  return (
-    <label className="planilhaGom__areaMarcar">
-      <input
-        type="checkbox"
-        className="planilhaGom__marcar"
-        checked={marcado}
-        ref={(caixa) => {
-          if (caixa) caixa.indeterminate = parcial;
-        }}
-        onChange={aoMudar}
-        disabled={desabilitado}
-        aria-label={rotulo}
-      />
-    </label>
-  );
-}
-
 function somarPartes(registros: RegistroGom[], campo: "inter" | "taxa") {
   return registros.reduce((total, r) => total + r.partes.reduce((soma, p) => soma + (p[campo] ?? 0), 0), 0);
-}
-
-function BotaoEditar({ nome, aoClicar }: { nome: string; aoClicar: () => void }) {
-  return (
-    <button type="button" className="planilhaGom__editar" onClick={aoClicar} aria-label={`Editar ${nome}`} title="Editar item">
-      <IconeLapis />
-    </button>
-  );
 }

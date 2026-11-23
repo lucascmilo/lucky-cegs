@@ -13,6 +13,7 @@
 
 /* === Seção: Faixa lilás do topo === */
 .perfil__faixa {
+  overflow-x: clip;
   border-bottom: 1px solid var(--cor-preto);
   background-color: #e2dcf5;
   background-image: radial-gradient(rgba(255, 255, 255, 0.55) 2px, transparent 2.5px);

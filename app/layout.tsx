@@ -33,7 +33,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#efebe5",
+  // Mesma cor da barra preta do topo: no celular, a barra do navegador continua o site
+  themeColor: "#151214",
 };
 
 // === Seção: Layout raiz ===
@@ -43,6 +44,10 @@ export default function LayoutRaiz({ children }: LayoutProps<"/">) {
       lang="pt-BR"
       className={`${figtree.variable} ${pinyonScript.variable} ${archivoBlack.variable} ${silkscreen.variable}`}
     >
+      <head>
+        {/* As fotos vêm do Cloudinary: a conexão abre antes de a página pedir a primeira */}
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+      </head>
       <body>{children}</body>
     </html>
   );

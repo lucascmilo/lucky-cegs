@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 import { mostrarAviso } from "@/componentes/AvisoFlutuante";
 import { IconeFechar, IconeMegafone } from "@/componentes/Icones";
 import { juntarClasses } from "@/lib/classes";
 import { TAMANHO_MAXIMO_AVISO } from "@/lib/configuracoes";
-import { postarAviso } from "../acoes";
+import type { AvisoEnviado } from "@/lib/planilhaCaixa";
+import { mensagemDeFalha } from "@/lib/conexao";
+import { postarAviso } from "../acoesCaixa";
 import "@/estilos/componentes/JanelaGom.css";
 
 // Começos prontos: um toque preenche a mensagem
@@ -20,19 +22,21 @@ type PropsJanelaAviso = {
   nomeCaixa: string;
   // Users dos joiners com itens nesta caixa
   joiners: string[];
+  // Últimos avisos desta caixa, do mais novo para o mais antigo
+  enviados: AvisoEnviado[];
   aoFechar: () => void;
 };
 
 // === Seção: Janela "Aviso da caixa" ===
 // O aviso chega no sino de todos os joiners da caixa ou de um só, e leva para a página da caixa.
-export default function JanelaAviso({ caixaId, nomeCaixa, joiners, aoFechar }: PropsJanelaAviso) {
+export default function JanelaAviso({ caixaId, nomeCaixa, joiners, enviados, aoFechar }: PropsJanelaAviso) {
   const referencia = useRef<HTMLDialogElement>(null);
   const campo = useRef<HTMLTextAreaElement>(null);
   const [para, setPara] = useState<"todos" | "um">("todos");
   const [joiner, setJoiner] = useState(joiners[0] ?? "");
   const [mensagem, setMensagem] = useState("");
   const [erro, setErro] = useState<string | null>(null);
-  const [enviando, iniciar] = useTransition();
+  const [enviando, setEnviando] = useState(false);
 
   useEffect(() => {
     referencia.current?.showModal();
@@ -53,17 +57,35 @@ export default function JanelaAviso({ caixaId, nomeCaixa, joiners, aoFechar }: P
     });
   }
 
-  function enviar() {
+  // Fecha e avisa a tela na hora: o evento "close" do navegador pode se perder enquanto a página atualiza
+  const jaFechou = useRef(false);
+  function fechar() {
+    referencia.current?.close();
+    aoFecharJanela();
+  }
+
+  function aoFecharJanela() {
+    if (jaFechou.current) return;
+    jaFechou.current = true;
+    aoFechar();
+  }
+
+  async function enviar() {
     if (texto.length < 3) return setErro("Escreva o aviso.");
     setErro(null);
-    iniciar(async () => {
+    setEnviando(true);
+    try {
       const resultado = await postarAviso(caixaId, texto, para === "todos" ? "todos" : joiner);
       if (!resultado.ok) return setErro(resultado.erro);
       mostrarAviso(
         resultado.enviados === 1 ? "Aviso enviado para 1 joiner." : `Aviso enviado para ${resultado.enviados} joiners.`,
       );
-      referencia.current?.close();
-    });
+      fechar();
+    } catch {
+      setErro(mensagemDeFalha());
+    } finally {
+      setEnviando(false);
+    }
   }
 
   return (
@@ -71,7 +93,7 @@ export default function JanelaAviso({ caixaId, nomeCaixa, joiners, aoFechar }: P
       ref={referencia}
       className="janelaGom janelaAviso"
       aria-labelledby="titulo-janela-aviso"
-      onClose={aoFechar}
+      onClose={aoFecharJanela}
       onCancel={(evento) => {
         if (enviando) evento.preventDefault();
       }}
@@ -199,6 +221,24 @@ export default function JanelaAviso({ caixaId, nomeCaixa, joiners, aoFechar }: P
               </span>
             </div>
           </>
+        )}
+
+        {enviados.length > 0 && (
+          <section className="janelaAviso__enviados" aria-labelledby="titulo-avisos-enviados">
+            <h3 id="titulo-avisos-enviados" className="janelaAviso__previaRotulo">
+              Últimos avisos
+            </h3>
+            <ul className="janelaAviso__lista">
+              {enviados.map((aviso) => (
+                <li key={aviso.id} className="janelaAviso__enviado">
+                  <span className="janelaAviso__textoEnviado">{aviso.texto}</span>
+                  <span className="janelaAviso__dadosEnviado">
+                    {aviso.quando} · {aviso.para ? `para @${aviso.para}` : `para todos (${aviso.enviados})`}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
         )}
 
         {erro && (

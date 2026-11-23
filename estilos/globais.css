@@ -1,5 +1,7 @@
 /* === Seção: Variáveis globais === */
+/* O site é só claro: campos e barras de rolagem não viram escuros no tema escuro do sistema */
 :root {
+  color-scheme: light;
   --cor-rosa: #ea4f80;
   --cor-rosa-vivo: #e24c7c;
   --cor-rosa-escuro: #c2185b;
@@ -96,6 +98,9 @@ h3 {
 a,
 button,
 input,
+select,
+textarea,
+summary,
 label {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
@@ -111,7 +116,9 @@ img {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
   color: inherit;
 }
@@ -324,6 +331,7 @@ button {
 /* Em telas de toque, links e botões pequenos ganham uma área clicável invisível maior */
 @media (pointer: coarse) {
   .playerMusica__botaoPular,
+  .playerMusica__botaoMudo,
   .rodape__link,
   .formulario__linkTermos,
   .formulario__alternarConta a {
@@ -331,6 +339,7 @@ button {
   }
 
   .playerMusica__botaoPular::before,
+  .playerMusica__botaoMudo::before,
   .rodape__link::before,
   .formulario__linkTermos::before,
   .formulario__alternarConta a::before {

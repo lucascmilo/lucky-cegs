@@ -1,8 +1,9 @@
 import { asc, desc, eq, inArray, isNull, ne, or } from "drizzle-orm";
 import { user } from "@/auth-schema";
 import { db } from "@/db";
-import { caixa, parte, registro } from "@/db/schema";
-import type { CaixaGom, JoinerOpcao, RegistroGom } from "@/lib/planilhaCaixa";
+import { avisoCaixa, caixa, parte, registro } from "@/db/schema";
+import { formatarMomento } from "@/lib/formatacao";
+import type { AvisoEnviado, CaixaGom, JoinerOpcao, RegistroGom } from "@/lib/planilhaCaixa";
 
 // Tudo aqui é só para a GOM: quem chama precisa ter conferido o papel de admin.
 
@@ -86,5 +87,23 @@ export async function obterRegistrosGom(caixaId: number): Promise<RegistroGom[]>
         taxaPago: p.taxaPago,
         quantidades: { pc: p.qtdPc, postcard: p.qtdPostcard, smini: p.qtdSmini, album: p.qtdAlbum, itens: p.qtdItens },
       })),
+  }));
+}
+
+// === Seção: Últimos avisos enviados para os joiners da caixa ===
+export async function obterAvisosCaixa(caixaId: number): Promise<AvisoEnviado[]> {
+  const avisos = await db
+    .select()
+    .from(avisoCaixa)
+    .where(eq(avisoCaixa.caixaId, caixaId))
+    .orderBy(desc(avisoCaixa.criadoEm))
+    .limit(5);
+  const agora = new Date();
+  return avisos.map((aviso) => ({
+    id: aviso.id,
+    texto: aviso.texto,
+    para: aviso.para,
+    enviados: aviso.enviados,
+    quando: formatarMomento(aviso.criadoEm, agora),
   }));
 }

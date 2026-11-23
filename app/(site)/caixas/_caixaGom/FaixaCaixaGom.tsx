@@ -8,7 +8,7 @@ import { IconeLapis, IconeMegafone } from "@/componentes/Icones";
 import JanelaConfirmar from "@/componentes/JanelaConfirmar";
 import { juntarClasses } from "@/lib/classes";
 import { ETAPAS_CAIXA, obterEtapaCaixa, type EtapaCaixa } from "@/lib/etapas";
-import type { CaixaGom, JoinerOpcao } from "@/lib/planilhaCaixa";
+import type { AvisoEnviado, CaixaGom, JoinerOpcao } from "@/lib/planilhaCaixa";
 import brilhoAmarelo from "@/public/imagens/brilho-amarelo.png";
 import fotoCaixasGom from "@/public/imagens/caixas-gom-foto.png";
 import codigoBarras from "@/public/imagens/codigo-barras.png";
@@ -18,6 +18,7 @@ import NomeCaixa from "../_caixa/NomeCaixa";
 import JanelaAviso from "./JanelaAviso";
 import JanelaCaixa from "./JanelaCaixa";
 import JanelaItem from "./JanelaItem";
+import { chamar } from "@/lib/conexao";
 
 type PropsFaixaCaixaGom = {
   caixa: CaixaGom;
@@ -25,6 +26,7 @@ type PropsFaixaCaixaGom = {
   joiners: JoinerOpcao[];
   // Users dos joiners com itens nesta caixa (para os avisos)
   joinersDaCaixa: string[];
+  avisos: AvisoEnviado[];
   totalRegistros: number;
   // ?novo=1 abre "Novo item" e ?nova=1 abre "Nova caixa" ao carregar
   abrirNovoItem: boolean;
@@ -47,11 +49,19 @@ export default function FaixaCaixaGom({
   caixas,
   joiners,
   joinersDaCaixa,
+  avisos,
   totalRegistros,
   abrirNovoItem,
   abrirNovaCaixa,
 }: PropsFaixaCaixaGom) {
   const [janela, setJanela] = useState<Janela>(abrirNovaCaixa ? "novaCaixa" : abrirNovoItem ? "novoItem" : null);
+  // Cada abertura monta uma janela nova (se uma anterior não desmontou ao fechar, ela não trava o botão)
+  const [vez, setVez] = useState(0);
+
+  function abrir(qual: Exclude<Janela, null>) {
+    setJanela(qual);
+    setVez((anterior) => anterior + 1);
+  }
   const [novaSituacao, setNovaSituacao] = useState<EtapaCaixa | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   const [salvando, iniciar] = useTransition();
@@ -81,15 +91,20 @@ export default function FaixaCaixaGom({
     return () => observador.disconnect();
   }, []);
 
-  function fecharJanela() {
-    setJanela(null);
+  // O ?novo=1 / ?nova=1 só serve para abrir a janela: sai do endereço na hora (se ficasse até fechar,
+  // a página atualizada depois de salvar traria o parâmetro de volta)
+  useEffect(() => {
     limparEndereco("novo");
     limparEndereco("nova");
+  }, []);
+
+  function fecharJanela() {
+    setJanela(null);
   }
 
   function confirmarSituacao(situacao: EtapaCaixa) {
     iniciar(async () => {
-      const resultado = await mudarSituacaoCaixa(caixa.id, situacao);
+      const resultado = await chamar(() => mudarSituacaoCaixa(caixa.id, situacao));
       if (!resultado.ok) return setErro(resultado.erro);
       setNovaSituacao(null);
       mostrarAviso(`Situação mudada para ${obterEtapaCaixa(situacao).rotulo}.`);
@@ -108,7 +123,7 @@ export default function FaixaCaixaGom({
           <button
             type="button"
             className="pilulaSelecao caixaGomTopo__pilula caixaGomTopo__novaCaixa"
-            onClick={() => setJanela("novaCaixa")}
+            onClick={() => abrir("novaCaixa")}
           >
             + Nova Caixa
           </button>
@@ -139,7 +154,7 @@ export default function FaixaCaixaGom({
 
         {/* === Seção: Adicionar item, situação e editar a caixa === */}
         <div className="caixaGomTopo__acoes">
-          <button type="button" className="botao botao__rosa caixaGomTopo__adicionar" onClick={() => setJanela("novoItem")}>
+          <button type="button" className="botao botao__rosa caixaGomTopo__adicionar" onClick={() => abrir("novoItem")}>
             + Adicionar item
           </button>
 
@@ -165,7 +180,7 @@ export default function FaixaCaixaGom({
             <button
               type="button"
               className="caixaGomTopo__editarCaixa"
-              onClick={() => setJanela("aviso")}
+              onClick={() => abrir("aviso")}
               aria-label={`Postar aviso para os joiners da ${caixa.nome}`}
               title="Postar aviso"
             >
@@ -174,7 +189,7 @@ export default function FaixaCaixaGom({
             <button
               type="button"
               className="caixaGomTopo__editarCaixa"
-              onClick={() => setJanela("editarCaixa")}
+              onClick={() => abrir("editarCaixa")}
               aria-label={`Editar ${caixa.nome}`}
               title="Editar caixa"
             >
@@ -221,17 +236,20 @@ export default function FaixaCaixaGom({
       )}
 
       {janela === "novoItem" && (
-        <JanelaItem caixa={caixa} caixas={caixas} joiners={joiners} aoFechar={fecharJanela} aoSalvar={mostrarAviso} />
+        <JanelaItem key={vez} caixa={caixa} caixas={caixas} joiners={joiners} aoFechar={fecharJanela} aoSalvar={mostrarAviso} />
       )}
 
       {janela === "aviso" && (
-        <JanelaAviso caixaId={caixa.id} nomeCaixa={caixa.nome} joiners={joinersDaCaixa} aoFechar={fecharJanela} />
+        <JanelaAviso key={vez} caixaId={caixa.id} nomeCaixa={caixa.nome} joiners={joinersDaCaixa}
+          enviados={avisos}
+          aoFechar={fecharJanela}
+        />
       )}
 
-      {janela === "novaCaixa" && <JanelaCaixa caixas={caixas} aoFechar={fecharJanela} />}
+      {janela === "novaCaixa" && <JanelaCaixa key={vez} caixas={caixas} aoFechar={fecharJanela} />}
 
       {janela === "editarCaixa" && (
-        <JanelaCaixa caixas={caixas} caixa={caixa} totalRegistros={totalRegistros} aoFechar={fecharJanela} />
+        <JanelaCaixa key={vez} caixas={caixas} caixa={caixa} totalRegistros={totalRegistros} aoFechar={fecharJanela} />
       )}
     </section>
   );

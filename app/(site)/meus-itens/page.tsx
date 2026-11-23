@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Carregando from "@/componentes/Carregando";
+import EsqueletoPagina from "@/componentes/EsqueletoPagina";
 import { obterMeusItens } from "@/lib/meusItens";
 import { exigirUsuario } from "@/lib/sessao";
 import TelaMeusItens from "./_meusItens/TelaMeusItens";
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 // === Seção: Página dos itens do joiner ===
 export default function PaginaMeusItens(props: PageProps<"/meus-itens">) {
   return (
-    <Suspense fallback={<Carregando />}>
+    <Suspense fallback={<EsqueletoPagina tipo="cartoes" />}>
       <ConteudoMeusItens {...props} />
     </Suspense>
   );

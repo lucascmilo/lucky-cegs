@@ -6,8 +6,8 @@ export const EMAIL_PIX = "luckycegs@gmail.com";
 export const ORIGENS: Record<string, string> = {
   JP: "Japão",
   KR: "Coreia",
-  PH: "Filipinas",
   CH: "China",
+  PH: "Filipinas",
 };
 
 // === Seção: Playlist do player da barra superior ===

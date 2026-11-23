@@ -68,7 +68,7 @@ export function montarDetalheItem(item: ItemCaixa, nomeCaixa: string): DetalheIt
     id: item.id,
     nome: item.nome,
     cabecalho,
-    quantidades: descreverQuantidades(item),
+    quantidades: quantidadesDoJoiner(item),
     situacao: item.situacao,
     fotoId: item.fotoId,
     proofWhId: item.proofWhId,
@@ -104,4 +104,25 @@ function somarCampo(
     valor: soma === null ? "-" : formatarReais(soma),
     estado: estadoDoValor(soma, pago),
   };
+}
+
+// === Seção: Quantidade que fica com o joiner ===
+// Num set dividido, soma as partes do joiner e mostra junto do total ("2 de 7 PCS")
+function quantidadesDoJoiner(item: ItemCaixa) {
+  const total = descreverQuantidades(item);
+  if (item.totalPessoas < 2 || item.minhasPartes.length === 0) return total;
+
+  const somar = (campo: "qtdPc" | "qtdPostcard" | "qtdSmini" | "qtdAlbum") =>
+    item.minhasPartes.reduce((soma, parte) => soma + parte[campo], 0);
+  const minhas = { qtdPc: somar("qtdPc"), qtdPostcard: somar("qtdPostcard"), qtdSmini: somar("qtdSmini"), qtdAlbum: somar("qtdAlbum") };
+  // Partes antigas, de antes da quantidade por pessoa, ficam zeradas: aí só o total aparece
+  if (Object.values(minhas).every((valor) => valor === 0)) return total;
+
+  const campos = ["qtdPc", "qtdPostcard", "qtdSmini", "qtdAlbum"] as const;
+  return campos
+    .filter((campo) => item[campo] > 0)
+    .map((campo) => {
+      const [texto] = descreverQuantidades({ qtdPc: 0, qtdPostcard: 0, qtdSmini: 0, qtdAlbum: 0, [campo]: item[campo] });
+      return `${minhas[campo]} de ${texto}`;
+    });
 }

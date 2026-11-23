@@ -1,0 +1,130 @@
+/* === Seção: Esqueleto da página === */
+.esqueletoPagina {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-bottom: calc(var(--px-caixa) * 80);
+}
+
+.esqueletoPagina__largura {
+  width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
+  margin-inline: auto;
+}
+
+.esqueletoPagina__faixa {
+  border-bottom: 1px solid var(--cor-borda-bege);
+  background: var(--cor-creme);
+}
+
+.esqueletoPagina__faixa .esqueletoPagina__largura {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(var(--px-caixa) * 18);
+  min-height: max(220px, var(--px-caixa) * 330);
+  padding-block: 32px;
+}
+
+.esqueletoPagina__titulo {
+  width: min(70%, calc(var(--px-caixa) * 520));
+  height: max(40px, var(--px-caixa) * 64);
+}
+
+.esqueletoPagina__subtitulo {
+  width: min(50%, calc(var(--px-caixa) * 320));
+  height: 18px;
+}
+
+.esqueletoPagina__pilulas {
+  display: flex;
+  gap: 12px;
+}
+
+.esqueletoPagina__pilula {
+  width: min(28%, 140px);
+  height: 38px;
+  border-radius: var(--raio-pilula);
+}
+
+.esqueletoPagina__conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--px-caixa) * 28);
+  margin-top: calc(var(--px-caixa) * 60);
+}
+
+.esqueletoPagina__tituloSecao {
+  width: min(60%, 280px);
+  height: max(28px, var(--px-caixa) * 44);
+}
+
+.esqueletoPagina__resumo {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.esqueletoPagina__quadro {
+  height: max(70px, var(--px-caixa) * 100);
+}
+
+.esqueletoPagina__barra {
+  height: max(48px, var(--px-caixa) * 64);
+  border-radius: 16px;
+}
+
+.esqueletoPagina__tabela {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.esqueletoPagina__linha {
+  height: max(48px, var(--px-caixa) * 56);
+}
+
+.esqueletoPagina__cartoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.esqueletoPagina__cartao {
+  height: 260px;
+  border-radius: 18px;
+}
+
+.esqueletoPagina__ficha {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 28px;
+  border: 1px solid var(--cor-borda-bege);
+  border-radius: 22px;
+  background: var(--cor-branco);
+}
+
+.esqueletoPagina__linhaFicha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 32px;
+}
+
+.esqueletoPagina__rotulo {
+  height: 28px;
+}
+
+.esqueletoPagina__campo {
+  height: 96px;
+}
+
+@media (max-width: 860px) {
+  .esqueletoPagina__resumo {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .esqueletoPagina__linhaFicha {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import AvisoConexao from "./AvisoConexao";
 import BarraSuperior from "./BarraSuperior";
 import Cabecalho from "./Cabecalho";
 import Rodape from "./Rodape";
@@ -24,6 +25,8 @@ export default function EstruturaSite({ children }: { children: ReactNode }) {
 
       {/* === Seção: Rodapé === */}
       <Rodape />
+
+      <AvisoConexao />
     </>
   );
 }

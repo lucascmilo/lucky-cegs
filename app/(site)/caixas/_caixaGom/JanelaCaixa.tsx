@@ -12,8 +12,9 @@ import { ETAPAS_CAIXA, obterEtapaCaixa, type EtapaCaixa } from "@/lib/etapas";
 import type { CaixaGom } from "@/lib/planilhaCaixa";
 import { useAvisoAoSair } from "@/lib/useAvisoAoSair";
 import codigoBarras from "@/public/imagens/codigo-barras.png";
-import { criarCaixa, editarCaixa, excluirCaixa } from "../acoes";
+import { criarCaixa, editarCaixa, excluirCaixa } from "../acoesCaixa";
 import "@/estilos/componentes/JanelaGom.css";
+import { chamar } from "@/lib/conexao";
 
 const SIGLAS = Object.keys(ORIGENS);
 const PADRAO_NOME = /^caixa\s+(\d+)\s+([a-z]{2})$/i;
@@ -99,8 +100,17 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
     if (!numeroMexido) setNumero(String(proximoNumero(caixas, sigla)));
   }
 
+  // Fecha e avisa a tela na hora: o evento "close" do navegador pode se perder enquanto a página atualiza
+  const jaFechou = useRef(false);
   function fechar() {
     referencia.current?.close();
+    aoFecharJanela();
+  }
+
+  function aoFecharJanela() {
+    if (jaFechou.current) return;
+    jaFechou.current = true;
+    aoFechar();
   }
 
   function pedirParaFechar() {
@@ -120,7 +130,7 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
 
     const dados = { numero: numero.trim(), origem, situacao, abertura, observacao };
     iniciar(async () => {
-      const resultado = caixa ? await editarCaixa(caixa.id, dados) : await criarCaixa(dados);
+      const resultado = caixa ? await chamar(() => editarCaixa(caixa.id, dados)) : await chamar(() => criarCaixa(dados));
       if (!resultado.ok) {
         setErros(resultado.erros);
         setErroGeral(resultado.erro ?? "Confira os campos marcados.");
@@ -136,7 +146,7 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
     if (!caixa) return;
     setErroExcluir(null);
     iniciar(async () => {
-      const resultado = await excluirCaixa(caixa.id);
+      const resultado = await chamar(() => excluirCaixa(caixa.id));
       if (!resultado.ok) return setErroExcluir(resultado.erro);
       mostrarAviso(`${caixa.nome} foi excluída.`);
       fechar();
@@ -159,7 +169,7 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
       ref={referencia}
       className="janelaGom"
       aria-labelledby="titulo-janela-caixa"
-      onClose={aoFechar}
+      onClose={aoFecharJanela}
       onCancel={(evento) => {
         evento.preventDefault();
         pedirParaFechar();

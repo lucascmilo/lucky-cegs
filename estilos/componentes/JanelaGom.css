@@ -583,6 +583,8 @@
 }
 
 .janelaGom__ficaComRotulo {
+  flex-shrink: 0;
+  white-space: nowrap;
   font-size: 13px;
   font-weight: 700;
   color: var(--cor-texto-suave);
@@ -1105,4 +1107,44 @@
 
 .janelaAviso__enviar {
   min-width: max(200px, var(--px-janela) * 260);
+}
+
+.janelaAviso__enviados {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: calc(var(--px-janela) * 32);
+}
+
+.janelaAviso__lista {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--cor-borda-bege);
+  border-radius: 12px;
+  background: var(--cor-branco);
+  list-style: none;
+}
+
+.janelaAviso__enviado {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+}
+
+.janelaAviso__enviado + .janelaAviso__enviado {
+  border-top: 1px dashed var(--cor-borda-bege);
+}
+
+.janelaAviso__textoEnviado {
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.janelaAviso__dadosEnviado {
+  font-size: 12px;
+  color: var(--cor-texto-suave);
 }

@@ -14,6 +14,7 @@ import codigoBarras from "@/public/imagens/codigo-barras.png";
 import { alterarNome, alterarUser } from "../acoes";
 import "@/estilos/paginas/acesso/Formulario.css";
 import "@/estilos/paginas/Perfil.css";
+import { chamar } from "@/lib/conexao";
 
 // === Seção: Tipos ===
 type PropsTelaPerfil = {
@@ -185,7 +186,7 @@ function SecaoNome({ textos, nomeSalvo, valor, aoMudar }: PropsSecao & { nomeSal
     evento.preventDefault();
     if (!valor.trim()) return setErro("Informe um nome.");
     iniciar(async () => {
-      const resultado = await alterarNome(valor);
+      const resultado = await chamar(() => alterarNome(valor));
       if (resultado.ok) setAviso("Nome salvo.");
       else setErro(resultado.erro);
     });
@@ -232,7 +233,7 @@ function SecaoUser({ textos, userSalvo, valor, aoMudar }: PropsSecao & { userSal
     evento.preventDefault();
     if (!PADRAO_USER.test(limpo)) return setErro(MENSAGEM_USER_INVALIDO);
     iniciar(async () => {
-      const resultado = await alterarUser(limpo);
+      const resultado = await chamar(() => alterarUser(limpo));
       if (resultado.ok) {
         aoMudar(limpo.toLowerCase());
         setAviso("User salvo. Use o novo @ para entrar.");

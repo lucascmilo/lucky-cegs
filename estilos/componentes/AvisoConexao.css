@@ -1,0 +1,37 @@
+/* === Seção: Faixa de "sem internet" === */
+.avisoConexao {
+  position: fixed;
+  top: max(10px, env(safe-area-inset-top));
+  left: 50%;
+  z-index: 70;
+  max-width: calc(100% - 2 * var(--margem-lateral));
+  margin: 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.avisoConexao__faixa {
+  display: block;
+  padding: 10px 18px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-erro);
+  box-shadow: 0 14px 30px -10px rgba(21, 18, 20, 0.45);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--cor-branco);
+  animation: avisoConexaoEntra 0.25s ease-out;
+}
+
+.avisoConexao__voltou {
+  background: var(--cor-menta);
+  color: var(--cor-preto);
+}
+
+@keyframes avisoConexaoEntra {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}

@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { user } from "@/auth-schema";
-import Carregando from "@/componentes/Carregando";
+import EsqueletoPagina from "@/componentes/EsqueletoPagina";
 import { db } from "@/db";
 import { exigirUsuario } from "@/lib/sessao";
 import TelaPerfil from "./_perfil/TelaPerfil";
@@ -20,7 +20,7 @@ const formatadorMesAno = new Intl.DateTimeFormat("pt-BR", {
 // === Seção: Página do perfil ===
 export default function PaginaPerfil() {
   return (
-    <Suspense fallback={<Carregando />}>
+    <Suspense fallback={<EsqueletoPagina tipo="ficha" />}>
       <ConteudoPerfil />
     </Suspense>
   );

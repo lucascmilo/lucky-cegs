@@ -8,6 +8,7 @@ import { formatarReais, normalizarBusca } from "@/lib/formatacao";
 import type { ItemSemDonoGom } from "@/lib/semDonoGom";
 import { apagarItemSemDono, darItemSemDono } from "../acoes";
 import "@/estilos/componentes/PecasItem.css";
+import { chamar } from "@/lib/conexao";
 
 const POR_VEZ = 5;
 
@@ -38,6 +39,10 @@ export default function TabelaSemDonoGom({ itens }: { itens: ItemSemDonoGom[] })
           id="busca-sem-dono-gom"
           className="semDono__campoBusca"
           type="search"
+          enterKeyHint="search"
+          onKeyDown={(evento) => {
+            if (evento.key === "Enter") evento.currentTarget.blur();
+          }}
           value={busca}
           onChange={(evento) => {
             setBusca(evento.target.value);
@@ -109,7 +114,7 @@ function LinhaItem({ item }: { item: ItemSemDonoGom }) {
 
   function executar(acao: () => Promise<{ ok: true } | { ok: false; erro: string }>) {
     iniciarEnvio(async () => {
-      const resultado = await acao();
+      const resultado = await chamar(() => acao());
       if (resultado.ok) setJanela(null);
       else setErro(resultado.erro);
     });

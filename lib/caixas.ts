@@ -29,6 +29,11 @@ export type MinhaParte = {
   vendaPago: boolean;
   interPago: boolean;
   taxaPago: boolean;
+  // Quanto do item fica com o joiner (num set de 7 PCS, por exemplo, 2)
+  qtdPc: number;
+  qtdPostcard: number;
+  qtdSmini: number;
+  qtdAlbum: number;
 };
 
 export type ItemCaixa = {
@@ -142,6 +147,10 @@ export async function obterItensCaixa(caixaId: number, userId: string): Promise<
       vendaPago: parte.vendaPago,
       interPago: parte.interPago,
       taxaPago: parte.taxaPago,
+      qtdPc: parte.qtdPc,
+      qtdPostcard: parte.qtdPostcard,
+      qtdSmini: parte.qtdSmini,
+      qtdAlbum: parte.qtdAlbum,
     })
     .from(parte)
     .where(and(eq(parte.userId, userId), inArray(parte.registroId, idsRegistros)))
@@ -177,6 +186,10 @@ export async function obterItensCaixa(caixaId: number, userId: string): Promise<
         vendaPago: p.vendaPago,
         interPago: p.interPago,
         taxaPago: comTaxa && p.taxaPago,
+        qtdPc: p.qtdPc,
+        qtdPostcard: p.qtdPostcard,
+        qtdSmini: p.qtdSmini,
+        qtdAlbum: p.qtdAlbum,
       }));
 
     return {

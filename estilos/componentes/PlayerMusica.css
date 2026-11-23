@@ -215,12 +215,6 @@
     flex-basis: 300px;
   }
 
-  .playerMusica__botaoMudo {
-    width: 40px;
-    height: 40px;
-    margin: -10px;
-  }
-
   .playerMusica__controleVolume {
     display: none;
   }

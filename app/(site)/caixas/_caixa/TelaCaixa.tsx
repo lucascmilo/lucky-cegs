@@ -116,6 +116,7 @@ export default function TelaCaixa({ caixa, caixasAbertas, itens, eu, parametros 
               id="busca-caixa"
               className="caixaItens__campoBusca"
               type="search"
+              enterKeyHint="search"
               name="busca"
               defaultValue={busca}
               placeholder="Buscar item, membro ou @…"

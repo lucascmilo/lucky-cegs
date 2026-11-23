@@ -1023,7 +1023,8 @@
   }
 
   .caixaGomTopo__seletor {
-    flex: 1;
+    flex: 1 1 0;
+    width: 0;
     min-width: 0;
   }
 
@@ -1191,4 +1192,26 @@
 
 .planilhaGom__editar:hover {
   background: var(--cor-rosa-claro);
+}
+
+/* Dica do atalho "/" na busca: só com mouse e teclado */
+.planilhaGom__atalho {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--cor-borda-bege);
+  border-radius: 7px;
+  background: var(--cor-bege-claro);
+  font-family: var(--fonte-texto);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cor-texto-suave);
+}
+
+@media (pointer: coarse) {
+  .planilhaGom__atalho {
+    display: none;
+  }
 }

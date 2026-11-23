@@ -5,6 +5,7 @@ import JanelaConfirmar from "@/componentes/JanelaConfirmar";
 import JanelaSenhaProvisoria from "@/componentes/JanelaSenhaProvisoria";
 import { criarContaJoiner, redefinirSenhaJoiner, type ResultadoConta } from "@/lib/acoesContas";
 import type { JoinerOpcao } from "@/lib/planilhaCaixa";
+import { chamar } from "@/lib/conexao";
 
 // === Seção: Contas dos joiners (GOM) ===
 // Um campo de @ só: se a conta existe, redefine a senha; se não existe, cria.
@@ -22,7 +23,7 @@ export default function ContasJoiners({ joiners }: { joiners: JoinerOpcao[] }) {
   function executar(acao: (texto: string) => Promise<ResultadoConta>) {
     setErro(null);
     iniciar(async () => {
-      const resultado = await acao(user);
+      const resultado = await chamar(() => acao(user));
       setConfirmando(false);
       if (!resultado.ok) return setErro(resultado.erro);
       setPronto(resultado);
@@ -58,7 +59,7 @@ export default function ContasJoiners({ joiners }: { joiners: JoinerOpcao[] }) {
             setErro(null);
           }}
           list={idLista}
-          placeholder="@user do twitter"
+          placeholder="@user do twitter…"
           autoComplete="off"
           autoCapitalize="none"
           spellCheck={false}

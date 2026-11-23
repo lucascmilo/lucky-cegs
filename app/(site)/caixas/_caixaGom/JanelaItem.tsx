@@ -1,13 +1,11 @@
 "use client";
 
-import { CldImage } from "next-cloudinary";
-import { useEffect, useId, useRef, useState, useTransition, type DragEvent, type ReactNode } from "react";
-import { IconeEnviar, IconeFechar, IconeLapis, IconeLixeira, IconeMais, IconeMenos } from "@/componentes/Icones";
+import { useEffect, useId, useRef, useState, useTransition } from "react";
+import { IconeFechar, IconeLapis } from "@/componentes/Icones";
 import JanelaConfirmar from "@/componentes/JanelaConfirmar";
 import JanelaSenhaProvisoria from "@/componentes/JanelaSenhaProvisoria";
 import { criarContaJoiner, type ResultadoConta } from "@/lib/acoesContas";
 import { juntarClasses } from "@/lib/classes";
-import { conferirFoto, enviarFoto } from "@/lib/envioFoto";
 import { ETAPAS_ITEM, obterEtapaCaixa, type EtapaItem } from "@/lib/etapas";
 import { formatarReais } from "@/lib/formatacao";
 import {
@@ -22,7 +20,9 @@ import {
 } from "@/lib/planilhaCaixa";
 import { useAvisoAoSair } from "@/lib/useAvisoAoSair";
 import { criarItem, descartarFotos, editarItem, excluirItem, type DadosParte } from "../acoes";
+import { Campo, CampoFoto, Contador, EntradaReais } from "./CamposJanela";
 import "@/estilos/componentes/JanelaGom.css";
+import { chamar } from "@/lib/conexao";
 
 // Com a caixa na warehouse o item pode estar nestas etapas; depois ele acompanha a caixa
 const ETAPAS_NA_WAREHOUSE: EtapaItem[] = ["esperando", "comprado", "warehouse"];
@@ -207,7 +207,7 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
 
   function criarConta(texto: string, chaveErro: string) {
     iniciarConta(async () => {
-      const resultado = await criarContaJoiner(texto);
+      const resultado = await chamar(() => criarContaJoiner(texto));
       if (!resultado.ok) return setErros((anteriores) => ({ ...anteriores, [chaveErro]: resultado.erro }));
       setJoiners((anteriores) => [...anteriores, { id: resultado.user, user: resultado.user, nome: resultado.user }]);
       setErros((anteriores) => Object.fromEntries(Object.entries(anteriores).filter(([c]) => c !== chaveErro)));
@@ -215,15 +215,32 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
     });
   }
 
+  // Fecha e avisa a tela na hora: o evento "close" do navegador pode se perder enquanto a página atualiza
+  const jaFechou = useRef(false);
   function fechar() {
     referencia.current?.close();
+    aoFecharJanela();
   }
 
   function aoFecharJanela() {
+    if (jaFechou.current) return;
+    jaFechou.current = true;
     const usadas = salvou.current ? [fotoId, proofWhId] : [inicial.fotoId, inicial.proofWhId];
     const sobrando = [...fotosEnviadas.current].filter((id) => !usadas.includes(id));
     if (sobrando.length > 0) void descartarFotos(sobrando);
     aoFechar();
+  }
+
+  // Outro joiner na linha: o pago era da pessoa anterior, então desmarca (voltar ao joiner original recupera)
+  function mudarJoiner(linha: Linha, texto: string) {
+    const original = inicial.linhas.find((l) => l.chave === linha.chave);
+    const mesmaPessoa = original && limparUser(original.user) === limparUser(texto);
+    atualizarLinha(linha.chave, {
+      user: texto,
+      vendaPago: mesmaPessoa ? original.vendaPago : false,
+      interPago: mesmaPessoa ? original.interPago : false,
+      taxaPago: mesmaPessoa ? original.taxaPago : false,
+    });
   }
 
   function pedirParaFechar() {
@@ -296,7 +313,7 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
     };
 
     iniciar(async () => {
-      const resultado = registro ? await editarItem(registro.id, dados) : await criarItem(dados);
+      const resultado = registro ? await chamar(() => editarItem(registro.id, dados)) : await chamar(() => criarItem(dados));
       if (resultado.ok) {
         salvou.current = true;
         const outraCaixa = caixaEscolhida.id === caixa.id ? "" : ` na ${caixaEscolhida.nome}`;
@@ -312,7 +329,7 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
     if (!registro) return;
     setErroExcluir(null);
     iniciarExclusao(async () => {
-      const resultado = await excluirItem(registro.id);
+      const resultado = await chamar(() => excluirItem(registro.id));
       if (!resultado.ok) return setErroExcluir(resultado.erro);
       salvou.current = true;
       aoSalvar(`${registro.nome} foi excluído.`);
@@ -558,7 +575,7 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
                       {...propsErro(`${chave}.user`, `${prefixo}-user`, idErros)}
                       className="janelaGom__entrada janelaGom__entradaLinha"
                       value={linha.user}
-                      onChange={(evento) => atualizarLinha(linha.chave, { user: evento.target.value })}
+                      onChange={(evento) => mudarJoiner(linha, evento.target.value)}
                       list={idLista}
                       placeholder="@user"
                       aria-label={`Joiner${numero}`}
@@ -773,116 +790,6 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
   );
 }
 
-// === Seção: Campo com rótulo, ajuda e erro ===
-type PropsCampo = { rotulo: string; id: string; erro?: string; ajuda?: string; children: ReactNode };
-
-function Campo({ rotulo, id, erro, ajuda, children }: PropsCampo) {
-  return (
-    <div className="janelaGom__campo">
-      <label htmlFor={id} className="janelaGom__rotulo">
-        {rotulo}
-      </label>
-      {children}
-      {erro ? (
-        <p id={`${id}-erro`} className="janelaGom__erro">
-          {erro}
-        </p>
-      ) : (
-        ajuda && <p className="janelaGom__ajuda">{ajuda}</p>
-      )}
-    </div>
-  );
-}
-
-type PropsEntradaReais = {
-  id: string;
-  valor: string;
-  aoMudar: (valor: string) => void;
-  alta?: boolean;
-  compacto?: boolean;
-  rotulo?: string;
-  "aria-invalid": boolean;
-  "aria-describedby"?: string;
-  "data-erro": string;
-};
-
-function EntradaReais({ valor, aoMudar, alta, compacto, rotulo, ...resto }: PropsEntradaReais) {
-  return (
-    <span className={juntarClasses("janelaGom__reais", compacto && "janelaGom__reaisCompacto")}>
-      <span className="janelaGom__simbolo" aria-hidden="true">
-        R$
-      </span>
-      <input
-        {...resto}
-        className={juntarClasses(
-          "janelaGom__entrada janelaGom__entradaReais",
-          alta && "janelaGom__entradaAlta",
-          compacto && "janelaGom__entradaLinha",
-        )}
-        value={valor}
-        onChange={(evento) => aoMudar(evento.target.value)}
-        aria-label={rotulo}
-        inputMode="decimal"
-        placeholder="0,00"
-        autoComplete="off"
-      />
-    </span>
-  );
-}
-
-// === Seção: Contador com − e + ===
-// "compacto" é a versão pequena, ao lado do nome da categoria (quanto fica com cada joiner do set)
-type PropsContador = {
-  id: string;
-  rotulo: string;
-  // No contador compacto aparece a sigla (PC, POST…); o nome inteiro fica para o leitor de tela
-  sigla?: string;
-  valor: number;
-  aoMudar: (valor: number) => void;
-  compacto?: boolean;
-};
-
-function Contador({ id, rotulo, sigla, valor, aoMudar, compacto }: PropsContador) {
-  const mudar = (novo: number) => aoMudar(Math.min(999, Math.max(0, novo)));
-  return (
-    <div className={juntarClasses("janelaGom__contadorCampo", compacto && "janelaGom__contadorCompacto")}>
-      <label htmlFor={id} className="janelaGom__rotuloPequeno" title={sigla ? rotulo : undefined}>
-        {sigla ?? rotulo}
-        {sigla && <span className="somenteLeitorTela"> ({rotulo})</span>}
-      </label>
-      <div className="janelaGom__contador">
-        <button
-          type="button"
-          className="janelaGom__passo"
-          onClick={() => mudar(valor - 1)}
-          disabled={valor === 0}
-          aria-label={`Menos ${rotulo}`}
-        >
-          <IconeMenos />
-        </button>
-        <input
-          id={id}
-          className="janelaGom__numero"
-          value={valor}
-          onChange={(evento) => mudar(Number(evento.target.value.replace(/\D/g, "")) || 0)}
-          onFocus={(evento) => evento.target.select()}
-          inputMode="numeric"
-          autoComplete="off"
-        />
-        <button
-          type="button"
-          className="janelaGom__passo"
-          onClick={() => mudar(valor + 1)}
-          disabled={valor === 999}
-          aria-label={`Mais ${rotulo}`}
-        >
-          <IconeMais />
-        </button>
-      </div>
-    </div>
-  );
-}
-
 // === Seção: Conferência das quantidades do set ===
 // Mostra quanto já foi dividido entre os joiners em cada categoria do set
 function ConferenciaSet({ linhas, quantidades }: { linhas: Linha[]; quantidades: Quantidades }) {
@@ -903,108 +810,5 @@ function ConferenciaSet({ linhas, quantidades }: { linhas: Linha[]; quantidades:
         </span>
       ))}
     </p>
-  );
-}
-
-// === Seção: Espaço para soltar a foto ===
-type PropsCampoFoto = { rotulo: string; pasta: string; fotoId: string | null; aoMudar: (id: string | null) => void };
-
-function CampoFoto({ rotulo, pasta, fotoId, aoMudar }: PropsCampoFoto) {
-  const idSeletor = useId();
-  const [arrastando, setArrastando] = useState(false);
-  const [erro, setErro] = useState<string | null>(null);
-  const [enviando, iniciar] = useTransition();
-
-  function enviar(arquivo: File | undefined) {
-    if (!arquivo) return;
-    const problema = conferirFoto(arquivo);
-    if (problema) return setErro(problema);
-    setErro(null);
-    iniciar(async () => {
-      try {
-        aoMudar(await enviarFoto(arquivo, pasta));
-      } catch (falha) {
-        setErro(falha instanceof Error ? falha.message : "A foto não subiu. Tente de novo.");
-      }
-    });
-  }
-
-  function soltar(evento: DragEvent<HTMLDivElement>) {
-    evento.preventDefault();
-    setArrastando(false);
-    enviar(evento.dataTransfer.files[0]);
-  }
-
-  const escolher = () => document.getElementById(idSeletor)?.click();
-
-  return (
-    <div className="janelaGom__campo">
-      <span className="janelaGom__rotulo" id={`${idSeletor}-rotulo`}>
-        {rotulo}
-      </span>
-      <div
-        className={juntarClasses("janelaGom__soltar", arrastando && "janelaGom__soltarArrastando")}
-        onDragOver={(evento) => {
-          evento.preventDefault();
-          setArrastando(true);
-        }}
-        onDragLeave={() => setArrastando(false)}
-        onDrop={soltar}
-        aria-busy={enviando}
-      >
-        {fotoId ? (
-          <>
-            <CldImage src={fotoId} alt={rotulo} width={120} height={120} crop="fill" className="janelaGom__miniatura" />
-            <span className="janelaGom__textoFoto">
-              <strong>{enviando ? "Enviando…" : "Foto pronta"}</strong>
-              <span>Arraste outra para trocar</span>
-            </span>
-            <span className="janelaGom__acoesFoto">
-              <button type="button" className="janelaGom__botaoFoto" onClick={escolher} disabled={enviando}>
-                Trocar
-              </button>
-              <button
-                type="button"
-                className="janelaGom__botaoFoto"
-                onClick={() => aoMudar(null)}
-                disabled={enviando}
-                aria-label={`Tirar ${rotulo.toLowerCase()}`}
-              >
-                <IconeLixeira />
-              </button>
-            </span>
-          </>
-        ) : (
-          <button
-            type="button"
-            className="janelaGom__escolherFoto"
-            onClick={escolher}
-            disabled={enviando}
-            aria-describedby={`${idSeletor}-rotulo`}
-          >
-            <IconeEnviar tamanho={22} />
-            <span className="janelaGom__textoFoto">
-              <strong>{enviando ? "Enviando…" : "Solte a foto aqui"}</strong>
-              <span>ou toque para escolher</span>
-            </span>
-          </button>
-        )}
-        <input
-          id={idSeletor}
-          type="file"
-          accept="image/*"
-          hidden
-          onChange={(evento) => {
-            enviar(evento.target.files?.[0]);
-            evento.target.value = "";
-          }}
-        />
-      </div>
-      {erro && (
-        <p className="janelaGom__erro" role="alert">
-          {erro}
-        </p>
-      )}
-    </div>
   );
 }

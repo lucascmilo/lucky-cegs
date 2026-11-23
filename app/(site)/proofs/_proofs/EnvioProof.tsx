@@ -6,6 +6,7 @@ import JanelaConfirmar from "@/componentes/JanelaConfirmar";
 import { juntarClasses } from "@/lib/classes";
 import { conferirFoto, enviarFoto } from "@/lib/envioFoto";
 import { removerProof, salvarProof } from "../acoes";
+import { chamar } from "@/lib/conexao";
 
 const PASTA = "proofs";
 
@@ -157,7 +158,7 @@ export function AcoesProof({ joiner, user }: { joiner: Joiner; user: string }) {
               aoCancelar={() => setConfirmando(false)}
               aoConfirmar={() =>
                 iniciarRemocao(async () => {
-                  const resultado = await removerProof(joiner.caixaId, joiner.userId);
+                  const resultado = await chamar(() => removerProof(joiner.caixaId, joiner.userId));
                   if (resultado.ok) setConfirmando(false);
                   else setErroRemover(resultado.erro);
                 })

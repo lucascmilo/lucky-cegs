@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import Carregando from "@/componentes/Carregando";
+import EsqueletoPagina from "@/componentes/EsqueletoPagina";
 import { obterCaixa, obterCaixasAbertas, obterItensCaixa, obterNomeCaixa } from "@/lib/caixas";
-import { obterCaixasGom, obterJoiners, obterRegistrosGom } from "@/lib/caixasGom";
+import { obterAvisosCaixa, obterCaixasGom, obterJoiners, obterRegistrosGom } from "@/lib/caixasGom";
 import { textoDoParametro } from "@/lib/navegacao";
 import { exigirUsuario } from "@/lib/sessao";
 import TelaCaixa from "../_caixa/TelaCaixa";
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps<"/caixas/[id]">): P
 // Tudo que depende do login e do banco fica dentro do Suspense: a navegação mostra o carregamento na hora.
 export default function PaginaCaixa(props: PageProps<"/caixas/[id]">) {
   return (
-    <Suspense fallback={<Carregando />}>
+    <Suspense fallback={<EsqueletoPagina tipo="planilha" />}>
       <ConteudoCaixa {...props} />
     </Suspense>
   );
@@ -37,13 +37,19 @@ async function ConteudoCaixa({ params, searchParams }: PageProps<"/caixas/[id]">
     const caixa = caixas.find((c) => c.id === id);
     if (!caixa) notFound();
 
-    const [registros, joiners, parametros] = await Promise.all([obterRegistrosGom(id), obterJoiners(), searchParams]);
+    const [registros, joiners, avisos, parametros] = await Promise.all([
+      obterRegistrosGom(id),
+      obterJoiners(),
+      obterAvisosCaixa(id),
+      searchParams,
+    ]);
     return (
       <TelaCaixaGom
         caixa={caixa}
         caixas={caixas}
         registros={registros}
         joiners={joiners}
+        avisos={avisos}
         abrirNovoItem={textoDoParametro(parametros.novo) === "1"}
         abrirNovaCaixa={textoDoParametro(parametros.nova) === "1"}
         inicialPlanilha={{

@@ -77,6 +77,7 @@ export default function TelaSemDono({ itens, logado, parametros }: PropsTelaSemD
               id="busca-sem-dono"
               className="semDono__campoBusca"
               type="search"
+              enterKeyHint="search"
               name="busca"
               defaultValue={busca}
               placeholder="Buscar item, grupo, membro ou caixa…"

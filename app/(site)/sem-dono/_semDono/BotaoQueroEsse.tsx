@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { enderecoEntrar } from "@/lib/navegacao";
 import { pedirItemSemDono } from "../acoes";
+import { chamar } from "@/lib/conexao";
 
 type PropsBotaoQueroEsse = {
   registroId: number;
@@ -43,7 +44,7 @@ export default function BotaoQueroEsse({ registroId, logado, pedidoEnviado }: Pr
         onClick={() =>
           iniciarEnvio(async () => {
             setErro(null);
-            const resultado = await pedirItemSemDono(registroId);
+            const resultado = await chamar(() => pedirItemSemDono(registroId));
             if (resultado.ok) setEnviado(true);
             else setErro(resultado.erro);
           })

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Carregando from "@/componentes/Carregando";
+import EsqueletoPagina from "@/componentes/EsqueletoPagina";
 import { obterJoiners } from "@/lib/caixasGom";
 import { obterCaixasEmAndamento, obterProofsParaSubir, obterQuemFaltaPagar } from "@/lib/painel";
 import { exigirGom } from "@/lib/sessao";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 // === Seção: Painel inicial da GOM ===
 export default function PaginaPainel(props: PageProps<"/painel">) {
   return (
-    <Suspense fallback={<Carregando />}>
+    <Suspense fallback={<EsqueletoPagina tipo="cartoes" />}>
       <ConteudoPainel {...props} />
     </Suspense>
   );

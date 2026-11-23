@@ -53,7 +53,7 @@ export default function FormularioEntrar() {
             autoComplete="username"
             autoCapitalize="none"
             spellCheck={false}
-            placeholder="Seu user no twitter"
+            placeholder="Seu user no twitter…"
             value={user}
             onChange={(evento) => setUser(evento.target.value)}
           />

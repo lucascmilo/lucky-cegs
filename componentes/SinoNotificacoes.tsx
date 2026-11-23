@@ -88,7 +88,7 @@ export default function SinoNotificacoes({ itens: itensServidor, naoLidas: naoLi
     setConfirmandoLimpar(false);
     setNovas(new Set());
     setBuscada({ itens: [], naoLidas: 0 });
-    iniciar(() => limparNotificacoes());
+    void limparNotificacoes();
   }
 
   function alternar() {

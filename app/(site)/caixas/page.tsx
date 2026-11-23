@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import Carregando from "@/componentes/Carregando";
+import EsqueletoPagina from "@/componentes/EsqueletoPagina";
 import CartaoAviso from "@/componentes/CartaoAviso";
 import { obterCaixaPadrao } from "@/lib/caixas";
 import { obterCaixaMaisRecente } from "@/lib/caixasGom";
@@ -14,7 +14,7 @@ import BotaoNovaCaixa from "./_caixaGom/BotaoNovaCaixa";
 // A GOM chega aqui pelo Painel com ?novo=1 (abre "Novo item") ou ?nova=1 (abre "Nova caixa").
 export default function PaginaCaixas(props: PageProps<"/caixas">) {
   return (
-    <Suspense fallback={<Carregando />}>
+    <Suspense fallback={<EsqueletoPagina tipo="planilha" />}>
       <CaixaPadrao {...props} />
     </Suspense>
   );

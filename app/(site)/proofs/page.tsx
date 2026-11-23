@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Carregando from "@/componentes/Carregando";
+import EsqueletoPagina from "@/componentes/EsqueletoPagina";
 import { textoDoParametro } from "@/lib/navegacao";
 import { obterCaixasComProofs, obterProofsDaCaixa } from "@/lib/proofs";
 import { exigirGom } from "@/lib/sessao";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 // A caixa e o joiner escolhidos ficam no endereço (?caixa=…&joiner=…), como nos links do painel.
 export default function PaginaProofs(props: PageProps<"/proofs">) {
   return (
-    <Suspense fallback={<Carregando />}>
+    <Suspense fallback={<EsqueletoPagina tipo="cartoes" />}>
       <ConteudoProofs {...props} />
     </Suspense>
   );
