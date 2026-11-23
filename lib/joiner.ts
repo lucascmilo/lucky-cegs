@@ -57,11 +57,11 @@ export async function obterFaltaPagar(userId: string) {
 }
 
 // === Seção: Caixas mais recentes do joiner ===
-// "Seus itens" conta as partes do joiner na caixa (num set de 7 pcs, 2 partes = 2 itens);
-// o total soma qtd_itens de todos os registros da caixa.
+// Itens = soma de todas as categorias (photocards, postcards, smini, álbuns e cacarecos).
+// "Seus itens" soma o que fica com o joiner; o total soma todos os registros da caixa.
 export async function obterCaixasRecentes(userId: string, limite = 4): Promise<CaixaResumo[]> {
   const itensPorCaixa = await db
-    .select({ caixaId: registro.caixaId, seusItens: sql<number>`count(${parte.id})::int` })
+    .select({ caixaId: registro.caixaId, seusItens: sql<number>`coalesce(sum(${parte.qtdPc} + ${parte.qtdPostcard} + ${parte.qtdSmini} + ${parte.qtdAlbum} + ${parte.qtdItens}), 0)::int` })
     .from(parte)
     .innerJoin(registro, eq(parte.registroId, registro.id))
     .where(eq(parte.userId, userId))
@@ -76,7 +76,7 @@ export async function obterCaixasRecentes(userId: string, limite = 4): Promise<C
       origem: caixa.origem,
       situacao: caixa.situacao,
       situacaoAtualizadaEm: caixa.situacaoAtualizadaEm,
-      totalItens: sql<number>`coalesce(sum(${registro.qtdItens}), 0)::int`,
+      totalItens: sql<number>`coalesce(sum(${registro.qtdPc} + ${registro.qtdPostcard} + ${registro.qtdSmini} + ${registro.qtdAlbum} + ${registro.qtdItens}), 0)::int`,
     })
     .from(caixa)
     .leftJoin(registro, eq(registro.caixaId, caixa.id))

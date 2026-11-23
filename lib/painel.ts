@@ -93,7 +93,7 @@ export async function obterCaixasEmAndamento(): Promise<CaixaAndamento[]> {
       id: caixa.id,
       nome: caixa.nome,
       situacao: caixa.situacao,
-      totalItens: sql<number>`coalesce(sum(${registro.qtdItens}), 0)::int`,
+      totalItens: sql<number>`coalesce(sum(${registro.qtdPc} + ${registro.qtdPostcard} + ${registro.qtdSmini} + ${registro.qtdAlbum} + ${registro.qtdItens}), 0)::int`,
     })
     .from(caixa)
     .leftJoin(registro, eq(registro.caixaId, caixa.id))
