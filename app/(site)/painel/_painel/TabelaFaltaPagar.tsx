@@ -84,7 +84,8 @@ export default function TabelaFaltaPagar({ pessoas }: { pessoas: JoinerDevendo[]
           className="botao botao__contorno faltaPagar__verMais"
           onClick={() => setMostrar((n) => n + POR_VEZ)}
         >
-          Ver mais {Math.min(restantes, POR_VEZ)} de {restantes}
+          Ver mais {Math.min(restantes, POR_VEZ)}
+          {restantes > POR_VEZ && ` de ${restantes}`}
         </button>
       )}
     </div>

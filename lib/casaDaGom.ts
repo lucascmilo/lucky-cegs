@@ -4,7 +4,7 @@ import { caixa, proofGom } from "@/db/schema";
 import { obterMeusItens, type CaixaComMeusItens } from "@/lib/meusItens";
 
 // === Seção: Tipos ===
-export type ProofDaCaixa = { fotoId: string; enviadaEm: Date };
+type ProofDaCaixa = { fotoId: string; enviadaEm: Date };
 export type CaixaNaCasa = CaixaComMeusItens & { chegouEm: Date; proof: ProofDaCaixa | null };
 
 // === Seção: Caixas do joiner que chegaram na casa da GOM ===

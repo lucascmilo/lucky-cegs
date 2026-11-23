@@ -187,3 +187,20 @@ export function IconeEnviar({ className, tamanho = 20 }: PropsIcone) {
     </svg>
   );
 }
+
+export function IconeCamera({ className, tamanho = 16 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M2.5 5.5A1.5 1.5 0 0 1 4 4h1.2l1-1.5h3.6l1 1.5H12a1.5 1.5 0 0 1 1.5 1.5v5.5A1.5 1.5 0 0 1 12 12.5H4A1.5 1.5 0 0 1 2.5 11Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+      <circle cx="8" cy="8.2" r="2.2" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
+  );
+}
+
+export function IconeLixeira({ className, tamanho = 16 }: PropsIcone) {
+  return (
+    <svg className={className} width={tamanho} height={tamanho} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3 4.5h10M6.5 4.5V3h3v1.5m-5 0 .6 8a1 1 0 0 0 1 .9h3.8a1 1 0 0 0 1-.9l.6-8M6.8 7v4m2.4-4v4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}

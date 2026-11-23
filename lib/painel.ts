@@ -106,7 +106,7 @@ export async function obterCaixasEmAndamento(): Promise<CaixaAndamento[]> {
 }
 
 // === Seção: Proofs para subir ===
-// Um joiner por caixa que chegou na casa da GOM e ainda não tem a foto dele
+// Um joiner por caixa que chegou na casa da GOM e ainda não tem proof
 export type ProofPendente = { caixaId: number; nomeCaixa: string; userId: string; user: string };
 
 export async function obterProofsParaSubir(): Promise<ProofPendente[]> {

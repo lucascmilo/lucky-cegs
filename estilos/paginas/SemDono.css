@@ -395,8 +395,16 @@
   transform: translate(9px, 9px);
 }
 
-.semDonoVazio__circulo {
+.semDonoVazio__circulo:not(.semDonoVazio__circuloGom) {
   background: var(--cor-rosa);
+}
+
+.semDonoVazio__circuloGom {
+  --tamanho-azulejo: 24px;
+}
+
+.semDonoVazio__arteGom {
+  background: #f1cfd4;
 }
 
 .semDonoVazio__prego {
@@ -560,5 +568,350 @@
     align-items: center;
     padding: 28px 20px 30px;
     text-align: center;
+  }
+}
+
+/* === Seção: Versão da GOM: faixa === */
+.semDono__faixaGom {
+  background: #f1cfd4;
+}
+
+.semDono__faixaGom .semDono__faixaConteudo {
+  height: calc(var(--px-caixa) * 350);
+}
+
+.semDono__faixaGom .semDono__quadrado {
+  --tamanho-azulejo: 22px;
+}
+
+.semDono__acao {
+  width: max(200px, var(--px-caixa) * 250);
+  height: max(44px, var(--px-caixa) * 50);
+  margin-top: calc(var(--px-caixa) * 30);
+  font-size: max(14px, var(--px-caixa) * 16);
+}
+
+/* === Seção: Versão da GOM: busca e tabela === */
+.semDonoGom__busca {
+  gap: 10px;
+  margin-top: 0;
+  padding-left: 18px;
+}
+
+.semDonoGom__iconeBusca {
+  flex-shrink: 0;
+  color: #6b6466;
+}
+
+.semDonoGom {
+  position: relative;
+  margin-top: calc(var(--px-pagina) * 46);
+  padding: calc(var(--px-pagina) * 36) 0 calc(var(--px-pagina) * 20);
+  border-radius: 14px;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
+}
+
+.semDonoGom__tabela {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Cada título fica no meio da sua coluna, e os itens se centralizam embaixo dele ("Dar para" fica à esquerda) */
+.semDonoGom__tabela thead th:nth-child(1) {
+  width: 7.9%;
+}
+
+.semDonoGom__tabela thead th:nth-child(2) {
+  width: 21%;
+}
+
+.semDonoGom__tabela thead th:nth-child(3) {
+  width: 13.3%;
+}
+
+.semDonoGom__tabela thead th:nth-child(4) {
+  width: 13.8%;
+}
+
+.semDonoGom__tabela thead th:nth-child(5) {
+  width: 19.8%;
+}
+
+.semDonoGom__tabela th,
+.semDonoGom__tabela td {
+  padding: 0 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.semDonoGom__tabela :is(th, td):last-child {
+  padding: 0 16px 0 14px;
+  text-align: left;
+}
+
+.semDonoGom__tabela thead th {
+  height: 37px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  vertical-align: top;
+}
+
+.semDonoGom__tabela tbody tr {
+  height: 60px;
+}
+
+.semDonoGom__tabela tbody tr:not(:last-child) {
+  border-bottom: 1px dashed #d6d3d3;
+}
+
+.semDonoGom__tabela tbody td {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.semDonoGom__camera {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 8px;
+  background: var(--cor-rosa);
+  color: var(--cor-branco);
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.semDonoGom__camera:hover:not(:disabled) {
+  background: var(--cor-rosa-escuro);
+  transform: translateY(-1px);
+}
+
+.semDonoGom__camera:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.semDonoGom__nome {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.semDonoGom__valor {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.semDonoGom__pedidos {
+  line-height: 1.35;
+}
+
+.semDonoGom__listaPedidos {
+  display: flex;
+  flex-direction: column;
+}
+
+.semDonoGom__dar {
+  white-space: nowrap;
+}
+
+.semDonoGom__escolher,
+.semDonoGom__botaoDar {
+  height: 32px;
+  border: 1px solid var(--cor-preto);
+  border-radius: var(--raio-pilula);
+  background-color: var(--cor-branco);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cor-preto);
+}
+
+.semDonoGom__escolher {
+  width: calc(100% - 76px - 30px - 12px);
+  max-width: 140px;
+  padding: 0 26px 0 12px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23151214' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 11px center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.semDonoGom__botaoDar {
+  width: 76px;
+  margin-left: 6px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.semDonoGom__botaoDar:hover:not(:disabled) {
+  background-color: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+/* Apagar o anúncio (item vendido por fora) */
+.semDonoGom__apagar {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-left: 6px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-branco);
+  vertical-align: middle;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.semDonoGom__apagar:hover {
+  border-color: var(--cor-erro);
+  background: var(--cor-erro);
+  color: var(--cor-branco);
+}
+
+/* Fotos do item, abertas pela câmera */
+.janelaConfirmar.semDonoGom__janelaFotos {
+  width: min(100% - 2 * var(--margem-lateral), 640px);
+}
+
+.semDonoGom__topoFotos {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  text-transform: lowercase;
+}
+
+.semDonoGom__fecharFotos {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-branco);
+}
+
+.semDonoGom__janelaFotos .semDonoGom__fotos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.semDonoGom__janelaFotos .semDonoGom__foto {
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+
+.semDonoGom__escolher:disabled,
+.semDonoGom__botaoDar:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.semDonoGom__nada {
+  height: 80px;
+  font-size: 14px !important;
+  text-align: center !important;
+  color: #6b6466;
+}
+
+.semDonoGom__verMais {
+  display: flex;
+  height: 36px;
+  margin: 14px auto 0;
+  padding: 0 18px;
+  font-size: 13px;
+}
+
+/* === Seção: Versão da GOM: celular e tablet (cada item vira um cartão) === */
+@media (max-width: 860px) {
+  .semDonoGom__tabela,
+  .semDonoGom__tabela tbody {
+    display: block;
+  }
+
+  .semDonoGom__tabela thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .semDonoGom__tabela tbody tr {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px 12px;
+    height: auto;
+    padding: 16px 18px;
+  }
+
+  .semDonoGom__tabela tbody :is(th, td) {
+    padding: 0 !important;
+    text-align: left;
+  }
+
+  .semDonoGom__nome {
+    white-space: normal;
+  }
+
+  /* Caixa, valor e pedidos com o rótulo ao lado */
+  .semDonoGom__tabela td[data-rotulo]:not(:first-child) {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: 10px;
+  }
+
+  .semDonoGom__tabela td[data-rotulo]:not(:first-child)::before {
+    content: attr(data-rotulo);
+    flex: 0 0 64px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #6b6466;
+  }
+
+  .semDonoGom__dar {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .semDonoGom__escolher {
+    flex: 1;
+    width: auto;
+    max-width: none;
+  }
+
+  .semDonoGom__botaoDar,
+  .semDonoGom__apagar {
+    flex-shrink: 0;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .semDono__faixaGom .semDono__faixaConteudo {
+    height: auto;
+  }
+
+  .semDonoGom__janelaFotos .semDonoGom__fotos {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

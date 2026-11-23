@@ -1,0 +1,176 @@
+/* === Seção: Janela de confirmação (cartão-postal) === */
+.janelaConfirmar {
+  width: min(100% - 2 * var(--margem-lateral), 460px);
+  max-height: calc(100dvh - 32px);
+  padding: 9px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 8px;
+  background: #fff8f0;
+  box-shadow:
+    0 2px 4px rgba(21, 18, 20, 0.08),
+    0 28px 60px -18px rgba(21, 18, 20, 0.45);
+  color: var(--cor-texto);
+  /* Pode abrir dentro de uma tabela: não herda o texto dela */
+  font-size: 15px;
+  text-align: left;
+  white-space: normal;
+  overscroll-behavior: contain;
+}
+
+.janelaConfirmar::backdrop {
+  background: rgba(21, 18, 20, 0.38);
+  backdrop-filter: blur(3px);
+}
+
+/* Sobe e cresce de leve ao abrir; volta mais rápido ao fechar */
+.janelaConfirmar[open] {
+  animation: janelaConfirmarEntra 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.janelaConfirmar[open]::backdrop {
+  animation: janelaConfirmarFundo 0.2s ease-out both;
+}
+
+.janelaConfirmar__fechando[open] {
+  animation: janelaConfirmarSai 0.16s ease-in both;
+}
+
+.janelaConfirmar__fechando[open]::backdrop {
+  animation: janelaConfirmarFundo 0.16s ease-in reverse both;
+}
+
+@keyframes janelaConfirmarEntra {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+}
+
+@keyframes janelaConfirmarSai {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@keyframes janelaConfirmarFundo {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Moldura rosa por dentro, como no cartão-postal */
+.janelaConfirmar__conteudo {
+  padding: 24px 24px 18px;
+  border: 3px solid var(--cor-rosa);
+  border-radius: 3px;
+}
+
+.janelaConfirmar__topo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Selo redondo com borda tracejada, como um carimbo */
+.janelaConfirmar__selo {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border: 1px solid var(--cor-preto);
+  border-radius: 50%;
+  background: var(--cor-rosa);
+  outline: 1.5px dashed var(--cor-preto);
+  outline-offset: 3px;
+  color: var(--cor-branco);
+  transform: rotate(-8deg);
+}
+
+.janelaConfirmar__seloPerigo {
+  background: var(--cor-erro);
+}
+
+.janelaConfirmar__titulo {
+  font-family: var(--fonte-titulo);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.janelaConfirmar__texto {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 18px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.55;
+  color: #3d3739;
+}
+
+.janelaConfirmar__texto strong {
+  font-weight: 700;
+  color: var(--cor-preto);
+}
+
+.janelaConfirmar__erro {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--cor-rosa-suave);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cor-erro);
+}
+
+/* Linha tracejada separa o recado dos botões */
+.janelaConfirmar__botoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1.5px dashed rgba(21, 18, 20, 0.3);
+}
+
+.janelaConfirmar__botoes .botao {
+  min-width: 116px;
+  height: 44px;
+  padding: 0 22px;
+}
+
+.janelaConfirmar__botaoPerigo {
+  border: 0;
+  background: var(--cor-erro);
+  color: var(--cor-branco);
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.janelaConfirmar__botaoPerigo:hover:not(:disabled) {
+  background: #8f1140;
+}
+
+.janelaConfirmar__botoes .botao:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* === Seção: Celular === */
+@media (max-width: 420px) {
+  .janelaConfirmar__conteudo {
+    padding: 20px 16px 16px;
+  }
+
+  .janelaConfirmar__botoes {
+    flex-direction: column-reverse;
+  }
+
+  .janelaConfirmar__botoes .botao {
+    width: 100%;
+  }
+}

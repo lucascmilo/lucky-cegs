@@ -1,15 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { CaixaPostal } from "@/componentes/CartaoPostal";
+import CartaoPostalVazio from "@/componentes/CartaoPostalVazio";
 import { ProvedorDetalhes } from "@/componentes/JanelaDetalhes";
 import type { CaixaNaCasa } from "@/lib/casaDaGom";
 import { ABAS_DETALHES, montarDetalheItem, type DetalheItem } from "@/lib/detalheItem";
 import { formatarData } from "@/lib/formatacao";
 import { textoDoParametro } from "@/lib/navegacao";
 import brilhoRosa from "@/public/imagens/brilho-rosa.png";
-import carimboPostal from "@/public/imagens/carimbo-postal.png";
 import fotoCasaGom from "@/public/imagens/casa-gom-foto.png";
 import cd from "@/public/imagens/cd.png";
-import Fichario, { type CaixaPostal } from "./Fichario";
+import Fichario from "./Fichario";
 import "@/estilos/paginas/CasaDaGom.css";
 
 type PropsTelaCasaDaGom = {
@@ -87,42 +88,22 @@ export default function TelaCasaDaGom({ caixas, eu, parametros }: PropsTelaCasaD
 // Um cartão-postal ainda sem foto, com o carimbo "aguardando entrega"
 function FicharioVazio() {
   return (
-    <div className="postal postalVazio" role="status">
-      <div className="postal__borda">
-        <div className="postal__ladoFoto postalVazio__espacoFoto" aria-hidden="true">
-          <span className="postalVazio__polaroide">
-            <span className="postalVazio__polaroideFoto" />
-          </span>
-          <span className="postalVazio__legendaFoto">SUA FOTO VEM AQUI</span>
-          <span className="postalVazio__carimbo">
-            AGUARDANDO
-            <br />
-            ENTREGA
-          </span>
-        </div>
-
-        <span className="postal__linha" aria-hidden="true" />
-
-        <div className="postal__texto">
-          <p className="postal__marca">LUCKY CEGS · POST CARD CO.</p>
-          <h2 className="postalVazio__titulo">Seu fichário está vazio</h2>
-          <p className="postal__cursiva">nada chegou ainda</p>
-          <p className="postalVazio__descricao">
-            Quando uma caixa sua chegar na casa da GOM, ela tira uma foto com todos os seus itens e o cartão aparece
-            aqui.
-          </p>
-          <div className="postalVazio__acoes">
-            <Link href="/meus-itens" className="botao botao__rosa">
-              Ver meus itens
-            </Link>
-            <Link href="/caixas" className="botao botao__contorno">
-              Ver as caixas
-            </Link>
-          </div>
-        </div>
-
-        <Image src={carimboPostal} alt="" sizes="150px" className="postal__carimbo" />
-      </div>
-    </div>
+    <CartaoPostalVazio
+      legendaFoto="SUA FOTO VEM AQUI"
+      carimbo={["AGUARDANDO", "ENTREGA"]}
+      titulo="Seu fichário está vazio"
+      cursiva="nada chegou ainda"
+      descricao="Quando uma caixa sua chegar na casa da GOM, ela tira uma foto com todos os seus itens e o cartão aparece aqui."
+      acoes={
+        <>
+          <Link href="/meus-itens" className="botao botao__rosa">
+            Ver meus itens
+          </Link>
+          <Link href="/caixas" className="botao botao__contorno">
+            Ver as caixas
+          </Link>
+        </>
+      }
+    />
   );
 }

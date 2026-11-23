@@ -43,7 +43,10 @@ export default function ListaCaixasAndamento({ caixas }: { caixas: CaixaAndament
                   aria-label={`Etapa ${etapa.numero} de ${ETAPAS_CAIXA.length}: ${etapa.rotulo}`}
                 >
                   {ETAPAS_CAIXA.map((item, indice) => (
-                    <span key={item.id} className={indice < etapa.numero ? "andamento__barraCheia" : "andamento__barra"} />
+                    <span
+                      key={item.id}
+                      className={indice < etapa.numero ? "andamento__barraCheia" : "andamento__barra"}
+                    />
                   ))}
                 </span>
                 <span className="andamento__itens">
@@ -56,8 +59,13 @@ export default function ListaCaixasAndamento({ caixas }: { caixas: CaixaAndament
       </ul>
 
       {restantes > 0 && (
-        <button type="button" className="botao botao__contorno andamento__verMais" onClick={() => setMostrar((n) => n + POR_VEZ)}>
-          Ver mais {Math.min(restantes, POR_VEZ)} de {restantes}
+        <button
+          type="button"
+          className="botao botao__contorno andamento__verMais"
+          onClick={() => setMostrar((n) => n + POR_VEZ)}
+        >
+          Ver mais {Math.min(restantes, POR_VEZ)}
+          {restantes > POR_VEZ && ` de ${restantes}`}
         </button>
       )}
     </>

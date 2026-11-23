@@ -1,5 +1,5 @@
 /* === Seção: Player === */
-/* Ocupa o que sobra ao lado do Pix (até 456px); só desce para outra linha se sobrar menos de 400px */
+/* Ocupa o que sobra ao lado do Pix; desce para outra linha quando não cabe */
 .playerMusica__player {
   display: flex;
   flex: 1 1 400px;

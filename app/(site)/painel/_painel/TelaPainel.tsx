@@ -73,7 +73,7 @@ export default function TelaPainel({ devendo, caixas, proofs }: PropsTelaPainel)
 
       <div className="painel__secoes">
         {/* === Seção: Quem falta pagar e caixas em andamento === */}
-        <section className="inicioJoiner__faixa inicioJoiner__faixaQuadrados">
+        <section className="inicioJoiner__faixa inicioJoiner__faixaQuadrados fundoAzulejos">
           <div className="painel__quadros">
             <div className="painel__coluna">
               <h2 className="inicioJoiner__titulo">

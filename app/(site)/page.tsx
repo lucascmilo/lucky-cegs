@@ -14,7 +14,7 @@ import SecaoSuasCaixas, { type ListaCaixas } from "./_inicio/SecaoSuasCaixas";
 import "@/estilos/paginas/InicioJoiner.css";
 
 // === Seção: Tela inicial ===
-// Visitante vê só o hero; joiner vê também as seções dele; GOM vai para o painel.
+// Visitante vê só o hero; joiner vê também as próprias seções; GOM vai para o painel.
 export default function PaginaInicial() {
   return (
     <Suspense fallback={<HeroInicio />}>

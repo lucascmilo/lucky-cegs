@@ -13,7 +13,7 @@ export type ListaCaixas = CaixaResumo[] | null;
 // === Seção: Suas caixas ===
 export default function SecaoSuasCaixas({ caixas }: { caixas: ListaCaixas }) {
   return (
-    <section className="inicioJoiner__faixa inicioJoiner__faixaQuadrados">
+    <section className="inicioJoiner__faixa inicioJoiner__faixaQuadrados fundoAzulejos">
       <div className="inicioJoiner__cartao inicioJoiner__cartaoCaixas">
         <div className="inicioJoiner__topoCaixas">
           <h2 className="inicioJoiner__titulo">

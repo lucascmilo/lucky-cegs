@@ -403,6 +403,12 @@
   color: #6b6466;
 }
 
+.postal__acoes {
+  position: relative;
+  z-index: 1;
+  margin-top: 18px;
+}
+
 .postal__carimbo {
   position: absolute;
   right: calc(var(--px-pagina) * 44);

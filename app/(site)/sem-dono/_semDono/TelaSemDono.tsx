@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { FotosDoItem } from "@/componentes/FotoItem";
 import { IconeSetaBaixo } from "@/componentes/Icones";
@@ -7,9 +6,9 @@ import TextoCortado from "@/componentes/TextoCortado";
 import { formatarReais, normalizarBusca } from "@/lib/formatacao";
 import { textoDoParametro } from "@/lib/navegacao";
 import { textoCustosExtras, type ItemSemDono } from "@/lib/semDono";
-import chaveiro from "@/public/imagens/chaveiro.png";
-import fotoSemDono from "@/public/imagens/sem-dono-foto.png";
+import ArteChaveiro from "./ArteChaveiro";
 import BotaoQueroEsse from "./BotaoQueroEsse";
+import FaixaSemDono from "./FaixaSemDono";
 import "@/estilos/paginas/SemDono.css";
 
 const CARTOES_POR_VEZ = 4;
@@ -31,7 +30,9 @@ export default function TelaSemDono({ itens, logado, parametros }: PropsTelaSemD
   const termo = normalizarBusca(busca);
   const encontrados = termo
     ? itens.filter((item) =>
-        [item.nome, item.grupo, item.membro, item.nomeCaixa].some((texto) => texto && normalizarBusca(texto).includes(termo)),
+        [item.nome, item.grupo, item.membro, item.nomeCaixa].some(
+          (texto) => texto && normalizarBusca(texto).includes(termo),
+        ),
       )
     : itens;
   const restantes = encontrados.length - mostrar;
@@ -46,22 +47,7 @@ export default function TelaSemDono({ itens, logado, parametros }: PropsTelaSemD
 
   return (
     <div className="semDono">
-      {/* === Seção: Faixa do topo === */}
-      <section className="semDono__faixa">
-        <div className="semDono__faixaConteudo">
-          <h1 className="tituloFaixa">
-            <span>ITENS</span>
-            <span className="tituloFaixa__rosa">sem dono</span>
-          </h1>
-          <p className="tituloFaixa__subtitulo">Itens que sobraram nas caixas. Peça claim e a GOM confirma no seu privado.</p>
-
-          <div className="semDono__colagem" aria-hidden="true">
-            <span className="semDono__quadrado fundoPontosRosa" />
-            <Image src={fotoSemDono} alt="" sizes="190px" className="semDono__foto" priority />
-            <Image src={chaveiro} alt="" sizes="153px" className="semDono__chaveiro" />
-          </div>
-        </div>
-      </section>
+      <FaixaSemDono subtitulo="Itens que sobraram nas caixas. Peça claim e a GOM confirma no seu privado." />
 
       <div className="semDono__conteudo">
         {/* === Seção: Como funciona a claim (começa fechado) === */}
@@ -122,7 +108,11 @@ export default function TelaSemDono({ itens, logado, parametros }: PropsTelaSemD
               ))}
             </ul>
             {restantes > 0 && (
-              <Link href={endereco({ mostrar: mostrar + CARTOES_POR_VEZ })} scroll={false} className="botao botao__contorno semDono__verMais">
+              <Link
+                href={endereco({ mostrar: mostrar + CARTOES_POR_VEZ })}
+                scroll={false}
+                className="botao botao__contorno semDono__verMais"
+              >
                 Ver mais {restantes} {restantes === 1 ? "item" : "itens"}
               </Link>
             )}
@@ -178,22 +168,7 @@ function SemItens({ buscando }: { buscando: boolean }) {
 
   return (
     <div className="semDonoVazio" role="status">
-      <div className="semDonoVazio__arte" aria-hidden="true">
-        <div className="semDonoVazio__selo">
-          <svg className="semDonoVazio__anel" viewBox="0 0 240 240">
-            <defs>
-              <path id="anel-sem-dono" d="M 120 120 m -106 0 a 106 106 0 1 1 212 0 a 106 106 0 1 1 -212 0" />
-            </defs>
-            <text textLength="660" lengthAdjust="spacing">
-              <textPath href="#anel-sem-dono">ITENS SEM DONO ★ ITENS SEM DONO ★ ITENS SEM DONO ★</textPath>
-            </text>
-          </svg>
-          <span className="semDonoVazio__sombra" />
-          <span className="semDonoVazio__circulo" />
-          <span className="semDonoVazio__prego" />
-          <Image src={chaveiro} alt="" unoptimized className="semDonoVazio__chaveiro" />
-        </div>
-      </div>
+      <ArteChaveiro texto="ITENS SEM DONO" id="anel-sem-dono" />
 
       <div className="semDonoVazio__conteudo">
         <p className="semDonoVazio__etiqueta">{textos.etiqueta}</p>

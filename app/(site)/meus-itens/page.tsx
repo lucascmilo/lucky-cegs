@@ -18,7 +18,7 @@ export default function PaginaMeusItens(props: PageProps<"/meus-itens">) {
   );
 }
 
-// Só os itens em que o joiner tem parte, com valores e pagamentos dele
+// Só os itens em que o joiner tem parte, com os próprios valores e pagamentos
 async function ConteudoMeusItens({ searchParams }: PageProps<"/meus-itens">) {
   const usuario = await exigirUsuario("/meus-itens");
   const [caixas, parametros] = await Promise.all([obterMeusItens(usuario.id), searchParams]);

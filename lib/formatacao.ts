@@ -68,6 +68,15 @@ export function formatarDataCurta(data: Date, agora = new Date()) {
   return (mesmoAno ? formatadorDiaMes : formatadorDiaMesAno).format(data);
 }
 
+// === Seção: Momento de um pedido ("hoje às 14:02", "ontem às 09:41", "20/11 às 10:15") ===
+const formatadorHora = new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" });
+
+export function formatarMomento(data: Date, agora = new Date()) {
+  const dias = Math.round((diaEmSaoPaulo(agora) - diaEmSaoPaulo(data)) / DIA_EM_MS);
+  const dia = dias <= 0 ? "hoje" : dias === 1 ? "ontem" : formatadorDiaMes.format(data);
+  return `${dia} às ${formatadorHora.format(data)}`;
+}
+
 // === Seção: Busca ===
 // Ignora maiúsculas e acentos ("japao" encontra "Japão")
 export function normalizarBusca(texto: string) {
