@@ -6,83 +6,106 @@
   align-items: center;
   justify-content: center;
   gap: 28px;
-  min-height: 420px;
-  padding: 64px var(--margem-lateral);
+  min-height: min(420px, 60svh);
+  padding: 48px var(--margem-lateral);
 }
 
-/* === Seção: Photocards embaralhando === */
-.carregando__cartas {
+/* === Seção: Página de caderno === */
+.carregando__pagina {
   position: relative;
-  width: 84px;
-  height: 108px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 150px;
+  padding: 16px 16px 16px 28px;
+  border: var(--borda);
+  background: var(--cor-creme);
+  box-shadow: var(--sombra-cartao);
+  transform: rotate(-3deg);
 }
 
-.carregando__carta {
+.carregando__pagina::before {
+  content: "";
   position: absolute;
-  inset: 0;
+  top: 6px;
+  bottom: 6px;
+  left: -12px;
+  width: 26px;
+  background: url("/imagens/argola.svg") left top / 26px 24.7px repeat-y;
+}
+
+/* === Seção: Moldura de seleção === */
+.carregando__moldura {
+  position: relative;
   display: grid;
   place-items: center;
-  border: 1px solid var(--cor-preto);
-  border-radius: 10px;
-  box-shadow: var(--sombra-cartao);
+  width: 100%;
+  aspect-ratio: 1;
+  border: var(--borda);
+  background: var(--cor-rosa-suave);
 }
 
-.carregando__cartaUm {
-  background: var(--cor-azul-colagem);
-  animation: embaralharUm 1.6s ease-in-out infinite;
+.carregando__alca {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: var(--borda);
+  background: var(--cor-acido);
 }
 
-.carregando__cartaDois {
-  background: var(--cor-amarelo);
-  animation: embaralharDois 1.6s ease-in-out infinite;
+.carregando__alcaUm {
+  top: -6px;
+  left: -6px;
 }
 
-.carregando__cartaTres {
-  background-color: var(--cor-rosa);
-  background-image: radial-gradient(var(--cor-rosa-pontos) 1.5px, transparent 2px);
-  background-size: 10px 10px;
-  animation: embaralharTres 1.6s ease-in-out infinite;
+.carregando__alcaDois {
+  top: -6px;
+  right: -6px;
 }
 
-.carregando__estrela {
-  width: 30px;
-  height: 30px;
+.carregando__alcaTres {
+  bottom: -6px;
+  left: -6px;
 }
 
-@keyframes embaralharUm {
+.carregando__alcaQuatro {
+  right: -6px;
+  bottom: -6px;
+}
+
+/* === Seção: Trevo === */
+.carregando__trevo {
+  width: 64%;
+  height: auto;
+  overflow: visible;
+}
+
+.carregando__folha {
+  fill: var(--cor-rosa);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: acenderFolha 1.6s ease-in-out infinite;
+}
+
+.carregando__folhaDestaque {
+  fill: var(--cor-preto);
+}
+
+@keyframes acenderFolha {
   0%,
   100% {
-    transform: rotate(-14deg) translateX(-18px);
+    opacity: 0.25;
   }
-  50% {
-    transform: rotate(-6deg) translateX(-8px);
-  }
-}
-
-@keyframes embaralharDois {
-  0%,
-  100% {
-    transform: rotate(12deg) translateX(18px);
-  }
-  50% {
-    transform: rotate(5deg) translateX(8px);
-  }
-}
-
-@keyframes embaralharTres {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0);
-  }
-  50% {
-    transform: translateY(-10px) rotate(-3deg);
+  25%,
+  60% {
+    opacity: 1;
   }
 }
 
 /* === Seção: Texto === */
 .carregando__texto {
   font-family: var(--fonte-pixel);
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   color: var(--cor-preto);
 }
@@ -106,6 +129,14 @@
     opacity: 0.2;
   }
   30% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carregando__folha,
+  .carregando__pontos span {
+    animation: none;
     opacity: 1;
   }
 }

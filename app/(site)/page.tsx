@@ -26,7 +26,10 @@ export default function PaginaInicial() {
 // Checagem rápida (sem banco): quem tem cookie de sessão já vê o esqueleto da tela do joiner,
 // em vez de ver o hero de visitante piscar enquanto os dados carregam.
 async function InicioPorCookie() {
-  if (!getSessionCookie(await headers())) return <HeroInicio acoes={<AcoesVisitante />} />;
+  const temSessao = Boolean(getSessionCookie(await headers()));
+  if (!temSessao) {
+    return <HeroInicio acoes={<AcoesVisitante />} />;
+  }
 
   return (
     <Suspense
@@ -48,12 +51,21 @@ async function InicioPorPerfil() {
   if (usuario?.papel === "admin") redirect("/painel");
   if (!usuario) return <HeroInicio acoes={<AcoesVisitante />} />;
 
-  const [faltaPagar, caixas] = await Promise.all([obterFaltaPagar(usuario.id), obterCaixasRecentes(usuario.id)]);
+  const [faltaPagar, caixas] = await Promise.all([
+    obterFaltaPagar(usuario.id),
+    obterCaixasRecentes(usuario.id),
+  ]);
   return <InicioJoiner faltaPagar={faltaPagar} caixas={caixas} />;
 }
 
 // === Seção: Tela do joiner (null = ainda carregando) ===
-function InicioJoiner({ faltaPagar, caixas }: { faltaPagar: number | null; caixas: ListaCaixas }) {
+function InicioJoiner({
+  faltaPagar,
+  caixas,
+}: {
+  faltaPagar: number | null;
+  caixas: ListaCaixas;
+}) {
   return (
     <>
       <HeroInicio acoes={<AcoesJoiner faltaPagar={faltaPagar} />} textoAlto />

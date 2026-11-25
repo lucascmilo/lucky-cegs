@@ -33,10 +33,15 @@ export default function MenuUsuario({ usuario }: { usuario: UsuarioAtual }) {
   }, [aberto]);
 
   async function sairDaConta() {
+    if (saindo) return;
     setSaindo(true);
-    await authClient.signOut();
-    roteador.push("/");
-    roteador.refresh();
+    try {
+      await authClient.signOut();
+      roteador.push("/");
+      roteador.refresh();
+    } finally {
+      setSaindo(false);
+    }
   }
 
   return (
@@ -54,24 +59,35 @@ export default function MenuUsuario({ usuario }: { usuario: UsuarioAtual }) {
           {inicial}
         </span>
         <span className="cabecalho__arroba">@{usuario.user}</span>
-        <IconeSetaBaixo className="cabecalho__setaMenu" />
+        <IconeSetaBaixo className="cabecalho__setaMenu" aria-hidden="true" />
       </button>
 
       {/* === Seção: Opções === */}
       {aberto && (
-        <div className="cabecalho__menuSuspenso" id="menu-conta">
-          <Link href="/perfil" className="cabecalho__opcaoMenu" onClick={() => setAberto(false)}>
-            <IconePerfil />
+        <div
+          className="cabecalho__menuSuspenso"
+          id="menu-conta"
+          role="menu"
+          aria-label={`Opções da conta @${usuario.user}`}
+        >
+          <Link
+            href="/perfil"
+            role="menuitem"
+            className="cabecalho__opcaoMenu"
+            onClick={() => setAberto(false)}
+          >
+            <IconePerfil aria-hidden="true" />
             Perfil
           </Link>
           <button
             type="button"
-           
+            role="menuitem"
             className="cabecalho__opcaoMenu"
             onClick={sairDaConta}
             disabled={saindo}
+            aria-busy={saindo}
           >
-            <IconeSair />
+            <IconeSair aria-hidden="true" />
             {saindo ? "Saindo…" : "Sair"}
           </button>
         </div>

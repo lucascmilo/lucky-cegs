@@ -7,7 +7,7 @@ type PropsArteChaveiro = {
   texto: string;
   // Id do caminho do texto (único na página)
   id: string;
-  // Versão da GOM: fundo rosa e círculo de azulejos azuis
+  // Versão da GOM: fundo rosa e círculo de trevos creme
   gom?: boolean;
 };
 
@@ -25,7 +25,7 @@ export default function ArteChaveiro({ texto, id, gom = false }: PropsArteChavei
           </text>
         </svg>
         <span className="semDonoVazio__sombra" />
-        <span className={juntarClasses("semDonoVazio__circulo", gom && "semDonoVazio__circuloGom fundoAzulejos")} />
+        <span className={juntarClasses("semDonoVazio__circulo", gom && "semDonoVazio__circuloGom fundoTrevosCreme")} />
         <span className="semDonoVazio__prego" />
         <Image src={chaveiro} alt="" unoptimized className="semDonoVazio__chaveiro" />
       </div>

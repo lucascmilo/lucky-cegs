@@ -31,6 +31,14 @@ async function ConteudoPainel({ searchParams }: PageProps<"/painel">) {
   ]);
 
   // Só no desenvolvimento: /painel?previa=proofs-em-dia mostra o aviso de quando todas as proofs subiram
-  const previaEmDia = process.env.NODE_ENV === "development" && parametros.previa === "proofs-em-dia";
-  return <TelaPainel devendo={devendo} caixas={caixas} proofs={previaEmDia ? [] : proofs} joiners={joiners} />;
+  const previaEmDia =
+    process.env.NODE_ENV === "development" && parametros.previa === "proofs-em-dia";
+  return (
+    <TelaPainel
+      devendo={devendo}
+      caixas={caixas}
+      proofs={previaEmDia ? [] : proofs}
+      joiners={joiners}
+    />
+  );
 }

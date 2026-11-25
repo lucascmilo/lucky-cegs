@@ -11,7 +11,7 @@ const POR_VEZ = 3;
 // Mostra 3 caixas; "Ver mais" mostra mais 3 a cada clique
 export default function ListaCaixasAndamento({ caixas }: { caixas: CaixaAndamento[] }) {
   const [mostrar, setMostrar] = useState(POR_VEZ);
-  const restantes = caixas.length - mostrar;
+  const restantes = Math.max(0, caixas.length - mostrar);
 
   if (caixas.length === 0) {
     return (
@@ -34,7 +34,10 @@ export default function ListaCaixasAndamento({ caixas }: { caixas: CaixaAndament
             <li key={caixa.id}>
               <Link href={`/caixas/${caixa.id}`} className="andamento__cartao">
                 <span className="andamento__nome">{caixa.nome}</span>
-                <span className="pilulaEtapa andamento__etapa" style={{ backgroundColor: etapa.cor }}>
+                <span
+                  className="pilulaEtapa andamento__etapa"
+                  style={{ backgroundColor: etapa.cor }}
+                >
                   {etapa.rotulo}
                 </span>
                 <span
@@ -45,7 +48,9 @@ export default function ListaCaixasAndamento({ caixas }: { caixas: CaixaAndament
                   {ETAPAS_CAIXA.map((item, indice) => (
                     <span
                       key={item.id}
-                      className={indice < etapa.numero ? "andamento__barraCheia" : "andamento__barra"}
+                      className={
+                        indice < etapa.numero ? "andamento__barraCheia" : "andamento__barra"
+                      }
                     />
                   ))}
                 </span>

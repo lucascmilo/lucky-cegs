@@ -33,16 +33,25 @@ export default function JanelaConfirmar({
   aoCancelar,
 }: PropsJanelaConfirmar) {
   const referencia = useRef<HTMLDialogElement>(null);
+  const temporizadorFechar = useRef<number | null>(null);
   const [fechando, setFechando] = useState(false);
 
   useEffect(() => {
     referencia.current?.showModal();
+    return () => {
+      if (temporizadorFechar.current !== null) {
+        window.clearTimeout(temporizadorFechar.current);
+      }
+    };
   }, []);
 
   function cancelar() {
     if (enviando || fechando) return;
     setFechando(true);
-    window.setTimeout(aoCancelar, DURACAO_FECHAR);
+    temporizadorFechar.current = window.setTimeout(() => {
+      referencia.current?.close();
+      aoCancelar();
+    }, DURACAO_FECHAR);
   }
 
   return (
@@ -60,8 +69,18 @@ export default function JanelaConfirmar({
     >
       <div className="janelaConfirmar__conteudo">
         <div className="janelaConfirmar__topo">
-          <span className={juntarClasses("janelaConfirmar__selo", tom === "perigo" && "janelaConfirmar__seloPerigo")}>
-            {tom === "perigo" ? <IconeLixeira tamanho={22} /> : <IconeCoracao tamanho={20} />}
+          <span
+            className={juntarClasses(
+              "janelaConfirmar__selo",
+              tom === "perigo" && "janelaConfirmar__seloPerigo",
+            )}
+            aria-hidden="true"
+          >
+            {tom === "perigo" ? (
+              <IconeLixeira tamanho={22} aria-hidden="true" />
+            ) : (
+              <IconeCoracao tamanho={20} aria-hidden="true" />
+            )}
           </span>
           <h2 id="titulo-confirmar" className="janelaConfirmar__titulo">
             {titulo}
@@ -77,12 +96,20 @@ export default function JanelaConfirmar({
         )}
 
         <div className="janelaConfirmar__botoes">
-          <button type="button" className="botao botao__contorno" onClick={cancelar} disabled={enviando}>
+          <button
+            type="button"
+            className="botao botao__contorno"
+            onClick={cancelar}
+            disabled={enviando}
+          >
             Cancelar
           </button>
           <button
             type="button"
-            className={juntarClasses("botao", tom === "perigo" ? "janelaConfirmar__botaoPerigo" : "botao__preto")}
+            className={juntarClasses(
+              "botao",
+              tom === "perigo" ? "janelaConfirmar__botaoPerigo" : "botao__preto",
+            )}
             onClick={aoConfirmar}
             disabled={enviando}
           >

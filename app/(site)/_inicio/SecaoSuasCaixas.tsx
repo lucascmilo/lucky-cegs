@@ -1,11 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { IconeSeta } from "@/componentes/Icones";
 import { SeloNovo } from "@/componentes/Novidade";
 import { ETAPAS_CAIXA, obterEtapaCaixa } from "@/lib/etapas";
 import { formatarTempoRelativo, nomeOrigem } from "@/lib/formatacao";
 import type { CaixaResumo } from "@/lib/joiner";
-import carimboPostal from "@/public/imagens/carimbo-postal.png";
 
 // null = caixas ainda carregando
 export type ListaCaixas = CaixaResumo[] | null;
@@ -13,7 +11,7 @@ export type ListaCaixas = CaixaResumo[] | null;
 // === Seção: Suas caixas ===
 export default function SecaoSuasCaixas({ caixas }: { caixas: ListaCaixas }) {
   return (
-    <section className="inicioJoiner__faixa inicioJoiner__faixaQuadrados fundoAzulejos">
+    <section className="inicioJoiner__faixa inicioJoiner__faixaQuadrados fundoHalftone">
       <div className="inicioJoiner__cartao inicioJoiner__cartaoCaixas">
         <div className="inicioJoiner__topoCaixas">
           <h2 className="inicioJoiner__titulo">
@@ -49,7 +47,12 @@ function CartaoCaixa({ caixa }: { caixa: CaixaResumo }) {
 
   return (
     <Link href={`/caixas/${caixa.id}`} className="caixaResumo">
-      <SeloNovo caixaId={caixa.id} atualizadoEm={caixa.situacaoAtualizadaEm} texto="NOVA ETAPA" className="caixaResumo__novo" />
+      <SeloNovo
+        caixaId={caixa.id}
+        atualizadoEm={caixa.situacaoAtualizadaEm}
+        texto="NOVA ETAPA"
+        className="caixaResumo__novo"
+      />
       <div className="caixaResumo__topo">
         <span className="caixaResumo__origem">{nomeOrigem(caixa.origem) ?? "—"}</span>
         <span className="caixaResumo__tempo">{formatarTempoRelativo(caixa.situacaoAtualizadaEm)}</span>
@@ -67,7 +70,10 @@ function CartaoCaixa({ caixa }: { caixa: CaixaResumo }) {
         aria-label={`Etapa ${etapa.numero} de ${ETAPAS_CAIXA.length}: ${etapa.rotulo}`}
       >
         {ETAPAS_CAIXA.map((item, indice) => (
-          <span key={item.id} className={indice < etapa.numero ? "caixaResumo__barraCheia" : "caixaResumo__barra"} />
+          <span
+            key={item.id}
+            className={indice < etapa.numero ? "caixaResumo__barraCheia" : "caixaResumo__barra"}
+          />
         ))}
       </div>
 
@@ -78,7 +84,7 @@ function CartaoCaixa({ caixa }: { caixa: CaixaResumo }) {
           </strong>{" "}
           de {caixa.totalItens} itens
         </span>
-        <IconeSeta />
+        <IconeSeta aria-hidden="true" />
       </div>
     </Link>
   );
@@ -88,8 +94,6 @@ function CartaoCaixa({ caixa }: { caixa: CaixaResumo }) {
 function SemCaixas() {
   return (
     <div className="inicioJoiner__vazio envelopeCorreio">
-      <Image src={carimboPostal} alt="" sizes="150px" className="inicioJoiner__vazioCarimbo" />
-
       <div className="inicioJoiner__vazioTextos">
         <p className="inicioJoiner__vazioEtiqueta">NENHUMA CAIXA AINDA</p>
         <h3 className="inicioJoiner__vazioTitulo">

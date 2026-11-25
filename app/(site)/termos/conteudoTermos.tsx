@@ -12,7 +12,7 @@ type SecaoTermos = {
 
 // === Seção: Introdução ===
 export const INTRODUCAO_TERMOS =
-  "A Lucky CEGs é uma comunidade criada com o objetivo de ajudar você a aumentar sua coleção em um ambiente seguro, organizado e amigável. Nossos termos foram elaborados para garantir uma experiência mais tranquila, organizada e eficiente para todos os nossos joiners <3 Pedimos, por favor, que leia tudo com atenção antes de participar das nossas CEGs.";
+  "A Lucky CEGs é uma comunidade criada com o objetivo de ajudar você a aumentar sua coleção em um ambiente seguro, organizado e amigável. Nossos termos foram elaborados para garantir uma experiência mais tranquila, organizada e eficiente para todos os nossos joiners. Pedimos, por favor, que leia tudo com atenção antes de participar das nossas CEGs.";
 
 // === Seção: Regras ===
 // Para editar os termos, altere só este arquivo (<strong> para negrito).

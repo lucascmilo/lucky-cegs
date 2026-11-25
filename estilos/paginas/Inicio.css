@@ -1,6 +1,5 @@
 /* === Seção: Hero === */
 .inicio__hero {
-  /* Escala do hero: encolhe com a largura e a altura da tela */
   --px-hero: max(0.5px, min(1px, var(--largura-tela) / 1440, (var(--altura-tela) - 150px) / 776));
   display: flex;
   flex: 1;
@@ -13,6 +12,7 @@
   display: flex;
   flex: 1;
   justify-content: space-between;
+  gap: calc(var(--px-hero) * 24);
   width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   min-height: calc(var(--px-hero) * 776);
   margin-inline: auto;
@@ -31,7 +31,8 @@
   flex-direction: column;
   font-family: var(--fonte-titulo);
   font-size: calc(var(--px-hero) * 130);
-  font-weight: 400;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: 0.703;
   letter-spacing: 0.02em;
 }
@@ -54,7 +55,7 @@
   padding-left: calc(var(--px-hero) * 4);
   font-size: max(14px, var(--px-hero) * 20);
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.25;
   color: var(--cor-texto);
 }
 
@@ -77,7 +78,7 @@
   display: flex;
   flex-direction: column;
   gap: calc(var(--px-hero) * 24);
-  width: max(320px, var(--px-hero) * 510);
+  width: min(100%, max(320px, var(--px-hero) * 510));
   margin-top: calc(var(--px-hero) * 24);
 }
 
@@ -88,8 +89,9 @@
 }
 
 .inicio__botoes .botao {
-  height: max(42px, var(--px-hero) * 50);
-  padding: 0 12px;
+  min-height: max(44px, var(--px-hero) * 50);
+  height: auto;
+  padding: 8px 14px;
   font-size: max(14px, var(--px-hero) * 16);
 }
 
@@ -97,24 +99,33 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: max(64px, var(--px-hero) * 75);
-  padding: 0 calc(var(--px-hero) * 36) 0 calc(var(--px-hero) * 18);
-  border: 1px solid var(--cor-preto);
-  border-radius: 16px;
+  gap: 12px;
+  min-height: max(64px, var(--px-hero) * 75);
+  padding: 10px calc(var(--px-hero) * 32) 10px calc(var(--px-hero) * 18);
+  border: var(--borda);
+  border-radius: 0;
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
   text-decoration: none;
-  transition: transform 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .inicio__faltaPagar:hover {
   transform: translateY(-1px);
 }
 
+.inicio__faltaPagar:active {
+  box-shadow: none;
+  transform: translate(4px, 3px);
+}
+
 .inicio__faltaPagarTexto {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
 }
 
 .inicio__faltaPagarRotulo {
@@ -123,12 +134,19 @@
 }
 
 .inicio__faltaPagarValor {
-  font-variant-numeric: tabular-nums;
   font-family: var(--fonte-titulo);
   font-size: max(20px, var(--px-hero) * 26);
-  font-weight: 400;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: 1.1;
-  color: var(--cor-rosa);
+  color: var(--cor-rosa-texto);
+  font-variant-numeric: tabular-nums;
+}
+
+.inicio__faltaPagarEsqueleto {
+  width: max(110px, var(--px-hero) * 130);
+  height: max(20px, var(--px-hero) * 26);
+  margin-top: 2px;
 }
 
 /* === Seção: Colagem === */
@@ -141,8 +159,8 @@
   margin-right: calc(
     -1 * min(var(--px-hero) * 61, (100cqw - min(100cqw - 2 * var(--margem-lateral), var(--largura-conteudo))) / 2)
   );
-  /* Esconde sob o rodapé o contorno branco da base da colagem */
   margin-bottom: calc(var(--px-hero) * -3);
+  pointer-events: none;
 }
 
 .inicio__colagem > * {
@@ -150,37 +168,41 @@
   height: auto;
 }
 
+.inicio__imagemColagem,
+.inicio__adesivoCoracao,
+.painel__photocard {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+}
+
 .inicio__imagemColagem {
-  left: 4.006%;
   top: 5.96%;
+  left: 4.006%;
   width: 86.595%;
 }
 
-.inicio__photocard {
-  left: 4.006%;
-  top: 5.96%;
+.inicio__adesivoCoracao {
+  top: 71%;
+  left: 57%;
+  width: 15%;
+  transform: rotate(-8deg);
+}
+
+.painel__photocard {
+  top: 15.96%;
+  left: -3.006%;
   width: 26.194%;
-}
-
-.inicio__codigoBarras {
-  left: 0;
-  top: 41.987%;
-  width: 25.005%;
-}
-
-.inicio__selo {
-  left: 74.884%;
-  top: 0;
-  width: 24.989%;
 }
 
 /* === Seção: Responsivo === */
 @media (max-width: 860px) {
   .inicio__conteudo {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto 1fr;
-    gap: 8px;
+    gap: 12px;
     min-height: 0;
   }
 
@@ -191,7 +213,8 @@
 
   .inicio__titulo {
     align-items: center;
-    font-size: clamp(56px, 15vw, 96px);
+    font-size: clamp(44px, 14vw, 96px);
+    line-height: 0.78;
   }
 
   .inicio__tituloPreto {
@@ -200,7 +223,7 @@
 
   .inicio__descricao {
     align-items: center;
-    margin-top: 32px;
+    margin-top: 28px;
     padding-left: 0;
     font-size: 16px;
   }
@@ -211,7 +234,7 @@
 
   .inicio__acoes {
     width: min(100%, 510px);
-    margin: 32px auto 0;
+    margin: 28px auto 0;
     gap: 16px;
     text-align: left;
   }
@@ -221,14 +244,14 @@
   }
 
   .inicio__faltaPagar {
-    padding: 0 24px 0 18px;
+    padding: 12px 20px;
   }
 
   .inicio__colagem {
     justify-self: center;
     align-self: end;
-    width: min(100% + 16px, 649px);
-    margin-right: -16px;
+    width: min(100%, 560px);
+    margin-right: 0;
     margin-bottom: -2px;
   }
 }
@@ -239,9 +262,8 @@
   }
 }
 
-/* === Seção: Esqueleto do valor === */
-.inicio__faltaPagarEsqueleto {
-  width: max(110px, var(--px-hero) * 130);
-  height: max(20px, var(--px-hero) * 26);
-  margin-top: 2px;
+@media (max-width: 420px) {
+  .inicio__botoes {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

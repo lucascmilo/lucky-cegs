@@ -1,12 +1,12 @@
 "use client";
 
-import { useId, useState, useTransition, type DragEvent, type ReactNode } from "react";
+import { type DragEvent, type ReactNode, useId, useState, useTransition } from "react";
 import { IconeEnviar } from "@/componentes/Icones";
 import JanelaConfirmar from "@/componentes/JanelaConfirmar";
 import { juntarClasses } from "@/lib/classes";
+import { chamar } from "@/lib/conexao";
 import { conferirFoto, enviarFoto } from "@/lib/envioFoto";
 import { removerProof, salvarProof } from "../acoes";
-import { chamar } from "@/lib/conexao";
 
 const PASTA = "proofs";
 
@@ -28,7 +28,9 @@ function useEnvioProof({ caixaId, userId }: Joiner) {
         const resultado = await salvarProof(caixaId, userId, await enviarFoto(arquivo, PASTA));
         if (!resultado.ok) setErro(resultado.erro);
       } catch (falha) {
-        setErro(falha instanceof Error ? falha.message : "A foto não subiu. Tente de novo.");
+        setErro(
+          falha instanceof Error ? falha.message : "A foto não subiu. Tente de novo.",
+        );
       }
     });
   }
@@ -58,7 +60,11 @@ function AreaSoltar({
 
   return (
     <div
-      className={juntarClasses(className, arrastando && "envioProof__arrastando", enviando && "envioProof__enviando")}
+      className={juntarClasses(
+        className,
+        arrastando && "envioProof__arrastando",
+        enviando && "envioProof__enviando",
+      )}
       onDragOver={(evento) => {
         evento.preventDefault();
         setArrastando(true);
@@ -67,7 +73,10 @@ function AreaSoltar({
       onDrop={soltar}
       aria-busy={enviando}
     >
-      {children({ escolher: () => document.getElementById(idSeletor)?.click(), enviando })}
+      {children({
+        escolher: () => document.getElementById(idSeletor)?.click(),
+        enviando,
+      })}
       <input
         id={idSeletor}
         type="file"
@@ -93,12 +102,20 @@ export function BarraEnvio({ joiner, nome }: { joiner: Joiner; nome: string }) {
     <AreaSoltar joiner={joiner} className="envioProof">
       {({ escolher, enviando }) => (
         <>
-          <IconeEnviar className="envioProof__icone" />
+          <IconeEnviar className="envioProof__icone" aria-hidden="true" />
           <div className="envioProof__textos">
             <p className="envioProof__titulo">Subir proof geral de {nome}</p>
-            <p className="envioProof__dica">Uma foto com todos os itens desse joiner desta caixa. Arraste ou toque para escolher.</p>
+            <p className="envioProof__dica">
+              Uma foto com todos os itens desse joiner desta caixa. Arraste ou toque para
+              escolher.
+            </p>
           </div>
-          <button type="button" className="envioProof__botao" onClick={escolher} disabled={enviando}>
+          <button
+            type="button"
+            className="envioProof__botao"
+            onClick={escolher}
+            disabled={enviando}
+          >
             {enviando ? "Enviando…" : "Escolher foto"}
           </button>
         </>
@@ -112,9 +129,16 @@ export function FotoParaSoltar({ joiner }: { joiner: Joiner }) {
   return (
     <AreaSoltar joiner={joiner} className="envioProof__foto">
       {({ escolher, enviando }) => (
-        <button type="button" className="envioProof__fotoBotao" onClick={escolher} disabled={enviando}>
-          <IconeEnviar tamanho={26} />
-          <span className="envioProof__fotoTitulo">{enviando ? "ENVIANDO…" : "SOLTE A FOTO AQUI"}</span>
+        <button
+          type="button"
+          className="envioProof__fotoBotao"
+          onClick={escolher}
+          disabled={enviando}
+        >
+          <IconeEnviar tamanho={26} aria-hidden="true" />
+          <span className="envioProof__fotoTitulo">
+            {enviando ? "ENVIANDO…" : "SOLTE A FOTO AQUI"}
+          </span>
           <span>ou toque para escolher</span>
         </button>
       )}
@@ -132,8 +156,13 @@ export function AcoesProof({ joiner, user }: { joiner: Joiner; user: string }) {
     <AreaSoltar joiner={joiner} className="acoesProof">
       {({ escolher, enviando }) => (
         <>
-          <button type="button" className="acoesProof__botao" onClick={escolher} disabled={enviando}>
-            <IconeEnviar tamanho={16} />
+          <button
+            type="button"
+            className="acoesProof__botao"
+            onClick={escolher}
+            disabled={enviando}
+          >
+            <IconeEnviar tamanho={16} aria-hidden="true" />
             {enviando ? "Enviando…" : "Trocar foto"}
           </button>
           <button
@@ -158,14 +187,17 @@ export function AcoesProof({ joiner, user }: { joiner: Joiner; user: string }) {
               aoCancelar={() => setConfirmando(false)}
               aoConfirmar={() =>
                 iniciarRemocao(async () => {
-                  const resultado = await chamar(() => removerProof(joiner.caixaId, joiner.userId));
+                  const resultado = await chamar(() =>
+                    removerProof(joiner.caixaId, joiner.userId),
+                  );
                   if (resultado.ok) setConfirmando(false);
                   else setErroRemover(resultado.erro);
                 })
               }
             >
               <p>
-                A foto sai do fichário de <strong>@{user}</strong> e é apagada. Não dá para desfazer.
+                A foto sai do fichário de <strong>@{user}</strong> e é apagada. Não dá para
+                desfazer.
               </p>
             </JanelaConfirmar>
           )}

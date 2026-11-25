@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { SemDonoGom } from "@/lib/semDonoGom";
-import ArteChaveiro from "./ArteChaveiro";
+import modeloGomSemDono from "@/public/imagens/modelo-gom-sem-dono.png";
 import FaixaSemDono from "./FaixaSemDono";
 import TabelaSemDonoGom from "./TabelaSemDonoGom";
+import "@/estilos/paginas/SemDono.css";
 
 function contar(quantidade: number, singular: string, plural: string) {
   return `${quantidade} ${quantidade === 1 ? singular : plural}`;
@@ -32,7 +34,17 @@ export default function TelaSemDonoGom({ dados }: { dados: SemDonoGom }) {
           <TabelaSemDonoGom itens={dados.itens} />
         ) : (
           <div className="semDonoVazio" role="status">
-            <ArteChaveiro texto="TUDO JÁ TEM DONO" id="anel-sem-dono-gom" gom />
+            <div className="semDonoVazio__arte" aria-hidden="true">
+              <Image
+                src={modeloGomSemDono}
+                alt=""
+                width={modeloGomSemDono.width}
+                height={modeloGomSemDono.height}
+                sizes="(max-width: 560px) 220px, 240px"
+                className="semDonoVazio__imagem"
+              />
+            </div>
+
             <div className="semDonoVazio__conteudo">
               <p className="semDonoVazio__etiqueta">TUDO JÁ TEM DONO</p>
               <h2 className="semDonoVazio__titulo">Nenhum item sobrando</h2>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
-import "@/estilos/componentes/AvisoConexao.css";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import "@/estilos/componentes/AvisosTela.css";
 
 function inscrever(avisar: () => void) {
   window.addEventListener("online", avisar);
@@ -20,14 +20,21 @@ export default function AvisoConexao() {
     () => navigator.onLine,
     () => true,
   );
+  const esteveOffline = useRef(false);
   const [voltou, setVoltou] = useState(false);
-  const [caiu, setCaiu] = useState(false);
 
-  if (!online && !caiu) setCaiu(true);
-  if (online && caiu) {
-    setCaiu(false);
-    setVoltou(true);
-  }
+  useEffect(() => {
+    if (!online) {
+      esteveOffline.current = true;
+      setVoltou(false);
+      return;
+    }
+
+    if (esteveOffline.current) {
+      esteveOffline.current = false;
+      setVoltou(true);
+    }
+  }, [online]);
 
   useEffect(() => {
     if (!voltou) return;
@@ -36,11 +43,13 @@ export default function AvisoConexao() {
   }, [voltou]);
 
   return (
-    <p className="avisoConexao" role="status">
+    <p className="avisoConexao" role="status" aria-live="polite">
       {!online && (
         <span className="avisoConexao__faixa">Sem internet. Para salvar, espere a conexão voltar.</span>
       )}
-      {online && voltou && <span className="avisoConexao__faixa avisoConexao__voltou">Conexão de volta.</span>}
+      {online && voltou && (
+        <span className="avisoConexao__faixa avisoConexao__voltou">Conexão de volta.</span>
+      )}
     </p>
   );
 }

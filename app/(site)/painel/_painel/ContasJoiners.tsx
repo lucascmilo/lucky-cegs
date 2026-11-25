@@ -3,9 +3,9 @@
 import { useId, useState, useTransition } from "react";
 import JanelaConfirmar from "@/componentes/JanelaConfirmar";
 import JanelaSenhaProvisoria from "@/componentes/JanelaSenhaProvisoria";
-import { criarContaJoiner, redefinirSenhaJoiner, type ResultadoConta } from "@/lib/acoesContas";
-import type { JoinerOpcao } from "@/lib/planilhaCaixa";
+import { type ResultadoConta, criarContaJoiner, redefinirSenhaJoiner } from "@/lib/acoesContas";
 import { chamar } from "@/lib/conexao";
+import type { JoinerOpcao } from "@/lib/planilhaCaixa";
 
 // === Seção: Contas dos joiners (GOM) ===
 // Um campo de @ só: se a conta existe, redefine a senha; se não existe, cria.
@@ -34,8 +34,8 @@ export default function ContasJoiners({ joiners }: { joiners: JoinerOpcao[] }) {
   return (
     <div className="contasJoiners">
       <p className="contasJoiners__texto">
-        Joiner esqueceu a senha ou ainda não tem conta? Digite o @: a senha provisória sai pronta para mandar, e o joiner
-        troca em Meu perfil depois de entrar.
+        Joiner esqueceu a senha ou ainda não tem conta? Digite o @: a senha provisória sai pronta
+        para mandar, e o joiner troca em Meu perfil depois de entrar.
       </p>
 
       <form
@@ -73,8 +73,18 @@ export default function ContasJoiners({ joiners }: { joiners: JoinerOpcao[] }) {
             </option>
           ))}
         </datalist>
-        <button type="submit" className="botao botao__preto contasJoiners__botao" disabled={enviando || !user}>
-          {enviando ? "Aguarde…" : !user ? "Redefinir ou criar" : existente ? "Redefinir senha" : "Criar conta"}
+        <button
+          type="submit"
+          className="botao botao__preto contasJoiners__botao"
+          disabled={enviando || !user}
+        >
+          {enviando
+            ? "Aguarde…"
+            : !user
+              ? "Redefinir ou criar"
+              : existente
+                ? "Redefinir senha"
+                : "Criar conta"}
         </button>
       </form>
 
@@ -94,7 +104,8 @@ export default function ContasJoiners({ joiners }: { joiners: JoinerOpcao[] }) {
           aoConfirmar={() => executar(redefinirSenhaJoiner)}
         >
           <p>
-            A senha atual de <strong>@{existente.user}</strong> para de funcionar e a conta sai de todos os aparelhos.
+            A senha atual de <strong>@{existente.user}</strong> para de funcionar e a conta sai de
+            todos os aparelhos.
           </p>
           <p>Você recebe uma senha provisória para mandar.</p>
         </JanelaConfirmar>

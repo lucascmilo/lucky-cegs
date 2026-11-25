@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { FotosDoItem } from "./FotoItem";
 import { IconeFechar } from "./Icones";
 import "@/estilos/componentes/JanelaConfirmar.css";
-import "@/estilos/componentes/JanelaFotos.css";
 
 type PropsJanelaFotos = {
   item: { nome: string; fotoId: string | null; proofWhId: string | null };
@@ -39,10 +38,14 @@ export default function JanelaFotos({ item, aoFechar }: PropsJanelaFotos) {
             onClick={() => referencia.current?.close()}
             aria-label="Fechar fotos"
           >
-            <IconeFechar />
+            <IconeFechar aria-hidden="true" />
           </button>
         </div>
-        <FotosDoItem item={item} className="janelaFotos__fotos" classeFoto="janelaFotos__foto" />
+        <FotosDoItem
+          item={item}
+          className="janelaFotos__fotos"
+          classeFoto="janelaFotos__foto"
+        />
       </div>
     </dialog>
   );

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { obterNotificacoes } from "@/lib/notificacoes";
 import { obterUsuarioAtual } from "@/lib/sessao";
-import estrelaLogo from "@/public/imagens/estrela-logo.png";
+import logoTrevo from "@/public/imagens/logo-trevo.svg";
 import MenuCabecalho, { MenuCabecalhoComCaminho } from "./MenuCabecalho";
 import "@/estilos/componentes/Cabecalho.css";
 
@@ -22,7 +22,7 @@ export default function Cabecalho() {
       <div className="cabecalho__conteudo">
         {/* === Seção: Logo === */}
         <Link href="/" className="cabecalho__logo" aria-label="Lucky Cegs, início">
-          <Image src={estrelaLogo} alt="" className="cabecalho__estrelaLogo" priority />
+          <Image src={logoTrevo} alt="" className="cabecalho__estrelaLogo" priority />
           <span>
             LUCKY<span className="cabecalho__logoRosa">CEGS</span>
           </span>

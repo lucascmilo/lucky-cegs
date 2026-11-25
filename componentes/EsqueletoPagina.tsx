@@ -8,8 +8,8 @@ type TipoEsqueleto = "planilha" | "cartoes" | "ficha";
 // "planilha": Caixa (resumo e tabela). "cartoes": listas de cartões (Meus itens, Sem dono, Painel…). "ficha": Perfil.
 export default function EsqueletoPagina({ tipo }: { tipo: TipoEsqueleto }) {
   return (
-    <div className="esqueletoPagina" role="status" aria-label="Carregando…">
-      <div className="esqueletoPagina__faixa">
+    <div className="esqueletoPagina" role="status" aria-live="polite" aria-label="Carregando…">
+      <div className="esqueletoPagina__faixa" aria-hidden="true">
         <div className="esqueletoPagina__largura">
           <span className="esqueleto esqueletoPagina__titulo" />
           <span className="esqueleto esqueletoPagina__subtitulo" />
@@ -21,7 +21,7 @@ export default function EsqueletoPagina({ tipo }: { tipo: TipoEsqueleto }) {
         </div>
       </div>
 
-      <div className="esqueletoPagina__largura esqueletoPagina__conteudo">
+      <div className="esqueletoPagina__largura esqueletoPagina__conteudo" aria-hidden="true">
         {tipo === "planilha" && (
           <>
             <span className="esqueleto esqueletoPagina__tituloSecao" />

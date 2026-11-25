@@ -15,7 +15,12 @@ type PropsJanelaSenhaProvisoria = {
 
 // === Seção: Senha provisória para a GOM mandar ao joiner ===
 // A senha só aparece aqui, uma vez: a GOM copia a mensagem pronta e manda pelo grupo ou pela DM.
-export default function JanelaSenhaProvisoria({ user, senha, nova, aoFechar }: PropsJanelaSenhaProvisoria) {
+export default function JanelaSenhaProvisoria({
+  user,
+  senha,
+  nova,
+  aoFechar,
+}: PropsJanelaSenhaProvisoria) {
   const referencia = useRef<HTMLDialogElement>(null);
   const endereco = typeof window === "undefined" ? "" : `${window.location.origin}/entrar`;
 
@@ -40,7 +45,7 @@ export default function JanelaSenhaProvisoria({ user, senha, nova, aoFechar }: P
       <div className="janelaConfirmar__conteudo">
         <div className="janelaConfirmar__topo">
           <span className="janelaConfirmar__selo" aria-hidden="true">
-            <IconeCheck tamanho={18} />
+            <IconeCheck tamanho={18} aria-hidden="true" />
           </span>
           <h2 id="titulo-senha-provisoria" className="janelaConfirmar__titulo">
             {nova ? "Conta criada" : "Senha redefinida"}
@@ -56,7 +61,11 @@ export default function JanelaSenhaProvisoria({ user, senha, nova, aoFechar }: P
 
         <div className="janelaConfirmar__botoes">
           <BotaoCopiar texto={mensagem} variante="claro" className="janelaSenha__copiar" />
-          <button type="button" className="botao botao__preto" onClick={() => referencia.current?.close()}>
+          <button
+            type="button"
+            className="botao botao__preto"
+            onClick={() => referencia.current?.close()}
+          >
             Pronto
           </button>
         </div>

@@ -5,12 +5,12 @@ import CartaoPostalVazio from "@/componentes/CartaoPostalVazio";
 import { IconeCheck } from "@/componentes/Icones";
 import { ProvedorDetalhes } from "@/componentes/JanelaDetalhes";
 import { juntarClasses } from "@/lib/classes";
-import { montarDetalheItem, type DetalheItem } from "@/lib/detalheItem";
+import { type DetalheItem, montarDetalheItem } from "@/lib/detalheItem";
 import { formatarData } from "@/lib/formatacao";
 import type { CaixaComProofs, ProofsDaCaixa } from "@/lib/proofs";
-import brilhoRosa from "@/public/imagens/brilho-rosa.png";
-import cd from "@/public/imagens/cd.png";
-import fotoProofs from "@/public/imagens/proofs-foto.png";
+import trevo from "@/public/imagens/adesivo-trevo-preto.png";
+import fotoProofs from "@/public/imagens/modelo-proofs-gom.png";
+import fotoPostalVazio from "@/public/imagens/photobook-pagina.png";
 import { AcoesProof, BarraEnvio, FotoParaSoltar } from "./EnvioProof";
 import "@/estilos/paginas/CasaDaGom.css";
 import "@/estilos/paginas/Proofs.css";
@@ -34,7 +34,9 @@ export default function TelaProofs({ caixas, dados, joinerPedido }: PropsTelaPro
   const enviadas = joiners.filter((j) => j.proof).length;
 
   const detalhes: Record<number, DetalheItem> = dados
-    ? Object.fromEntries(dados.itens.map((item) => [item.id, montarDetalheItem(item, dados.caixa.nome)]))
+    ? Object.fromEntries(
+        dados.itens.map((item) => [item.id, montarDetalheItem(item, dados.caixa.nome)]),
+      )
     : {};
 
   return (
@@ -57,7 +59,10 @@ export default function TelaProofs({ caixas, dados, joinerPedido }: PropsTelaPro
                     key={caixa.id}
                     href={endereco(caixa.id)}
                     scroll={false}
-                    className={juntarClasses("pilulaSelecao", caixa.id === dados?.caixa.id && "pilulaSelecao__ativa")}
+                    className={juntarClasses(
+                      "pilulaSelecao",
+                      caixa.id === dados?.caixa.id && "pilulaSelecao__ativa",
+                    )}
                     aria-current={caixa.id === dados?.caixa.id ? "page" : undefined}
                   >
                     {caixa.nome}
@@ -67,11 +72,9 @@ export default function TelaProofs({ caixas, dados, joinerPedido }: PropsTelaPro
             )}
 
             <div className="casaGom__colagem" aria-hidden="true">
-              <span className="casaGom__quadrado fundoPontosAzul" />
+              <span className="casaGom__quadrado" />
               <Image src={fotoProofs} alt="" sizes="190px" className="casaGom__foto" priority />
-              <Image src={cd} alt="" sizes="80px" className="casaGom__cd" />
-              <Image src={brilhoRosa} alt="" className="casaGom__brilho casaGom__brilhoUm" />
-              <Image src={brilhoRosa} alt="" className="casaGom__brilho casaGom__brilhoDois" />
+              <Image src={trevo} alt="" sizes="80px" className="casaGom__cd casaGom__trevo" />
             </div>
           </div>
         </section>
@@ -83,7 +86,10 @@ export default function TelaProofs({ caixas, dados, joinerPedido }: PropsTelaPro
               <div className="proofsGom__lista">
                 <div className="proofsGom__topoLista">
                   <h2 className="proofsGom__tituloLista">Joiners da {dados.caixa.nome}</h2>
-                  <span className="proofsGom__contagem" aria-label={`${enviadas} de ${joiners.length} proofs enviadas`}>
+                  <span
+                    className="proofsGom__contagem"
+                    aria-label={`${enviadas} de ${joiners.length} proofs enviadas`}
+                  >
                     {enviadas}/{joiners.length}
                   </span>
                 </div>
@@ -95,7 +101,10 @@ export default function TelaProofs({ caixas, dados, joinerPedido }: PropsTelaPro
                         <Link
                           href={endereco(dados.caixa.id, joiner.userId)}
                           scroll={false}
-                          className={juntarClasses("proofsGom__joiner", ativo && "proofsGom__joinerAtivo")}
+                          className={juntarClasses(
+                            "proofsGom__joiner",
+                            ativo && "proofsGom__joinerAtivo",
+                          )}
                           aria-current={ativo ? "true" : undefined}
                         >
                           <span className="proofsGom__inicial" aria-hidden="true">
@@ -106,7 +115,8 @@ export default function TelaProofs({ caixas, dados, joinerPedido }: PropsTelaPro
                               <strong>{joiner.nome}</strong> @{joiner.user}
                             </span>
                             <span>
-                              {joiner.itens.length} {joiner.itens.length === 1 ? "item" : "itens"}
+                              {joiner.itens.length}{" "}
+                              {joiner.itens.length === 1 ? "item" : "itens"}
                             </span>
                           </span>
                           <span className={joiner.proof ? "proofsGom__enviada" : "proofsGom__falta"}>
@@ -130,7 +140,7 @@ export default function TelaProofs({ caixas, dados, joinerPedido }: PropsTelaPro
                 ) : (
                   enviadas === joiners.length && (
                     <p className="proofsGom__tudoEnviado" role="status">
-                      <IconeCheck tamanho={16} />
+                      <IconeCheck tamanho={16} aria-hidden="true" />
                       Todas as proofs desta caixa subiram
                     </p>
                   )
@@ -148,10 +158,17 @@ export default function TelaProofs({ caixas, dados, joinerPedido }: PropsTelaPro
                   }}
                   para={{ nome: atual.nome, user: atual.user }}
                   descricaoFoto={`Proof de @${atual.user} da ${dados.caixa.nome}`}
-                  semFoto={<FotoParaSoltar joiner={{ caixaId: dados.caixa.id, userId: atual.userId }} />}
+                  semFoto={
+                    <FotoParaSoltar
+                      joiner={{ caixaId: dados.caixa.id, userId: atual.userId }}
+                    />
+                  }
                   acoes={
                     atual.proof && (
-                      <AcoesProof joiner={{ caixaId: dados.caixa.id, userId: atual.userId }} user={atual.user} />
+                      <AcoesProof
+                        joiner={{ caixaId: dados.caixa.id, userId: atual.userId }}
+                        user={atual.user}
+                      />
                     )
                   }
                 />
@@ -160,10 +177,10 @@ export default function TelaProofs({ caixas, dados, joinerPedido }: PropsTelaPro
           ) : (
             <CartaoPostalVazio
               legendaFoto="AS PROOFS FICAM AQUI"
-              carimbo={["AGUARDANDO", "CAIXA"]}
               titulo="Nenhuma caixa na sua casa"
               cursiva="o correio ainda não passou"
               descricao="Quando uma caixa chegar na casa da GOM, os joiners dela aparecem aqui para você subir a foto de cada um."
+              foto={fotoPostalVazio}
               acoes={
                 <>
                   <Link href="/caixas" className="botao botao__rosa">

@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import EsqueletoPagina from "@/componentes/EsqueletoPagina";
 import CartaoAviso from "@/componentes/CartaoAviso";
+import EsqueletoPagina from "@/componentes/EsqueletoPagina";
 import { obterCaixaPadrao } from "@/lib/caixas";
 import { obterCaixaMaisRecente } from "@/lib/caixasGom";
 import { textoDoParametro } from "@/lib/navegacao";
 import { exigirUsuario } from "@/lib/sessao";
+import cadernoAberto from "@/public/imagens/caderno-aberto.png";
+import mosaicoPixels from "@/public/imagens/mosaico-pixels.png";
 import BotaoNovaCaixa from "./_caixaGom/BotaoNovaCaixa";
 
 // === Seção: /caixas abre uma caixa ===
@@ -28,12 +30,13 @@ async function CaixaPadrao({ searchParams }: PageProps<"/caixas">) {
     gom ? obterCaixaMaisRecente() : obterCaixaPadrao(usuario.id),
     searchParams,
   ]);
-  const abrir = gom ? (["novo", "nova"] as const).find((chave) => textoDoParametro(parametros[chave]) === "1") : undefined;
+  const abrir = gom
+    ? (["novo", "nova"] as const).find((chave) => textoDoParametro(parametros[chave]) === "1")
+    : undefined;
   if (id) redirect(`/caixas/${id}${abrir ? `?${abrir}=1` : ""}`);
 
   return (
     <CartaoAviso
-      selo="0"
       etiqueta="NENHUMA CAIXA ABERTA"
       tituloPreto="AINDA SEM"
       tituloRosa="CAIXAS"
@@ -43,6 +46,8 @@ async function CaixaPadrao({ searchParams }: PageProps<"/caixas">) {
           ? "Crie a primeira caixa: ela aparece aqui com a planilha dos itens."
           : "Quando a GOM abrir uma caixa, ela aparece aqui com todos os itens."
       }
+      peca={cadernoAberto}
+      imagemSelo={mosaicoPixels}
     >
       {gom ? (
         <BotaoNovaCaixa abrir={abrir === "nova"} />

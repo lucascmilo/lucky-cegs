@@ -13,7 +13,9 @@ export default function BarraSuperior() {
           <span className="barraSuperior__rotuloPix">
             <span className="barraSuperior__marca">LUCKY CEGS | </span>Pix
           </span>
-          <span className="barraSuperior__emailPix">{EMAIL_PIX}</span>
+          <span className="barraSuperior__emailPix" title={EMAIL_PIX}>
+            {EMAIL_PIX}
+          </span>
           <BotaoCopiar texto={EMAIL_PIX} />
         </div>
 

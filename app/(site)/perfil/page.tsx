@@ -29,7 +29,10 @@ export default function PaginaPerfil() {
 // Nome, user e senha da própria conta. A key recria a tela ao trocar de conta (os rascunhos não passam de uma conta para outra)
 async function ConteudoPerfil() {
   const usuario = await exigirUsuario("/perfil");
-  const [conta] = await db.select({ nome: user.name, criadoEm: user.createdAt }).from(user).where(eq(user.id, usuario.id));
+  const [conta] = await db
+    .select({ nome: user.name, criadoEm: user.createdAt })
+    .from(user)
+    .where(eq(user.id, usuario.id));
   return (
     <TelaPerfil
       key={usuario.id}

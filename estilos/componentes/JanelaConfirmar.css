@@ -1,20 +1,18 @@
-/* === Seção: Janela de confirmação (cartão-postal) === */
+/* === Seção: Janela de confirmação === */
 .janelaConfirmar {
   width: min(100% - 2 * var(--margem-lateral), 460px);
   max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 9px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 8px;
-  background: #fff8f0;
-  box-shadow:
-    0 2px 4px rgba(21, 18, 20, 0.08),
-    0 28px 60px -18px rgba(21, 18, 20, 0.45);
+  border: var(--borda);
+  border-radius: 0;
+  background: var(--cor-creme);
+  box-shadow: var(--sombra-janela);
   color: var(--cor-texto);
-  /* Pode abrir dentro de uma tabela: não herda o texto dela */
   font-size: 15px;
   text-align: left;
   white-space: normal;
-  overscroll-behavior: contain;
 }
 
 .janelaConfirmar::backdrop {
@@ -58,10 +56,10 @@
   }
 }
 
+/* === Seção: Conteúdo === */
 .janelaConfirmar__conteudo {
   padding: 24px 24px 18px;
   border: 3px solid var(--cor-rosa);
-  border-radius: 3px;
 }
 
 .janelaConfirmar__topo {
@@ -76,23 +74,24 @@
   place-items: center;
   width: 50px;
   height: 50px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
+  border: var(--borda);
   background: var(--cor-rosa);
   outline: 1.5px dashed var(--cor-preto);
   outline-offset: 3px;
-  color: var(--cor-branco);
+  color: var(--cor-preto);
   transform: rotate(-8deg);
 }
 
 .janelaConfirmar__seloPerigo {
   background: var(--cor-erro);
+  color: var(--cor-branco);
 }
 
 .janelaConfirmar__titulo {
   font-family: var(--fonte-titulo);
-  font-size: 22px;
-  font-weight: 400;
+  font-size: clamp(19px, 4.5vw, 22px);
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: 1.15;
   text-wrap: balance;
 }
@@ -105,7 +104,7 @@
   font-size: 15px;
   font-weight: 500;
   line-height: 1.55;
-  color: #3d3739;
+  color: var(--cor-grafite);
 }
 
 .janelaConfirmar__texto strong {
@@ -116,30 +115,31 @@
 .janelaConfirmar__erro {
   margin-top: 12px;
   padding: 10px 12px;
-  border-radius: 8px;
   background: var(--cor-rosa-suave);
   font-size: 13px;
   font-weight: 600;
   color: var(--cor-erro);
 }
 
+/* === Seção: Botões === */
 .janelaConfirmar__botoes {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   margin-top: 22px;
   padding-top: 18px;
-  border-top: 1.5px dashed rgba(21, 18, 20, 0.3);
+  border-top: 1.5px dashed var(--cor-preto);
 }
 
 .janelaConfirmar__botoes .botao {
   min-width: 116px;
-  height: 44px;
-  padding: 0 22px;
+  min-height: 44px;
+  height: auto;
+  padding: 10px 22px;
 }
 
 .janelaConfirmar__botaoPerigo {
-  border: 0;
+  border: var(--borda);
   background: var(--cor-erro);
   color: var(--cor-branco);
   transition:
@@ -148,7 +148,7 @@
 }
 
 .janelaConfirmar__botaoPerigo:hover:not(:disabled) {
-  background: #8f1140;
+  background: var(--cor-rosa-profundo);
 }
 
 .janelaConfirmar__botoes .botao:disabled {
@@ -156,27 +156,11 @@
   cursor: progress;
 }
 
-/* === Seção: Celular === */
-@media (max-width: 420px) {
-  .janelaConfirmar__conteudo {
-    padding: 20px 16px 16px;
-  }
-
-  .janelaConfirmar__botoes {
-    flex-direction: column-reverse;
-  }
-
-  .janelaConfirmar__botoes .botao {
-    width: 100%;
-  }
-}
-
-/* === Seção: Senha provisória (contas dos joiners) === */
+/* === Seção: Senha provisória === */
 .janelaSenha__mensagem {
   margin: 6px 0 0;
   padding: 14px 16px;
-  border: 1.5px dashed rgba(21, 18, 20, 0.35);
-  border-radius: 10px;
+  border: 1.5px dashed var(--cor-preto);
   background: var(--cor-branco);
   font-family: var(--fonte-texto);
   font-size: 14px;
@@ -189,6 +173,80 @@
 
 .janelaConfirmar__botoes .janelaSenha__copiar {
   min-width: 116px;
-  height: 44px;
+  min-height: 44px;
+  height: auto;
   justify-content: center;
+}
+
+/* === Seção: Variante fotos do item (antigo JanelaFotos.css) === */
+.janelaConfirmar.janelaFotos {
+  width: min(100% - 2 * var(--margem-lateral), 640px);
+}
+
+.janelaFotos__topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  text-transform: lowercase;
+}
+
+.janelaFotos__fechar {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: var(--borda);
+  border-radius: 0;
+  background: var(--cor-branco);
+  color: var(--cor-preto);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.janelaFotos__fechar:hover {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+.janelaFotos .janelaFotos__fotos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.janelaFotos .janelaFotos__foto {
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 600px) {
+  .janelaFotos .janelaFotos__fotos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .janelaConfirmar__conteudo {
+    padding: 20px 16px 16px;
+  }
+
+  .janelaConfirmar__selo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .janelaConfirmar__botoes {
+    flex-direction: column-reverse;
+  }
+
+  .janelaConfirmar__botoes .botao,
+  .janelaConfirmar__botoes .janelaSenha__copiar {
+    width: 100%;
+  }
 }

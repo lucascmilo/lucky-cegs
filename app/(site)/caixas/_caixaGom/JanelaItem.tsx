@@ -4,25 +4,25 @@ import { useEffect, useId, useRef, useState, useTransition } from "react";
 import { IconeFechar, IconeLapis } from "@/componentes/Icones";
 import JanelaConfirmar from "@/componentes/JanelaConfirmar";
 import JanelaSenhaProvisoria from "@/componentes/JanelaSenhaProvisoria";
-import { criarContaJoiner, type ResultadoConta } from "@/lib/acoesContas";
+import { type ResultadoConta, criarContaJoiner } from "@/lib/acoesContas";
 import { juntarClasses } from "@/lib/classes";
-import { ETAPAS_ITEM, obterEtapaCaixa, type EtapaItem } from "@/lib/etapas";
+import { chamar } from "@/lib/conexao";
+import { type EtapaItem, ETAPAS_ITEM, obterEtapaCaixa } from "@/lib/etapas";
 import { formatarReais } from "@/lib/formatacao";
 import {
-  CATEGORIAS,
-  QUANTIDADES_ZERADAS,
-  lerNumero,
   type CaixaGom,
+  CATEGORIAS,
   type Categoria,
   type JoinerOpcao,
+  QUANTIDADES_ZERADAS,
   type Quantidades,
   type RegistroGom,
+  lerNumero,
 } from "@/lib/planilhaCaixa";
 import { useAvisoAoSair } from "@/lib/useAvisoAoSair";
-import { criarItem, descartarFotos, editarItem, excluirItem, type DadosParte } from "../acoes";
+import { type DadosParte, criarItem, descartarFotos, editarItem, excluirItem } from "../acoes";
 import { Campo, CampoFoto, Contador, EntradaReais } from "./CamposJanela";
 import "@/estilos/componentes/JanelaGom.css";
-import { chamar } from "@/lib/conexao";
 
 // Com a caixa na warehouse o item pode estar nestas etapas; depois ele acompanha a caixa
 const ETAPAS_NA_WAREHOUSE: EtapaItem[] = ["esperando", "comprado", "warehouse"];
@@ -31,8 +31,14 @@ const SEM_CONTA = "Nenhuma conta com esse user.";
 
 type Linha = DadosParte & { chave: number };
 
-const formatadorValor = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const formatadorPeso = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+const formatadorValor = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+const formatadorPeso = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 3,
+  maximumFractionDigits: 3,
+});
 const formatadorData = new Intl.DateTimeFormat("pt-BR", {
   day: "2-digit",
   month: "2-digit",
@@ -83,7 +89,13 @@ function estadoInicial(caixa: CaixaGom, registro?: RegistroGom) {
 
   // Item sem dono: a linha fica sem joiner, com o preço do anúncio no valor
   const linhas: Linha[] = registro.semDono
-    ? [{ ...novaLinha(0), membro: registro.membro ?? "", valor: campoValor(registro.precoSemDono) }]
+    ? [
+        {
+          ...novaLinha(0),
+          membro: registro.membro ?? "",
+          valor: campoValor(registro.precoSemDono),
+        },
+      ]
     : registro.partes.map((p, indice) => ({
         chave: indice,
         id: p.id,
@@ -108,7 +120,10 @@ function estadoInicial(caixa: CaixaGom, registro?: RegistroGom) {
     quantidades: { ...registro.quantidades },
     peso: registro.pesoKg === null ? "" : formatadorPeso.format(registro.pesoKg),
     compra: campoValor(registro.compra),
-    tipo: registro.tipo === "set" || registro.partes.length > 1 ? ("set" as const) : ("individual" as const),
+    tipo:
+      registro.tipo === "set" || registro.partes.length > 1
+        ? ("set" as const)
+        : ("individual" as const),
     linhas: linhas.length > 0 ? linhas : [novaLinha(0)],
   };
 }
@@ -127,7 +142,14 @@ type PropsJanelaItem = {
 // === Seção: Janela "Novo item" / "Editar item" ===
 // Fecha no X, no "Cancelar" ou no Esc; com algo mudado, pergunta antes de descartar.
 // Clicar fora não fecha (para não perder o que já foi preenchido).
-export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, registro, aoFechar, aoSalvar }: PropsJanelaItem) {
+export default function JanelaItem({
+  caixa,
+  caixas,
+  joiners: joinersIniciais,
+  registro,
+  aoFechar,
+  aoSalvar,
+}: PropsJanelaItem) {
   const editando = Boolean(registro);
   const referencia = useRef<HTMLDialogElement>(null);
   const formulario = useRef<HTMLFormElement>(null);
@@ -187,11 +209,24 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
   const valores = linhasUsadas.map((linha) => lerNumero(linha.valor));
   const valorCompra = lerNumero(compra);
   const contaValida = [...valores, valorCompra].every((valor) => !Number.isNaN(valor));
-  const lucro = valores.reduce<number>((total, valor) => total + (valor ?? 0), 0) - (valorCompra ?? 0);
+  const lucro =
+    valores.reduce<number>((total, valor) => total + (valor ?? 0), 0) - (valorCompra ?? 0);
 
   const categoriasDoSet = CATEGORIAS.filter(({ id }) => quantidades[id] > 0);
 
-  const atual = { caixaId, grupo, situacao, nome, fotoId, proofWhId, quantidades, peso, compra, tipo, linhas };
+  const atual = {
+    caixaId,
+    grupo,
+    situacao,
+    nome,
+    fotoId,
+    proofWhId,
+    quantidades,
+    peso,
+    compra,
+    tipo,
+    linhas,
+  };
   const alterado = JSON.stringify(atual) !== JSON.stringify(inicial);
   useAvisoAoSair(alterado);
 
@@ -208,9 +243,16 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
   function criarConta(texto: string, chaveErro: string) {
     iniciarConta(async () => {
       const resultado = await chamar(() => criarContaJoiner(texto));
-      if (!resultado.ok) return setErros((anteriores) => ({ ...anteriores, [chaveErro]: resultado.erro }));
-      setJoiners((anteriores) => [...anteriores, { id: resultado.user, user: resultado.user, nome: resultado.user }]);
-      setErros((anteriores) => Object.fromEntries(Object.entries(anteriores).filter(([c]) => c !== chaveErro)));
+      if (!resultado.ok) {
+        return setErros((anteriores) => ({ ...anteriores, [chaveErro]: resultado.erro }));
+      }
+      setJoiners((anteriores) => [
+        ...anteriores,
+        { id: resultado.user, user: resultado.user, nome: resultado.user },
+      ]);
+      setErros((anteriores) =>
+        Object.fromEntries(Object.entries(anteriores).filter(([c]) => c !== chaveErro)),
+      );
       setContaCriada(resultado);
     });
   }
@@ -225,7 +267,9 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
   function aoFecharJanela() {
     if (jaFechou.current) return;
     jaFechou.current = true;
-    const usadas = salvou.current ? [fotoId, proofWhId] : [inicial.fotoId, inicial.proofWhId];
+    const usadas = salvou.current
+      ? [fotoId, proofWhId]
+      : [inicial.fotoId, inicial.proofWhId];
     const sobrando = [...fotosEnviadas.current].filter((id) => !usadas.includes(id));
     if (sobrando.length > 0) void descartarFotos(sobrando);
     aoFechar();
@@ -250,7 +294,9 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
   }
 
   function atualizarLinha(chave: number, mudancas: Partial<Linha>) {
-    setLinhas((anteriores) => anteriores.map((linha) => (linha.chave === chave ? { ...linha, ...mudancas } : linha)));
+    setLinhas((anteriores) =>
+      anteriores.map((linha) => (linha.chave === chave ? { ...linha, ...mudancas } : linha)),
+    );
   }
 
   function adicionarLinha() {
@@ -274,9 +320,15 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
       const user = limparUser(linha.user);
       if (!user && tipo === "set") encontrados[`${chave}.user`] = "Escolha o joiner.";
       if (user && !joiners.some((j) => j.user === user)) encontrados[`${chave}.user`] = SEM_CONTA;
-      if (Number.isNaN(lerNumero(linha.valor))) encontrados[`${chave}.valor`] = "Valor: use só números, como 45,90.";
-      if (Number.isNaN(lerNumero(linha.inter))) encontrados[`${chave}.inter`] = "Inter: use só números.";
-      if (Number.isNaN(lerNumero(linha.taxa))) encontrados[`${chave}.taxa`] = "Taxa: use só números.";
+      if (Number.isNaN(lerNumero(linha.valor))) {
+        encontrados[`${chave}.valor`] = "Valor: use só números, como 45,90.";
+      }
+      if (Number.isNaN(lerNumero(linha.inter))) {
+        encontrados[`${chave}.inter`] = "Inter: use só números.";
+      }
+      if (Number.isNaN(lerNumero(linha.taxa))) {
+        encontrados[`${chave}.taxa`] = "Taxa: use só números.";
+      }
     });
     return encontrados;
   }
@@ -313,7 +365,9 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
     };
 
     iniciar(async () => {
-      const resultado = registro ? await chamar(() => editarItem(registro.id, dados)) : await chamar(() => criarItem(dados));
+      const resultado = registro
+        ? await chamar(() => editarItem(registro.id, dados))
+        : await chamar(() => criarItem(dados));
       if (resultado.ok) {
         salvou.current = true;
         const outraCaixa = caixaEscolhida.id === caixa.id ? "" : ` na ${caixaEscolhida.nome}`;
@@ -368,7 +422,9 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
         onInput={(evento) => {
           const chave = (evento.target as HTMLElement).dataset.erro;
           if (chave && erros[chave]) {
-            setErros((anteriores) => Object.fromEntries(Object.entries(anteriores).filter(([c]) => c !== chave)));
+            setErros((anteriores) =>
+              Object.fromEntries(Object.entries(anteriores).filter(([c]) => c !== chave)),
+            );
           }
         }}
         onSubmit={(evento) => {
@@ -387,14 +443,15 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
             disabled={salvando || apagando}
             aria-label="Fechar sem salvar"
           >
-            <IconeFechar tamanho={22} />
+            <IconeFechar tamanho={22} aria-hidden="true" />
           </button>
         </div>
 
         {registro && (
           <p className="janelaGom__editando">
-            <IconeLapis tamanho={15} />
-            Editando um registro da {caixa.nome} · alterado por último em {formatadorData.format(registro.atualizadoEm)}
+            <IconeLapis tamanho={15} aria-hidden="true" />
+            Editando um registro da {caixa.nome} · alterado por último em{" "}
+            {formatadorData.format(registro.atualizadoEm)}
           </p>
         )}
 
@@ -432,16 +489,22 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
               value={situacaoFinal}
               onChange={(evento) => setSituacao(evento.target.value as EtapaItem)}
               disabled={!naWarehouse}
-              title={naWarehouse ? undefined : "Fora da warehouse, o item acompanha a etapa da caixa"}
+              title={
+                naWarehouse ? undefined : "Fora da warehouse, o item acompanha a etapa da caixa"
+              }
             >
               {naWarehouse ? (
-                ETAPAS_ITEM.filter((etapa) => ETAPAS_NA_WAREHOUSE.includes(etapa.id)).map((etapa) => (
-                  <option key={etapa.id} value={etapa.id}>
-                    {etapa.rotulo}
-                  </option>
-                ))
+                ETAPAS_ITEM.filter((etapa) => ETAPAS_NA_WAREHOUSE.includes(etapa.id)).map(
+                  (etapa) => (
+                    <option key={etapa.id} value={etapa.id}>
+                      {etapa.rotulo}
+                    </option>
+                  ),
+                )
               ) : (
-                <option value={caixaEscolhida.situacao}>{obterEtapaCaixa(caixaEscolhida.situacao).rotulo}</option>
+                <option value={caixaEscolhida.situacao}>
+                  {obterEtapaCaixa(caixaEscolhida.situacao).rotulo}
+                </option>
               )}
             </select>
           </Campo>
@@ -465,13 +528,22 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
         {/* === Seção: Fotos === */}
         <div className="janelaGom__linha janelaGom__fotos">
           <CampoFoto rotulo="Foto do item" pasta="itens" fotoId={fotoId} aoMudar={mudarFoto} />
-          <CampoFoto rotulo="Proof da warehouse" pasta="warehouse" fotoId={proofWhId} aoMudar={mudarProof} />
-          {erros.fotos && <p className="janelaGom__erro janelaGom__inteira">{erros.fotos}</p>}
+          <CampoFoto
+            rotulo="Proof da warehouse"
+            pasta="warehouse"
+            fotoId={proofWhId}
+            aoMudar={mudarProof}
+          />
+          {erros.fotos && (
+            <p className="janelaGom__erro janelaGom__inteira">{erros.fotos}</p>
+          )}
         </div>
 
         {/* === Seção: Quantidades === */}
         <fieldset className="janelaGom__linha janelaGom__grupoCampos">
-          <legend className="janelaGom__rotulo">Quantidade por categoria{tipo === "set" && " (total do set)"}</legend>
+          <legend className="janelaGom__rotulo">
+            Quantidade por categoria{tipo === "set" && " (total do set)"}
+          </legend>
           <div className="janelaGom__quantidades">
             {CATEGORIAS.map((categoria) => (
               <Contador
@@ -479,7 +551,9 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
                 id={`item-qtd-${categoria.id}`}
                 rotulo={categoria.rotulo}
                 valor={quantidades[categoria.id]}
-                aoMudar={(valor) => setQuantidades((anteriores) => ({ ...anteriores, [categoria.id]: valor }))}
+                aoMudar={(valor) =>
+                  setQuantidades((anteriores) => ({ ...anteriores, [categoria.id]: valor }))
+                }
               />
             ))}
           </div>
@@ -500,14 +574,22 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
             />
           </Campo>
           <Campo rotulo="Valor de compra" id="item-compra" erro={erros.compra}>
-            <EntradaReais {...propsErro("compra", "item-compra")} valor={compra} aoMudar={setCompra} alta />
+            <EntradaReais
+              {...propsErro("compra", "item-compra")}
+              valor={compra}
+              aoMudar={setCompra}
+              alta
+            />
           </Campo>
           <div className="janelaGom__campo">
             <span className="janelaGom__rotulo" id="item-lucro-rotulo">
               Lucro
             </span>
             <output
-              className={juntarClasses("janelaGom__lucro", contaValida && lucro < 0 && "janelaGom__lucroNegativo")}
+              className={juntarClasses(
+                "janelaGom__lucro",
+                contaValida && lucro < 0 && "janelaGom__lucroNegativo",
+              )}
               aria-labelledby="item-lucro-rotulo"
               aria-live="polite"
             >
@@ -527,7 +609,10 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
             <button
               key={valor}
               type="button"
-              className={juntarClasses("janelaGom__botaoTipo", tipo === valor && "janelaGom__botaoTipoAtivo")}
+              className={juntarClasses(
+                "janelaGom__botaoTipo",
+                tipo === valor && "janelaGom__botaoTipoAtivo",
+              )}
               aria-pressed={tipo === valor}
               onClick={() => escolherTipo(valor)}
             >
@@ -625,9 +710,15 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
                             className="janelaGom__pago"
                             checked={preenchido && linha[pago]}
                             disabled={!preenchido}
-                            onChange={(evento) => atualizarLinha(linha.chave, { [pago]: evento.target.checked })}
+                            onChange={(evento) =>
+                              atualizarLinha(linha.chave, { [pago]: evento.target.checked })
+                            }
                             aria-label={`${rotulo}${numero} pago`}
-                            title={preenchido ? "Marcar como pago" : "Lance o valor para marcar como pago"}
+                            title={
+                              preenchido
+                                ? "Marcar como pago"
+                                : "Lance o valor para marcar como pago"
+                            }
                           />
                         </span>
                       </span>
@@ -637,12 +728,18 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
                     <button
                       type="button"
                       className="janelaGom__tirarJoiner"
-                      onClick={() => setLinhas((anteriores) => anteriores.filter((l) => l.chave !== linha.chave))}
+                      onClick={() =>
+                        setLinhas((anteriores) => anteriores.filter((l) => l.chave !== linha.chave))
+                      }
                       disabled={linhas.length <= 2}
                       aria-label={`Tirar o joiner${numero}`}
-                      title={linhas.length <= 2 ? "Um set precisa de pelo menos 2 joiners" : "Tirar este joiner"}
+                      title={
+                        linhas.length <= 2
+                          ? "Um set precisa de pelo menos 2 joiners"
+                          : "Tirar este joiner"
+                      }
                     >
-                      <IconeFechar tamanho={16} />
+                      <IconeFechar tamanho={16} aria-hidden="true" />
                     </button>
                   )}
                 </div>
@@ -654,7 +751,9 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
                     onClick={() => criarConta(linha.user, `${chave}.user`)}
                     disabled={criandoConta}
                   >
-                    {criandoConta ? "Criando conta…" : `Criar conta para @${limparUser(linha.user)}`}
+                    {criandoConta
+                      ? "Criando conta…"
+                      : `Criar conta para @${limparUser(linha.user)}`}
                   </button>
                 )}
 
@@ -666,7 +765,11 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
 
                 {/* Quanto do set fica com esta pessoa */}
                 {tipo === "set" && categoriasDoSet.length > 0 && (
-                  <div className="janelaGom__ficaCom" role="group" aria-label={`Quanto fica com o joiner${numero}`}>
+                  <div
+                    className="janelaGom__ficaCom"
+                    role="group"
+                    aria-label={`Quanto fica com o joiner${numero}`}
+                  >
                     <span className="janelaGom__ficaComRotulo" aria-hidden="true">
                       Fica com:
                     </span>
@@ -678,7 +781,9 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
                         sigla={categoria.sigla}
                         valor={linha.quantidades[categoria.id]}
                         aoMudar={(valor) =>
-                          atualizarLinha(linha.chave, { quantidades: { ...linha.quantidades, [categoria.id]: valor } })
+                          atualizarLinha(linha.chave, {
+                            quantidades: { ...linha.quantidades, [categoria.id]: valor },
+                          })
                         }
                         compacto
                       />
@@ -690,13 +795,19 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
           })}
 
           {tipo === "individual" && (
-            <p className="janelaGom__ajuda">Sem joiner, o item vai para Sem dono. Inter e taxa vazios ficam “a definir”.</p>
+            <p className="janelaGom__ajuda">
+              Sem joiner, o item vai para Sem dono. Inter e taxa vazios ficam “a definir”.
+            </p>
           )}
 
           {tipo === "set" && (
             <>
               <ConferenciaSet linhas={linhas} quantidades={quantidades} />
-              <button type="button" className="botao botao__contorno janelaGom__adicionarJoiner" onClick={adicionarLinha}>
+              <button
+                type="button"
+                className="botao botao__contorno janelaGom__adicionarJoiner"
+                onClick={adicionarLinha}
+              >
                 + Adicionar joiner / membro
               </button>
             </>
@@ -741,7 +852,9 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
         </div>
       </form>
 
-      {contaCriada && <JanelaSenhaProvisoria {...contaCriada} aoFechar={() => setContaCriada(null)} />}
+      {contaCriada && (
+        <JanelaSenhaProvisoria {...contaCriada} aoFechar={() => setContaCriada(null)} />
+      )}
 
       {descartando && (
         <JanelaConfirmar
@@ -753,7 +866,11 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
           aoCancelar={() => setDescartando(false)}
           aoConfirmar={fechar}
         >
-          <p>{editando ? "O item continua como estava antes de abrir a janela." : "O que foi preenchido não será salvo."}</p>
+          <p>
+            {editando
+              ? "O item continua como estava antes de abrir a janela."
+              : "O que foi preenchido não será salvo."}
+          </p>
         </JanelaConfirmar>
       )}
 
@@ -773,14 +890,17 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
           {joinersDoItem.length > 0 && (
             <p>
               {joinersDoItem.length === 1 ? "O joiner" : "Os joiners"}{" "}
-              <strong>{[...new Set(joinersDoItem.map((p) => `@${p.user}`))].join(", ")}</strong>{" "}
+              <strong>
+                {[...new Set(joinersDoItem.map((p) => `@${p.user}`))].join(", ")}
+              </strong>{" "}
               {joinersDoItem.length === 1 ? "recebe" : "recebem"} um aviso.
             </p>
           )}
           {pagantes.length > 0 && (
             <p>
-              Já tem pagamento marcado ({[...new Set(pagantes.map((p) => `@${p.user}`))].join(", ")}). Combine a devolução por
-              fora.
+              Já tem pagamento marcado (
+              {[...new Set(pagantes.map((p) => `@${p.user}`))].join(", ")}). Combine a devolução
+              por fora.
             </p>
           )}
           <p>Não dá para desfazer.</p>
@@ -792,16 +912,30 @@ export default function JanelaItem({ caixa, caixas, joiners: joinersIniciais, re
 
 // === Seção: Conferência das quantidades do set ===
 // Mostra quanto já foi dividido entre os joiners em cada categoria do set
-function ConferenciaSet({ linhas, quantidades }: { linhas: Linha[]; quantidades: Quantidades }) {
+function ConferenciaSet({
+  linhas,
+  quantidades,
+}: {
+  linhas: Linha[];
+  quantidades: Quantidades;
+}) {
   const categorias = CATEGORIAS.filter(({ id }) => quantidades[id] > 0);
   if (categorias.length === 0) {
-    return <p className="janelaGom__conferencia">Preencha a quantidade do set para dividir entre os joiners.</p>;
+    return (
+      <p className="janelaGom__conferencia">
+        Preencha a quantidade do set para dividir entre os joiners.
+      </p>
+    );
   }
-  const somar = (id: Categoria) => linhas.reduce((total, linha) => total + linha.quantidades[id], 0);
+  const somar = (id: Categoria) =>
+    linhas.reduce((total, linha) => total + linha.quantidades[id], 0);
   const certo = categorias.every(({ id }) => somar(id) === quantidades[id]);
 
   return (
-    <p className={juntarClasses("janelaGom__conferencia", certo && "janelaGom__conferenciaCerta")} aria-live="polite">
+    <p
+      className={juntarClasses("janelaGom__conferencia", certo && "janelaGom__conferenciaCerta")}
+      aria-live="polite"
+    >
       Dividido:{" "}
       {categorias.map(({ id, resumo }, indice) => (
         <span key={id}>

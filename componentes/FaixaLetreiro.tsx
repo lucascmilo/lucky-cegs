@@ -17,7 +17,9 @@ function GrupoFrases({ oculto = false }: { oculto?: boolean }) {
       {FRASES.map((frase) => (
         <span key={frase} className="faixaLetreiro__item">
           {frase}
-          <span className="faixaLetreiro__estrela">☆</span>
+          <span className="faixaLetreiro__estrela" aria-hidden="true">
+            ☆
+          </span>
         </span>
       ))}
     </span>

@@ -27,7 +27,7 @@ export default function AcoesJoiner({ faltaPagar }: { faltaPagar: number | null 
             <strong className="inicio__faltaPagarValor">{formatarReais(faltaPagar)}</strong>
           )}
         </span>
-        <IconeSeta tamanho={20} />
+        <IconeSeta tamanho={20} aria-hidden="true" />
       </Link>
     </div>
   );

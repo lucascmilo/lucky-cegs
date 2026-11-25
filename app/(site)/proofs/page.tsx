@@ -22,11 +22,20 @@ export default function PaginaProofs(props: PageProps<"/proofs">) {
 
 async function ConteudoProofs({ searchParams }: PageProps<"/proofs">) {
   const gom = await exigirGom("/proofs");
-  const [caixas, parametros] = await Promise.all([obterCaixasComProofs(), searchParams]);
+  const [caixas, parametros] = await Promise.all([
+    obterCaixasComProofs(),
+    searchParams,
+  ]);
 
   const pedida = Number(textoDoParametro(parametros.caixa));
   const caixaId = caixas.some((c) => c.id === pedida) ? pedida : caixas[0]?.id;
   const dados = caixaId ? await obterProofsDaCaixa(caixaId, gom.id) : null;
 
-  return <TelaProofs caixas={caixas} dados={dados} joinerPedido={textoDoParametro(parametros.joiner)} />;
+  return (
+    <TelaProofs
+      caixas={caixas}
+      dados={dados}
+      joinerPedido={textoDoParametro(parametros.joiner)}
+    />
+  );
 }

@@ -5,12 +5,19 @@ import { IconeOlho } from "@/componentes/Icones";
 import { juntarClasses } from "@/lib/classes";
 
 // === Seção: Campo de senha com botão de mostrar/ocultar ===
-export default function EntradaSenha({ className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "type">) {
+export default function EntradaSenha({
+  className,
+  ...props
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "type">) {
   const [visivel, setVisivel] = useState(false);
 
   return (
     <span className="formulario__envoltorioSenha">
-      <input {...props} type={visivel ? "text" : "password"} className={juntarClasses(className, "formulario__entradaSenha")} />
+      <input
+        {...props}
+        type={visivel ? "text" : "password"}
+        className={juntarClasses(className, "formulario__entradaSenha")}
+      />
       <button
         type="button"
         className="formulario__botaoOlho"

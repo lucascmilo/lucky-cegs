@@ -20,8 +20,13 @@ type PropsPedidosIndividuais = {
 };
 
 // === Seção: Pedidos individuais ("Ver mais" mostra mais 4) ===
-export default function PedidosIndividuais({ itens, caixaId, mostrar, enderecoVerMais }: PropsPedidosIndividuais) {
-  const restantes = itens.length - mostrar;
+export default function PedidosIndividuais({
+  itens,
+  caixaId,
+  mostrar,
+  enderecoVerMais,
+}: PropsPedidosIndividuais) {
+  const restantes = Math.max(0, itens.length - mostrar);
 
   return (
     <>
@@ -34,7 +39,11 @@ export default function PedidosIndividuais({ itens, caixaId, mostrar, enderecoVe
       </ul>
 
       {restantes > 0 && (
-        <Link href={enderecoVerMais} scroll={false} className="botao botao__contorno pedidosIndividuais__verMais">
+        <Link
+          href={enderecoVerMais}
+          scroll={false}
+          className="botao botao__contorno pedidosIndividuais__verMais"
+        >
           Ver mais {restantes} {restantes === 1 ? "item" : "itens"}
         </Link>
       )}
@@ -50,7 +59,11 @@ function CartaoIndividual({ item, caixaId }: { item: ItemCaixa; caixaId: number 
     <article className={juntarClasses("cartaoIndividual", meu && "cartaoIndividual__meu")}>
       {meu && <EtiquetaMeu className="cartaoIndividual__etiqueta" />}
 
-      <FotosDoItem item={item} className="cartaoIndividual__fotos" classeFoto="cartaoIndividual__foto" />
+      <FotosDoItem
+        item={item}
+        className="cartaoIndividual__fotos"
+        classeFoto="cartaoIndividual__foto"
+      />
 
       <h3 className="cartaoIndividual__nome">
         <TextoCortado texto={item.nome} />
@@ -71,7 +84,7 @@ function CartaoIndividual({ item, caixaId }: { item: ItemCaixa; caixaId: number 
             <span className="cartaoIndividual__falta">Falta {formatarReais(item.faltaPagar)}</span>
           ) : (
             <span className="cartaoIndividual__falta cartaoIndividual__tudoPago">
-              <IconeCheck tamanho={11} /> Pago
+              <IconeCheck tamanho={11} aria-hidden="true" /> Pago
             </span>
           )}
           <BotaoDetalhes itemId={item.id} className="cartaoIndividual__detalhes" />

@@ -1,20 +1,31 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useTransition, type FormEvent, type ReactNode } from "react";
-import { useAvisoAoSair } from "@/lib/useAvisoAoSair";
+import { type FormEvent, type ReactNode, useState, useTransition } from "react";
 import EntradaSenha from "@/componentes/EntradaSenha";
 import { IconeCheck } from "@/componentes/Icones";
 import { authClient } from "@/lib/auth-client";
-import { PADRAO_USER, TAMANHO_MAXIMO_NOME, TAMANHO_MINIMO_SENHA, TAMANHO_USER } from "@/lib/configuracoes";
-import { limparUser, MENSAGEM_USER_INVALIDO, traduzirErroAutenticacao } from "@/lib/mensagensErro";
+import { chamar } from "@/lib/conexao";
+import {
+  PADRAO_USER,
+  TAMANHO_MAXIMO_NOME,
+  TAMANHO_MINIMO_SENHA,
+  TAMANHO_USER,
+} from "@/lib/configuracoes";
+import {
+  MENSAGEM_USER_INVALIDO,
+  limparUser,
+  traduzirErroAutenticacao,
+} from "@/lib/mensagensErro";
 import type { UsuarioAtual } from "@/lib/sessao";
-import brilhoAmarelo from "@/public/imagens/brilho-amarelo.png";
+import { useAvisoAoSair } from "@/lib/useAvisoAoSair";
+import etiquetaLucky from "@/public/imagens/adesivo-lucky-cegs.png";
+import trevoRosa from "@/public/imagens/adesivo-trevo-rosa.png";
 import codigoBarras from "@/public/imagens/codigo-barras.png";
+import tiraCabine from "@/public/imagens/tira-cabine.png";
 import { alterarNome, alterarUser } from "../acoes";
 import "@/estilos/paginas/acesso/Formulario.css";
 import "@/estilos/paginas/Perfil.css";
-import { chamar } from "@/lib/conexao";
 
 // === Seção: Tipos ===
 type PropsTelaPerfil = {
@@ -32,14 +43,16 @@ const TEXTOS = {
     nome: "Como a GOM e o pessoal das caixas veem você. No site, aparece sempre em minúsculas.",
     user: "Seu user atual do twitter, usado para entrar no site. O @ antigo fica livre para outra conta.",
     ajudaUser: `Use seu user atual do twitter: ${REGRA_USER}`,
-    senha: "A senha atual confirma que é você. Depois da troca, as outras sessões abertas saem da conta.",
+    senha:
+      "A senha atual confirma que é você. Depois da troca, as outras sessões abertas saem da conta.",
   },
   admin: {
     subtitulo: "Nome, user e senha da conta da GOM.",
     nome: "Como os joiners veem a GOM nos avisos e nas caixas. No site, aparece sempre em minúsculas.",
     user: "O @ atual da loja no twitter, usado para entrar no painel. O @ antigo fica livre para outra conta.",
     ajudaUser: `Use o user atual da loja no twitter: ${REGRA_USER}`,
-    senha: "Essa conta abre o painel e os valores de compra: prefira uma senha longa. Depois da troca, as outras sessões abertas saem da conta.",
+    senha:
+      "Essa conta abre o painel e os valores de compra: prefira uma senha longa. Depois da troca, as outras sessões abertas saem da conta.",
   },
 };
 type Textos = (typeof TEXTOS)["user"];
@@ -51,7 +64,9 @@ export default function TelaPerfil({ usuario, nomeSalvo, desde }: PropsTelaPerfi
   const [rascunhoUser, setRascunhoUser] = useState(usuario.user);
 
   const textos = TEXTOS[usuario.papel];
-  useAvisoAoSair(rascunhoNome.trim() !== nomeSalvo || limparUser(rascunhoUser) !== usuario.user);
+  useAvisoAoSair(
+    rascunhoNome.trim() !== nomeSalvo || limparUser(rascunhoUser) !== usuario.user,
+  );
 
   const nomeCartao = rascunhoNome.trim() || nomeSalvo;
   const userCartao = limparUser(rascunhoUser) || usuario.user;
@@ -69,15 +84,44 @@ export default function TelaPerfil({ usuario, nomeSalvo, desde }: PropsTelaPerfi
             <p className="tituloFaixa__subtitulo">{textos.subtitulo}</p>
           </div>
 
-          <CartaoMembro nome={nomeCartao} user={userCartao} gom={usuario.papel === "admin"} desde={desde} />
+          <CartaoMembro
+            nome={nomeCartao}
+            user={userCartao}
+            gom={usuario.papel === "admin"}
+            desde={desde}
+          />
+          <Image
+            src={tiraCabine}
+            alt=""
+            sizes="100px"
+            className="perfil__tira"
+            aria-hidden="true"
+          />
         </div>
       </section>
 
       {/* === Seção: Ficha com os dados === */}
       <div className="perfil__conteudo">
         <div className="perfil__ficha">
-          <SecaoNome textos={textos} nomeSalvo={nomeSalvo} valor={rascunhoNome} aoMudar={setRascunhoNome} />
-          <SecaoUser textos={textos} userSalvo={usuario.user} valor={rascunhoUser} aoMudar={setRascunhoUser} />
+          <Image
+            src={etiquetaLucky}
+            alt=""
+            sizes="150px"
+            className="perfil__etiquetaFicha"
+            aria-hidden="true"
+          />
+          <SecaoNome
+            textos={textos}
+            nomeSalvo={nomeSalvo}
+            valor={rascunhoNome}
+            aoMudar={setRascunhoNome}
+          />
+          <SecaoUser
+            textos={textos}
+            userSalvo={usuario.user}
+            valor={rascunhoUser}
+            aoMudar={setRascunhoUser}
+          />
           <SecaoSenha textos={textos} />
         </div>
       </div>
@@ -86,15 +130,36 @@ export default function TelaPerfil({ usuario, nomeSalvo, desde }: PropsTelaPerfi
 }
 
 // === Seção: Cartão de membro ===
-function CartaoMembro({ nome, user, gom, desde }: { nome: string; user: string; gom: boolean; desde: string }) {
-  const inicial = (nome || user).trim().charAt(0).toUpperCase();
+function CartaoMembro({
+  nome,
+  user,
+  gom,
+  desde,
+}: {
+  nome: string;
+  user: string;
+  gom: boolean;
+  desde: string;
+}) {
+  const userLimpo = limparUser(user);
+  const inicial = (nome || userLimpo).trim().charAt(0).toUpperCase();
 
   return (
-    <div className="perfil__cartao" aria-label={`Cartão de membro de @${user}`} role="img">
+    <div
+      className="perfil__cartao"
+      aria-label={`Cartão de membro de @${userLimpo}`}
+      role="img"
+    >
       <span className="perfil__fita" aria-hidden="true" />
-      <Image src={brilhoAmarelo} alt="" className="perfil__brilho" aria-hidden="true" />
+      <Image
+        src={trevoRosa}
+        alt=""
+        sizes="72px"
+        className="perfil__adesivoTrevo"
+        aria-hidden="true"
+      />
 
-      <div className="perfil__cartaoTopo fundoPontosRosa">
+      <div className="perfil__cartaoTopo fundoTrevosRosa">
         <span className="perfil__cartaoMarca">LUCKY CEGS</span>
         <span className="perfil__cartaoTipo">{gom ? "GOM" : "MEMBRO"}</span>
       </div>
@@ -105,7 +170,7 @@ function CartaoMembro({ nome, user, gom, desde }: { nome: string; user: string; 
         </span>
         <div className="perfil__identidade">
           <span className="perfil__cartaoNome">{nome.toLowerCase()}</span>
-          <span className="perfil__cartaoUser">@{user.toLowerCase()}</span>
+          <span className="perfil__cartaoUser">@{userLimpo.toLowerCase()}</span>
         </div>
       </div>
 
@@ -137,7 +202,9 @@ function LinhaFicha({ titulo, descricao, aoEnviar, children, rodape }: PropsLinh
         aoEnviar(evento);
         // Leva o foco para o primeiro campo com erro
         const formulario = evento.currentTarget;
-        requestAnimationFrame(() => formulario.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus());
+        requestAnimationFrame(() =>
+          formulario.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus(),
+        );
       }}
     >
       <div className="perfil__explicacao">
@@ -154,18 +221,32 @@ function LinhaFicha({ titulo, descricao, aoEnviar, children, rodape }: PropsLinh
   );
 }
 
-function RodapeSalvar({ rotulo, enviando, desativado, aviso }: { rotulo: string; enviando: boolean; desativado: boolean; aviso: string | null }) {
+function RodapeSalvar({
+  rotulo,
+  enviando,
+  desativado,
+  aviso,
+}: {
+  rotulo: string;
+  enviando: boolean;
+  desativado: boolean;
+  aviso: string | null;
+}) {
   return (
     <>
       <p className="perfil__aviso" role="status">
         {aviso && (
           <>
-            <IconeCheck tamanho={12} />
+            <IconeCheck tamanho={12} aria-hidden="true" />
             {aviso}
           </>
         )}
       </p>
-      <button type="submit" className="botao botao__preto perfil__botao" disabled={desativado || enviando}>
+      <button
+        type="submit"
+        className="botao botao__preto perfil__botao"
+        disabled={desativado || enviando}
+      >
         {enviando ? "Salvando…" : rotulo}
       </button>
     </>
@@ -173,9 +254,18 @@ function RodapeSalvar({ rotulo, enviando, desativado, aviso }: { rotulo: string;
 }
 
 // === Seção: Nome ===
-type PropsSecao = { textos: Textos; valor: string; aoMudar: (valor: string) => void };
+type PropsSecao = {
+  textos: Textos;
+  valor: string;
+  aoMudar: (valor: string) => void;
+};
 
-function SecaoNome({ textos, nomeSalvo, valor, aoMudar }: PropsSecao & { nomeSalvo: string }) {
+function SecaoNome({
+  textos,
+  nomeSalvo,
+  valor,
+  aoMudar,
+}: PropsSecao & { nomeSalvo: string }) {
   const [erro, setErro] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
   const [enviando, iniciar] = useTransition();
@@ -197,7 +287,14 @@ function SecaoNome({ textos, nomeSalvo, valor, aoMudar }: PropsSecao & { nomeSal
       titulo="Nome"
       descricao={textos.nome}
       aoEnviar={enviar}
-      rodape={<RodapeSalvar rotulo="Salvar nome" enviando={enviando} desativado={semMudanca} aviso={aviso} />}
+      rodape={
+        <RodapeSalvar
+          rotulo="Salvar nome"
+          enviando={enviando}
+          desativado={semMudanca}
+          aviso={aviso}
+        />
+      }
     >
       <label className="formulario__campo">
         <span className="formulario__rotulo">Nome</span>
@@ -221,7 +318,12 @@ function SecaoNome({ textos, nomeSalvo, valor, aoMudar }: PropsSecao & { nomeSal
 }
 
 // === Seção: User ===
-function SecaoUser({ textos, userSalvo, valor, aoMudar }: PropsSecao & { userSalvo: string }) {
+function SecaoUser({
+  textos,
+  userSalvo,
+  valor,
+  aoMudar,
+}: PropsSecao & { userSalvo: string }) {
   const [erro, setErro] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
   const [enviando, iniciar] = useTransition();
@@ -246,7 +348,14 @@ function SecaoUser({ textos, userSalvo, valor, aoMudar }: PropsSecao & { userSal
       titulo="User"
       descricao={textos.user}
       aoEnviar={enviar}
-      rodape={<RodapeSalvar rotulo="Salvar user" enviando={enviando} desativado={semMudanca} aviso={aviso} />}
+      rodape={
+        <RodapeSalvar
+          rotulo="Salvar user"
+          enviando={enviando}
+          desativado={semMudanca}
+          aviso={aviso}
+        />
+      }
     >
       <label className="formulario__campo">
         <span className="formulario__rotulo">User</span>
@@ -300,8 +409,11 @@ function SecaoSenha({ textos }: { textos: Textos }) {
     evento.preventDefault();
     const novos: typeof erros = {};
     if (!campos.atual) novos.atual = "Informe a senha atual.";
-    if (campos.nova.length < TAMANHO_MINIMO_SENHA) novos.nova = `Mínimo de ${TAMANHO_MINIMO_SENHA} caracteres.`;
-    else if (campos.nova === campos.atual) novos.nova = "A nova senha precisa ser diferente da atual.";
+    if (campos.nova.length < TAMANHO_MINIMO_SENHA) {
+      novos.nova = `Mínimo de ${TAMANHO_MINIMO_SENHA} caracteres.`;
+    } else if (campos.nova === campos.atual) {
+      novos.nova = "A nova senha precisa ser diferente da atual.";
+    }
     if (campos.confirmar !== campos.nova) novos.confirmar = "As senhas não são iguais.";
     setErros(novos);
     if (Object.values(novos).some(Boolean)) return;
@@ -316,7 +428,9 @@ function SecaoSenha({ textos }: { textos: Textos }) {
 
     if (falha) {
       const mensagem = traduzirErroAutenticacao(falha.code, "senha");
-      setErros(falha.code === "INVALID_PASSWORD" ? { atual: mensagem } : { geral: mensagem });
+      setErros(
+        falha.code === "INVALID_PASSWORD" ? { atual: mensagem } : { geral: mensagem },
+      );
       return;
     }
     setCampos(SENHA_VAZIA);
@@ -345,7 +459,14 @@ function SecaoSenha({ textos }: { textos: Textos }) {
       titulo="Senha"
       descricao={textos.senha}
       aoEnviar={enviar}
-      rodape={<RodapeSalvar rotulo="Trocar senha" enviando={enviando} desativado={false} aviso={aviso} />}
+      rodape={
+        <RodapeSalvar
+          rotulo="Trocar senha"
+          enviando={enviando}
+          desativado={false}
+          aviso={aviso}
+        />
+      }
     >
       {campo("atual", "Senha atual", "current-password")}
       <div className="perfil__duasColunas">

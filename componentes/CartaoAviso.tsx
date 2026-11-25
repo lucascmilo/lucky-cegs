@@ -1,46 +1,79 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import type { ReactNode } from "react";
-import carimboPostal from "@/public/imagens/carimbo-postal.png";
 import "@/estilos/componentes/CartaoAviso.css";
 
 // === Seção: Tipos ===
 type PropsCartaoAviso = {
-  // Texto grande dentro do selo (ex.: "404")
-  selo: string;
-  etiqueta: string;
-  tituloPreto: string;
-  tituloRosa: string;
-  cursiva: string;
-  texto: string;
-  children: ReactNode;
+  etiqueta?: string;
+  tituloPreto?: string;
+  tituloRosa?: string;
+  cursiva?: string;
+  texto?: string;
+  // Peça da biblioteca colada na quina do cartão (cada tela usa uma diferente)
+  peca: StaticImageData;
+  // Imagem exibida na coluna no lugar do selo antigo
+  imagemSelo?: StaticImageData;
+  children?: ReactNode;
 };
 
-// === Seção: Cartão-postal de aviso (página não encontrada, erro) ===
-export default function CartaoAviso({ selo, etiqueta, tituloPreto, tituloRosa, cursiva, texto, children }: PropsCartaoAviso) {
-  return (
-    <section className="cartaoAviso fundoPontosRosa">
-      <div className="cartaoAviso__cartao envelopeCorreio">
-        {/* === Seção: Selo === */}
-        <div className="cartaoAviso__colunaSelo" aria-hidden="true">
-          <div className="cartaoAviso__selo">
-            <div className="cartaoAviso__seloMiolo">
-              <span className="cartaoAviso__seloNumero">{selo}</span>
-              <span className="cartaoAviso__seloMarca">LUCKY CEGS</span>
-            </div>
-          </div>
-          <Image src={carimboPostal} alt="" sizes="150px" className="cartaoAviso__carimbo" />
-        </div>
+// === Seção: Cartão-postal de aviso ===
+export default function CartaoAviso({
+  etiqueta,
+  tituloPreto,
+  tituloRosa,
+  cursiva,
+  texto,
+  peca,
+  imagemSelo,
+  children,
+}: PropsCartaoAviso) {
+  const temTextos = Boolean(etiqueta || tituloPreto || tituloRosa || cursiva || texto);
+  const classeCartao = imagemSelo
+    ? "cartaoAviso__cartao--duasColunas"
+    : "cartaoAviso__cartao--colunaUnica";
 
-        {/* === Seção: Mensagem === */}
+  return (
+    <section className="cartaoAviso fundoTrevosRosa">
+      <div className={`cartaoAviso__cartao envelopeCorreio ${classeCartao}`}>
+        <Image
+          src={peca}
+          alt=""
+          width={peca.width}
+          height={peca.height}
+          sizes="140px"
+          className="cartaoAviso__peca"
+          aria-hidden="true"
+        />
+
+        {imagemSelo && (
+          <div className="cartaoAviso__colunaSelo" aria-hidden="true">
+            <Image
+              src={imagemSelo}
+              alt=""
+              width={imagemSelo.width}
+              height={imagemSelo.height}
+              sizes="(max-width: 760px) 100vw, 220px"
+              unoptimized
+              className="cartaoAviso__imagemSelo"
+            />
+          </div>
+        )}
+
         <div className="cartaoAviso__textos">
-          <p className="cartaoAviso__etiqueta">{etiqueta}</p>
-          <h1 className="cartaoAviso__titulo">
-            {tituloPreto}
-            <span className="cartaoAviso__tituloRosa">{tituloRosa}</span>
-          </h1>
-          <p className="cartaoAviso__cursiva">{cursiva}</p>
-          <p className="cartaoAviso__texto">{texto}</p>
-          <div className="cartaoAviso__acoes">{children}</div>
+          {temTextos && (
+            <>
+              {etiqueta && <p className="cartaoAviso__etiqueta">{etiqueta}</p>}
+              {(tituloPreto || tituloRosa) && (
+                <h1 className="cartaoAviso__titulo">
+                  {tituloPreto}
+                  {tituloRosa && <span className="cartaoAviso__tituloRosa">{tituloRosa}</span>}
+                </h1>
+              )}
+              {cursiva && <p className="cartaoAviso__cursiva">{cursiva}</p>}
+              {texto && <p className="cartaoAviso__texto">{texto}</p>}
+            </>
+          )}
+          {children && <div className="cartaoAviso__acoes">{children}</div>}
         </div>
       </div>
     </section>

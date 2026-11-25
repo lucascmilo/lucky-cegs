@@ -29,6 +29,7 @@ export default function PlayerMusica() {
   const semSom = mudo || volume === 0;
   const musicaAtual = PLAYLIST[indice];
   const progresso = duracao > 0 ? (tempoAtual / duracao) * 100 : 0;
+  const percentualVolume = Math.round((mudo ? 0 : volume) * 100);
 
   useEffect(() => {
     iniciarReproducaoAutomatica();
@@ -38,8 +39,13 @@ export default function PlayerMusica() {
     <div className="playerMusica__player" data-player-musica>
       {/* === Seção: Controles === */}
       <div className="playerMusica__controles">
-        <button type="button" className="playerMusica__botaoPular" onClick={voltarFaixa} aria-label="Música anterior">
-          <IconeAnterior />
+        <button
+          type="button"
+          className="playerMusica__botaoPular"
+          onClick={voltarFaixa}
+          aria-label="Música anterior"
+        >
+          <IconeAnterior aria-hidden="true" />
         </button>
         <button
           type="button"
@@ -47,10 +53,19 @@ export default function PlayerMusica() {
           onClick={alternarReproducao}
           aria-label={tocando ? "Pausar música" : "Tocar música"}
         >
-          {tocando ? <IconePausa tamanho={13} /> : <IconePlay />}
+          {tocando ? (
+            <IconePausa tamanho={13} aria-hidden="true" />
+          ) : (
+            <IconePlay aria-hidden="true" />
+          )}
         </button>
-        <button type="button" className="playerMusica__botaoPular" onClick={() => trocarFaixa(1)} aria-label="Próxima música">
-          <IconeProxima />
+        <button
+          type="button"
+          className="playerMusica__botaoPular"
+          onClick={() => trocarFaixa(1)}
+          aria-label="Próxima música"
+        >
+          <IconeProxima aria-hidden="true" />
         </button>
       </div>
 
@@ -62,7 +77,10 @@ export default function PlayerMusica() {
             {formatarTempo(tempoAtual)} / {formatarTempo(duracao)}
           </span>
         </div>
-        <span className="playerMusica__titulo" title={`${musicaAtual.artista} - ${musicaAtual.titulo}`}>
+        <span
+          className="playerMusica__titulo"
+          title={`${musicaAtual.artista} - ${musicaAtual.titulo}`}
+        >
           {musicaAtual.artista} - {musicaAtual.titulo}
         </span>
         <input
@@ -89,7 +107,11 @@ export default function PlayerMusica() {
           aria-label={mudo ? "Ligar o som" : "Tirar o som"}
           aria-pressed={mudo}
         >
-          <IconeVolume mudo={semSom} className="playerMusica__iconeVolume" />
+          <IconeVolume
+            mudo={semSom}
+            className="playerMusica__iconeVolume"
+            aria-hidden="true"
+          />
         </button>
         <input
           type="range"
@@ -100,6 +122,7 @@ export default function PlayerMusica() {
           onChange={(evento) => definirVolume(Number(evento.target.value))}
           className="playerMusica__controleVolume"
           aria-label="Volume"
+          aria-valuetext={`${percentualVolume}%`}
           style={{ "--preenchimento": `${mudo ? 0 : volume * 100}%` } as CSSProperties}
         />
       </div>

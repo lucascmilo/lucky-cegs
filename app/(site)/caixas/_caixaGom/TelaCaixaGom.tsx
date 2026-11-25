@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import AvisoFlutuante from "@/componentes/AvisoFlutuante";
 import { formatarReais } from "@/lib/formatacao";
 import {
@@ -10,6 +13,8 @@ import {
   type RegistroGom,
 } from "@/lib/planilhaCaixa";
 import FaixaCaixaGom from "./FaixaCaixaGom";
+import JanelaInterTaxaLote from "./JanelaInterTaxaLote";
+import JanelaMarcarPagoLote from "./JanelaMarcarPagoLote";
 import PlanilhaCaixa from "./PlanilhaCaixa";
 import "@/estilos/componentes/PecasItem.css";
 import "@/estilos/paginas/Caixa.css";
@@ -26,6 +31,8 @@ type PropsTelaCaixaGom = {
   inicialPlanilha: { busca: string; ordem: string; filtro: string };
 };
 
+type JanelaLote = "interTaxa" | "marcarPago" | null;
+
 // === Seção: Caixa da GOM (resumo e planilha com todos os valores) ===
 // As keys recriam as partes com estado ao trocar de caixa (seleção e janela não passam de uma caixa para outra)
 export default function TelaCaixaGom({
@@ -38,6 +45,14 @@ export default function TelaCaixaGom({
   abrirNovaCaixa,
   inicialPlanilha,
 }: PropsTelaCaixaGom) {
+  const [janelaLote, setJanelaLote] = useState<JanelaLote>(null);
+  const [vezLote, setVezLote] = useState(0);
+
+  function abrirJanelaLote(qual: Exclude<JanelaLote, null>) {
+    setJanelaLote(qual);
+    setVezLote((n) => n + 1);
+  }
+
   const resumo = resumirCaixa(registros);
   const joinersDaCaixa = [...new Set(registros.flatMap((r) => r.partes.map((p) => p.user)))].sort();
 
@@ -46,7 +61,10 @@ export default function TelaCaixaGom({
     { rotulo: "Compra Total", valor: formatarReais(resumo.compra) },
     { rotulo: "Lucro", valor: formatarReais(resumo.lucro), negativo: resumo.lucro < 0 },
     { rotulo: "Peso Total", valor: formatarPeso(resumo.peso) },
-    ...CATEGORIAS.map((categoria) => ({ rotulo: categoria.resumo, valor: String(resumo.quantidades[categoria.id]) })),
+    ...CATEGORIAS.map((categoria) => ({
+      rotulo: categoria.resumo,
+      valor: String(resumo.quantidades[categoria.id]),
+    })),
   ];
 
   return (
@@ -72,7 +90,11 @@ export default function TelaCaixaGom({
             {quadros.map((quadro) => (
               <div key={quadro.rotulo} className="caixaGom__quadro">
                 <dt className="caixaGom__rotuloResumo">{quadro.rotulo}</dt>
-                <dd className={quadro.negativo ? "caixaGom__valorResumo caixaGom__negativo" : "caixaGom__valorResumo"}>
+                <dd
+                  className={
+                    quadro.negativo ? "caixaGom__valorResumo caixaGom__negativo" : "caixaGom__valorResumo"
+                  }
+                >
                   {quadro.valor}
                 </dd>
               </div>
@@ -81,16 +103,57 @@ export default function TelaCaixaGom({
         </section>
 
         <section aria-labelledby="titulo-registros" className="caixaGom__registros">
-          <h2 id="titulo-registros" className="caixaGom__titulo">
-            <span>REGISTROS</span> <span className="caixaGom__tituloRosa">DA PLANILHA</span>
-          </h2>
-          <PlanilhaCaixa key={`planilha-${caixa.id}`} caixa={caixa} caixas={caixas}
+          <div className="caixaGom__topoRegistros">
+            <h2 id="titulo-registros" className="caixaGom__titulo">
+              <span>REGISTROS</span> <span className="caixaGom__tituloRosa">DA PLANILHA</span>
+            </h2>
+            <div className="caixaGom__acoesLote">
+              <button
+                type="button"
+                className="botao botao__contorno caixaGom__botaoLote"
+                onClick={() => abrirJanelaLote("interTaxa")}
+              >
+                Lançar inter e taxa
+              </button>
+              <button
+                type="button"
+                className="botao botao__contorno caixaGom__botaoLote"
+                onClick={() => abrirJanelaLote("marcarPago")}
+              >
+                Dar baixa em pagamentos
+              </button>
+            </div>
+          </div>
+          <PlanilhaCaixa
+            key={`planilha-${caixa.id}`}
+            caixa={caixa}
+            caixas={caixas}
             registros={registros}
             joiners={joiners}
             inicial={inicialPlanilha}
           />
         </section>
       </div>
+
+      {janelaLote === "interTaxa" && (
+        <JanelaInterTaxaLote
+          key={`inter-taxa-${caixa.id}-${vezLote}`}
+          caixaId={caixa.id}
+          nomeCaixa={caixa.nome}
+          aoFechar={() => setJanelaLote(null)}
+        />
+      )}
+
+      {janelaLote === "marcarPago" && (
+        <JanelaMarcarPagoLote
+          key={`marcar-pago-${caixa.id}-${vezLote}`}
+          caixaId={caixa.id}
+          nomeCaixa={caixa.nome}
+          joiners={joiners}
+          joinersDaCaixa={joinersDaCaixa}
+          aoFechar={() => setJanelaLote(null)}
+        />
+      )}
 
       <AvisoFlutuante />
     </div>

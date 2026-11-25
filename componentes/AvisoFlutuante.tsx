@@ -2,7 +2,7 @@
 
 import { useEffect, useSyncExternalStore } from "react";
 import { IconeCheck } from "./Icones";
-import "@/estilos/componentes/AvisoFlutuante.css";
+import "@/estilos/componentes/AvisosTela.css";
 
 // === Seção: Aviso flutuante ("Item salvo", "Caixa criada"…) ===
 // Qualquer parte da tela chama mostrarAviso(); o aviso aparece embaixo, no meio, e some sozinho.
@@ -36,7 +36,9 @@ export default function AvisoFlutuante() {
 
   useEffect(() => {
     if (!atual) return;
+    const chaveAtual = atual;
     const tempo = window.setTimeout(() => {
+      if (`${contador}|${texto}` !== chaveAtual) return;
       texto = null;
       avisar();
     }, DURACAO);
@@ -44,10 +46,10 @@ export default function AvisoFlutuante() {
   }, [atual]);
 
   return (
-    <p className="avisoFlutuante" role="status">
+    <p className="avisoFlutuante" role="status" aria-live="polite">
       {atual && (
         <span key={atual} className="avisoFlutuante__caixa">
-          <IconeCheck tamanho={12} /> {atual.slice(atual.indexOf("|") + 1)}
+          <IconeCheck tamanho={12} aria-hidden="true" /> {atual.slice(atual.indexOf("|") + 1)}
         </span>
       )}
     </p>

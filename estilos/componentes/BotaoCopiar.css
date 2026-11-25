@@ -5,13 +5,16 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  min-width: 106px;
+  height: 26px;
   padding: 0 14px;
-  border-radius: var(--raio-pilula);
+  border-radius: 0;
   font-size: 13px;
   font-weight: 700;
   white-space: nowrap;
   transition:
     background-color 0.15s ease,
+    color 0.15s ease,
     transform 0.15s ease;
 }
 
@@ -25,38 +28,34 @@
   height: 16px;
 }
 
-/* === Seção: Variante escura === */
+/* === Seção: Variantes === */
 .botaoCopiar__escuro {
-  width: 106px;
-  height: 25px;
-  background: var(--cor-preto-suave);
-  border: 1px solid #5a5557;
+  border: 1px solid var(--cor-texto-suave);
+  background: var(--cor-preto);
   color: var(--cor-branco);
 }
 
 .botaoCopiar__escuro:hover {
-  background: #2a2628;
+  background: var(--cor-grafite);
 }
 
-/* === Seção: Variante rosa === */
+.botaoCopiar__escuro:focus-visible {
+  outline-color: var(--cor-acido);
+}
+
 .botaoCopiar__rosa {
-  width: 106px;
-  height: 25px;
+  border: 1px solid var(--cor-rosa-profundo);
   background: transparent;
-  border: 1px solid #8f1d47;
   color: var(--cor-preto);
 }
 
 .botaoCopiar__rosa:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.24);
 }
 
-/* === Seção: Variante clara (sobre fundos claros, como a janela de detalhes) === */
 .botaoCopiar__claro {
-  width: 106px;
-  height: 25px;
+  border: var(--borda);
   background: var(--cor-branco);
-  border: 1px solid var(--cor-preto);
   color: var(--cor-preto);
 }
 

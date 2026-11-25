@@ -20,6 +20,9 @@ export default function PaginaCasaDaGom(props: PageProps<"/casa-da-gom">) {
 
 async function ConteudoCasaDaGom({ searchParams }: PageProps<"/casa-da-gom">) {
   const usuario = await exigirUsuario("/casa-da-gom");
-  const [caixas, parametros] = await Promise.all([obterCaixasNaCasa(usuario.id), searchParams]);
+  const [caixas, parametros] = await Promise.all([
+    obterCaixasNaCasa(usuario.id),
+    searchParams,
+  ]);
   return <TelaCasaDaGom caixas={caixas} eu={usuario} parametros={parametros} />;
 }

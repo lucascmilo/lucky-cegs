@@ -1,7 +1,7 @@
-/* === Seção: Título cortado com "…" === */
+/* === Seção: Título cortado === */
 .textoCortado {
-  display: block;
   position: relative;
+  display: block;
   min-width: 0;
 }
 
@@ -34,13 +34,13 @@
 /* === Seção: Balão com o texto inteiro === */
 .textoCortado__balao {
   position: absolute;
-  top: -10px;
-  left: -12px;
+  top: -8px;
+  left: 0;
   z-index: 5;
-  width: calc(100% + 24px);
+  width: 100%;
+  min-width: min(220px, 100%);
   padding: 10px 12px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 12px;
+  border: var(--borda);
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
   white-space: normal;
@@ -52,5 +52,11 @@
   from {
     opacity: 0;
     transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .textoCortado__balao {
+    animation: none;
   }
 }

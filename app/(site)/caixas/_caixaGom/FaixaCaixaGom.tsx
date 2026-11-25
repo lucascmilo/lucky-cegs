@@ -7,18 +7,18 @@ import { mostrarAviso } from "@/componentes/AvisoFlutuante";
 import { IconeLapis, IconeMegafone } from "@/componentes/Icones";
 import JanelaConfirmar from "@/componentes/JanelaConfirmar";
 import { juntarClasses } from "@/lib/classes";
-import { ETAPAS_CAIXA, obterEtapaCaixa, type EtapaCaixa } from "@/lib/etapas";
+import { chamar } from "@/lib/conexao";
+import { ETAPAS_CAIXA, type EtapaCaixa, obterEtapaCaixa } from "@/lib/etapas";
 import type { AvisoEnviado, CaixaGom, JoinerOpcao } from "@/lib/planilhaCaixa";
-import brilhoAmarelo from "@/public/imagens/brilho-amarelo.png";
-import fotoCaixasGom from "@/public/imagens/caixas-gom-foto.png";
+import trevoFoto from "@/public/imagens/adesivo-trevo-foto.png";
 import codigoBarras from "@/public/imagens/codigo-barras.png";
-import coracaoBranco from "@/public/imagens/coracao-branco.png";
-import { mudarSituacaoCaixa } from "../acoes";
+import coracaoBranco from "@/public/imagens/coracao-branco.svg";
+import fotoCaixasGom from "@/public/imagens/modelo-caixas-gom.png";
 import NomeCaixa from "../_caixa/NomeCaixa";
+import { mudarSituacaoCaixa } from "../acoes";
 import JanelaAviso from "./JanelaAviso";
 import JanelaCaixa from "./JanelaCaixa";
 import JanelaItem from "./JanelaItem";
-import { chamar } from "@/lib/conexao";
 
 type PropsFaixaCaixaGom = {
   caixa: CaixaGom;
@@ -34,6 +34,40 @@ type PropsFaixaCaixaGom = {
 };
 
 type Janela = "novoItem" | "novaCaixa" | "editarCaixa" | "aviso" | null;
+
+const ORDEM_ORIGEM: Record<string, number> = {
+  JP: 0,
+  KR: 1,
+  CH: 2,
+  PH: 3,
+};
+
+function analisarCaixaOrdenacao(item: CaixaGom) {
+  const correspondencia = item.nome.match(/(\d+)/);
+  const numero = correspondencia ? Number(correspondencia[1]) : Number.MAX_SAFE_INTEGER;
+
+  const origemBruta =
+    (item as CaixaGom & { origem?: string }).origem ??
+    item.nome.match(/\b(JP|KR|CH|PH)\b/i)?.[1] ??
+    "";
+  const origem = origemBruta.trim().toUpperCase();
+  const pesoOrigem = ORDEM_ORIGEM[origem] ?? 99;
+
+  return { numero, pesoOrigem, origem };
+}
+
+function compararCaixasGom(a: CaixaGom, b: CaixaGom) {
+  const infoA = analisarCaixaOrdenacao(a);
+  const infoB = analisarCaixaOrdenacao(b);
+
+  if (infoA.numero !== infoB.numero) {
+    return infoA.numero - infoB.numero;
+  }
+  if (infoA.pesoOrigem !== infoB.pesoOrigem) {
+    return infoA.pesoOrigem - infoB.pesoOrigem;
+  }
+  return infoA.origem.localeCompare(infoB.origem, "pt-BR");
+}
 
 // Tira só o parâmetro que abriu a janela (busca e filtro da planilha continuam no endereço)
 function limparEndereco(parametro: string) {
@@ -54,7 +88,9 @@ export default function FaixaCaixaGom({
   abrirNovoItem,
   abrirNovaCaixa,
 }: PropsFaixaCaixaGom) {
-  const [janela, setJanela] = useState<Janela>(abrirNovaCaixa ? "novaCaixa" : abrirNovoItem ? "novoItem" : null);
+  const [janela, setJanela] = useState<Janela>(
+    abrirNovaCaixa ? "novaCaixa" : abrirNovoItem ? "novoItem" : null,
+  );
   // Cada abertura monta uma janela nova (se uma anterior não desmontou ao fechar, ela não trava o botão)
   const [vez, setVez] = useState(0);
 
@@ -83,7 +119,8 @@ export default function FaixaCaixaGom({
     if (linha && ativa) {
       const caixaLinha = linha.getBoundingClientRect();
       const caixaAtiva = ativa.getBoundingClientRect();
-      linha.scrollLeft += caixaAtiva.left - caixaLinha.left - (caixaLinha.width - caixaAtiva.width) / 2;
+      linha.scrollLeft +=
+        caixaAtiva.left - caixaLinha.left - (caixaLinha.width - caixaAtiva.width) / 2;
     }
     medirBordas();
     const observador = new ResizeObserver(medirBordas);
@@ -111,6 +148,8 @@ export default function FaixaCaixaGom({
     });
   }
 
+  const caixasOrdenadas = [...caixas].sort(compararCaixasGom);
+
   return (
     <section className="caixaTopo caixaGomTopo">
       <div className="caixaTopo__conteudo caixaGomTopo__conteudo">
@@ -118,7 +157,7 @@ export default function FaixaCaixaGom({
           <NomeCaixa nome={caixa.nome} />
         </h1>
 
-        {/* === Seção: Todas as caixas, da mais antiga para a mais recente === */}
+        {/* === Seção: Todas as caixas, ordenadas por número e origem (JP > KR > CH > PH) === */}
         <nav className="caixaGomTopo__navCaixas" aria-label="Caixas">
           <button
             type="button"
@@ -136,7 +175,7 @@ export default function FaixaCaixaGom({
             )}
             onScroll={medirBordas}
           >
-            {caixas.map((item) => (
+            {caixasOrdenadas.map((item) => (
               <Link
                 key={item.id}
                 href={`/caixas/${item.id}`}
@@ -154,7 +193,11 @@ export default function FaixaCaixaGom({
 
         {/* === Seção: Adicionar item, situação e editar a caixa === */}
         <div className="caixaGomTopo__acoes">
-          <button type="button" className="botao botao__rosa caixaGomTopo__adicionar" onClick={() => abrir("novoItem")}>
+          <button
+            type="button"
+            className="botao botao__rosa caixaGomTopo__adicionar"
+            onClick={() => abrir("novoItem")}
+          >
             + Adicionar item
           </button>
 
@@ -184,7 +227,7 @@ export default function FaixaCaixaGom({
               aria-label={`Postar aviso para os joiners da ${caixa.nome}`}
               title="Postar aviso"
             >
-              <IconeMegafone />
+              <IconeMegafone aria-hidden="true" />
             </button>
             <button
               type="button"
@@ -193,7 +236,7 @@ export default function FaixaCaixaGom({
               aria-label={`Editar ${caixa.nome}`}
               title="Editar caixa"
             >
-              <IconeLapis tamanho={18} />
+              <IconeLapis tamanho={18} aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -203,8 +246,14 @@ export default function FaixaCaixaGom({
           <span className="caixaTopo__quadrado caixaGomTopo__quadrado" />
           <Image src={fotoCaixasGom} alt="" sizes="190px" className="caixaTopo__foto" priority />
           <Image src={codigoBarras} alt="" sizes="160px" className="caixaTopo__codigoBarras" />
-          <Image src={brilhoAmarelo} alt="" className="caixaTopo__brilho" />
-          <Image src={coracaoBranco} alt="" className="caixaTopo__coracao" />
+          <Image
+            src={coracaoBranco}
+            alt=""
+            width={40}
+            height={40}
+            className="caixaTopo__coracao"
+          />
+          <Image src={trevoFoto} alt="" sizes="90px" className="caixaTopo__adesivoTrevo" />
         </div>
       </div>
 
@@ -218,7 +267,8 @@ export default function FaixaCaixaGom({
           aoConfirmar={() => confirmarSituacao(novaSituacao)}
         >
           <p>
-            <strong>{caixa.nome}</strong> passa para <strong>{obterEtapaCaixa(novaSituacao).rotulo}</strong>.
+            <strong>{caixa.nome}</strong> passa para{" "}
+            <strong>{obterEtapaCaixa(novaSituacao).rotulo}</strong>.
           </p>
           <p>
             {novaSituacao === "warehouse"
@@ -236,20 +286,39 @@ export default function FaixaCaixaGom({
       )}
 
       {janela === "novoItem" && (
-        <JanelaItem key={vez} caixa={caixa} caixas={caixas} joiners={joiners} aoFechar={fecharJanela} aoSalvar={mostrarAviso} />
+        <JanelaItem
+          key={vez}
+          caixa={caixa}
+          caixas={caixas}
+          joiners={joiners}
+          aoFechar={fecharJanela}
+          aoSalvar={mostrarAviso}
+        />
       )}
 
       {janela === "aviso" && (
-        <JanelaAviso key={vez} caixaId={caixa.id} nomeCaixa={caixa.nome} joiners={joinersDaCaixa}
+        <JanelaAviso
+          key={vez}
+          caixaId={caixa.id}
+          nomeCaixa={caixa.nome}
+          joiners={joinersDaCaixa}
           enviados={avisos}
           aoFechar={fecharJanela}
         />
       )}
 
-      {janela === "novaCaixa" && <JanelaCaixa key={vez} caixas={caixas} aoFechar={fecharJanela} />}
+      {janela === "novaCaixa" && (
+        <JanelaCaixa key={vez} caixas={caixas} aoFechar={fecharJanela} />
+      )}
 
       {janela === "editarCaixa" && (
-        <JanelaCaixa key={vez} caixas={caixas} caixa={caixa} totalRegistros={totalRegistros} aoFechar={fecharJanela} />
+        <JanelaCaixa
+          key={vez}
+          caixas={caixas}
+          caixa={caixa}
+          totalRegistros={totalRegistros}
+          aoFechar={fecharJanela}
+        />
       )}
     </section>
   );

@@ -1,20 +1,18 @@
 /* === Seção: Escala da tela === */
 .caixaGom {
   --px-pagina: calc(var(--px-caixa) * 0.9);
-  --cor-pago: #006329;
-  --cor-a-pagar: #9e1517;
-  --cor-texto-suave: #4a4547;
+  --cor-amarelo-faixa: #fff1c1;
   display: flex;
   flex: 1;
   flex-direction: column;
 }
 
-/* === Seção: Seletor (situação, caixas) === */
+/* === Seção: Seletor === */
 .seletorGom {
   height: 100%;
   padding: 0 calc(var(--px-caixa) * 44) 0 calc(var(--px-caixa) * 20);
-  border: 1px solid var(--cor-preto);
-  border-radius: var(--raio-pilula);
+  border: var(--borda);
+  border-radius: 0;
   background: var(--cor-branco)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23151214' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
     right calc(var(--px-caixa) * 18) center / 12px no-repeat;
@@ -27,44 +25,57 @@
 }
 
 .seletorGom:focus-visible {
-  border-color: var(--cor-rosa-escuro);
-  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
+  border-color: var(--cor-rosa-texto);
+  box-shadow: var(--anel-foco);
   outline: none;
 }
 
 .seletorGom:disabled {
   background-color: var(--cor-bege-claro);
-  cursor: not-allowed;
   opacity: 0.7;
+  cursor: not-allowed;
 }
 
-/* === Seção: Faixa amarela do topo === */
+/* === Seção: Faixa do topo === */
 .caixaGomTopo {
-  background: #fff1c1;
+  position: relative;
+  background: var(--cor-papel);
+  overflow: hidden;
+}
+
+.caixaGomTopo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.15;
+  background-image: url("/imagens/campo-pixels.svg");
+  background-repeat: repeat;
 }
 
 .caixaGomTopo__conteudo {
+  position: relative;
+  z-index: 1;
   min-height: calc(var(--px-caixa) * 350);
-  padding: calc(var(--px-caixa) * 64) 0 calc(var(--px-caixa) * 64);
+  padding: calc(var(--px-caixa) * 60) 0;
 }
 
-/* Mesmo tamanho do título de Termos */
 .caixaGomTopo .caixaTopo__titulo {
-  max-width: calc(var(--px-caixa) * 640);
+  max-width: min(calc(var(--px-caixa) * 640), calc(100% - var(--px-caixa) * 360));
   font-size: max(36px, var(--px-faixa) * 80);
-  line-height: 0.781;
+  line-height: 0.84;
 }
 
 .caixaGomTopo .caixaTopo__nome {
-  font-size: min(1em, var(--px-caixa) * 640 / (var(--letras) * 0.8));
+  font-size: min(1em, var(--px-caixa) * 640 / (var(--letras, 8) * 0.8));
 }
 
-/* Linha das caixas: as pílulas rolam para o lado e o "+ Nova Caixa" fica sempre à vista no fim */
 .caixaGomTopo__navCaixas {
   display: flex;
   align-items: flex-start;
   gap: calc(var(--px-caixa) * 15);
-  max-width: calc(var(--px-caixa) * 700);
+  max-width: min(calc(var(--px-caixa) * 700), calc(100% - var(--px-caixa) * 360));
   margin-top: calc(var(--px-caixa) * 28);
 }
 
@@ -83,11 +94,10 @@
   scroll-padding-inline: 3px;
 }
 
-/* Só no Firefox: no Chrome, scrollbar-color desativaria as regras ::-webkit-scrollbar */
 @supports (-moz-appearance: none) {
   .caixaGomTopo__caixas {
     scrollbar-width: thin;
-    scrollbar-color: var(--cor-rosa-escuro) rgba(21, 18, 20, 0.1);
+    scrollbar-color: var(--cor-rosa-texto) rgba(21, 18, 20, 0.1);
   }
 }
 
@@ -108,7 +118,7 @@
 .caixaGomTopo__caixas::-webkit-scrollbar-thumb {
   border: 0;
   border-radius: var(--raio-pilula);
-  background: var(--cor-rosa-escuro);
+  background: var(--cor-rosa-texto);
 }
 
 .caixaGomTopo__caixas::-webkit-scrollbar-button {
@@ -120,7 +130,6 @@
   background: var(--cor-rosa-profundo);
 }
 
-/* Degradê no lado em que ainda tem pílula escondida (a barra embaixo fica inteira) */
 .caixaGomTopo__caixasAntes,
 .caixaGomTopo__caixasDepois {
   mask:
@@ -153,21 +162,28 @@
 
 .caixaGomTopo__novaCaixa {
   background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
   font-family: inherit;
-  box-shadow: 0 6px 14px -8px rgba(21, 18, 20, 0.45);
+}
+
+.caixaGomTopo__novaCaixa:hover,
+.caixaGomTopo__editarCaixa:hover,
+.planilhaGom__editar:hover {
+  background: var(--cor-rosa-claro);
 }
 
 .caixaGomTopo__acoes {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 16px calc(var(--px-caixa) * 48);
+  gap: 16px calc(var(--px-caixa) * 40);
+  max-width: calc(100% - var(--px-caixa) * 360);
   margin-top: calc(var(--px-caixa) * 22);
 }
 
 .caixaGomTopo__adicionar {
   width: calc(var(--px-caixa) * 250);
-  height: calc(var(--px-caixa) * 50);
+  min-height: max(46px, calc(var(--px-caixa) * 50));
   padding: 0 16px;
 }
 
@@ -184,14 +200,27 @@
 
 .caixaGomTopo__seletor {
   width: calc(var(--px-caixa) * 250);
-  height: calc(var(--px-caixa) * 50);
+  height: max(46px, calc(var(--px-caixa) * 50));
+}
+
+.caixaGomTopo__editarCaixa {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: max(44px, var(--px-caixa) * 50);
+  height: max(44px, var(--px-caixa) * 50);
+  margin-left: calc(var(--px-caixa) * 6);
+  padding: 0;
+  border: var(--borda);
+  background: var(--cor-branco);
+  transition: background-color 0.15s ease;
 }
 
 .caixaGomTopo__quadrado {
   background: var(--cor-azul-colagem);
 }
 
-/* === Seção: Conteúdo (resumo e planilha) === */
+/* === Seção: Conteúdo e resumo === */
 .caixaGom__conteudo {
   width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   margin-inline: auto;
@@ -203,8 +232,9 @@
   flex-direction: column;
   font-family: var(--fonte-titulo);
   font-size: max(28px, var(--px-caixa) * 38);
-  font-weight: 400;
-  line-height: 0.845;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
+  line-height: 0.9;
   letter-spacing: 0.01em;
   color: var(--cor-preto);
 }
@@ -213,14 +243,12 @@
   color: var(--cor-rosa);
 }
 
-/* === Seção: Resumo da caixa === */
 .caixaGom__resumo {
   display: grid;
   grid-template-columns: 145fr 165fr 129fr 146fr 141fr 117fr 106fr 115fr 96fr;
   min-height: calc(var(--px-caixa) * 100);
   margin: calc(var(--px-caixa) * 30) 0 0;
-  border: 1px solid var(--cor-preto);
-  border-radius: 14px;
+  border: var(--borda);
   background: var(--cor-branco);
   overflow: hidden;
 }
@@ -230,7 +258,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: calc(var(--px-caixa) * 14);
+  gap: calc(var(--px-caixa) * 12);
   min-width: 0;
   padding: 12px calc(var(--px-caixa) * 8);
   text-align: center;
@@ -255,14 +283,34 @@
 }
 
 .caixaGom__negativo {
-  color: var(--cor-a-pagar);
+  color: var(--cor-erro);
 }
 
 .caixaGom__registros {
   margin-top: calc(var(--px-caixa) * 48);
 }
 
-/* === Seção: Busca e ordem === */
+.caixaGom__topoRegistros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 24px;
+}
+
+.caixaGom__acoesLote {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.caixaGom__botaoLote {
+  min-height: 44px;
+  padding: 8px 18px;
+  font-size: max(14px, var(--px-caixa) * 15);
+}
+
+/* === Seção: Busca, ordem e filtros === */
 .planilhaGom__ferramentas {
   display: flex;
   gap: calc(var(--px-caixa) * 20);
@@ -275,21 +323,20 @@
   align-items: center;
   gap: 10px;
   height: calc(var(--px-caixa) * 52);
-  min-height: 44px;
+  min-height: 46px;
   padding: 0 18px;
-  border: 1px solid var(--cor-preto);
-  border-radius: var(--raio-pilula);
+  border: var(--borda);
   background: var(--cor-branco);
 }
 
 .planilhaGom__busca:focus-within {
-  border-color: var(--cor-rosa-escuro);
-  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
+  border-color: var(--cor-rosa-texto);
+  box-shadow: var(--anel-foco);
 }
 
 .planilhaGom__iconeBusca {
   flex-shrink: 0;
-  color: #6b6466;
+  color: var(--cor-texto-suave);
 }
 
 .planilhaGom__campoBusca {
@@ -303,20 +350,33 @@
 }
 
 .planilhaGom__campoBusca::placeholder {
-  color: #6b6466;
+  color: var(--cor-texto-suave);
+}
+
+.planilhaGom__atalho {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--cor-borda-bege);
+  background: var(--cor-bege-claro);
+  font-family: var(--fonte-texto);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cor-texto-suave);
 }
 
 .planilhaGom__ordem {
   display: flex;
-  gap: calc(var(--px-caixa) * 25);
+  gap: calc(var(--px-caixa) * 20);
 }
 
 .planilhaGom__botaoOrdem {
   width: calc(var(--px-caixa) * 140);
   height: calc(var(--px-caixa) * 52);
-  min-height: 44px;
-  border: 1px solid var(--cor-preto);
-  border-radius: var(--raio-pilula);
+  min-height: 46px;
+  border: var(--borda);
   background: var(--cor-branco);
   font-size: max(14px, var(--px-caixa) * 16);
   font-weight: 700;
@@ -333,7 +393,68 @@
   color: var(--cor-branco);
 }
 
-/* === Seção: Barra preta dos selecionados === */
+.planilhaGom__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: calc(var(--px-caixa) * 16);
+}
+
+.planilhaGom__filtro {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 8px 0 14px;
+  border: var(--borda);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-branco);
+  font-size: max(13px, var(--px-caixa) * 14);
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.planilhaGom__filtro:hover {
+  background: var(--cor-rosa-claro);
+}
+
+.planilhaGom__filtroAtivo,
+.planilhaGom__filtroAtivo:hover {
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+}
+
+.planilhaGom__quantos {
+  min-width: 24px;
+  padding: 2px 7px;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-bege);
+  font-size: 12px;
+  color: var(--cor-preto);
+  font-variant-numeric: tabular-nums;
+}
+
+.planilhaGom__filtroAtivo .planilhaGom__quantos {
+  background: var(--cor-rosa);
+  color: var(--cor-preto);
+}
+
+.planilhaGom__corEtapa {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border: var(--borda);
+  background: var(--cor-etapa);
+  vertical-align: middle;
+}
+
+.planilhaGom__filtro .planilhaGom__corEtapa {
+  margin-right: 0;
+}
+
+/* === Seção: Barra dos selecionados === */
 .planilhaGom__barra {
   display: flex;
   flex-wrap: wrap;
@@ -342,8 +463,7 @@
   gap: 10px 20px;
   min-height: calc(var(--px-caixa) * 64);
   margin-top: calc(var(--px-caixa) * 20);
-  padding: 9px calc(var(--px-caixa) * 12) 9px calc(var(--px-caixa) * 28);
-  border-radius: 16px;
+  padding: 10px calc(var(--px-caixa) * 14) 10px calc(var(--px-caixa) * 24);
   background: var(--cor-preto);
   color: var(--cor-branco);
 }
@@ -358,7 +478,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px calc(var(--px-caixa) * 27);
+  gap: 10px calc(var(--px-caixa) * 20);
 }
 
 .planilhaGom__rotuloMover {
@@ -369,31 +489,58 @@
 .planilhaGom__destino {
   width: calc(var(--px-caixa) * 190);
   height: calc(var(--px-caixa) * 44);
-  min-height: 40px;
+  min-height: 44px;
 }
 
 .planilhaGom__botaoMover {
   width: calc(var(--px-caixa) * 110);
   height: calc(var(--px-caixa) * 44);
-  min-height: 40px;
+  min-height: 44px;
   border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: var(--raio-pilula);
   background: var(--cor-rosa);
   font-size: max(14px, var(--px-caixa) * 16);
   font-weight: 700;
-  color: var(--cor-branco);
+  color: var(--cor-preto);
   transition:
     background-color 0.15s ease,
+    color 0.15s ease,
     opacity 0.15s ease;
 }
 
 .planilhaGom__botaoMover:hover:not(:disabled) {
-  background: var(--cor-rosa-escuro);
+  background: var(--cor-rosa-texto);
+  color: var(--cor-branco);
 }
 
 .planilhaGom__botaoMover:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+.planilhaGom__desfazer {
+  min-height: 36px;
+  margin-left: 12px;
+  padding: 4px 12px;
+  border: 1px solid var(--cor-branco);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cor-branco);
+  transition: background-color 0.15s ease;
+}
+
+.planilhaGom__desfazer:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.planilhaGom__desfazer:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.planilhaGom__botaoMover:focus-visible,
+.planilhaGom__desfazer:focus-visible {
+  outline-color: var(--cor-acido);
 }
 
 .planilhaGom__erro {
@@ -408,13 +555,13 @@
   position: relative;
   margin-top: calc(var(--px-caixa) * 32);
   padding: calc(var(--px-pagina) * 30) 0 calc(var(--px-pagina) * 12);
-  border-radius: 14px;
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
 }
 
 .planilhaGom__legenda {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
   gap: 6px;
@@ -427,7 +574,6 @@
 .planilhaGom__ponto {
   width: 9px;
   height: 9px;
-  border-radius: 50%;
 }
 
 .planilhaGom__ponto + .planilhaGom__ponto,
@@ -436,11 +582,11 @@
 }
 
 .planilhaGom__pontoPago {
-  background: var(--cor-pago);
+  background: var(--cor-ok-texto);
 }
 
 .planilhaGom__pontoAPagar {
-  background: var(--cor-a-pagar);
+  background: var(--cor-erro);
 }
 
 .planilhaGom__tabela {
@@ -492,7 +638,7 @@
 .planilhaGom__tabela thead th {
   height: max(40px, var(--px-caixa) * 45);
   border-bottom: 1px solid var(--cor-preto);
-  font-size: max(11px, var(--px-caixa) * 12);
+  font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -511,7 +657,7 @@
 }
 
 .planilhaGom__tabela tbody tr + tr {
-  border-top: 1px dashed #d6d3d3;
+  border-top: 1px dashed var(--cor-preto);
 }
 
 .planilhaGom__tabela tbody td {
@@ -519,7 +665,6 @@
   font-weight: 500;
 }
 
-/* Dinheiro: com valor muito alto, o número desce para baixo do "R$" em vez de invadir a coluna ao lado */
 .planilhaGom__dinheiro {
   display: inline-block;
   line-height: 1.2;
@@ -535,7 +680,6 @@
   white-space: nowrap;
 }
 
-/* A área de toque é maior que a caixa desenhada */
 .planilhaGom__tabela :is(th, td):first-child {
   padding: 0;
 }
@@ -556,8 +700,7 @@
   width: 20px;
   height: 20px;
   margin: 0;
-  border: 1.5px solid var(--cor-preto);
-  border-radius: 6px;
+  border: var(--borda);
   background: var(--cor-branco);
   appearance: none;
   cursor: pointer;
@@ -570,7 +713,8 @@
   content: "";
   width: 12px;
   height: 12px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m2.5 6.2 2.4 2.4 4.6-5' fill='none' stroke='%23fff' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m2.5 6.2 2.4 2.4 4.6-5' fill='none' stroke='%23fff' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
   transform: scale(0);
   transition: transform 0.18s cubic-bezier(0.3, 1.4, 0.5, 1);
 }
@@ -598,7 +742,7 @@
 }
 
 .planilhaGom__marcar:focus-visible {
-  outline: 2px solid var(--cor-rosa-escuro);
+  outline: 2px solid var(--cor-rosa-texto);
   outline-offset: 2px;
 }
 
@@ -606,7 +750,6 @@
   opacity: 0.35;
   cursor: not-allowed;
 }
-
 
 .planilhaGom__nome {
   font-size: max(13px, var(--px-caixa) * 14);
@@ -646,17 +789,17 @@
 .planilhaGom__editar {
   display: inline-grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
+  width: 34px;
+  height: 34px;
   padding: 0;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
+  border: var(--borda);
   background: var(--cor-branco);
+  transition: background-color 0.15s ease;
 }
 
-.planilhaGom__joiner {
+.planilhaGom__tabela tbody .planilhaGom__joiner {
   overflow: hidden;
-  font-weight: 700 !important;
+  font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -672,26 +815,33 @@
 
 .planilhaGom__pago {
   font-weight: 700;
-  color: var(--cor-pago);
+  color: var(--cor-ok-texto);
 }
 
 .planilhaGom__aPagar {
   font-weight: 700;
-  color: var(--cor-a-pagar);
+  color: var(--cor-erro);
 }
 
 .planilhaGom__vazio,
 .planilhaGom__zero {
-  color: #a8a2a4;
+  color: var(--cor-texto-suave);
+  opacity: 0.72;
 }
 
 .planilhaGom__tabela .planilhaGom__linhaSet {
-  background: #ff81a3;
+  background: var(--cor-rosa);
+  color: var(--cor-preto);
+}
+
+.planilhaGom__linhaSet .planilhaGom__vazio,
+.planilhaGom__linhaSet .planilhaGom__zero {
+  color: var(--cor-preto);
+  opacity: 0.78;
 }
 
 .planilhaGom__seloSet {
   padding: 2px 7px;
-  border-radius: 6px;
   background: var(--cor-preto);
   font-size: 11px;
   letter-spacing: 0.04em;
@@ -707,36 +857,36 @@
   height: 48px;
 }
 
-.planilhaGom__membro {
-  padding-left: 30px !important;
+.planilhaGom__tabela tbody .planilhaGom__membro {
+  padding-left: 30px;
   font-size: 13px;
-  font-weight: 600 !important;
+  font-weight: 600;
   text-transform: lowercase;
 }
 
 .planilhaGom__membro::before {
   content: "↳ ";
-  color: var(--cor-rosa-escuro);
+  color: var(--cor-rosa-texto);
 }
 
 .planilhaGom__tabela .planilhaGom__selecionada {
-  background: rgba(236, 79, 121, 0.3);
+  background: rgba(234, 79, 128, 0.28);
 }
 
 .planilhaGom__tabela .planilhaGom__linhaSet.planilhaGom__selecionada {
-  background: #f26a91;
+  background: var(--cor-rosa);
 }
 
-.planilhaGom__nada {
+.planilhaGom__tabela tbody .planilhaGom__nada {
   height: 90px;
-  font-size: 14px !important;
-  color: #6b6466;
+  font-size: 14px;
+  color: var(--cor-texto-suave);
 }
 
 .planilhaGom__linhaTotal {
   height: 56px;
   border-top: 1px solid var(--cor-preto);
-  background: #fff4e8;
+  background: var(--cor-creme);
 }
 
 .planilhaGom__linhaTotal :is(th, td) {
@@ -746,14 +896,50 @@
 
 .planilhaGom__linhaTotal th {
   font-family: var(--fonte-titulo);
-  font-weight: 400;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   text-transform: uppercase;
 }
 
-/* Telas médias: a tabela rola para o lado sem apertar as colunas */
+.planilhaGom__verMais {
+  display: flex;
+  min-height: 44px;
+  margin: 18px auto 0;
+  padding: 0 22px;
+  font-size: 14px;
+}
+
+/* === Seção: Responsivo === */
+@media (pointer: coarse) {
+  .planilhaGom__atalho {
+    display: none;
+  }
+
+  .planilhaGom__editar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .planilhaGom__filtro,
+  .planilhaGom__desfazer {
+    min-height: 44px;
+  }
+}
+
+@media (min-width: 1181px) {
+  .planilhaGom__tabela thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--cor-branco);
+    box-shadow: inset 0 -1px 0 var(--cor-preto);
+  }
+}
+
 @media (max-width: 1180px) and (min-width: 861px) {
   .planilhaGom {
     overflow-x: auto;
+    overscroll-behavior-x: contain;
   }
 
   .planilhaGom__tabela {
@@ -765,25 +951,53 @@
   }
 }
 
-/* === Seção: Celular e tablet (cada item vira um cartão) === */
+@media (max-width: 1100px) {
+  .caixaGomTopo .caixaTopo__titulo,
+  .caixaGomTopo__navCaixas,
+  .caixaGomTopo__acoes {
+    max-width: calc(100% - var(--px-caixa) * 340);
+  }
+}
+
+@media (max-width: 1080px) {
+  .caixaGom__resumo {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .caixaGom__quadro + .caixaGom__quadro {
+    border-left: 0;
+  }
+
+  .caixaGom__quadro {
+    border-bottom: 1px solid var(--cor-preto);
+  }
+
+  .caixaGom__quadro:nth-child(n + 7) {
+    border-bottom: 0;
+  }
+
+  .caixaGom__quadro:not(:nth-child(3n + 1)) {
+    border-left: 1px solid var(--cor-preto);
+  }
+}
+
 @media (max-width: 860px) {
-  .caixaGomTopo .caixaTopo__titulo {
-    max-width: 100%;
+  .caixaGomTopo .caixaTopo__titulo,
+  .caixaGomTopo__navCaixas,
+  .caixaGomTopo__acoes {
+    max-width: none;
   }
 
   .caixaGomTopo .caixaTopo__nome {
-    font-size: min(1em, (var(--largura-tela) - 2 * var(--margem-lateral)) / (var(--letras) * 0.8));
+    font-size: min(1em, (var(--largura-tela) - 2 * var(--margem-lateral)) / (var(--letras, 8) * 0.8));
   }
 
   .caixaGomTopo__conteudo {
+    min-height: 0;
     padding: 40px 0 36px;
   }
 
-  .caixaGomTopo__navCaixas {
-    max-width: none;
-    gap: 10px;
-  }
-
+  .caixaGomTopo__navCaixas,
   .caixaGomTopo__caixas {
     gap: 10px;
   }
@@ -811,24 +1025,7 @@
   }
 
   .caixaGom__resumo {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     margin-top: 24px;
-  }
-
-  .caixaGom__quadro + .caixaGom__quadro {
-    border-left: 0;
-  }
-
-  .caixaGom__quadro {
-    border-bottom: 1px solid var(--cor-preto);
-  }
-
-  .caixaGom__quadro:nth-child(n + 7) {
-    border-bottom: 0;
-  }
-
-  .caixaGom__quadro:not(:nth-child(3n + 1)) {
-    border-left: 1px solid var(--cor-preto) !important;
   }
 
   .caixaGom__registros {
@@ -855,6 +1052,24 @@
     width: auto;
   }
 
+  .planilhaGom__filtros {
+    flex-wrap: nowrap;
+    margin-inline: calc(-1 * var(--margem-lateral));
+    padding: 2px var(--margem-lateral) 6px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .planilhaGom__filtros::-webkit-scrollbar {
+    display: none;
+  }
+
+  .planilhaGom__filtro {
+    flex-shrink: 0;
+    min-height: 44px;
+  }
+
   .planilhaGom__barra {
     margin-top: 16px;
     padding: 14px 16px;
@@ -867,6 +1082,13 @@
   .planilhaGom__destino {
     flex: 1;
     width: auto;
+    min-width: 0;
+  }
+
+  .planilhaGom__desfazer {
+    display: inline-block;
+    min-height: 44px;
+    margin: 6px 0 0;
   }
 
   .planilhaGom {
@@ -875,7 +1097,12 @@
   }
 
   .planilhaGom__legenda {
-    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .planilhaGom__editar {
+    width: 44px;
+    height: 44px;
   }
 
   .planilhaGom__tabela,
@@ -895,30 +1122,33 @@
     clip-path: inset(50%);
   }
 
-  /* Marcar e câmera ficam no canto; o nome ocupa a primeira linha; os valores vêm em duas colunas */
-  .planilhaGom__tabela tr {
+  .planilhaGom__tabela tbody tr,
+  .planilhaGom__tabela tfoot tr,
+  .planilhaGom__tabela .planilhaGom__linhaParte,
+  .planilhaGom__tabela .planilhaGom__linhaTotal {
     position: relative;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px 18px;
-    height: auto !important;
-    padding: 16px 16px 16px;
+    gap: 10px 16px;
+    height: auto;
+    min-height: 0;
+    padding: 16px;
   }
 
-  .planilhaGom__tabela :is(th, td) {
-    padding: 0 !important;
+  .planilhaGom__tabela :is(th, td),
+  .planilhaGom__tabela .planilhaGom__alinharEsquerda {
+    padding: 0;
     text-align: left;
   }
 
   .planilhaGom__celulaMarcar,
   .planilhaGom__celulaFotos {
     position: absolute;
-    top: 14px;
   }
 
   .planilhaGom__celulaMarcar {
-    left: 4px;
-    top: 8px;
+    top: 10px;
+    left: 6px;
   }
 
   .planilhaGom__areaMarcar {
@@ -926,38 +1156,58 @@
   }
 
   .planilhaGom__celulaFotos {
-    left: 46px;
+    top: 16px;
+    left: 48px;
   }
 
-  .planilhaGom__tabela .planilhaGom__nome,
-  .planilhaGom__tabela .planilhaGom__membro,
-  .planilhaGom__tabela .planilhaGom__linhaTotal th {
+  .planilhaGom__tabela .planilhaGom__nome {
     grid-column: 1 / -1;
-    min-height: 32px;
-    padding-left: 76px !important;
-    line-height: 32px;
+    min-height: 44px;
+    padding-left: 86px;
+    line-height: 1.3;
+  }
+
+  .planilhaGom__celulaNome {
+    flex-wrap: wrap;
+    gap: 6px 8px;
   }
 
   .planilhaGom__nomeTexto {
+    flex: 1 1 120px;
     white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  .planilhaGom__tabela tbody .planilhaGom__membro,
+  .planilhaGom__tabela .planilhaGom__linhaTotal th {
+    grid-column: 1 / -1;
+    min-height: 0;
+    padding-left: 0;
     line-height: 1.3;
+  }
+
+  .planilhaGom__tabela tbody .planilhaGom__joiner {
+    grid-column: 1 / -1;
+    overflow: visible;
+    white-space: normal;
   }
 
   .planilhaGom__tabela td[data-rotulo] {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 10px;
+    gap: 4px 8px;
     min-width: 0;
   }
 
   .planilhaGom__tabela td[data-rotulo]::before {
     content: attr(data-rotulo);
     flex-shrink: 0;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
-    color: #6b6466;
+    color: var(--cor-texto-suave);
   }
 
   .planilhaGom__tabela td[data-rotulo]:empty,
@@ -965,29 +1215,27 @@
   .planilhaGom__celulaVazia,
   .planilhaGom__linhaParte .planilhaGom__celulaMarcar,
   .planilhaGom__linhaParte .planilhaGom__celulaFotos {
-    display: none !important;
+    display: none;
   }
 
   .planilhaGom__tabela .planilhaGom__linhaParte {
-    margin-left: 22px;
-    border-left: 3px solid #ff81a3;
-    border-top: 0 !important;
+    margin-left: 16px;
+    border-left: 3px solid var(--cor-rosa);
+    border-top: 0;
   }
 
-  .planilhaGom__tabela .planilhaGom__membro,
-  .planilhaGom__tabela .planilhaGom__linhaTotal th {
-    padding-left: 0 !important;
-  }
-
-  .planilhaGom__tabela .planilhaGom__joiner {
-    grid-column: 1 / -1;
-  }
-
-  .planilhaGom__nada {
+  .planilhaGom__tabela tbody .planilhaGom__nada {
     display: block;
-    height: auto;
-    padding: 24px 16px !important;
     grid-column: 1 / -1;
+    height: auto;
+    padding: 24px 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .caixaGomTopo .caixaTopo__titulo {
+    font-size: clamp(28px, 9.5vw, 46px);
+    line-height: 0.88;
   }
 }
 
@@ -996,16 +1244,15 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* O lucro ocupa a linha inteira: os 9 quadros fecham em 5 linhas */
+  .caixaGom__quadro:not(:nth-child(3n + 1)) {
+    border-left: 0;
+  }
+
   .caixaGom__quadro:nth-child(3) {
     grid-column: 1 / -1;
   }
 
-  .caixaGom__quadro {
-    border-left: 0 !important;
-  }
-
-  .caixaGom__quadro:is(:nth-child(1), :nth-child(2n + 4)) {
+  .caixaGom__quadro:is(:nth-child(1), :nth-child(4), :nth-child(6), :nth-child(8)) {
     border-right: 1px solid var(--cor-preto);
   }
 
@@ -1028,190 +1275,28 @@
     min-width: 0;
   }
 
-  .planilhaGom__tabela tr {
-    gap: 8px 14px;
+  .caixaGom__acoesLote,
+  .caixaGom__botaoLote {
+    width: 100%;
   }
 }
 
-/* Título no celular igual ao de Termos */
-@media (max-width: 600px) {
-  .caixaGomTopo .caixaTopo__titulo {
-    font-size: clamp(28px, 9.5vw, 46px);
-    line-height: 0.82;
-  }
-}
-
-/* === Seção: Filtros rápidos da planilha === */
-.planilhaGom__filtros {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: calc(var(--px-caixa) * 16);
-}
-
-.planilhaGom__filtro {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 36px;
-  padding: 0 8px 0 14px;
-  border: 1px solid var(--cor-preto);
-  border-radius: var(--raio-pilula);
-  background: var(--cor-branco);
-  font-size: max(13px, var(--px-caixa) * 14);
-  font-weight: 700;
-  transition: background-color 0.15s ease;
-}
-
-.planilhaGom__filtro:hover {
-  background: var(--cor-rosa-claro);
-}
-
-.planilhaGom__filtroAtivo,
-.planilhaGom__filtroAtivo:hover {
-  background: var(--cor-preto);
-  color: var(--cor-branco);
-}
-
-.planilhaGom__quantos {
-  min-width: 24px;
-  padding: 2px 7px;
-  border-radius: var(--raio-pilula);
-  background: var(--cor-bege);
-  font-size: 12px;
-  color: var(--cor-preto);
-  font-variant-numeric: tabular-nums;
-}
-
-.planilhaGom__filtroAtivo .planilhaGom__quantos {
-  background: var(--cor-rosa);
-  color: var(--cor-branco);
-}
-
-.planilhaGom__corEtapa {
-  display: inline-block;
-  flex-shrink: 0;
-  width: 10px;
-  height: 10px;
-  margin-right: 6px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
-  background: var(--cor-etapa);
-  vertical-align: middle;
-}
-
-.planilhaGom__filtro .planilhaGom__corEtapa {
-  margin-right: 0;
-}
-
-.planilhaGom__desfazer {
-  margin-left: 12px;
-  padding: 4px 12px;
-  border: 1px solid var(--cor-branco);
-  border-radius: var(--raio-pilula);
-  background: transparent;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--cor-branco);
-  transition: background-color 0.15s ease;
-}
-
-.planilhaGom__desfazer:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.16);
-}
-
-.planilhaGom__desfazer:disabled {
-  opacity: 0.6;
-  cursor: progress;
-}
-
-/* Muitos itens: 50 por vez e o cabeçalho fica preso no topo ao rolar */
-.planilhaGom__verMais {
-  display: flex;
-  height: 44px;
-  margin: 18px auto 0;
-  padding: 0 22px;
-  font-size: 14px;
-}
-
-@media (min-width: 1181px) {
-  .planilhaGom__tabela thead th {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    background: var(--cor-branco);
-    box-shadow: inset 0 -1px 0 var(--cor-preto);
-  }
-}
-
-@media (max-width: 860px) {
-  .planilhaGom__filtros {
-    flex-wrap: nowrap;
-    margin-inline: calc(-1 * var(--margem-lateral));
-    padding: 2px var(--margem-lateral) 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
+@media (max-width: 420px) {
+  .planilhaGom__mover {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .planilhaGom__filtros::-webkit-scrollbar {
-    display: none;
+  .planilhaGom__destino,
+  .planilhaGom__botaoMover {
+    width: 100%;
   }
 
-  .planilhaGom__filtro {
-    flex-shrink: 0;
-    min-height: 40px;
-  }
-
-  .planilhaGom__desfazer {
-    display: inline-block;
-    margin: 6px 0 0;
-  }
-}
-
-.caixaGomTopo__editarCaixa {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: max(44px, var(--px-caixa) * 50);
-  height: max(44px, var(--px-caixa) * 50);
-  margin-left: calc(var(--px-caixa) * 6);
-  padding: 0;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
-  background: var(--cor-branco);
-  transition: background-color 0.15s ease;
-}
-
-.caixaGomTopo__editarCaixa:hover {
-  background: var(--cor-rosa-claro);
-}
-
-.caixaGomTopo__novaCaixa:hover {
-  background: var(--cor-rosa-claro);
-}
-
-.planilhaGom__editar:hover {
-  background: var(--cor-rosa-claro);
-}
-
-/* Dica do atalho "/" na busca: só com mouse e teclado */
-.planilhaGom__atalho {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  border: 1px solid var(--cor-borda-bege);
-  border-radius: 7px;
-  background: var(--cor-bege-claro);
-  font-family: var(--fonte-texto);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--cor-texto-suave);
-}
-
-@media (pointer: coarse) {
-  .planilhaGom__atalho {
-    display: none;
+  .planilhaGom__tabela tbody tr,
+  .planilhaGom__tabela tfoot tr,
+  .planilhaGom__tabela .planilhaGom__linhaParte,
+  .planilhaGom__tabela .planilhaGom__linhaTotal {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
 }

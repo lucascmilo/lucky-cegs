@@ -5,19 +5,37 @@
 
 /* === Seção: Faixa de título === */
 .termos__faixa {
+  position: relative;
   overflow: hidden;
   border-block: 1px solid var(--cor-preto);
-  background-color: var(--cor-creme);
+  background-color: var(--cor-papel);
+}
+
+.termos__faixa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.15;
+  background-image: url("/imagens/campo-pixels.svg");
+  background-repeat: repeat;
 }
 
 .termos__faixaConteudo {
   position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
-  height: calc(var(--px-faixa) * 328);
+  min-height: calc(var(--px-faixa) * 328);
   margin-inline: auto;
+  padding-block: 32px;
+}
+
+.termos__faixaConteudo > :not(.termos__colagem) {
+  max-width: calc(100% - var(--px-faixa) * 340);
 }
 
 /* === Seção: Colagem da faixa === */
@@ -25,9 +43,10 @@
   position: absolute;
   top: 50%;
   right: calc(var(--px-faixa) * -45);
-  transform: translateY(-45.64%);
   width: calc(var(--px-faixa) * 385);
   aspect-ratio: 385 / 264;
+  transform: translateY(-45.64%);
+  pointer-events: none;
 }
 
 .termos__colagem > * {
@@ -36,40 +55,40 @@
 }
 
 .termos__quadradoAzul {
-  left: 32.727%;
   top: 0;
+  left: 32.727%;
   width: 57.143%;
   height: 64.394%;
-  border: 1px solid var(--cor-preto);
-  background: var(--cor-azul-colagem);
+  border: var(--borda);
+  background: var(--cor-rosa) url("/imagens/fundo-trevos-rosa.svg") 0 0 / 60px 60px;
+}
+
+.termos__photocard,
+.termos__estrela,
+.termos__adesivo {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
 }
 
 .termos__photocard {
-  left: 0;
   top: 12.121%;
+  left: 0;
   width: 60.26%;
 }
 
 .termos__estrela {
-  left: 54.545%;
   top: 3.03%;
+  left: 54.545%;
   width: 45.455%;
 }
 
-.termos__brilho {
-  width: 5.195%;
-  transform: rotate(20deg);
-  transform-origin: 0 0;
-}
-
-.termos__brilhoUm {
-  left: 35.325%;
-  top: 3.03%;
-}
-
-.termos__brilhoDois {
-  left: 60.779%;
-  top: 68.182%;
+.termos__adesivo {
+  top: 60%;
+  left: 67%;
+  width: 22%;
+  transform: rotate(-7deg);
 }
 
 /* === Seção: Conteúdo === */
@@ -81,13 +100,14 @@
 .termos__introducao {
   margin-top: 53px;
   padding: 24px 48px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 20px;
+  border: var(--borda);
+  border-radius: 0;
+  background-color: var(--cor-branco);
   font-size: 16px;
   font-weight: 600;
   line-height: 23px;
   text-align: justify;
-  background-color: var(--cor-branco);
+  text-wrap: pretty;
 }
 
 .termos__corpo {
@@ -102,8 +122,8 @@
 .termos__cartao {
   margin-right: -2px;
   padding: 40px 35px 42.5px 33px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 20px;
+  border: var(--borda);
+  border-radius: 0;
   background-color: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
 }
@@ -132,7 +152,7 @@
 .termos__numeroSecao {
   flex: 0 0 40px;
   font-family: var(--fonte-pixel);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   color: var(--cor-rosa-texto);
 }
@@ -147,8 +167,8 @@
   font-size: 16px;
   line-height: 23px;
   text-align: justify;
-  hyphens: auto;
   text-wrap: pretty;
+  overflow-wrap: break-word;
 }
 
 .termos__secao:first-child .termos__itens {
@@ -164,8 +184,8 @@
   position: sticky;
   top: 24px;
   padding: 18.5px 12px 16.5px 20px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 20px;
+  border: var(--borda);
+  border-radius: 0;
   background-color: var(--cor-branco);
 }
 
@@ -178,7 +198,8 @@
 .indiceTermos__item {
   display: flex;
   align-items: center;
-  height: 50px;
+  min-height: 44px;
+  padding-block: 6px;
   color: var(--cor-preto);
   text-decoration: none;
 }
@@ -186,7 +207,7 @@
 .indiceTermos__numero {
   flex: 0 0 44px;
   font-family: var(--fonte-pixel);
-  font-size: 18px;
+  font-size: 16px;
   line-height: 20px;
   color: var(--cor-rosa-texto);
 }
@@ -194,15 +215,12 @@
 .indiceTermos__titulo {
   font-size: 17px;
   font-weight: 900;
-  line-height: 17px;
+  line-height: 1.15;
   white-space: pre-line;
   transition: color 0.15s ease;
 }
 
-.indiceTermos__item:hover .indiceTermos__titulo {
-  color: var(--cor-rosa-escuro);
-}
-
+.indiceTermos__item:hover .indiceTermos__titulo,
 .indiceTermos__itemAtivo .indiceTermos__titulo {
   color: var(--cor-rosa-texto);
 }
@@ -227,8 +245,8 @@
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-padding-inline: var(--margem-lateral);
+    scroll-snap-type: x proximity;
     scrollbar-width: none;
-    /* Esmaece a borda direita para indicar que dá para rolar as abas */
     mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent);
   }
 
@@ -237,12 +255,14 @@
   }
 
   .indiceTermos__item {
+    flex: none;
     gap: 8px;
-    height: 36px;
+    min-height: 44px;
     padding: 0 14px;
-    border: 1px solid var(--cor-preto);
-    border-radius: var(--raio-pilula);
+    border: var(--borda);
+    border-radius: 0;
     background: var(--cor-branco);
+    scroll-snap-align: start;
     white-space: nowrap;
     transition:
       background-color 0.15s ease,
@@ -251,7 +271,7 @@
 
   .indiceTermos__numero {
     flex: none;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1;
   }
 
@@ -262,8 +282,8 @@
   }
 
   .indiceTermos__itemAtivo {
-    background: var(--cor-rosa-escuro);
-    border-color: var(--cor-rosa-escuro);
+    background: var(--cor-rosa-texto);
+    border-color: var(--cor-rosa-texto);
   }
 
   .indiceTermos__itemAtivo .indiceTermos__titulo,
@@ -280,6 +300,10 @@
 @media (max-width: 1240px) {
   .termos__colagem {
     right: 0;
+  }
+
+  .termos__faixaConteudo > :not(.termos__colagem) {
+    max-width: calc(100% - var(--px-faixa) * 395);
   }
 
   .termos__corpo {
@@ -309,7 +333,6 @@
 }
 
 @media (max-width: 860px) {
-  /* minmax(0, …) deixa a barra de abas rolar por dentro, sem alargar a coluna */
   .termos__corpo {
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
@@ -321,14 +344,18 @@
   }
 
   .termos__secao {
-    scroll-margin-top: 76px;
+    scroll-margin-top: 84px;
   }
 }
 
 @media (max-width: 600px) {
   .termos__faixaConteudo {
-    height: auto;
+    min-height: 0;
     padding: 32px 0 24px;
+  }
+
+  .termos__faixaConteudo > :not(.termos__colagem) {
+    max-width: none;
   }
 
   .termos__colagem {
@@ -336,17 +363,18 @@
     top: auto;
     right: auto;
     align-self: center;
-    transform: none;
     width: min(78%, 280px);
     margin-top: 20px;
+    transform: none;
   }
 
   .termos__introducao {
     margin-top: 24px;
     padding: 18px 20px;
-    border-radius: 16px;
+    border-radius: 0;
     font-size: 15px;
     line-height: 22px;
+    text-align: left;
   }
 
   .termos__corpo {
@@ -355,7 +383,7 @@
 
   .termos__cartao {
     padding: 24px 18px 28px;
-    border-radius: 16px;
+    border-radius: 0;
   }
 
   .termos__tituloSecao {
@@ -370,5 +398,6 @@
   .termos__itens {
     font-size: 15px;
     line-height: 22px;
+    text-align: left;
   }
 }

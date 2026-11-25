@@ -1,21 +1,20 @@
 /* === Seção: Janela de detalhes === */
 .janelaDetalhes {
   --espaco-etapas: 34px;
-  width: min(680px, 100vw - 48px);
+  width: min(680px, 100vw - 2 * var(--margem-lateral));
   max-width: none;
-  max-height: calc(100svh - 48px);
+  max-height: calc(100svh - 32px);
   padding: 0;
   overflow: auto;
   overscroll-behavior: contain;
-  border: 1px solid var(--cor-preto);
-  border-radius: 20px;
-  background: #fbf9f6;
+  border: var(--borda);
+  border-radius: 0;
+  background: var(--cor-papel);
   box-shadow: var(--sombra-cartao);
   color: var(--cor-preto);
   animation: abrirJanela 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Fundo desfocado e um pouco escurecido: destaca a janela sem esconder de onde ela veio */
 .janelaDetalhes::backdrop {
   background: rgba(21, 18, 20, 0.35);
   backdrop-filter: blur(6px);
@@ -76,7 +75,7 @@ html:has(.janelaDetalhes[open]) {
   gap: 6px;
   width: 84px;
   height: 32px;
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 13px;
 }
 
@@ -99,13 +98,13 @@ html:has(.janelaDetalhes[open]) {
   width: 44px;
   height: 44px;
   padding: 0;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
+  border: var(--borda);
+  border-radius: 0;
   background: var(--cor-branco);
   color: var(--cor-preto);
   transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .janelaDetalhes__fechar svg {
@@ -118,12 +117,13 @@ html:has(.janelaDetalhes[open]) {
   color: var(--cor-branco);
 }
 
-/* === Seção: Nome, pílulas e abas === */
+/* === Seção: Título, pílulas e abas === */
 .janelaDetalhes__titulo {
   margin-top: 14px;
   font-family: var(--fonte-titulo);
-  font-size: 22px;
-  font-weight: 400;
+  font-size: clamp(19px, 3vw, 22px);
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: 1.2;
   text-transform: lowercase;
 }
@@ -131,8 +131,8 @@ html:has(.janelaDetalhes[open]) {
 .janelaDetalhes__pilulas {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 8px;
+  gap: 10px 12px;
+  margin-top: 10px;
 }
 
 .janelaDetalhes__pilulas .pilulaEtapa,
@@ -155,17 +155,17 @@ html:has(.janelaDetalhes[open]) {
 }
 
 .janelaDetalhes__aba {
-  height: 34px;
+  min-height: 38px;
   padding: 0 16px;
-  border: 1px solid var(--cor-preto);
+  border: var(--borda);
   border-radius: var(--raio-pilula);
   background: var(--cor-branco);
   font-size: 13px;
   font-weight: 700;
   color: var(--cor-preto);
   transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .janelaDetalhes__aba:hover {
@@ -182,7 +182,7 @@ html:has(.janelaDetalhes[open]) {
   margin-top: 16px;
 }
 
-/* === Seção: Aba Fotos (lado a lado) === */
+/* === Seção: Aba Fotos === */
 .janelaDetalhes__fotos {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -192,7 +192,7 @@ html:has(.janelaDetalhes[open]) {
 .janelaDetalhes__foto {
   aspect-ratio: 594 / 398;
   border-left-width: 14px;
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 .janelaDetalhes__foto .fotoItem__lupa {
@@ -227,8 +227,6 @@ html:has(.janelaDetalhes[open]) {
   margin-top: var(--espaco-etapas);
 }
 
-/* Linha até a próxima etapa: preta onde o item já passou, cinza no que falta.
-   Vai do círculo até o próximo, mesmo quando a etapa atual tem o quadro mais alto. */
 .linhaTempo__etapa:not(:last-child)::after {
   content: "";
   position: absolute;
@@ -236,13 +234,12 @@ html:has(.janelaDetalhes[open]) {
   bottom: calc(8px - var(--espaco-etapas));
   left: 14.5px;
   width: 3px;
-  border-radius: 2px;
   background: var(--cor-preto);
 }
 
 .linhaTempo__atual::after,
 .linhaTempo__futura::after {
-  background: #d8d2ca;
+  background: var(--cor-borda-bege);
 }
 
 .linhaTempo__marcador {
@@ -250,13 +247,12 @@ html:has(.janelaDetalhes[open]) {
   place-items: center;
   width: 32px;
   height: 32px;
-  border-radius: 50%;
   background: var(--cor-preto);
   color: var(--cor-branco);
 }
 
 .linhaTempo__futura .linhaTempo__marcador {
-  border: 2px solid #d8d2ca;
+  border: 2px solid var(--cor-borda-bege);
   background: var(--cor-branco);
 }
 
@@ -271,7 +267,6 @@ html:has(.janelaDetalhes[open]) {
   content: "";
   position: absolute;
   inset: -2px;
-  border-radius: 50%;
   border: 3px solid var(--cor-rosa);
   animation: pulsarEtapa 1.8s ease-out infinite;
 }
@@ -293,7 +288,7 @@ html:has(.janelaDetalhes[open]) {
 }
 
 .linhaTempo__futura .linhaTempo__rotulo {
-  color: #8a8386;
+  color: var(--cor-texto-suave);
 }
 
 .linhaTempo__data,
@@ -307,9 +302,8 @@ html:has(.janelaDetalhes[open]) {
 .linhaTempo__quadro {
   position: relative;
   grid-column: 2 / 4;
-  padding: 10px 14px 12px 12px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 12px;
+  padding: 12px 14px;
+  border: var(--borda);
   background: var(--cor-rosa-suave);
 }
 
@@ -320,13 +314,13 @@ html:has(.janelaDetalhes[open]) {
   padding: 0 10px;
   background: var(--cor-preto);
   font-family: var(--fonte-pixel);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--cor-branco);
 }
 
 .linhaTempo__dataAtual {
   position: absolute;
-  top: 11px;
+  top: 12px;
   right: 14px;
 }
 
@@ -341,7 +335,7 @@ html:has(.janelaDetalhes[open]) {
   margin-top: 4px;
   font-size: 13px;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 /* === Seção: Aba Pagamento === */
@@ -352,16 +346,18 @@ html:has(.janelaDetalhes[open]) {
 .pagamentoItem__linhas {
   margin: 0;
   padding: 0;
-  border-top: 1px solid #b5aea7;
+  border-top: 1px solid var(--cor-borda-bege);
   list-style: none;
 }
 
 .pagamentoItem__linha {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
+  gap: 8px 12px;
   min-height: 46px;
-  border-bottom: 1px solid #b5aea7;
+  padding-block: 6px;
+  border-bottom: 1px solid var(--cor-borda-bege);
 }
 
 .pagamentoItem__rotulo {
@@ -372,6 +368,7 @@ html:has(.janelaDetalhes[open]) {
 .pagamentoItem__valor {
   font-size: 14px;
   font-weight: 700;
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 
@@ -399,7 +396,6 @@ html:has(.janelaDetalhes[open]) {
   gap: 14px 24px;
   margin-top: 16px;
   padding: 14px 16px;
-  border-radius: 14px;
   background: var(--cor-rosa-suave);
 }
 
@@ -426,45 +422,47 @@ html:has(.janelaDetalhes[open]) {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 28px;
-  border: 1px solid var(--cor-preto);
+  min-height: 30px;
+  padding: 0 10px;
+  border: var(--borda);
   border-radius: var(--raio-pilula);
   background: var(--cor-branco);
   font-size: 13px;
   font-weight: 700;
+  overflow-wrap: anywhere;
+  user-select: all;
 }
 
 .pagamentoItem__aviso {
   font-size: 12px;
   font-weight: 500;
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
 .pagamentoItem__tudoPago {
   justify-content: center;
   gap: 10px;
-  background: #dcf3d3;
+  background: var(--cor-ok);
   font-size: 17px;
   font-weight: 700;
-  color: #2d6a1f;
+  color: var(--cor-ok-texto);
 }
 
-/* === Seção: Telas médias === */
+/* === Seção: Responsivo === */
 @media (max-width: 760px) {
   .janelaDetalhes__fotos {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-/* === Seção: Celular: folha que sobe da parte de baixo === */
 @media (max-width: 560px) {
   .janelaDetalhes {
-    --espaco-etapas: 36px;
+    --espaco-etapas: 32px;
     width: 100%;
     max-height: 92svh;
     margin: auto 0 0;
+    border-inline: 0;
     border-bottom: 0;
-    border-radius: 20px 20px 0 0;
     animation-name: subirFolha;
   }
 
@@ -473,7 +471,7 @@ html:has(.janelaDetalhes[open]) {
   }
 
   .janelaDetalhes__conteudo {
-    padding: 16px 16px 28px;
+    padding: 16px 16px max(28px, env(safe-area-inset-bottom));
   }
 
   .janelaDetalhes__topo {
@@ -483,24 +481,19 @@ html:has(.janelaDetalhes[open]) {
   .janelaDetalhes__etiqueta.etiquetaMeu {
     width: 78px;
     height: 30px;
-    font-size: 13px;
   }
 
   .janelaDetalhes__cabecalho {
     font-size: 14px;
   }
 
-  .janelaDetalhes__fechar {
-    width: 44px;
-    height: 44px;
-  }
-
-  .janelaDetalhes__titulo {
-    font-size: 19px;
+  .janelaDetalhes__aba {
+    flex: 1 1 auto;
+    min-height: 44px;
   }
 
   .linhaTempo__etapa {
-    column-gap: 16px;
+    column-gap: 14px;
   }
 
   .linhaTempo__rotulo,
@@ -515,6 +508,18 @@ html:has(.janelaDetalhes[open]) {
   }
 }
 
+@media (max-width: 480px) {
+  .linhaTempo__dataAtual {
+    position: static;
+    display: block;
+    margin-top: 6px;
+  }
+
+  .pagamentoItem__linha {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+}
+
 @keyframes subirFolha {
   from {
     transform: translateY(100%);
@@ -524,5 +529,12 @@ html:has(.janelaDetalhes[open]) {
 @keyframes descerFolha {
   to {
     transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .linhaTempo__atual .linhaTempo__marcador::before {
+    display: none;
+    animation: none;
   }
 }

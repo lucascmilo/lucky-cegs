@@ -5,7 +5,15 @@ import { useEffect, useRef, useState, useTransition, type ComponentType } from "
 import { limparNotificacoes, marcarNotificacoesLidas } from "@/lib/acoesNotificacoes";
 import { juntarClasses } from "@/lib/classes";
 import type { CaixaDeEntrada, Notificacao, TipoNotificacao } from "@/lib/notificacoes";
-import { IconeCaixa, IconeCamera, IconeCoracao, IconeEtiqueta, IconeFechar, IconeMegafone, IconeSino } from "./Icones";
+import {
+  IconeCaixa,
+  IconeCamera,
+  IconeCoracao,
+  IconeEtiqueta,
+  IconeFechar,
+  IconeMegafone,
+  IconeSino,
+} from "./Icones";
 import "@/estilos/componentes/SinoNotificacoes.css";
 
 // === Seção: Aparência de cada tipo ===
@@ -26,7 +34,11 @@ const APARENCIA: Record<TipoNotificacao, { Icone: ComponentType<{ tamanho?: numb
 // A cada 20 segundos (e quando a aba volta a aparecer) busca avisos novos, sem recarregar a página.
 const INTERVALO_BUSCA = 20_000;
 
-export default function SinoNotificacoes({ itens: itensServidor, naoLidas: naoLidasServidor, gom }: CaixaDeEntrada & { gom: boolean }) {
+export default function SinoNotificacoes({
+  itens: itensServidor,
+  naoLidas: naoLidasServidor,
+  gom,
+}: CaixaDeEntrada & { gom: boolean }) {
   const referencia = useRef<HTMLDivElement>(null);
   const [buscada, setBuscada] = useState<CaixaDeEntrada | null>(null);
   // Quando a página traz uma lista nova do servidor, ela passa a valer
@@ -88,7 +100,7 @@ export default function SinoNotificacoes({ itens: itensServidor, naoLidas: naoLi
     setConfirmandoLimpar(false);
     setNovas(new Set());
     setBuscada({ itens: [], naoLidas: 0 });
-    void limparNotificacoes();
+    iniciar(() => limparNotificacoes());
   }
 
   function alternar() {
@@ -101,7 +113,10 @@ export default function SinoNotificacoes({ itens: itensServidor, naoLidas: naoLi
     }
   }
 
-  const rotulo = naoLidas > 0 ? `Notificações, ${naoLidas} ${naoLidas === 1 ? "nova" : "novas"}` : "Notificações";
+  const rotulo =
+    naoLidas > 0
+      ? `Notificações, ${naoLidas} ${naoLidas === 1 ? "nova" : "novas"}`
+      : "Notificações";
 
   return (
     <div className="sino" ref={referencia}>
@@ -113,7 +128,7 @@ export default function SinoNotificacoes({ itens: itensServidor, naoLidas: naoLi
         aria-controls="lista-notificacoes"
         aria-label={rotulo}
       >
-        <IconeSino tamanho={20} />
+        <IconeSino tamanho={20} aria-hidden="true" />
         {naoLidas > 0 && (
           <span className="sino__contador" aria-hidden="true">
             {naoLidas > 9 ? "9+" : naoLidas}
@@ -145,7 +160,7 @@ export default function SinoNotificacoes({ itens: itensServidor, naoLidas: naoLi
           {itens.length === 0 ? (
             <div className="sino__vazio">
               <span className="sino__vazioIcone" aria-hidden="true">
-                <IconeSino tamanho={22} />
+                <IconeSino tamanho={22} aria-hidden="true" />
               </span>
               <p className="sino__vazioTitulo">Tudo quietinho por aqui</p>
               <p className="sino__vazioTexto">
@@ -157,7 +172,12 @@ export default function SinoNotificacoes({ itens: itensServidor, naoLidas: naoLi
           ) : (
             <ul className="sino__lista">
               {itens.map((item) => (
-                <ItemNotificacao key={item.id} item={item} nova={novas.has(item.id)} aoAbrir={() => setAberto(false)} />
+                <ItemNotificacao
+                  key={item.id}
+                  item={item}
+                  nova={novas.has(item.id)}
+                  aoAbrir={() => setAberto(false)}
+                />
               ))}
             </ul>
           )}
@@ -168,7 +188,15 @@ export default function SinoNotificacoes({ itens: itensServidor, naoLidas: naoLi
 }
 
 // === Seção: Uma notificação ===
-function ItemNotificacao({ item, nova, aoAbrir }: { item: Notificacao; nova: boolean; aoAbrir: () => void }) {
+function ItemNotificacao({
+  item,
+  nova,
+  aoAbrir,
+}: {
+  item: Notificacao;
+  nova: boolean;
+  aoAbrir: () => void;
+}) {
   const { Icone, cor } = APARENCIA[item.tipo];
   const conteudo = (
     <>
@@ -186,7 +214,11 @@ function ItemNotificacao({ item, nova, aoAbrir }: { item: Notificacao; nova: boo
   return (
     <li>
       {item.link ? (
-        <Link href={item.link} className={juntarClasses("sino__item", nova && "sino__itemNova")} onClick={aoAbrir}>
+        <Link
+          href={item.link}
+          className={juntarClasses("sino__item", nova && "sino__itemNova")}
+          onClick={aoAbrir}
+        >
           {conteudo}
         </Link>
       ) : (

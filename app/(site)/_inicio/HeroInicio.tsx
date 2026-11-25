@@ -1,16 +1,21 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import SeloPedidosAbertos from "@/componentes/SeloPedidosAbertos";
 import { juntarClasses } from "@/lib/classes";
-import codigoBarras from "@/public/imagens/codigo-barras.png";
-import colagemInicio from "@/public/imagens/inicio-colagem.webp";
+import coracaoFoto from "@/public/imagens/adesivo-coracao-foto.png";
+import colagemInicio from "@/public/imagens/inicio-modelo.png";
 import photocardInicio from "@/public/imagens/inicio-photocard.png";
 import "@/estilos/paginas/Inicio.css";
 
 // === Seção: Hero da tela inicial ===
 // "acoes": botões abaixo do texto (de conta para o visitante; do joiner com o "Falta pagar").
 // "textoAlto": sobe o texto para caber o bloco maior de ações do joiner.
-export default function HeroInicio({ acoes, textoAlto = false }: { acoes?: ReactNode; textoAlto?: boolean }) {
+export default function HeroInicio({
+  acoes,
+  textoAlto = false,
+}: {
+  acoes?: ReactNode;
+  textoAlto?: boolean;
+}) {
   return (
     <section className={juntarClasses("inicio__hero", textoAlto && "inicio__heroComAcoes")}>
       <div className="inicio__conteudo">
@@ -42,9 +47,8 @@ export default function HeroInicio({ acoes, textoAlto = false }: { acoes?: React
             sizes="(max-width: 860px) 90vw, 562px"
             className="inicio__imagemColagem"
           />
-          <Image src={photocardInicio} alt="" sizes="170px" className="inicio__photocard" />
-          <Image src={codigoBarras} alt="" sizes="163px" className="inicio__codigoBarras" />
-          <SeloPedidosAbertos className="inicio__selo" />
+          <Image src={photocardInicio} alt="" sizes="170px" className="painel__photocard" />
+          <Image src={coracaoFoto} alt="" sizes="100px" className="inicio__adesivoCoracao" />
         </div>
       </div>
     </section>

@@ -20,6 +20,7 @@ export default function FormularioEntrar() {
 
   async function enviarFormulario(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
+    if (enviando) return;
     setErro(null);
 
     const userLimpo = limparUser(user);
@@ -29,16 +30,24 @@ export default function FormularioEntrar() {
     }
 
     setEnviando(true);
-    const { error: falha } = await authClient.signIn.username({ username: userLimpo, password: senha });
+    try {
+      const { error: falha } = await authClient.signIn.username({
+        username: userLimpo,
+        password: senha,
+      });
 
-    if (falha) {
-      setErro(traduzirErroAutenticacao(falha.code, "entrar"));
+      if (falha) {
+        setErro(traduzirErroAutenticacao(falha.code, "entrar"));
+        setEnviando(false);
+        return;
+      }
+
+      roteador.push(destinoDepoisDoLogin());
+      roteador.refresh();
+    } catch {
+      setErro(traduzirErroAutenticacao(undefined, "entrar"));
       setEnviando(false);
-      return;
     }
-
-    roteador.push(destinoDepoisDoLogin());
-    roteador.refresh();
   }
 
   return (
@@ -55,7 +64,11 @@ export default function FormularioEntrar() {
             spellCheck={false}
             placeholder="Seu user no twitter…"
             value={user}
-            onChange={(evento) => setUser(evento.target.value)}
+            onChange={(evento) => {
+              setUser(evento.target.value);
+              if (erro) setErro(null);
+            }}
+            aria-invalid={Boolean(erro) || undefined}
           />
         </label>
 
@@ -67,14 +80,18 @@ export default function FormularioEntrar() {
             autoComplete="current-password"
             placeholder={`Mínimo de ${TAMANHO_MINIMO_SENHA} caracteres`}
             value={senha}
-            onChange={(evento) => setSenha(evento.target.value)}
+            onChange={(evento) => {
+              setSenha(evento.target.value);
+              if (erro) setErro(null);
+            }}
+            aria-invalid={Boolean(erro) || undefined}
           />
         </label>
       </div>
 
       <p className="formulario__esqueceu">
-        Esqueceu a senha? Peça para a GOM no grupo: ela manda uma senha provisória e você troca em Meu perfil depois de
-        entrar.
+        Esqueceu a senha? Peça para a GOM no grupo: ela manda uma senha provisória e você troca em Meu perfil depois
+        de entrar.
       </p>
 
       {/* === Seção: Erro === */}
@@ -85,7 +102,12 @@ export default function FormularioEntrar() {
       )}
 
       {/* === Seção: Ações === */}
-      <button type="submit" className="formulario__botaoPrincipal" disabled={enviando}>
+      <button
+        type="submit"
+        className="formulario__botaoPrincipal"
+        disabled={enviando}
+        aria-busy={enviando}
+      >
         {enviando ? "Entrando…" : "Entrar"}
       </button>
 

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { juntarClasses } from "@/lib/classes";
-import "@/estilos/componentes/Novidade.css";
+import "@/estilos/componentes/PecasItem.css";
 
 // === Seção: Novidades desde a última visita ===
 // A última visita a cada caixa fica guardada só no navegador da pessoa.
@@ -32,13 +32,15 @@ type PropsSeloNovo = {
 };
 
 export function SeloNovo({ caixaId, atualizadoEm, texto = "NOVO", className }: PropsSeloNovo) {
+  const mudouEm = useMemo(() => new Date(atualizadoEm).getTime(), [atualizadoEm]);
+  const limiteSemVisita = useMemo(() => Date.now() - JANELA_SEM_VISITA, []);
+
   // No servidor nunca aparece; no navegador, compara com a última visita
   const ehNovo = useSyncExternalStore(
     inscrever,
     () => {
       const visita = lerVisita(caixaId);
-      const mudouEm = new Date(atualizadoEm).getTime();
-      return visita ? mudouEm > Number(visita) : Date.now() - mudouEm < JANELA_SEM_VISITA;
+      return visita ? mudouEm > Number(visita) : mudouEm > limiteSemVisita;
     },
     () => false,
   );

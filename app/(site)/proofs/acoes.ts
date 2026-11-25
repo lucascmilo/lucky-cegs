@@ -17,14 +17,22 @@ const PASTA_PROOFS = "proofs/";
 async function conferir(caixaId: number, userId: string): Promise<string | null> {
   const usuario = await obterUsuarioAtual();
   if (usuario?.papel !== "admin") return "Só a GOM pode mexer nas proofs.";
-  if (!Number.isInteger(caixaId) || !userId) return "Caixa ou joiner inválido.";
+  if (!Number.isInteger(caixaId) || caixaId < 1 || !userId.trim()) {
+    return "Caixa ou joiner inválido.";
+  }
 
   const [encontrado] = await db
     .select({ id: parte.id })
     .from(parte)
     .innerJoin(registro, eq(parte.registroId, registro.id))
     .innerJoin(caixa, eq(registro.caixaId, caixa.id))
-    .where(and(eq(caixa.id, caixaId), eq(caixa.situacao, "casa_gom"), eq(parte.userId, userId)))
+    .where(
+      and(
+        eq(caixa.id, caixaId),
+        eq(caixa.situacao, "casa_gom"),
+        eq(parte.userId, userId),
+      ),
+    )
     .limit(1);
   return encontrado ? null : "Esse joiner não tem itens nessa caixa.";
 }
@@ -37,10 +45,15 @@ async function apagarFoto(fotoId: string) {
 }
 
 // === Seção: Salvar (ou trocar) a proof de um joiner ===
-export async function salvarProof(caixaId: number, userId: string, fotoId: string): Promise<Resultado> {
+export async function salvarProof(
+  caixaId: number,
+  userId: string,
+  fotoId: string,
+): Promise<Resultado> {
   const erro = await conferir(caixaId, userId);
   if (erro) return { ok: false, erro };
-  if (!fotoId.startsWith(PASTA_PROOFS)) return { ok: false, erro: "Foto inválida." };
+  const fotoLimpa = fotoId.trim();
+  if (!fotoLimpa.startsWith(PASTA_PROOFS)) return { ok: false, erro: "Foto inválida." };
 
   const [anterior] = await db
     .select({ fotoId: proofGom.fotoId })
@@ -49,12 +62,18 @@ export async function salvarProof(caixaId: number, userId: string, fotoId: strin
 
   await db
     .insert(proofGom)
-    .values({ caixaId, userId, fotoId })
-    .onConflictDoUpdate({ target: [proofGom.caixaId, proofGom.userId], set: { fotoId, criadaEm: new Date() } });
+    .values({ caixaId, userId, fotoId: fotoLimpa })
+    .onConflictDoUpdate({
+      target: [proofGom.caixaId, proofGom.userId],
+      set: { fotoId: fotoLimpa, criadaEm: new Date() },
+    });
 
-  if (anterior && anterior.fotoId !== fotoId) await apagarFoto(anterior.fotoId);
+  if (anterior && anterior.fotoId !== fotoLimpa) await apagarFoto(anterior.fotoId);
 
-  const [dados] = await db.select({ nome: caixa.nome }).from(caixa).where(eq(caixa.id, caixaId));
+  const [dados] = await db
+    .select({ nome: caixa.nome })
+    .from(caixa)
+    .where(eq(caixa.id, caixaId));
   await notificar([
     {
       userId,

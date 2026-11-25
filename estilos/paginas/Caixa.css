@@ -1,11 +1,24 @@
 /* === Seção: Faixa azul do topo === */
 .caixaTopo {
-  background: var(--cor-azul-colagem);
+  position: relative;
+  background: var(--cor-papel);
   border-bottom: 1px solid var(--cor-preto);
+}
+
+.caixaTopo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.15;
+  background-image: url("/imagens/campo-pixels.svg");
+  background-repeat: repeat;
 }
 
 .caixaTopo__conteudo {
   position: relative;
+  z-index: 1;
   width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   min-height: calc(var(--px-caixa) * 340);
   margin-inline: auto;
@@ -14,47 +27,47 @@
 
 .caixaTopo__titulo {
   position: relative;
-  /* O nome vai no máximo até o fim da última etapa (ver NomeCaixa.tsx) */
-  max-width: calc(var(--px-caixa) * 670);
+  max-width: min(calc(var(--px-caixa) * 670), calc(100% - var(--px-caixa) * 360));
   font-family: var(--fonte-titulo);
   font-size: calc(var(--px-caixa) * 94);
-  font-weight: 400;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: calc(var(--px-caixa) * 68);
   letter-spacing: 0.088em;
   text-transform: uppercase;
   color: var(--cor-preto);
 }
 
-/* O nome segue o padrão "Caixa 12 JP": sempre numa linha só */
 .caixaTopo__nome {
   display: block;
-  white-space: nowrap;
   width: fit-content;
+  font-size: min(1em, var(--px-caixa) * 670 / (var(--letras, 8) * 0.8));
   letter-spacing: 0.088em;
-  /* Estimativa antes do JavaScript: ~0,8 da fonte por letra */
-  font-size: min(1em, var(--px-caixa) * 670 / (var(--letras) * 0.8));
+  white-space: nowrap;
 }
 
-/* Origem escrita à mão logo abaixo do título; acompanha o tamanho dele */
 .caixaTopo__origem {
   display: block;
   width: fit-content;
-  margin: 0.12em 0 0 0.04em;
-  font-family: var(--fonte-cursiva);
-  font-size: 0.574em;
+  margin: 0.27em 0 0 0.09em;
+  font-family: var(--fonte-pixel);
+  font-size: max(12px, 0.255em);
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: 0;
+  letter-spacing: 0.06em;
+  color: var(--cor-rosa-texto);
   text-transform: none;
   white-space: nowrap;
-  transform: rotate(-7deg);
+  transform: translateY(0.45em) rotate(-7deg);
   transform-origin: left center;
 }
 
 /* === Seção: Etapas da caixa === */
 .caixaTopo__etapas {
   display: grid;
-  grid-template-columns: repeat(4, calc(var(--px-caixa) * 160));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: calc(var(--px-caixa) * 10);
+  max-width: min(calc(var(--px-caixa) * 670), calc(100% - var(--px-caixa) * 360));
   margin: calc(var(--px-caixa) * 22) 0 0;
   padding: 0;
   list-style: none;
@@ -65,13 +78,12 @@
   flex-direction: column;
   gap: calc(var(--px-caixa) * 8);
   font-size: max(12px, var(--px-caixa) * 15);
-  line-height: calc(var(--px-caixa) * 20);
+  line-height: 1.3;
   color: var(--cor-preto);
 }
 
 .caixaTopo__barra {
   height: calc(var(--px-caixa) * 12);
-  border-radius: calc(var(--px-caixa) * 2);
   background: rgba(21, 18, 20, 0.15);
 }
 
@@ -87,9 +99,9 @@
 .caixaTopo__caixas {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(var(--px-caixa) * 16);
-  max-width: calc(var(--px-caixa) * 820);
-  margin-top: calc(var(--px-caixa) * 14);
+  gap: calc(var(--px-caixa) * 14);
+  max-width: min(calc(var(--px-caixa) * 820), calc(100% - var(--px-caixa) * 360));
+  margin-top: calc(var(--px-caixa) * 16);
 }
 
 /* === Seção: Colagem da faixa === */
@@ -100,6 +112,7 @@
   width: calc(var(--px-caixa) * 370);
   aspect-ratio: 370 / 264;
   transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .caixaTopo__colagem > * {
@@ -108,38 +121,47 @@
 }
 
 .caixaTopo__quadrado {
-  left: 27.03%;
   top: 8.71%;
+  left: 27.03%;
   width: 59.46%;
   height: 64.39%;
-  border: 1px solid var(--cor-preto);
+  border: var(--borda);
   background: var(--cor-rosa);
 }
 
+.caixaTopo__foto,
+.caixaTopo__codigoBarras,
+.caixaTopo__adesivoTrevo,
+.caixaTopo__coracao {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+}
+
 .caixaTopo__foto {
-  left: 0;
   top: 28.03%;
+  left: 0;
   width: 51.35%;
-  border: 6px solid var(--cor-branco);
-  box-shadow: var(--sombra-cartao);
 }
 
 .caixaTopo__codigoBarras {
-  left: 56.76%;
   top: 0;
-  width: 43.24%;
-  transform: rotate(-2deg);
+  left: 56.76%;
+  width: 33.24%;
+  transform: rotate(-10deg);
 }
 
-.caixaTopo__brilho {
-  left: 17.57%;
-  top: 14.02%;
-  width: 5.95%;
+.caixaTopo__adesivoTrevo {
+  top: 72%;
+  left: 57%;
+  width: 22%;
+  transform: rotate(10deg);
 }
 
 .caixaTopo__coracao {
-  left: 77.84%;
   top: 60.61%;
+  left: 77.84%;
   width: 7.03%;
 }
 
@@ -147,7 +169,7 @@
 .caixaItens {
   width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   margin-inline: auto;
-  padding: calc(var(--px-caixa) * 53) 0 calc(var(--px-caixa) * 32);
+  padding: calc(var(--px-caixa) * 53) 0 calc(var(--px-caixa) * 48);
 }
 
 .caixaItens__barra {
@@ -161,30 +183,30 @@
 .caixaItens__filtros {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(var(--px-caixa) * 16);
+  gap: calc(var(--px-caixa) * 14);
 }
 
 .caixaItens__aviso {
   margin-top: calc(var(--px-caixa) * 15);
-  font-size: max(12px, var(--px-caixa) * 14);
+  font-size: max(13px, var(--px-caixa) * 14);
+  line-height: 1.4;
   color: var(--cor-texto);
 }
 
 .caixaItens__busca {
   display: flex;
-  align-items: center;
   flex: 1 1 calc(var(--px-caixa) * 360);
+  align-items: center;
   max-width: calc(var(--px-caixa) * 560);
-  height: calc(var(--px-caixa) * 52);
-  padding: 0 calc(var(--px-caixa) * 6) 0 calc(var(--px-caixa) * 20);
-  border: 1px solid var(--cor-preto);
-  border-radius: var(--raio-pilula);
+  height: max(48px, calc(var(--px-caixa) * 52));
+  padding: 0 6px 0 18px;
+  border: var(--borda);
   background: var(--cor-branco);
 }
 
 .caixaItens__busca:focus-within {
-  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
-  border-color: var(--cor-rosa-escuro);
+  border-color: var(--cor-rosa-texto);
+  box-shadow: var(--anel-foco);
 }
 
 .caixaItens__campoBusca {
@@ -194,32 +216,32 @@
   border: 0;
   outline: none;
   background: transparent;
-  font-size: max(12px, var(--px-caixa) * 16);
+  font-size: 16px;
 }
 
 .caixaItens__campoBusca::placeholder {
-  color: #6b6466;
+  color: var(--cor-texto-suave);
 }
 
 .caixaItens__botaoBusca {
   flex-shrink: 0;
-  height: calc(var(--px-caixa) * 40);
-  padding: 0 calc(var(--px-caixa) * 20);
+  height: 40px;
+  padding: 0 18px;
   border: 0;
-  border-radius: var(--raio-pilula);
   background: var(--cor-preto);
-  font-size: max(12px, var(--px-caixa) * 14);
+  font-size: 14px;
   font-weight: 700;
   color: var(--cor-branco);
+  transition: background-color 0.2s ease;
 }
 
 .caixaItens__botaoBusca:hover {
-  background: #2a2628;
+  background: var(--cor-grafite);
 }
 
 .caixaItens__resultadoBusca {
   margin-top: calc(var(--px-caixa) * 10);
-  font-size: max(12px, var(--px-caixa) * 15);
+  font-size: max(14px, var(--px-caixa) * 15);
   font-weight: 600;
 }
 
@@ -237,8 +259,9 @@
   flex-direction: column;
   font-family: var(--fonte-titulo);
   font-size: calc(var(--px-caixa) * 40);
-  font-weight: 400;
-  line-height: calc(var(--px-caixa) * 44);
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
+  line-height: 1.05;
   color: var(--cor-preto);
 }
 
@@ -257,10 +280,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--px-caixa) * 10);
+  gap: 10px;
   margin-top: calc(var(--px-caixa) * 42);
   padding: calc(var(--px-caixa) * 48) calc(var(--px-caixa) * 24);
-  font-size: max(12px, var(--px-caixa) * 16);
+  font-size: max(15px, var(--px-caixa) * 16);
   text-align: center;
 }
 
@@ -275,9 +298,8 @@
   grid-template-columns: calc(var(--px-caixa) * 236) minmax(0, 1fr);
   column-gap: calc(var(--px-caixa) * 48);
   padding: calc(var(--px-caixa) * 40);
-  border: 1px solid var(--cor-preto);
-  border-radius: calc(var(--px-caixa) * 18);
-  background: #fbf9f6;
+  border: var(--borda);
+  background: var(--cor-papel);
   box-shadow: var(--sombra-cartao);
 }
 
@@ -291,16 +313,17 @@
 }
 
 .cartaoSet__grupo {
-  font-size: max(12px, var(--px-caixa) * 14);
-  line-height: calc(var(--px-caixa) * 18);
+  font-size: max(13px, var(--px-caixa) * 14);
+  line-height: 1.3;
 }
 
 .cartaoSet__nome {
   margin-top: calc(var(--px-caixa) * 6);
   font-family: var(--fonte-titulo);
   font-size: calc(var(--px-caixa) * 32);
-  font-weight: 400;
-  line-height: 1;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
+  line-height: 1.05;
   text-transform: uppercase;
 }
 
@@ -336,22 +359,22 @@
 }
 
 .cartaoSet__pessoa .nomePessoa {
-  font-size: max(12px, var(--px-caixa) * 13.5);
+  font-size: max(13px, var(--px-caixa) * 14);
 }
 
-.cartaoSet__foto .fotoItem__lupa {
+.cartaoSet__foto .fotoItem__lupa,
+.cartaoIndividual__foto .fotoItem__lupa {
   top: calc(var(--px-caixa) * 6);
   right: calc(var(--px-caixa) * 6);
-  width: calc(var(--px-caixa) * 34);
-  height: calc(var(--px-caixa) * 34);
+  width: max(36px, calc(var(--px-caixa) * 36));
+  height: max(36px, calc(var(--px-caixa) * 36));
 }
 
-/* === Seção: Caixa rosa com as partes do joiner === */
+/* === Seção: Partes do joiner === */
 .minhasPartes {
   margin-top: calc(var(--px-caixa) * 20);
   padding: calc(var(--px-caixa) * 21);
-  border: 1px solid var(--cor-preto);
-  border-radius: calc(var(--px-caixa) * 14);
+  border: var(--borda);
   background: var(--cor-rosa-suave);
 }
 
@@ -363,7 +386,7 @@
 }
 
 .minhasPartes__topo .nomePessoa {
-  font-size: max(12px, var(--px-caixa) * 15);
+  font-size: max(14px, var(--px-caixa) * 15);
 }
 
 .minhasPartes__topo .pilulaContorno__versao {
@@ -371,14 +394,17 @@
 }
 
 .minhasPartes__detalhes {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
   margin-left: auto;
-  padding: 0;
+  padding: 0 2px;
   border: 0;
   background: none;
-  text-decoration: underline;
-  font-size: max(12px, var(--px-caixa) * 15);
+  font-size: max(14px, var(--px-caixa) * 15);
   font-weight: 700;
   color: var(--cor-preto);
+  text-decoration: underline;
   text-underline-offset: 3px;
   transition: color 0.2s ease;
 }
@@ -390,20 +416,21 @@
 .minhasPartes__rolagem {
   margin-top: calc(var(--px-caixa) * 11);
   overflow-x: auto;
+  overscroll-behavior-x: contain;
 }
 
 .minhasPartes__tabela {
   width: 100%;
   min-width: calc(var(--px-caixa) * 560);
   border-collapse: collapse;
-  font-size: max(12px, var(--px-caixa) * 13);
+  font-size: max(13px, var(--px-caixa) * 13);
 }
 
 .minhasPartes__tabela th {
   padding: 0 0 calc(var(--px-caixa) * 8);
   border-bottom: 1px solid var(--cor-preto);
   font-family: var(--fonte-pixel);
-  font-size: max(12px, var(--px-caixa) * 12);
+  font-size: 12px;
   font-weight: 400;
   text-align: left;
 }
@@ -442,15 +469,12 @@
 
 .pedidosIndividuais__verMais {
   display: flex;
-  width: calc(var(--px-caixa) * 206);
-  height: calc(var(--px-caixa) * 40);
+  width: min(100%, 220px);
+  min-height: 44px;
   margin: calc(var(--px-caixa) * 33) auto 0;
-}
-
-.pedidosIndividuais__verMais {
   transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
     transform 0.15s ease;
 }
 
@@ -463,11 +487,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: calc(var(--px-caixa) * 490);
   height: 100%;
+  min-height: calc(var(--px-caixa) * 490);
   padding: calc(var(--px-caixa) * 22) calc(var(--px-caixa) * 17) calc(var(--px-caixa) * 18);
-  border: 1px solid var(--cor-preto);
-  border-radius: calc(var(--px-caixa) * 14);
+  border: var(--borda);
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
 }
@@ -491,20 +514,14 @@
   gap: calc(var(--px-caixa) * 10);
 }
 
-.cartaoIndividual__foto .fotoItem__lupa {
-  width: calc(var(--px-caixa) * 32);
-  height: calc(var(--px-caixa) * 32);
-  top: calc(var(--px-caixa) * 6);
-  right: calc(var(--px-caixa) * 6);
-}
-
 .cartaoIndividual__nome {
-  text-transform: lowercase;
   margin-top: calc(var(--px-caixa) * 15);
   font-family: var(--fonte-titulo);
-  font-size: max(12px, var(--px-caixa) * 16);
-  font-weight: 400;
+  font-size: max(14px, var(--px-caixa) * 16);
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: 1.2;
+  text-transform: lowercase;
 }
 
 .cartaoIndividual__dono {
@@ -512,7 +529,7 @@
 }
 
 .cartaoIndividual__dono .nomePessoa {
-  font-size: max(12px, var(--px-caixa) * 13);
+  font-size: max(13px, var(--px-caixa) * 13);
 }
 
 .cartaoIndividual__etapa {
@@ -529,43 +546,44 @@
 
 .cartaoIndividual__rodape {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: calc(var(--px-caixa) * 8);
+  gap: 8px;
   margin-top: auto;
   padding-top: calc(var(--px-caixa) * 14);
 }
 
 .cartaoIndividual__falta {
-  font-variant-numeric: tabular-nums;
-  font-size: max(12px, var(--px-caixa) * 13);
+  font-size: max(13px, var(--px-caixa) * 13);
   font-weight: 700;
   color: var(--cor-rosa-texto);
+  font-variant-numeric: tabular-nums;
 }
 
 .cartaoIndividual__tudoPago {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: #2d6a1f;
+  color: var(--cor-ok-texto);
 }
 
 .cartaoIndividual__detalhes {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: calc(var(--px-caixa) * 72);
-  height: calc(var(--px-caixa) * 20);
-  border: 1px solid var(--cor-preto);
-  border-radius: var(--raio-pilula);
+  min-width: 76px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: var(--borda);
   background: var(--cor-branco);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--cor-preto);
   text-decoration: none;
   transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .cartaoIndividual__detalhes:hover {
@@ -574,18 +592,33 @@
 }
 
 /* === Seção: Responsivo === */
+@media (pointer: coarse) {
+  .cartaoSet__foto .fotoItem__lupa,
+  .cartaoIndividual__foto .fotoItem__lupa {
+    width: 40px;
+    height: 40px;
+  }
+
+  .minhasPartes__detalhes,
+  .cartaoIndividual__detalhes {
+    min-height: 44px;
+  }
+}
+
 @media (max-width: 1100px) {
   .caixaTopo__colagem {
     right: 0;
+    width: calc(var(--px-caixa) * 320);
+  }
+
+  .caixaTopo__titulo,
+  .caixaTopo__etapas,
+  .caixaTopo__caixas {
+    max-width: calc(100% - var(--px-caixa) * 340);
   }
 }
 
 @media (max-width: 1000px) {
-  .caixaTopo__etapas {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    max-width: calc(var(--px-caixa) * 670);
-  }
-
   .pedidosIndividuais__lista {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -621,26 +654,32 @@
   }
 
   .caixaTopo__conteudo {
+    min-height: 0;
     padding-top: 40px;
   }
 
+  .caixaTopo__titulo,
+  .caixaTopo__etapas,
+  .caixaTopo__caixas {
+    max-width: none;
+  }
+
   .caixaTopo__titulo {
-    max-width: min(100%, var(--px-caixa) * 670);
-    font-size: 64px;
-    line-height: 0.74;
+    font-size: clamp(40px, 11vw, 64px);
+    line-height: 0.82;
   }
 
   .caixaTopo__nome {
-    font-size: min(1em, min(var(--largura-tela) - 2 * var(--margem-lateral), var(--px-caixa) * 670) / (var(--letras) * 0.8));
+    font-size: min(1em, (var(--largura-tela) - 2 * var(--margem-lateral)) / (var(--letras, 8) * 0.8));
   }
 
   .caixaTopo__colagem {
     position: relative;
     top: auto;
     right: auto;
-    transform: none;
     width: min(300px, 86%);
     margin: 32px auto 0;
+    transform: none;
   }
 
   .caixaTopo__etapas {
@@ -649,12 +688,10 @@
 
   .caixaTopo__etapa {
     font-size: 12px;
-    line-height: 15px;
   }
 
   .caixaItens__titulo {
     font-size: 32px;
-    line-height: 36px;
   }
 
   .pedidosIndividuais__lista {
@@ -665,11 +702,7 @@
 
 @media (max-width: 560px) {
   .caixaTopo__etapas {
-    gap: 6px;
-  }
-
-  .caixaTopo__etapa {
-    font-size: 11px;
+    gap: 8px;
   }
 
   .caixaTopo__caixas,
@@ -677,20 +710,15 @@
     gap: 10px;
   }
 
-  .caixaItens__aviso {
-    font-size: 13px;
-  }
-
   .cartaoSet {
     padding: 24px 18px;
-    border-radius: 16px;
   }
 
   .cartaoSet__nome {
     font-size: 22px;
   }
 
-  .nomePessoa {
+  .caixaItens .nomePessoa {
     font-size: 15px;
   }
 
@@ -698,13 +726,20 @@
     padding: 16px;
   }
 
-  /* No celular, cada parte vira um bloco com os rótulos ao lado dos valores */
+  .minhasPartes__detalhes {
+    min-height: 44px;
+  }
+
   .minhasPartes__tabela {
     min-width: 0;
   }
 
   .minhasPartes__tabela thead {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
   }
 
   .minhasPartes__tabela tr {
@@ -720,8 +755,10 @@
 
   .minhasPartes__tabela td {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    gap: 6px 12px;
     height: auto;
     border: 0;
   }
@@ -729,7 +766,7 @@
   .minhasPartes__tabela td::before {
     content: attr(data-rotulo);
     font-family: var(--fonte-pixel);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
   }
 
@@ -741,4 +778,24 @@
     min-height: 0;
   }
 
+  .cartaoIndividual__detalhes {
+    min-height: 44px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 420px) {
+  .caixaTopo__etapas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 12px;
+  }
+
+  .caixaItens__busca {
+    padding: 0 5px 0 12px;
+  }
+
+  .caixaItens__botaoBusca {
+    padding: 0 14px;
+  }
 }

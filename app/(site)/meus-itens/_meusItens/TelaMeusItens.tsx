@@ -4,15 +4,15 @@ import Link from "next/link";
 import { IconeCheck, IconeSetaBaixo } from "@/componentes/Icones";
 import { BotaoDetalhes, ProvedorDetalhes } from "@/componentes/JanelaDetalhes";
 import { PilulaEtapa, ValorPagamento } from "@/componentes/PecasItem";
-import { PONTOS_ESTRELA } from "@/componentes/SeloPedidosAbertos";
 import type { ItemCaixa } from "@/lib/caixas";
 import { juntarClasses } from "@/lib/classes";
-import { ABAS_DETALHES, montarDetalheItem, type DetalheItem } from "@/lib/detalheItem";
+import { type DetalheItem, ABAS_DETALHES, montarDetalheItem } from "@/lib/detalheItem";
 import { obterEtapaCaixa } from "@/lib/etapas";
 import type { CaixaComMeusItens } from "@/lib/meusItens";
 import { textoDoParametro } from "@/lib/navegacao";
-import adesivo from "@/public/imagens/adesivo-accidentally.png";
-import fotoMeusItens from "@/public/imagens/meus-itens-foto.png";
+import circuloFoto from "@/public/imagens/adesivo-circulo-foto.png";
+import estrela from "@/public/imagens/estrela-modelo.png";
+import fotoMeusItens from "@/public/imagens/modelo-meus-itens.png";
 import "@/estilos/componentes/PecasItem.css";
 import "@/estilos/paginas/MeusItens.css";
 
@@ -38,7 +38,8 @@ type PropsTelaMeusItens = {
 
 // === Seção: Tela "Meus itens" ===
 export default function TelaMeusItens({ caixas, parametros }: PropsTelaMeusItens) {
-  const filtroAtual = FILTROS.find((f) => f.id === textoDoParametro(parametros.filtro)) ?? FILTROS[0];
+  const filtroAtual =
+    FILTROS.find((f) => f.id === textoDoParametro(parametros.filtro)) ?? FILTROS[0];
   const todosItens = caixas.flatMap((grupo) => grupo.itens);
 
   const caixasVisiveis = caixas
@@ -47,12 +48,22 @@ export default function TelaMeusItens({ caixas, parametros }: PropsTelaMeusItens
 
   // Os detalhes já vão prontos para o navegador: a janela abre na hora
   const detalhes: Record<number, DetalheItem> = Object.fromEntries(
-    caixas.flatMap((grupo) => grupo.itens.map((item) => [item.id, montarDetalheItem(item, grupo.caixa.nome)])),
+    caixas.flatMap((grupo) =>
+      grupo.itens.map((item) => [item.id, montarDetalheItem(item, grupo.caixa.nome)]),
+    ),
   );
-  const abaPedida = ABAS_DETALHES.find((a) => a.id === textoDoParametro(parametros.aba))?.id ?? "fotos";
+  const abaPedida =
+    ABAS_DETALHES.find((a) => a.id === textoDoParametro(parametros.aba))?.id ?? "fotos";
+  const itemInicialBruto = Number(textoDoParametro(parametros.item));
+  const itemInicial =
+    Number.isInteger(itemInicialBruto) && itemInicialBruto > 0 ? itemInicialBruto : null;
 
   return (
-    <ProvedorDetalhes detalhes={detalhes} itemInicial={Number(textoDoParametro(parametros.item)) || null} abaInicial={abaPedida}>
+    <ProvedorDetalhes
+      detalhes={detalhes}
+      itemInicial={itemInicial}
+      abaInicial={abaPedida}
+    >
       <div className="meusItens">
         {/* === Seção: Faixa do topo === */}
         <section className="meusItens__faixa">
@@ -69,7 +80,10 @@ export default function TelaMeusItens({ caixas, parametros }: PropsTelaMeusItens
                   <Link
                     key={f.id}
                     href={f.id === "todos" ? "/meus-itens" : `/meus-itens?filtro=${f.id}`}
-                    className={juntarClasses("pilulaSelecao", f.id === filtroAtual.id && "pilulaSelecao__ativa")}
+                    className={juntarClasses(
+                      "pilulaSelecao",
+                      f.id === filtroAtual.id && "pilulaSelecao__ativa",
+                    )}
                     aria-current={f.id === filtroAtual.id ? "page" : undefined}
                     scroll={false}
                   >
@@ -81,11 +95,25 @@ export default function TelaMeusItens({ caixas, parametros }: PropsTelaMeusItens
 
             <div className="meusItens__colagem" aria-hidden="true">
               <span className="meusItens__quadrado" />
-              <svg className="meusItens__estrela" viewBox="0 0 100 100">
-                <polygon points={PONTOS_ESTRELA} />
-              </svg>
-              <Image src={fotoMeusItens} alt="" sizes="190px" className="meusItens__foto" priority />
-              <Image src={adesivo} alt="" sizes="220px" className="meusItens__adesivo" />
+              <Image
+                src={circuloFoto}
+                alt=""
+                sizes="110px"
+                className="meusItens__adesivoCirculo"
+              />
+              <Image
+                src={fotoMeusItens}
+                alt=""
+                sizes="190px"
+                className="meusItens__foto"
+                priority
+              />
+              <Image
+                src={estrela}
+                alt=""
+                sizes="220px"
+                className="meusItens__estrela-imagem"
+              />
             </div>
           </div>
         </section>
@@ -93,7 +121,9 @@ export default function TelaMeusItens({ caixas, parametros }: PropsTelaMeusItens
         {/* === Seção: Cartões das caixas === */}
         <div className="meusItens__conteudo">
           {caixasVisiveis.length > 0 ? (
-            caixasVisiveis.map((grupo) => <CartaoCaixa key={grupo.caixa.id} grupo={grupo} detalhes={detalhes} />)
+            caixasVisiveis.map((grupo) => (
+              <CartaoCaixa key={grupo.caixa.id} grupo={grupo} detalhes={detalhes} />
+            ))
           ) : (
             <SemItens filtro={todosItens.length > 0 ? filtroAtual.id : null} />
           )}
@@ -104,7 +134,13 @@ export default function TelaMeusItens({ caixas, parametros }: PropsTelaMeusItens
 }
 
 // === Seção: Cartão de uma caixa (folha de caderno) ===
-function CartaoCaixa({ grupo, detalhes }: { grupo: CaixaComMeusItens; detalhes: Record<number, DetalheItem> }) {
+function CartaoCaixa({
+  grupo,
+  detalhes,
+}: {
+  grupo: CaixaComMeusItens;
+  detalhes: Record<number, DetalheItem>;
+}) {
   const etapa = obterEtapaCaixa(grupo.caixa.situacao);
   const idTitulo = `caixa-${grupo.caixa.id}`;
 
@@ -115,7 +151,10 @@ function CartaoCaixa({ grupo, detalhes }: { grupo: CaixaComMeusItens; detalhes: 
         <h2 id={idTitulo} className="cartaoMeusItens__titulo">
           {grupo.caixa.nome}
         </h2>
-        <span className="pilulaEtapa cartaoMeusItens__etapa" style={{ backgroundColor: etapa.cor }}>
+        <span
+          className="pilulaEtapa cartaoMeusItens__etapa"
+          style={{ backgroundColor: etapa.cor }}
+        >
           {etapa.rotulo}
         </span>
       </div>
@@ -140,7 +179,16 @@ function LinhaItem({ item, detalhe }: { item: ItemCaixa; detalhe: DetalheItem })
     <details className="linhaMeuItem">
       <summary className="linhaMeuItem__resumo">
         <span className="linhaMeuItem__miniatura">
-          {item.fotoId && <CldImage src={item.fotoId} alt="" width={92} height={92} crop="fill" sizes="46px" />}
+          {item.fotoId && (
+            <CldImage
+              src={item.fotoId}
+              alt=""
+              width={92}
+              height={92}
+              crop="fill"
+              sizes="46px"
+            />
+          )}
         </span>
 
         <span className="linhaMeuItem__textos">
@@ -154,7 +202,7 @@ function LinhaItem({ item, detalhe }: { item: ItemCaixa; detalhe: DetalheItem })
 
         {detalhe.tudoPago ? (
           <span className="linhaMeuItem__valor linhaMeuItem__pago">
-            <IconeCheck tamanho={12} /> Pago
+            <IconeCheck tamanho={12} aria-hidden="true" /> Pago
           </span>
         ) : (
           <span className="linhaMeuItem__valor linhaMeuItem__falta">
@@ -163,7 +211,7 @@ function LinhaItem({ item, detalhe }: { item: ItemCaixa; detalhe: DetalheItem })
           </span>
         )}
 
-        <IconeSetaBaixo className="linhaMeuItem__seta" tamanho={30} />
+        <IconeSetaBaixo className="linhaMeuItem__seta" tamanho={30} aria-hidden="true" />
       </summary>
 
       <div className="linhaMeuItem__aberta">
@@ -189,11 +237,18 @@ function SemItens({ filtro }: { filtro: Filtro | null }) {
     filtro === null
       ? {
           etiqueta: "NENHUM ITEM AINDA",
-          texto: "Quando você pedir um item numa caixa, ele aparece aqui com os valores para pagar.",
+          texto:
+            "Quando você pedir um item numa caixa, ele aparece aqui com os valores para pagar.",
         }
       : filtro === "chegaram"
-        ? { etiqueta: "NADA CHEGOU AINDA", texto: "Quando um item seu chegar na casa da GOM, ele aparece aqui." }
-        : { etiqueta: "TUDO JÁ CHEGOU", texto: "Nenhum item seu está a caminho agora." };
+        ? {
+            etiqueta: "NADA CHEGOU AINDA",
+            texto: "Quando um item seu chegar na casa da GOM, ele aparece aqui.",
+          }
+        : {
+            etiqueta: "TUDO JÁ CHEGOU",
+            texto: "Nenhum item seu está a caminho agora.",
+          };
 
   return (
     <div className="meusItens__vazio">
@@ -205,7 +260,11 @@ function SemItens({ filtro }: { filtro: Filtro | null }) {
           Ver as caixas
         </Link>
       ) : (
-        <Link href="/meus-itens" className="botao botao__contorno meusItens__vazioBotao" scroll={false}>
+        <Link
+          href="/meus-itens"
+          className="botao botao__contorno meusItens__vazioBotao"
+          scroll={false}
+        >
           Ver todos
         </Link>
       )}

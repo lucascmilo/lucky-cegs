@@ -16,7 +16,7 @@ function Valor({ valor }: { valor: ValorDevido }) {
 // Mostra 5 pessoas; "Ver mais" mostra mais 5 a cada clique
 export default function TabelaFaltaPagar({ pessoas }: { pessoas: JoinerDevendo[] }) {
   const [mostrar, setMostrar] = useState(POR_VEZ);
-  const restantes = pessoas.length - mostrar;
+  const restantes = Math.max(0, pessoas.length - mostrar);
   const visiveis = pessoas.slice(0, mostrar);
   const totalReceber = pessoas.reduce((soma, pessoa) => soma + pessoa.total, 0);
 

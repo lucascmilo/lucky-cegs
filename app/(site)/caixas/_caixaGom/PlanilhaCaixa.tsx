@@ -1,23 +1,23 @@
 "use client";
 
 import { CldImage } from "next-cloudinary";
-import { Fragment, useEffect, useRef, useState, useTransition, type CSSProperties } from "react";
+import { type CSSProperties, Fragment, useEffect, useRef, useState, useTransition } from "react";
 import { mostrarAviso } from "@/componentes/AvisoFlutuante";
 import { IconeCamera, IconeLupa } from "@/componentes/Icones";
 import JanelaFotos, { temFoto } from "@/componentes/JanelaFotos";
 import { juntarClasses } from "@/lib/classes";
-import { obterEtapaItem, type EtapaItem } from "@/lib/etapas";
+import { chamar } from "@/lib/conexao";
+import { type EtapaItem, obterEtapaItem } from "@/lib/etapas";
 import { normalizarBusca } from "@/lib/formatacao";
 import {
-  CATEGORIAS,
-  resumirCaixa,
   type CaixaGom,
+  CATEGORIAS,
   type JoinerOpcao,
   type RegistroGom,
+  resumirCaixa,
 } from "@/lib/planilhaCaixa";
-import { desfazerMover, moverItens, type EstadoItem } from "../acoes";
+import { type EstadoItem, desfazerMover, moverItens } from "../acoes";
 import JanelaItem from "./JanelaItem";
-import { chamar } from "@/lib/conexao";
 import {
   BolinhaEtapa,
   BotaoEditar,
@@ -49,12 +49,18 @@ const FILTROS_ETAPA: { id: EtapaItem; rotulo: string }[] = [
 ];
 
 export type Filtro = (typeof FILTROS_FIXOS)[number]["id"] | EtapaItem;
-const FILTROS_VALIDOS: string[] = [...FILTROS_FIXOS.map((filtro) => filtro.id), ...FILTROS_ETAPA.map((filtro) => filtro.id)];
+const FILTROS_VALIDOS: string[] = [
+  ...FILTROS_FIXOS.map((filtro) => filtro.id),
+  ...FILTROS_ETAPA.map((filtro) => filtro.id),
+];
 
 // Algum valor lançado e ainda não pago
 function temAPagar(registro: RegistroGom) {
   return registro.partes.some(
-    (p) => (p.venda !== null && !p.vendaPago) || (p.inter !== null && !p.interPago) || (p.taxa !== null && !p.taxaPago),
+    (p) =>
+      (p.venda !== null && !p.vendaPago) ||
+      (p.inter !== null && !p.interPago) ||
+      (p.taxa !== null && !p.taxaPago),
   );
 }
 
@@ -68,13 +74,6 @@ function passaNoFiltro(registro: RegistroGom, filtro: Filtro) {
 
 // Com muitos itens, a tabela mostra 50 por vez
 const POR_VEZ = 50;
-
-// Itens sem dono vão para o fim quando a ordem é por joiner
-const FIM_DA_LISTA = "￿";
-
-function primeiroJoiner(registro: RegistroGom) {
-  return registro.partes[0]?.user ?? FIM_DA_LISTA;
-}
 
 // Set (ou item com mais de uma pessoa): uma linha do set e uma linha por parte
 function ehGrupo(registro: RegistroGom) {
@@ -92,7 +91,13 @@ type PropsPlanilha = {
   inicial: { busca: string; ordem: string; filtro: string };
 };
 
-export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inicial }: PropsPlanilha) {
+export default function PlanilhaCaixa({
+  caixa,
+  caixas,
+  registros,
+  joiners,
+  inicial,
+}: PropsPlanilha) {
   const [editando, setEditando] = useState<RegistroGom | null>(null);
   const [vezEditar, setVezEditar] = useState(0);
 
@@ -102,7 +107,9 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
   }
   const [busca, setBusca] = useState(inicial.busca);
   const [ordem, setOrdem] = useState<Ordem>(inicial.ordem === "joiner" ? "joiner" : "item");
-  const [filtro, setFiltro] = useState<Filtro>(FILTROS_VALIDOS.includes(inicial.filtro) ? (inicial.filtro as Filtro) : "todos");
+  const [filtro, setFiltro] = useState<Filtro>(
+    FILTROS_VALIDOS.includes(inicial.filtro) ? (inicial.filtro as Filtro) : "todos",
+  );
   const [mostrar, setMostrar] = useState(POR_VEZ);
   const [desfazer, setDesfazer] = useState<EstadoItem[] | null>(null);
   const [desfazendo, iniciarDesfazer] = useTransition();
@@ -128,12 +135,20 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
   const campoBusca = useRef<HTMLInputElement>(null);
   useEffect(() => {
     function aoApertar(evento: KeyboardEvent) {
-      if (evento.ctrlKey || evento.metaKey || evento.altKey || document.querySelector("dialog[open]")) return;
+      if (
+        evento.ctrlKey ||
+        evento.metaKey ||
+        evento.altKey ||
+        document.querySelector("dialog[open]")
+      ) {
+        return;
+      }
       // Caixa de marcar não é campo de texto: depois de marcar um item, o Esc continua limpando a seleção
       const alvo = evento.target;
       const digitando =
         alvo instanceof HTMLElement &&
-        (alvo.isContentEditable || alvo.matches("textarea, select, input:not([type='checkbox']):not([type='radio'])"));
+        (alvo.isContentEditable ||
+          alvo.matches("textarea, select, input:not([type='checkbox']):not([type='radio'])"));
       if (digitando) return;
       if (evento.key === "/") {
         evento.preventDefault();
@@ -148,12 +163,18 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
   // Guarda busca, ordem e filtro no endereço sem recarregar a página
   useEffect(() => {
     const endereco = new URL(window.location.href);
-    const valores = { busca: busca.trim(), ordem: ordem === "item" ? "" : ordem, filtro: filtro === "todos" ? "" : filtro };
+    const valores = {
+      busca: busca.trim(),
+      ordem: ordem === "item" ? "" : ordem,
+      filtro: filtro === "todos" ? "" : filtro,
+    };
     for (const [chave, valor] of Object.entries(valores)) {
       if (valor) endereco.searchParams.set(chave, valor);
       else endereco.searchParams.delete(chave);
     }
-    if (endereco.href !== window.location.href) window.history.replaceState(window.history.state, "", endereco);
+    if (endereco.href !== window.location.href) {
+      window.history.replaceState(window.history.state, "", endereco);
+    }
   }, [busca, ordem, filtro]);
 
   const naWarehouse = caixa.situacao === "warehouse";
@@ -176,15 +197,26 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
   const visiveis =
     ordem === "joiner"
       ? [...encontrados]
-          .map((r) => ({ ...r, partes: [...r.partes].sort((a, b) => a.user.localeCompare(b.user)) }))
-          .sort((a, b) => primeiroJoiner(a).localeCompare(primeiroJoiner(b)))
+          .map((r) => ({
+            ...r,
+            partes: [...r.partes].sort((a, b) => a.user.localeCompare(b.user)),
+          }))
+          .sort((a, b) => {
+            const primeiroA = a.partes[0]?.user;
+            const primeiroB = b.partes[0]?.user;
+            if (!primeiroA && !primeiroB) return a.nome.localeCompare(b.nome);
+            if (!primeiroA) return 1;
+            if (!primeiroB) return -1;
+            return primeiroA.localeCompare(primeiroB);
+          })
       : encontrados;
 
   // Só conta os selecionados que ainda existem na caixa (some da seleção quem foi movido)
   const idsSelecionados = registros.filter((r) => selecionados.has(r.id)).map((r) => r.id);
   const exibidos = visiveis.slice(0, mostrar);
-  const restantes = visiveis.length - exibidos.length;
-  const todosVisiveisMarcados = exibidos.length > 0 && exibidos.every((r) => selecionados.has(r.id));
+  const restantes = Math.max(0, visiveis.length - exibidos.length);
+  const todosVisiveisMarcados =
+    exibidos.length > 0 && exibidos.every((r) => selecionados.has(r.id));
   const algumVisivelMarcado = exibidos.some((r) => selecionados.has(r.id));
   const outrasCaixas = caixas.filter((c) => c.id !== caixa.id);
   const total = resumirCaixa(visiveis);
@@ -213,14 +245,17 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
     setErro(null);
     setAviso(null);
     const quantos = idsSelecionados.length;
-    const nomeDestino = outrasCaixas.find((c) => String(c.id) === destino)?.nome ?? "outra caixa";
+    const nomeDestino =
+      outrasCaixas.find((c) => String(c.id) === destino)?.nome ?? "outra caixa";
     iniciar(async () => {
       const resultado = await chamar(() => moverItens(idsSelecionados, Number(destino)));
       if (!resultado.ok) return setErro(resultado.erro);
       setSelecionados(new Set());
       setDestino("");
       setDesfazer(resultado.anteriores);
-      setAviso(`${quantos} ${quantos === 1 ? "item movido" : "itens movidos"} para ${nomeDestino}.`);
+      setAviso(
+        `${quantos} ${quantos === 1 ? "item movido" : "itens movidos"} para ${nomeDestino}.`,
+      );
     });
   }
 
@@ -250,7 +285,7 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
       {/* === Seção: Busca e ordem === */}
       <div className="planilhaGom__ferramentas">
         <div className="planilhaGom__busca" role="search">
-          <IconeLupa className="planilhaGom__iconeBusca" />
+          <IconeLupa className="planilhaGom__iconeBusca" aria-hidden="true" />
           <label className="somenteLeitorTela" htmlFor="busca-planilha">
             Buscar item ou joiner
           </label>
@@ -283,7 +318,10 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
             <button
               key={opcao}
               type="button"
-              className={juntarClasses("planilhaGom__botaoOrdem", ordem === opcao && "planilhaGom__botaoOrdemAtivo")}
+              className={juntarClasses(
+                "planilhaGom__botaoOrdem",
+                ordem === opcao && "planilhaGom__botaoOrdemAtivo",
+              )}
               aria-pressed={ordem === opcao}
               onClick={() => setOrdem(opcao)}
             >
@@ -296,17 +334,26 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
       {/* === Seção: Filtros rápidos === */}
       <div className="planilhaGom__filtros" role="group" aria-label="Filtrar a planilha">
         {filtros.map((opcao) => {
-          const etapa = FILTROS_ETAPA.some((e) => e.id === opcao.id) ? obterEtapaItem(opcao.id as EtapaItem) : null;
+          const etapa = FILTROS_ETAPA.some((e) => e.id === opcao.id)
+            ? obterEtapaItem(opcao.id as EtapaItem)
+            : null;
           return (
             <button
               key={opcao.id}
               type="button"
-              className={juntarClasses("planilhaGom__filtro", filtroAtivo === opcao.id && "planilhaGom__filtroAtivo")}
+              className={juntarClasses(
+                "planilhaGom__filtro",
+                filtroAtivo === opcao.id && "planilhaGom__filtroAtivo",
+              )}
               aria-pressed={filtroAtivo === opcao.id}
               onClick={() => mudarFiltro(opcao.id)}
             >
               {etapa && (
-                <span className="planilhaGom__corEtapa" style={{ "--cor-etapa": etapa.cor } as CSSProperties} aria-hidden="true" />
+                <span
+                  className="planilhaGom__corEtapa"
+                  style={{ "--cor-etapa": etapa.cor } as CSSProperties}
+                  aria-hidden="true"
+                />
               )}
               {opcao.rotulo}
               <span className="planilhaGom__quantos">{opcao.quantos}</span>
@@ -322,7 +369,12 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
             ? (aviso ?? "Nenhum item selecionado")
             : `${idsSelecionados.length} ${idsSelecionados.length === 1 ? "selecionado" : "selecionados"}`}
           {idsSelecionados.length === 0 && aviso && desfazer && (
-            <button type="button" className="planilhaGom__desfazer" onClick={voltarMover} disabled={desfazendo}>
+            <button
+              type="button"
+              className="planilhaGom__desfazer"
+              onClick={voltarMover}
+              disabled={desfazendo}
+            >
               {desfazendo ? "Desfazendo…" : "Desfazer"}
             </button>
           )}
@@ -338,7 +390,9 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
             onChange={(evento) => setDestino(evento.target.value)}
             disabled={idsSelecionados.length === 0 || outrasCaixas.length === 0}
           >
-            <option value="">{outrasCaixas.length === 0 ? "Sem outra caixa" : "Escolher caixa"}</option>
+            <option value="">
+              {outrasCaixas.length === 0 ? "Sem outra caixa" : "Escolher caixa"}
+            </option>
             {outrasCaixas.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.nome}
@@ -367,7 +421,8 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
         <p className="planilhaGom__legenda">
           <span className="planilhaGom__ponto planilhaGom__pontoPago" aria-hidden="true" />
           pago
-          <span className="planilhaGom__ponto planilhaGom__pontoAPagar" aria-hidden="true" />a pagar
+          <span className="planilhaGom__ponto planilhaGom__pontoAPagar" aria-hidden="true" />a
+          pagar
         </p>
         <table className="planilhaGom__tabela">
           <colgroup>
@@ -395,7 +450,7 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
                 />
               </th>
               <th scope="col">
-                <IconeCamera tamanho={15} />
+                <IconeCamera tamanho={15} aria-hidden="true" />
                 <span className="somenteLeitorTela">Fotos</span>
               </th>
               <th scope="col" className="planilhaGom__alinharEsquerda">
@@ -413,7 +468,9 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
               </th>
               {CATEGORIAS.map((categoria) => (
                 <th key={categoria.id} scope="col">
-                  <abbr title={categoria.rotulo}>{categoria.sigla === "ITEM" ? "Item" : categoria.sigla}</abbr>
+                  <abbr title={categoria.rotulo}>
+                    {categoria.sigla === "ITEM" ? "Item" : categoria.sigla}
+                  </abbr>
                 </th>
               ))}
             </tr>
@@ -425,21 +482,39 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
               const celulasInicio = (
                 <>
                   <td className="planilhaGom__celulaMarcar">
-                    <Marcar marcado={marcado} aoMudar={() => alternar(registro.id)} rotulo={`Selecionar ${registro.nome}`} />
+                    <Marcar
+                      marcado={marcado}
+                      aoMudar={() => alternar(registro.id)}
+                      rotulo={`Selecionar ${registro.nome}`}
+                    />
                   </td>
                   <td className="planilhaGom__celulaFotos">
                     <button
                       type="button"
-                      className={juntarClasses("botaoCamera", registro.fotoId && "botaoCamera__miniatura")}
+                      className={juntarClasses(
+                        "botaoCamera",
+                        registro.fotoId && "botaoCamera__miniatura",
+                      )}
                       onClick={() => setFotosDe(registro)}
                       disabled={!temFoto(registro)}
-                      aria-label={temFoto(registro) ? `Ver fotos de ${registro.nome}` : `${registro.nome} ainda sem foto`}
+                      aria-label={
+                        temFoto(registro)
+                          ? `Ver fotos de ${registro.nome}`
+                          : `${registro.nome} ainda sem foto`
+                      }
                       title={temFoto(registro) ? "Ver fotos" : "Sem foto ainda"}
                     >
                       {registro.fotoId ? (
-                        <CldImage src={registro.fotoId} alt="" width={64} height={64} crop="fill" gravity="auto" />
+                        <CldImage
+                          src={registro.fotoId}
+                          alt=""
+                          width={64}
+                          height={64}
+                          crop="fill"
+                          gravity="auto"
+                        />
                       ) : (
-                        <IconeCamera tamanho={15} />
+                        <IconeCamera tamanho={15} aria-hidden="true" />
                       )}
                     </button>
                   </td>
@@ -449,9 +524,18 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
               if (ehGrupo(registro)) {
                 return (
                   <Fragment key={registro.id}>
-                    <tr className={juntarClasses("planilhaGom__linhaSet", marcado && "planilhaGom__selecionada")}>
+                    <tr
+                      className={juntarClasses(
+                        "planilhaGom__linhaSet",
+                        marcado && "planilhaGom__selecionada",
+                      )}
+                    >
                       {celulasInicio}
-                      <th scope="row" colSpan={2} className="planilhaGom__nome planilhaGom__alinharEsquerda">
+                      <th
+                        scope="row"
+                        colSpan={2}
+                        className="planilhaGom__nome planilhaGom__alinharEsquerda"
+                      >
                         <span className="planilhaGom__celulaNome">
                           {naWarehouse && <BolinhaEtapa situacao={registro.situacao} />}
                           <span className="planilhaGom__seloSet">SET</span>
@@ -459,7 +543,8 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
                             {registro.nome}
                           </span>
                           <span className="planilhaGom__pessoas">
-                            · {registro.partes.length} {registro.partes.length === 1 ? "joiner" : "joiners"}
+                            · {registro.partes.length}{" "}
+                            {registro.partes.length === 1 ? "joiner" : "joiners"}
                           </span>
                           <BotaoEditar nome={registro.nome} aoClicar={() => editar(registro)} />
                         </span>
@@ -492,7 +577,11 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
                     </span>
                   </th>
                   <td data-rotulo="Joiner" className="planilhaGom__joiner planilhaGom__alinharEsquerda">
-                    {parte ? `@${parte.user}` : <span className="planilhaGom__semDono">sem dono</span>}
+                    {parte ? (
+                      `@${parte.user}`
+                    ) : (
+                      <span className="planilhaGom__semDono">sem dono</span>
+                    )}
                   </td>
                   <td data-rotulo="Valor">
                     {parte ? (
@@ -502,8 +591,12 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
                     )}
                   </td>
                   <td data-rotulo="Compra">{formatarDinheiro(registro.compra)}</td>
-                  <td data-rotulo="Inter">{parte ? <ValorPago valor={parte.inter} pago={parte.interPago} /> : <Vazio />}</td>
-                  <td data-rotulo="Taxa">{parte ? <ValorPago valor={parte.taxa} pago={parte.taxaPago} /> : <Vazio />}</td>
+                  <td data-rotulo="Inter">
+                    {parte ? <ValorPago valor={parte.inter} pago={parte.interPago} /> : <Vazio />}
+                  </td>
+                  <td data-rotulo="Taxa">
+                    {parte ? <ValorPago valor={parte.taxa} pago={parte.taxaPago} /> : <Vazio />}
+                  </td>
                   <td data-rotulo="Peso (kg)">{formatarKg(registro.pesoKg)}</td>
                   <CelulasQuantidade quantidades={registro.quantidades} />
                 </tr>
@@ -551,7 +644,11 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
       </div>
 
       {restantes > 0 && (
-        <button type="button" className="botao botao__contorno planilhaGom__verMais" onClick={() => setMostrar((n) => n + POR_VEZ)}>
+        <button
+          type="button"
+          className="botao botao__contorno planilhaGom__verMais"
+          onClick={() => setMostrar((n) => n + POR_VEZ)}
+        >
           Ver mais {Math.min(restantes, POR_VEZ)}
           {restantes > POR_VEZ && ` de ${restantes}`}
         </button>
@@ -575,5 +672,8 @@ export default function PlanilhaCaixa({ caixa, caixas, registros, joiners, inici
 }
 
 function somarPartes(registros: RegistroGom[], campo: "inter" | "taxa") {
-  return registros.reduce((total, r) => total + r.partes.reduce((soma, p) => soma + (p[campo] ?? 0), 0), 0);
+  return registros.reduce(
+    (total, r) => total + r.partes.reduce((soma, p) => soma + (p[campo] ?? 0), 0),
+    0,
+  );
 }

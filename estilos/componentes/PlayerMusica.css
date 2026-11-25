@@ -1,10 +1,9 @@
 /* === Seção: Player === */
-/* Ocupa o que sobra ao lado do Pix; desce para outra linha quando não cabe */
 .playerMusica__player {
   display: flex;
   flex: 1 1 400px;
   align-items: center;
-  gap: 17px;
+  gap: 16px;
   max-width: 456px;
   min-width: 0;
 }
@@ -18,16 +17,16 @@
 }
 
 .playerMusica__botaoTocar {
-  flex-shrink: 0;
+  position: relative;
   display: grid;
+  flex-shrink: 0;
   place-items: center;
   width: 30px;
   height: 30px;
   padding: 0;
   border: 0;
-  border-radius: 50%;
   background: var(--cor-rosa);
-  color: var(--cor-branco);
+  color: var(--cor-preto);
   transition: transform 0.15s ease;
 }
 
@@ -42,10 +41,9 @@
   height: 22px;
   padding: 0;
   border: 0;
-  border-radius: 50%;
   background: transparent;
   color: var(--cor-branco);
-  opacity: 0.75;
+  opacity: 0.78;
   transition:
     opacity 0.15s ease,
     color 0.15s ease;
@@ -54,6 +52,14 @@
 .playerMusica__botaoPular:hover {
   color: var(--cor-rosa);
   opacity: 1;
+}
+
+.playerMusica__botaoTocar:focus-visible,
+.playerMusica__botaoPular:focus-visible,
+.playerMusica__botaoMudo:focus-visible,
+.playerMusica__progresso:focus-visible,
+.playerMusica__controleVolume:focus-visible {
+  outline-color: var(--cor-acido);
 }
 
 /* === Seção: Faixa atual === */
@@ -75,21 +81,23 @@
 }
 
 .playerMusica__status {
-  font-size: 14px;
-  color: var(--cor-menta);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--cor-ok);
   white-space: nowrap;
 }
 
 .playerMusica__tempo {
   font-size: 10px;
-  color: #a8a2a4;
+  color: rgba(255, 255, 255, 0.75);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 
 .playerMusica__titulo {
   overflow: hidden;
-  font-size: 14px;
+  font-size: 12px;
+  letter-spacing: 0.03em;
   color: var(--cor-branco);
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -113,7 +121,8 @@
   cursor: default;
 }
 
-.playerMusica__progresso::-webkit-slider-thumb {
+.playerMusica__progresso::-webkit-slider-thumb,
+.playerMusica__progresso::-moz-range-thumb {
   width: 9px;
   height: 9px;
   border: 0;
@@ -124,21 +133,8 @@
   transition: opacity 0.15s ease;
 }
 
-.playerMusica__progresso::-moz-range-thumb {
-  width: 9px;
-  height: 9px;
-  border: 0;
-  border-radius: 50%;
-  background: var(--cor-rosa);
-  opacity: 0;
-  transition: opacity 0.15s ease;
-}
-
 .playerMusica__progresso:not(:disabled):hover::-webkit-slider-thumb,
-.playerMusica__progresso:focus-visible::-webkit-slider-thumb {
-  opacity: 1;
-}
-
+.playerMusica__progresso:focus-visible::-webkit-slider-thumb,
 .playerMusica__progresso:not(:disabled):hover::-moz-range-thumb,
 .playerMusica__progresso:focus-visible::-moz-range-thumb {
   opacity: 1;
@@ -161,7 +157,6 @@
   margin: -6px;
   padding: 0;
   border: 0;
-  border-radius: 50%;
   background: transparent;
   color: inherit;
   transition: color 0.15s ease;
@@ -178,7 +173,7 @@
 }
 
 .playerMusica__controleVolume {
-  width: 99px;
+  width: 96px;
   height: 8px;
   margin: 0;
   border-radius: var(--raio-pilula);
@@ -191,7 +186,8 @@
   cursor: pointer;
 }
 
-.playerMusica__controleVolume::-webkit-slider-thumb {
+.playerMusica__controleVolume::-webkit-slider-thumb,
+.playerMusica__controleVolume::-moz-range-thumb {
   width: 15px;
   height: 15px;
   border: 0;
@@ -200,19 +196,16 @@
   appearance: none;
 }
 
-.playerMusica__controleVolume::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
-  border: 0;
-  border-radius: 50%;
-  background: var(--cor-rosa);
-}
-
 /* === Seção: Responsivo === */
-/* Em telas de toque o volume é o do aparelho: fica só o botão de silenciar */
 @media (pointer: coarse) {
   .playerMusica__player {
     flex-basis: 300px;
+  }
+
+  .playerMusica__botaoTocar::before {
+    content: "";
+    position: absolute;
+    inset: -7px;
   }
 
   .playerMusica__controleVolume {

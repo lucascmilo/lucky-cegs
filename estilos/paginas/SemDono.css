@@ -1,29 +1,43 @@
 /* === Seção: Escala da tela === */
 .semDono {
-  /* A estrutura da página (larguras, espaços, colagem) fica 10% menor */
   --px-pagina: calc(var(--px-caixa) * 0.9);
   display: flex;
   flex: 1;
   flex-direction: column;
 }
 
-/* === Seção: Faixa verde do topo === */
+/* === Seção: Faixa do topo === */
 .semDono__faixa {
-  background: #b8f0e6;
+  position: relative;
+  overflow: hidden;
+  background: var(--cor-papel);
   border-bottom: 1px solid var(--cor-preto);
+}
+
+.semDono__faixa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.15;
+  background-image: url("/imagens/campo-pixels.svg");
+  background-repeat: repeat;
 }
 
 .semDono__faixaConteudo {
   position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
-  height: calc(var(--px-caixa) * 328);
+  min-height: calc(var(--px-caixa) * 328);
   margin-inline: auto;
+  padding-block: 32px;
 }
 
-.semDono__faixaConteudo .tituloFaixa__subtitulo {
+.semDono__faixaConteudo > :not(.semDono__colagem) {
   max-width: calc(100% - var(--px-pagina) * 351 - 24px);
 }
 
@@ -34,7 +48,6 @@
   right: calc(var(--px-pagina) * -37);
   width: calc(var(--px-pagina) * 351);
   aspect-ratio: 351 / 308;
-  /* Centraliza pelo que aparece: o chaveiro tem uma sobra transparente embaixo */
   transform: translateY(-44.4%);
 }
 
@@ -43,27 +56,44 @@
 }
 
 .semDono__quadrado {
-  left: 28.49%;
   top: 0;
+  left: 28.49%;
+  z-index: 1;
   width: 62.68%;
   height: 55.19%;
-  border: 1px solid var(--cor-preto);
+  border: var(--borda);
+}
+
+.semDono__foto,
+.semDono__recorte,
+.semDono__chaveiro {
+  height: auto;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
 }
 
 .semDono__foto {
-  left: 0;
   top: 16.56%;
+  left: 0;
+  z-index: 2;
   width: 54.13%;
-  height: auto;
-  border: 6px solid var(--cor-branco);
-  box-shadow: var(--sombra-cartao);
+}
+
+.semDono__recorte {
+  top: -2%;
+  left: 83%;
+  z-index: 2;
+  width: 22%;
+  transform: rotate(6deg);
 }
 
 .semDono__chaveiro {
-  left: 56.41%;
   top: 39.29%;
+  left: 56.41%;
+  z-index: 0;
   width: 43.6%;
-  height: auto;
 }
 
 /* === Seção: Conteúdo === */
@@ -75,8 +105,7 @@
 
 /* === Seção: Como funciona a claim === */
 .semDono__comoFunciona {
-  border: 1px solid var(--cor-preto);
-  border-radius: 20px;
+  border: var(--borda);
   background: var(--cor-branco);
 }
 
@@ -85,10 +114,11 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 20px 48px;
+  min-height: 56px;
+  padding: 18px 48px;
   font-size: 18px;
   font-weight: 900;
-  line-height: 24px;
+  line-height: 1.35;
   list-style: none;
   cursor: pointer;
   transition: color 0.2s ease;
@@ -121,7 +151,7 @@
   padding: 0 48px 24px;
   list-style: none;
   font-size: 16px;
-  line-height: 23px;
+  line-height: 1.45;
 }
 
 /* === Seção: Busca === */
@@ -131,15 +161,14 @@
   width: 100%;
   height: 52px;
   margin-top: calc(var(--px-pagina) * 28);
-  padding: 0 6px 0 20px;
-  border: 1px solid var(--cor-preto);
-  border-radius: var(--raio-pilula);
+  padding: 0 6px 0 18px;
+  border: var(--borda);
   background: var(--cor-branco);
 }
 
 .semDono__busca:focus-within {
-  border-color: var(--cor-rosa-escuro);
-  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
+  border-color: var(--cor-rosa-texto);
+  box-shadow: var(--anel-foco);
 }
 
 .semDono__campoBusca {
@@ -153,7 +182,7 @@
 }
 
 .semDono__campoBusca::placeholder {
-  color: #6b6466;
+  color: var(--cor-texto-suave);
 }
 
 .semDono__botaoBusca {
@@ -161,16 +190,15 @@
   height: 40px;
   padding: 0 20px;
   border: 0;
-  border-radius: var(--raio-pilula);
   background: var(--cor-preto);
   font-size: 14px;
   font-weight: 700;
   color: var(--cor-branco);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
 .semDono__botaoBusca:hover {
-  background: #2a2628;
+  background: var(--cor-grafite);
 }
 
 .semDono__resultadoBusca {
@@ -196,13 +224,9 @@
 
 .semDono__verMais {
   display: flex;
-  width: 206px;
-  height: 40px;
+  width: min(100%, 216px);
+  min-height: 44px;
   margin: calc(var(--px-pagina) * 33) auto 0;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    transform 0.15s ease;
 }
 
 .semDono__verMais:hover {
@@ -216,8 +240,7 @@
   flex-direction: column;
   height: 100%;
   padding: calc(var(--px-pagina) * 22) calc(var(--px-pagina) * 17) calc(var(--px-pagina) * 18);
-  border: 1px solid var(--cor-preto);
-  border-radius: calc(var(--px-pagina) * 16);
+  border: var(--borda);
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
 }
@@ -225,7 +248,6 @@
 .cartaoSemDono__foto {
   height: calc(var(--px-pagina) * 154);
   border-left-width: 11px;
-  border-radius: 6px;
 }
 
 .cartaoSemDono__fotos {
@@ -235,12 +257,12 @@
 .cartaoSemDono__foto .fotoItem__lupa {
   top: calc(var(--px-pagina) * 5);
   right: calc(var(--px-pagina) * 6);
-  width: max(28px, var(--px-caixa) * 30);
-  height: max(28px, var(--px-caixa) * 30);
+  width: max(36px, var(--px-caixa) * 36);
+  height: max(36px, var(--px-caixa) * 36);
 }
 
 .cartaoSemDono__foto .fotoItem__lupa svg {
-  width: 14px;
+  width: 15px;
   height: auto;
 }
 
@@ -248,7 +270,8 @@
   margin-top: calc(var(--px-pagina) * 15);
   font-family: var(--fonte-titulo);
   font-size: max(14px, var(--px-caixa) * 16);
-  font-weight: 400;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: 1.2;
   text-transform: lowercase;
 }
@@ -262,7 +285,7 @@
 .cartaoSemDono__pilulas {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(var(--px-caixa) * 8) calc(var(--px-caixa) * 18);
+  gap: calc(var(--px-caixa) * 8) calc(var(--px-caixa) * 12);
   margin-top: calc(var(--px-pagina) * 18);
 }
 
@@ -270,7 +293,7 @@
 .cartaoSemDono__pilulas .pilulaContorno {
   min-width: 0;
   padding: 0 12px;
-  font-size: 11px;
+  font-size: 12px;
   white-space: nowrap;
 }
 
@@ -278,12 +301,14 @@
   margin-top: calc(var(--px-pagina) * 15);
   font-family: var(--fonte-titulo);
   font-size: max(20px, var(--px-caixa) * 25);
-  line-height: 0.9;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
+  line-height: 0.95;
   font-variant-numeric: tabular-nums;
 }
 
 .cartaoSemDono__custos {
-  margin-top: 2px;
+  margin-top: 4px;
   margin-bottom: calc(var(--px-pagina) * 19);
   font-size: max(12px, var(--px-caixa) * 13);
   font-weight: 600;
@@ -295,27 +320,30 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: max(36px, var(--px-caixa) * 35);
+  min-height: 44px;
   margin-top: auto;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: var(--raio-pilula);
-  background: linear-gradient(180deg, #d6487a 0%, #c42a62 45%, var(--cor-rosa-profundo) 100%);
-  box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -3px 0 rgba(21, 18, 20, 0.12),
-    0 6px 12px -4px rgba(21, 18, 20, 0.3);
-  font-size: max(13px, var(--px-caixa) * 13);
+  padding: 8px 12px;
+  border: var(--borda);
+  background: var(--cor-preto);
+  box-shadow: var(--sombra-cartao);
+  font-size: max(13px, var(--px-caixa) * 14);
   font-weight: 700;
-  color: var(--cor-branco);
+  color: var(--cor-creme);
   text-decoration: none;
   transition:
-    filter 0.3s ease,
+    background-color 0.2s ease,
+    box-shadow 0.15s ease,
     transform 0.15s ease;
 }
 
 .botaoQueroEsse:hover:not(:disabled) {
-  filter: brightness(1.06);
+  background: var(--cor-grafite);
   transform: translateY(-1px);
+}
+
+.botaoQueroEsse:active:not(:disabled) {
+  box-shadow: none;
+  transform: translate(4px, 3px);
 }
 
 .botaoQueroEsse:disabled {
@@ -324,8 +352,8 @@
 }
 
 .botaoQueroEsse__enviado {
-  border: 1px solid var(--cor-preto);
-  background: #bdebd0;
+  border: var(--borda);
+  background: var(--cor-ok);
   box-shadow: none;
   color: var(--cor-preto);
 }
@@ -343,114 +371,31 @@
   grid-template-columns: calc(var(--px-pagina) * 300) minmax(0, 1fr);
   overflow: hidden;
   margin-top: calc(var(--px-pagina) * 40);
-  border: 1px solid var(--cor-preto);
-  border-radius: 16px;
+  border: var(--borda);
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
 }
 
 .semDonoVazio__arte {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 290px;
+  padding: 24px;
   border-right: 1.5px dashed var(--cor-preto);
-  background: #b8f0e6;
+  background: var(--cor-rosa-suave);
 }
 
-.semDonoVazio__selo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 240px;
-  height: 240px;
-  transform: translate(-50%, -50%);
-}
-
-.semDonoVazio__anel {
-  position: absolute;
-  inset: 0;
-  overflow: visible;
-  animation: semDonoGiro 28s linear infinite;
-}
-
-.semDonoVazio__anel text {
-  font-family: var(--fonte-pixel);
-  font-size: 12px;
-  fill: var(--cor-preto);
-}
-
-.semDonoVazio__sombra,
-.semDonoVazio__circulo {
-  position: absolute;
-  top: 34px;
-  left: 34px;
-  width: 172px;
-  height: 172px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
-}
-
-.semDonoVazio__sombra {
-  background: var(--cor-branco);
-  transform: translate(9px, 9px);
-}
-
-.semDonoVazio__circulo:not(.semDonoVazio__circuloGom) {
-  background: var(--cor-rosa);
-}
-
-.semDonoVazio__circuloGom {
-  --tamanho-azulejo: 24px;
-}
-
-.semDonoVazio__arteGom {
-  background: #f1cfd4;
-}
-
-.semDonoVazio__prego {
-  position: absolute;
-  top: 46px;
-  left: 120px;
-  z-index: 1;
-  width: 12px;
-  height: 12px;
-  border: 2px solid var(--cor-preto);
-  border-radius: 50%;
-  background: var(--cor-amarelo);
-  transform: translate(-50%, -50%);
-}
-
-/* O chaveiro balança a partir do aro, que fica no prego */
-.semDonoVazio__chaveiro {
-  position: absolute;
-  top: 35px;
-  left: 39px;
-  width: 150px;
+.semDonoVazio__imagem {
+  display: block;
+  width: 100%;
+  max-width: 240px;
   height: auto;
-  transform-origin: 54% 6%;
-  animation: semDonoBalanco 3.6s ease-in-out infinite alternate;
-  filter: drop-shadow(0 10px 12px rgba(21, 18, 20, 0.22));
-}
-
-@keyframes semDonoGiro {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes semDonoBalanco {
-  from {
-    transform: rotate(-7deg);
-  }
-  to {
-    transform: rotate(7deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .semDonoVazio__chaveiro,
-  .semDonoVazio__anel {
-    animation: none;
-  }
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  object-fit: contain;
 }
 
 .semDonoVazio__conteudo {
@@ -463,11 +408,12 @@
 
 .semDonoVazio__etiqueta {
   padding: 5px 12px 4px;
-  border: 1px solid var(--cor-preto);
+  border: var(--borda);
   border-radius: var(--raio-pilula);
   background: var(--cor-rosa-suave);
   font-family: var(--fonte-pixel);
-  font-size: 13px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
   color: var(--cor-rosa-texto);
 }
 
@@ -475,7 +421,8 @@
   margin-top: 16px;
   font-family: var(--fonte-titulo);
   font-size: clamp(26px, var(--px-caixa) * 34, 34px);
-  font-weight: 400;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: 1.05;
 }
 
@@ -485,112 +432,32 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 1.5;
-  color: #3d3739;
+  color: var(--cor-grafite);
 }
 
 .semDonoVazio__botao {
   min-width: 170px;
-  height: 44px;
+  min-height: 44px;
   margin-top: 22px;
   padding: 0 24px;
 }
 
-/* === Seção: Responsivo === */
-@media (max-width: 1100px) {
-  .semDono__colagem {
-    right: 0;
-  }
-}
-
-@media (max-width: 1000px) {
-  .semDono__lista {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 860px) {
-  .semDono__comoFuncionaTitulo {
-    padding: 18px 20px;
-    font-size: 16px;
-  }
-
-  .semDono__passos {
-    padding: 0 20px 20px;
-    font-size: 15px;
-    line-height: 22px;
-  }
-
-  .semDono__lista {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-  }
-}
-
-/* Como em Termos: a colagem só desce para baixo do título no celular */
-@media (max-width: 600px) {
-  .semDono__faixaConteudo {
-    height: auto;
-    padding: 32px 0 28px;
-  }
-
-  .semDono__faixaConteudo .tituloFaixa__subtitulo {
-    max-width: none;
-  }
-
-  .semDono__colagem {
-    position: relative;
-    top: auto;
-    right: auto;
-    transform: none;
-    width: min(300px, 86%);
-    margin: 28px auto 0;
-  }
-}
-
-@media (max-width: 560px) {
-  .semDono__lista {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
-  }
-
-  .semDonoVazio {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .semDonoVazio__arte {
-    min-height: 280px;
-    border-right: 0;
-    border-bottom: 1.5px dashed var(--cor-preto);
-  }
-
-  .semDonoVazio__conteudo {
-    align-items: center;
-    padding: 28px 20px 30px;
-    text-align: center;
-  }
-}
-
-/* === Seção: Versão da GOM: faixa === */
+/* === Seção: Versão da GOM === */
 .semDono__faixaGom {
-  background: #f1cfd4;
+  background: var(--cor-papel);
 }
 
 .semDono__faixaGom .semDono__faixaConteudo {
-  height: calc(var(--px-caixa) * 350);
-}
-
-.semDono__faixaGom .semDono__quadrado {
-  --tamanho-azulejo: 22px;
+  min-height: calc(var(--px-caixa) * 350);
 }
 
 .semDono__acao {
   width: max(200px, var(--px-caixa) * 250);
-  height: max(44px, var(--px-caixa) * 50);
+  min-height: max(46px, var(--px-caixa) * 50);
   margin-top: calc(var(--px-caixa) * 30);
   font-size: max(14px, var(--px-caixa) * 16);
 }
 
-/* === Seção: Versão da GOM: busca e tabela === */
 .semDonoGom__busca {
   gap: 10px;
   margin-top: 0;
@@ -599,14 +466,13 @@
 
 .semDonoGom__iconeBusca {
   flex-shrink: 0;
-  color: #6b6466;
+  color: var(--cor-texto-suave);
 }
 
 .semDonoGom {
   position: relative;
   margin-top: calc(var(--px-pagina) * 46);
   padding: calc(var(--px-pagina) * 36) 0 calc(var(--px-pagina) * 20);
-  border-radius: 14px;
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
 }
@@ -663,16 +529,13 @@
 }
 
 .semDonoGom__tabela tbody tr:not(:last-child) {
-  border-bottom: 1px dashed #d6d3d3;
+  border-bottom: 1px dashed var(--cor-preto);
 }
 
 .semDonoGom__tabela tbody td {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
 }
-
-
-
 
 .semDonoGom__nome {
   overflow: hidden;
@@ -682,9 +545,9 @@
   white-space: nowrap;
 }
 
-.semDonoGom__valor {
-  font-size: 13px !important;
-  font-weight: 600 !important;
+.semDonoGom__tabela tbody .semDonoGom__valor {
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .semDonoGom__pedidos {
@@ -702,9 +565,8 @@
 
 .semDonoGom__escolher,
 .semDonoGom__botaoDar {
-  height: 32px;
-  border: 1px solid var(--cor-preto);
-  border-radius: var(--raio-pilula);
+  height: 36px;
+  border: var(--borda);
   background-color: var(--cor-branco);
   font-size: 12px;
   font-weight: 700;
@@ -712,12 +574,12 @@
 }
 
 .semDonoGom__escolher {
-  width: calc(100% - 76px - 30px - 12px);
+  width: calc(100% - 76px - 36px - 12px);
   max-width: 140px;
-  padding: 0 26px 0 12px;
+  padding: 0 26px 0 10px;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23151214' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-position: right 11px center;
+  background-position: right 10px center;
   background-repeat: no-repeat;
   cursor: pointer;
 }
@@ -738,11 +600,10 @@
 .semDonoGom__apagar {
   display: inline-grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   margin-left: 6px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
+  border: var(--borda);
   background: var(--cor-branco);
   vertical-align: middle;
   transition:
@@ -762,23 +623,69 @@
   cursor: not-allowed;
 }
 
-.semDonoGom__nada {
+.semDonoGom__tabela tbody .semDonoGom__nada {
   height: 80px;
-  font-size: 14px !important;
-  text-align: center !important;
-  color: #6b6466;
+  font-size: 14px;
+  text-align: center;
+  color: var(--cor-texto-suave);
 }
 
 .semDonoGom__verMais {
   display: flex;
-  height: 36px;
+  min-height: 44px;
   margin: 14px auto 0;
-  padding: 0 18px;
+  padding: 0 20px;
   font-size: 13px;
 }
 
-/* === Seção: Versão da GOM: celular e tablet (cada item vira um cartão) === */
+/* === Seção: Responsivo === */
+@media (pointer: coarse) {
+  .cartaoSemDono__foto .fotoItem__lupa {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .semDono__colagem {
+    right: 0;
+  }
+}
+
+@media (max-width: 1060px) and (min-width: 861px) {
+  .semDonoGom {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  .semDonoGom__tabela {
+    min-width: 960px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .semDono__lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 860px) {
+  .semDono__comoFuncionaTitulo {
+    padding: 16px 20px;
+    font-size: 16px;
+  }
+
+  .semDono__passos {
+    padding: 0 20px 20px;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .semDono__lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
   .semDonoGom__tabela,
   .semDonoGom__tabela tbody {
     display: block;
@@ -794,7 +701,7 @@
 
   .semDonoGom__tabela tbody tr {
     display: grid;
-    grid-template-columns: 34px minmax(0, 1fr);
+    grid-template-columns: 36px minmax(0, 1fr);
     align-items: center;
     gap: 8px 12px;
     height: auto;
@@ -802,7 +709,7 @@
   }
 
   .semDonoGom__tabela tbody :is(th, td) {
-    padding: 0 !important;
+    padding: 0;
     text-align: left;
   }
 
@@ -810,7 +717,6 @@
     white-space: normal;
   }
 
-  /* Caixa, valor e pedidos com o rótulo ao lado */
   .semDonoGom__tabela td[data-rotulo]:not(:first-child) {
     display: flex;
     grid-column: 1 / -1;
@@ -819,35 +725,107 @@
 
   .semDonoGom__tabela td[data-rotulo]:not(:first-child)::before {
     content: attr(data-rotulo);
-    flex: 0 0 64px;
-    font-size: 11px;
+    flex: 0 0 68px;
+    font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
-    color: #6b6466;
+    color: var(--cor-texto-suave);
   }
 
   .semDonoGom__dar {
     display: flex;
     grid-column: 1 / -1;
-    gap: 10px;
-    margin-top: 4px;
+    gap: 8px;
+    margin-top: 6px;
   }
 
   .semDonoGom__escolher {
     flex: 1;
+    min-width: 0;
     width: auto;
     max-width: none;
+    height: 44px;
+    font-size: 14px;
   }
 
-  .semDonoGom__botaoDar,
+  .semDonoGom__botaoDar {
+    flex-shrink: 0;
+    height: 44px;
+    margin-left: 0;
+    font-size: 13px;
+  }
+
   .semDonoGom__apagar {
     flex-shrink: 0;
+    width: 44px;
+    height: 44px;
     margin-left: 0;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 720px) {
+  .semDono__faixaConteudo,
   .semDono__faixaGom .semDono__faixaConteudo {
-    height: auto;
+    min-height: 0;
+    padding: 32px 0 28px;
+  }
+
+  .semDono__faixaConteudo > :not(.semDono__colagem) {
+    max-width: none;
+  }
+
+  .semDono__colagem {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: min(300px, 86%);
+    margin: 28px auto 0;
+  }
+
+  .semDono__acao {
+    width: 100%;
+  }
+
+  .semDonoVazio {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .semDonoVazio__arte {
+    min-height: 240px;
+    padding: 24px 20px;
+    border-right: 0;
+    border-bottom: 1.5px dashed var(--cor-preto);
+  }
+
+  .semDonoVazio__imagem {
+    max-width: 210px;
+  }
+
+  .semDonoVazio__conteudo {
+    align-items: center;
+    padding: 28px 20px 30px;
+    text-align: center;
+  }
+
+  .semDonoVazio__botao {
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .semDono__lista {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .semDono__busca {
+    padding: 0 5px 0 12px;
+  }
+
+  .semDono__botaoBusca {
+    padding: 0 14px;
   }
 }

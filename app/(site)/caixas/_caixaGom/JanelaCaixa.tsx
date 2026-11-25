@@ -7,14 +7,14 @@ import { mostrarAviso } from "@/componentes/AvisoFlutuante";
 import { IconeFechar } from "@/componentes/Icones";
 import JanelaConfirmar from "@/componentes/JanelaConfirmar";
 import { juntarClasses } from "@/lib/classes";
+import { chamar } from "@/lib/conexao";
 import { ORIGENS } from "@/lib/configuracoes";
-import { ETAPAS_CAIXA, obterEtapaCaixa, type EtapaCaixa } from "@/lib/etapas";
+import { ETAPAS_CAIXA, type EtapaCaixa, obterEtapaCaixa } from "@/lib/etapas";
 import type { CaixaGom } from "@/lib/planilhaCaixa";
 import { useAvisoAoSair } from "@/lib/useAvisoAoSair";
 import codigoBarras from "@/public/imagens/codigo-barras.png";
 import { criarCaixa, editarCaixa, excluirCaixa } from "../acoesCaixa";
 import "@/estilos/componentes/JanelaGom.css";
-import { chamar } from "@/lib/conexao";
 
 const SIGLAS = Object.keys(ORIGENS);
 const PADRAO_NOME = /^caixa\s+(\d+)\s+([a-z]{2})$/i;
@@ -45,7 +45,12 @@ type PropsJanelaCaixa = {
 
 // === Seção: Janela "Nova caixa" / "Editar caixa" ===
 // O nome é sempre "Caixa <número> <origem>". Na caixa nova, o número sugerido é o próximo daquela origem.
-export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFechar }: PropsJanelaCaixa) {
+export default function JanelaCaixa({
+  caixas,
+  caixa,
+  totalRegistros = 0,
+  aoFechar,
+}: PropsJanelaCaixa) {
   const router = useRouter();
   const editando = Boolean(caixa);
   const referencia = useRef<HTMLDialogElement>(null);
@@ -53,7 +58,8 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
 
   const [inicial] = useState(() => {
     const lido = caixa ? lerNome(caixa.nome) : null;
-    const origem = caixa?.origem && SIGLAS.includes(caixa.origem) ? caixa.origem : (lido?.sigla ?? "JP");
+    const origem =
+      caixa?.origem && SIGLAS.includes(caixa.origem) ? caixa.origem : (lido?.sigla ?? "JP");
     return {
       numero: String(lido?.numero ?? (caixa ? "" : proximoNumero(caixas, origem))),
       origem,
@@ -84,14 +90,19 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
     formulario.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
   }, [erros]);
 
-  const alterado = JSON.stringify({ numero, origem, situacao, abertura, observacao }) !== JSON.stringify(inicial);
+  const alterado =
+    JSON.stringify({ numero, origem, situacao, abertura, observacao }) !== JSON.stringify(inicial);
   useAvisoAoSair(alterado);
 
   const nome = `Caixa ${numero.trim() || "?"} ${origem}`;
-  const repetida = caixas.some((c) => c.id !== caixa?.id && c.nome.toLowerCase() === nome.toLowerCase());
+  const repetida = caixas.some(
+    (c) => c.id !== caixa?.id && c.nome.toLowerCase() === nome.toLowerCase(),
+  );
 
   function apagarErro(chave: string) {
-    setErros((anteriores) => Object.fromEntries(Object.entries(anteriores).filter(([c]) => c !== chave)));
+    setErros((anteriores) =>
+      Object.fromEntries(Object.entries(anteriores).filter(([c]) => c !== chave)),
+    );
   }
 
   function escolherOrigem(sigla: string) {
@@ -122,15 +133,20 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
   function salvar() {
     setErroGeral(null);
     const encontrados: Record<string, string> = {};
-    if (!/^\d{1,4}$/.test(numero.trim()) || Number(numero) < 1) encontrados.numero = "Use o número da caixa, como 7.";
-    else if (repetida) encontrados.numero = `Já existe a ${nome}.`;
+    if (!/^\d{1,4}$/.test(numero.trim()) || Number(numero) < 1) {
+      encontrados.numero = "Use o número da caixa, como 7.";
+    } else if (repetida) {
+      encontrados.numero = `Já existe a ${nome}.`;
+    }
     if (!abertura) encontrados.abertura = "Escolha a data de abertura.";
     setErros(encontrados);
     if (Object.keys(encontrados).length > 0) return;
 
     const dados = { numero: numero.trim(), origem, situacao, abertura, observacao };
     iniciar(async () => {
-      const resultado = caixa ? await chamar(() => editarCaixa(caixa.id, dados)) : await chamar(() => criarCaixa(dados));
+      const resultado = caixa
+        ? await chamar(() => editarCaixa(caixa.id, dados))
+        : await chamar(() => criarCaixa(dados));
       if (!resultado.ok) {
         setErros(resultado.erros);
         setErroGeral(resultado.erro ?? "Confira os campos marcados.");
@@ -195,7 +211,7 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
             disabled={salvando}
             aria-label="Fechar sem salvar"
           >
-            <IconeFechar tamanho={22} />
+            <IconeFechar tamanho={22} aria-hidden="true" />
           </button>
         </div>
 
@@ -204,7 +220,9 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
           <label htmlFor="caixa-numero" className="janelaGom__rotulo">
             Nome da caixa
           </label>
-          <span className={juntarClasses("janelaCaixa__nome", erros.numero && "janelaCaixa__nomeErro")}>
+          <span
+            className={juntarClasses("janelaCaixa__nome", erros.numero && "janelaCaixa__nomeErro")}
+          >
             <span className="janelaCaixa__prefixo" aria-hidden="true">
               CAIXA
             </span>
@@ -232,7 +250,9 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
           ) : repetida ? (
             <p className="janelaGom__erro">Já existe a {nome}.</p>
           ) : (
-            !editando && <p className="janelaGom__ajuda">Sugestão: o próximo número de {ORIGENS[origem]}.</p>
+            !editando && (
+              <p className="janelaGom__ajuda">Sugestão: o próximo número de {ORIGENS[origem]}.</p>
+            )
           )}
         </div>
 
@@ -241,7 +261,13 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
           <legend className="janelaGom__rotulo">Origem</legend>
           <div className="janelaCaixa__origens">
             {SIGLAS.map((sigla) => (
-              <label key={sigla} className={juntarClasses("janelaCaixa__origem", origem === sigla && "janelaCaixa__origemAtiva")}>
+              <label
+                key={sigla}
+                className={juntarClasses(
+                  "janelaCaixa__origem",
+                  origem === sigla && "janelaCaixa__origemAtiva",
+                )}
+              >
                 <input
                   type="radio"
                   name="origem"
@@ -268,7 +294,11 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
               value={situacao}
               onChange={(evento) => setSituacao(evento.target.value as EtapaCaixa)}
               disabled={editando}
-              title={editando ? "A situação muda pela faixa da caixa, onde os joiners recebem aviso" : undefined}
+              title={
+                editando
+                  ? "A situação muda pela faixa da caixa, onde os joiners recebem aviso"
+                  : undefined
+              }
             >
               {ETAPAS_CAIXA.map((opcao) => (
                 <option key={opcao.id} value={opcao.id}>
@@ -322,7 +352,8 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
             <span className="janelaCaixa__etiqueta">PRÉVIA</span>
             <strong className="janelaCaixa__nomePrevia">{nome.toUpperCase()}</strong>
             <span className="janelaCaixa__detalhes">
-              {ORIGENS[origem]} · {totalRegistros} {totalRegistros === 1 ? "registro" : "registros"} · {etapa.rotulo}
+              {ORIGENS[origem]} · {totalRegistros}{" "}
+              {totalRegistros === 1 ? "registro" : "registros"} · {etapa.rotulo}
             </span>
           </div>
           <Image src={codigoBarras} alt="" sizes="232px" className="janelaCaixa__codigo" />
@@ -335,7 +366,12 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
           </p>
         )}
         <div className={juntarClasses("janelaGom__botoes", editando && "janelaGom__botoesEditar")}>
-          <button type="button" className="botao botao__contorno janelaGom__botao" onClick={pedirParaFechar} disabled={salvando}>
+          <button
+            type="button"
+            className="botao botao__contorno janelaGom__botao"
+            onClick={pedirParaFechar}
+            disabled={salvando}
+          >
             Cancelar
           </button>
           {editando && (
@@ -352,7 +388,11 @@ export default function JanelaCaixa({ caixas, caixa, totalRegistros = 0, aoFecha
               Excluir caixa
             </button>
           )}
-          <button type="submit" className="botao botao__rosa janelaGom__botao janelaCaixa__botaoCriar" disabled={salvando}>
+          <button
+            type="submit"
+            className="botao botao__rosa janelaGom__botao janelaCaixa__botaoCriar"
+            disabled={salvando}
+          >
             {salvando ? "Salvando…" : editando ? "Salvar alterações" : "Criar caixa"}
           </button>
         </div>

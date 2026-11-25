@@ -11,7 +11,7 @@ export default function SecaoCasaDaGom() {
             <span className="inicioJoiner__tituloRosa">CASA DA GOM</span>
           </h2>
           <p className="inicioJoiner__texto">
-            Quando a caixa chega, a GOM tira uma foto com todos{" "}
+            Quando a caixa chega, a GOM tira uma foto com todos
             <br />
             os seus itens juntos e a foto fica guardada no seu fichário.
           </p>

@@ -1,9 +1,10 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { juntarClasses } from "@/lib/classes";
+import recortePixel from "@/public/imagens/adesivo-recorte-pixel.png";
 import chaveiro from "@/public/imagens/chaveiro.png";
-import fotoJoiner from "@/public/imagens/sem-dono-foto.png";
-import fotoGom from "@/public/imagens/sem-dono-gom-foto.png";
+import fotoJoiner from "@/public/imagens/sem-dono-modelo.png";
+import fotoGom from "@/public/imagens/modelo-gom-sem-dono.png";
 import "@/estilos/paginas/SemDono.css";
 
 type PropsFaixaSemDono = {
@@ -26,8 +27,9 @@ export default function FaixaSemDono({ subtitulo, gom = false, acao }: PropsFaix
         {acao}
 
         <div className="semDono__colagem" aria-hidden="true">
-          <span className={juntarClasses("semDono__quadrado", gom ? "fundoAzulejos" : "fundoPontosRosa")} />
+          <span className={juntarClasses("semDono__quadrado", gom ? "fundoTrevosCreme" : "fundoTrevosRosa")} />
           <Image src={gom ? fotoGom : fotoJoiner} alt="" sizes="190px" className="semDono__foto" priority />
+          <Image src={recortePixel} alt="" sizes="80px" className="semDono__recorte" />
           <Image src={chaveiro} alt="" sizes="153px" className="semDono__chaveiro" />
         </div>
       </div>

@@ -9,9 +9,15 @@ import { exigirUsuario } from "@/lib/sessao";
 import TelaCaixa from "../_caixa/TelaCaixa";
 import TelaCaixaGom from "../_caixaGom/TelaCaixaGom";
 
+function parsearIdCaixa(valor: string): number | null {
+  const id = Number(valor);
+  return Number.isInteger(id) && id > 0 ? id : null;
+}
+
 // === Seção: Título da aba com o nome da caixa ===
 export async function generateMetadata({ params }: PageProps<"/caixas/[id]">): Promise<Metadata> {
-  const nome = await obterNomeCaixa(Number((await params).id));
+  const id = parsearIdCaixa((await params).id);
+  const nome = id ? await obterNomeCaixa(id) : null;
   return { title: `${nome ?? "Caixa"} · Lucky Cegs` };
 }
 
@@ -30,9 +36,10 @@ export default function PaginaCaixa(props: PageProps<"/caixas/[id]">) {
 async function ConteudoCaixa({ params, searchParams }: PageProps<"/caixas/[id]">) {
   const { id: idTexto } = await params;
   const usuario = await exigirUsuario(`/caixas/${idTexto}`);
+  const id = parsearIdCaixa(idTexto);
+  if (!id) notFound();
 
   if (usuario.papel === "admin") {
-    const id = Number(idTexto);
     const caixas = await obterCaixasGom();
     const caixa = caixas.find((c) => c.id === id);
     if (!caixa) notFound();
@@ -61,7 +68,7 @@ async function ConteudoCaixa({ params, searchParams }: PageProps<"/caixas/[id]">
     );
   }
 
-  const caixa = await obterCaixa(Number(idTexto));
+  const caixa = await obterCaixa(id);
   if (!caixa) notFound();
 
   const [caixasAbertas, itens, parametros] = await Promise.all([
@@ -70,5 +77,13 @@ async function ConteudoCaixa({ params, searchParams }: PageProps<"/caixas/[id]">
     searchParams,
   ]);
 
-  return <TelaCaixa caixa={caixa} caixasAbertas={caixasAbertas} itens={itens} eu={usuario} parametros={parametros} />;
+  return (
+    <TelaCaixa
+      caixa={caixa}
+      caixasAbertas={caixasAbertas}
+      itens={itens}
+      eu={usuario}
+      parametros={parametros}
+    />
+  );
 }

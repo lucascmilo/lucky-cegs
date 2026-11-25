@@ -1,9 +1,9 @@
 "use client";
 
-import { type CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { IconeLapis } from "@/componentes/Icones";
 import { juntarClasses } from "@/lib/classes";
-import { obterEtapaItem, type EtapaItem } from "@/lib/etapas";
+import { type EtapaItem, obterEtapaItem } from "@/lib/etapas";
 import { CATEGORIAS, type ParteGom, type Quantidades } from "@/lib/planilhaCaixa";
 
 // === Seção: Peças da tabela ===
@@ -11,7 +11,11 @@ import { CATEGORIAS, type ParteGom, type Quantidades } from "@/lib/planilhaCaixa
 export function BolinhaEtapa({ situacao }: { situacao: EtapaItem }) {
   const etapa = obterEtapaItem(situacao);
   return (
-    <span className="planilhaGom__corEtapa" style={{ "--cor-etapa": etapa.cor } as CSSProperties} title={etapa.rotulo}>
+    <span
+      className="planilhaGom__corEtapa"
+      style={{ "--cor-etapa": etapa.cor } as CSSProperties}
+      title={etapa.rotulo}
+    >
       <span className="somenteLeitorTela">{etapa.rotulo}: </span>
     </span>
   );
@@ -19,10 +23,14 @@ export function BolinhaEtapa({ situacao }: { situacao: EtapaItem }) {
 
 export function LinhaParte({ parte, marcado }: { parte: ParteGom; marcado: boolean }) {
   return (
-    <tr className={juntarClasses("planilhaGom__linhaParte", marcado && "planilhaGom__selecionada")}>
+    <tr
+      className={juntarClasses("planilhaGom__linhaParte", marcado && "planilhaGom__selecionada")}
+    >
       <td className="planilhaGom__celulaMarcar" />
       <td className="planilhaGom__celulaFotos" />
-      <td className="planilhaGom__membro planilhaGom__alinharEsquerda">{parte.membro ?? <Vazio />}</td>
+      <td className="planilhaGom__membro planilhaGom__alinharEsquerda">
+        {parte.membro ?? <Vazio />}
+      </td>
       <td data-rotulo="Joiner" className="planilhaGom__joiner planilhaGom__alinharEsquerda">
         @{parte.user}
       </td>
@@ -47,7 +55,10 @@ export function CelulasQuantidade({ quantidades }: { quantidades: Quantidades })
     <td
       key={categoria.id}
       data-rotulo={categoria.sigla}
-      className={juntarClasses("planilhaGom__qtd", quantidades[categoria.id] === 0 && "planilhaGom__zero")}
+      className={juntarClasses(
+        "planilhaGom__qtd",
+        quantidades[categoria.id] === 0 && "planilhaGom__zero",
+      )}
     >
       {quantidades[categoria.id]}
     </td>
@@ -79,8 +90,14 @@ export function formatarDinheiro(valor: number | null) {
 
 // "R$" e o número separados: com valores muito altos, o número desce para a linha de baixo
 // em vez de invadir a coluna vizinha
-const formatadorValor = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const formatadorKg = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+const formatadorValor = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+const formatadorKg = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 3,
+  maximumFractionDigits: 3,
+});
 
 export function Dinheiro({ valor }: { valor: number }) {
   return (
@@ -98,9 +115,21 @@ export function formatarKg(kg: number | null) {
 
 // === Seção: Caixa de marcar ===
 // A área de toque é a célula inteira; a caixa desenhada fica no meio
-type PropsMarcar = { marcado: boolean; parcial?: boolean; aoMudar: () => void; rotulo: string; desabilitado?: boolean };
+type PropsMarcar = {
+  marcado: boolean;
+  parcial?: boolean;
+  aoMudar: () => void;
+  rotulo: string;
+  desabilitado?: boolean;
+};
 
-export function Marcar({ marcado, parcial = false, aoMudar, rotulo, desabilitado }: PropsMarcar) {
+export function Marcar({
+  marcado,
+  parcial = false,
+  aoMudar,
+  rotulo,
+  desabilitado,
+}: PropsMarcar) {
   return (
     <label className="planilhaGom__areaMarcar">
       <input
@@ -118,11 +147,16 @@ export function Marcar({ marcado, parcial = false, aoMudar, rotulo, desabilitado
   );
 }
 
-
 export function BotaoEditar({ nome, aoClicar }: { nome: string; aoClicar: () => void }) {
   return (
-    <button type="button" className="planilhaGom__editar" onClick={aoClicar} aria-label={`Editar ${nome}`} title="Editar item">
-      <IconeLapis />
+    <button
+      type="button"
+      className="planilhaGom__editar"
+      onClick={aoClicar}
+      aria-label={`Editar ${nome}`}
+      title="Editar item"
+    >
+      <IconeLapis aria-hidden="true" />
     </button>
   );
 }

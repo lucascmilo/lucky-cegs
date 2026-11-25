@@ -39,26 +39,33 @@ export default function CartaoSet({ item, eu, caixaId }: PropsCartaoSet) {
           <SeloNovo caixaId={caixaId} atualizadoEm={item.situacaoAtualizadaEm} />
         </div>
 
-        <ul className="cartaoSet__pessoas">
-          {item.outrasPessoas.map((pessoa) => (
-            <li key={pessoa.userId} className="cartaoSet__pessoa">
-              <NomePessoa pessoa={pessoa} />
-              <Versoes versoes={pessoa.versoes} />
-            </li>
-          ))}
-        </ul>
+        {item.outrasPessoas.length > 0 && (
+          <ul className="cartaoSet__pessoas">
+            {item.outrasPessoas.map((pessoa) => (
+              <li key={pessoa.userId} className="cartaoSet__pessoa">
+                <NomePessoa pessoa={pessoa} />
+                <Versoes versoes={pessoa.versoes} />
+              </li>
+            ))}
+          </ul>
+        )}
 
-        {item.minhasPartes.length > 0 && <MinhasPartes itemId={item.id} partes={item.minhasPartes} eu={eu} />}
+        {item.minhasPartes.length > 0 && (
+          <MinhasPartes itemId={item.id} partes={item.minhasPartes} eu={eu} />
+        )}
       </div>
     </article>
   );
 }
 
 function Versoes({ versoes }: { versoes: (string | null)[] }) {
+  const validas = versoes.filter((versao): versao is string => Boolean(versao));
+  if (validas.length === 0) return null;
+
   return (
     <span className="cartaoSet__versoes">
-      {versoes.filter(Boolean).map((versao, indice) => (
-        <span key={indice} className="pilulaContorno pilulaContorno__versao">
+      {validas.map((versao, indice) => (
+        <span key={`${versao}-${indice}`} className="pilulaContorno pilulaContorno__versao">
           {versao}
         </span>
       ))}

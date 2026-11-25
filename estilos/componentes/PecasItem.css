@@ -1,3 +1,19 @@
+/* === Seção: Selo "novo" (antigo Novidade.css) === */
+.seloNovo {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border: var(--borda);
+  border-radius: var(--raio-pilula);
+  background: var(--cor-acido);
+  font-family: var(--fonte-pixel);
+  font-size: 12px;
+  line-height: 1;
+  color: var(--cor-preto);
+  white-space: nowrap;
+}
+
 /* === Seção: Peças comuns dos itens === */
 .pilulaContorno,
 .pilulaEtapa {
@@ -5,9 +21,9 @@
   align-items: center;
   justify-content: center;
   min-width: calc(var(--px-caixa) * 95);
-  height: calc(var(--px-caixa) * 25);
+  height: max(24px, calc(var(--px-caixa) * 25));
   padding: 0 calc(var(--px-caixa) * 12);
-  border: 1px solid var(--cor-preto);
+  border: var(--borda);
   border-radius: var(--raio-pilula);
   background: var(--cor-branco);
   font-size: max(12px, var(--px-caixa) * 12);
@@ -27,10 +43,9 @@
   gap: calc(var(--px-caixa) * 5);
   width: calc(var(--px-caixa) * 60);
   height: calc(var(--px-caixa) * 20);
-  border-radius: calc(var(--px-caixa) * 4);
   background: var(--cor-preto);
   font-family: var(--fonte-pixel);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--cor-branco);
 }
 
@@ -39,8 +54,8 @@
 }
 
 .nomePessoa {
-  text-transform: lowercase;
   font-size: max(12px, var(--px-caixa) * 16);
+  text-transform: lowercase;
   color: var(--cor-preto);
 }
 
@@ -50,11 +65,11 @@
 
 .valorPagamento {
   display: inline-flex;
-  font-variant-numeric: tabular-nums;
   align-items: center;
   gap: calc(var(--px-caixa) * 10);
   font-size: max(12px, var(--px-caixa) * 13);
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .valorPagamento__selo {
@@ -62,60 +77,47 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
+  height: max(20px, calc(var(--px-caixa) * 20));
   padding: 0 8px;
-  height: calc(var(--px-caixa) * 20);
   border-radius: var(--raio-pilula);
   font-size: 10px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .valorPagamento__pago {
   min-width: calc(var(--px-caixa) * 53);
-  border: 1px solid #5aa548;
-  background: #dcf3d3;
-  color: #2d6a1f;
+  border: 1px solid var(--cor-ok-texto);
+  background: var(--cor-ok);
+  color: var(--cor-ok-texto);
 }
 
 .valorPagamento__emBreve {
   min-width: calc(var(--px-caixa) * 72);
-  border: 1px dashed #8a8486;
+  border: 1px dashed var(--cor-preto);
   background: var(--cor-bege-claro);
-  color: #5c5658;
+  color: var(--cor-texto-suave);
 }
 
 .valorPagamento__pendente {
   min-width: calc(var(--px-caixa) * 72);
-  border: 1px dashed var(--cor-rosa-texto);
+  border: 1px dashed var(--cor-preto);
   background: var(--cor-branco);
   color: var(--cor-rosa-texto);
 }
 
-/* === Seção: Foto do item e foto da balança === */
+/* === Seção: Fotos do item === */
 .fotosDoItem {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-@media (max-width: 560px) {
-  .fotosDoItem {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .fotosDoItem > .fotoItem {
-    height: auto;
-    aspect-ratio: 1;
-  }
-}
-
-/* === Seção: Foto do item === */
 .fotoItem {
   position: relative;
   overflow: hidden;
-  border: 1px solid var(--cor-preto);
+  border: var(--borda);
   border-left: 15px solid var(--cor-rosa);
-  border-radius: calc(var(--px-caixa) * 8);
   background: var(--cor-bege-claro);
 }
 
@@ -130,8 +132,8 @@
 
 .fotoItem__semFoto {
   font-family: var(--fonte-pixel);
-  font-size: 11px;
-  color: #6b6466;
+  font-size: 12px;
+  color: var(--cor-texto-suave);
 }
 
 .fotoItem__lupa {
@@ -140,11 +142,10 @@
   right: calc(var(--px-caixa) * 8);
   display: grid;
   place-items: center;
-  width: calc(var(--px-caixa) * 40);
-  height: calc(var(--px-caixa) * 40);
+  width: max(36px, calc(var(--px-caixa) * 40));
+  height: max(36px, calc(var(--px-caixa) * 40));
   padding: 0;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
+  border: var(--borda);
   background: var(--cor-branco);
   color: var(--cor-preto);
   transition: transform 0.15s ease;
@@ -156,12 +157,11 @@
 
 .fotoItem__janela {
   width: min(92vw, 1000px);
-  overscroll-behavior: contain;
   max-height: 90svh;
   padding: 0;
   overflow: visible;
-  border: 1px solid var(--cor-preto);
-  border-radius: 16px;
+  overscroll-behavior: contain;
+  border: var(--borda);
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
 }
@@ -178,8 +178,7 @@ html:has(.fotoItem__janela[open]) {
   display: block;
   width: 100%;
   height: auto;
-  max-height: calc(90svh - 2px);
-  border-radius: 15px;
+  max-height: calc(90svh - 4px);
   object-fit: contain;
 }
 
@@ -189,35 +188,41 @@ html:has(.fotoItem__janela[open]) {
   right: -14px;
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   padding: 0;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
+  border: var(--borda);
   background: var(--cor-rosa);
-  color: var(--cor-branco);
+  color: var(--cor-preto);
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .fotoItem__fechar:hover {
-  background: var(--cor-rosa-escuro);
+  background: var(--cor-rosa-texto);
+  color: var(--cor-branco);
 }
 
-/* === Seção: Pílula de escolha (caixas abertas e filtros; a ativa fica preta) === */
+/* === Seção: Pílula de escolha === */
 .pilulaSelecao {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: calc(var(--px-caixa) * 154);
-  height: calc(var(--px-caixa) * 40);
+  min-height: max(40px, calc(var(--px-caixa) * 40));
   padding: 0 calc(var(--px-caixa) * 20);
-  border: 1px solid var(--cor-preto);
+  border: var(--borda);
   border-radius: var(--raio-pilula);
   background: var(--cor-branco);
-  font-size: max(12px, var(--px-caixa) * 15);
+  font-size: max(13px, var(--px-caixa) * 15);
   font-weight: 700;
   color: var(--cor-preto);
   text-decoration: none;
-  transition: background-color 0.15s ease;
+  white-space: nowrap;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .pilulaSelecao:hover {
@@ -230,55 +235,72 @@ html:has(.fotoItem__janela[open]) {
   color: var(--cor-branco);
 }
 
-@media (max-width: 860px) {
-  .pilulaSelecao {
-    min-width: 0;
-    height: 38px;
-    padding: 0 18px;
-    font-size: 14px;
-  }
-}
-
-/* === Seção: Espiral de caderno no topo de um cartão === */
-/* O cartão precisa de position: relative */
+/* === Seção: Espiral de caderno === */
 .espiralCaderno {
   position: absolute;
   top: calc(var(--px-caixa) * -15);
   left: calc(var(--px-caixa) * 20);
   right: calc(var(--px-caixa) * 21);
   height: calc(var(--px-caixa) * 30);
-  background: url("/imagens/espiral-caderno.webp") left center / auto 100% round no-repeat;
+  background: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 38 40%27%3E%3Crect x=%2714.5%27 y=%271.5%27 width=%279%27 height=%2723%27 rx=%274.5%27 fill=%27none%27 stroke=%27%23151214%27 stroke-width=%273%27/%3E%3Ccircle cx=%2719%27 cy=%2728%27 r=%276%27 fill=%27%23d8d2ca%27/%3E%3C/svg%3E")
+    left top / auto 100% round no-repeat;
 }
 
-@media (max-width: 860px) {
-  .espiralCaderno {
-    left: 14px;
-    right: 14px;
-  }
-}
-
-/* === Seção: Botão da câmera (tabelas da GOM) === */
+/* === Seção: Botão da câmera === */
 .botaoCamera {
   display: inline-grid;
   place-items: center;
-  width: max(28px, var(--px-caixa) * 30);
-  height: max(28px, var(--px-caixa) * 30);
-  border: 1px solid var(--cor-preto);
-  border-radius: 8px;
+  width: max(30px, var(--px-caixa) * 32);
+  height: max(30px, var(--px-caixa) * 32);
+  border: var(--borda);
   background: var(--cor-rosa);
-  color: var(--cor-branco);
+  color: var(--cor-preto);
   vertical-align: middle;
   transition:
     background-color 0.2s ease,
+    color 0.2s ease,
     transform 0.15s ease;
 }
 
 .botaoCamera:hover:not(:disabled) {
-  background: var(--cor-rosa-escuro);
+  background: var(--cor-rosa-texto);
+  color: var(--cor-branco);
   transform: translateY(-1px);
 }
 
 .botaoCamera:disabled {
   opacity: 0.35;
   cursor: not-allowed;
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 860px) {
+  .pilulaSelecao {
+    min-width: 0;
+    min-height: 42px;
+    padding: 0 18px;
+    font-size: 14px;
+  }
+
+  .espiralCaderno {
+    left: 14px;
+    right: 14px;
+  }
+}
+
+@media (max-width: 560px) {
+  .fotosDoItem {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fotosDoItem > .fotoItem {
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .fotoItem__fechar {
+    top: 8px;
+    right: 8px;
+  }
 }

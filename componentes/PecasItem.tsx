@@ -10,7 +10,7 @@ import "@/estilos/componentes/PecasItem.css";
 export function EtiquetaMeu({ className }: { className?: string }) {
   return (
     <span className={juntarClasses("etiquetaMeu", className)}>
-      <IconeCoracao className="etiquetaMeu__coracao" />
+      <IconeCoracao className="etiquetaMeu__coracao" aria-hidden="true" />
       MEU
     </span>
   );
@@ -20,7 +20,10 @@ export function EtiquetaMeu({ className }: { className?: string }) {
 export function PilulaEtapa({ situacao, className }: { situacao: EtapaItem; className?: string }) {
   const etapa = obterEtapaItem(situacao);
   return (
-    <span className={juntarClasses("pilulaEtapa", className)} style={{ backgroundColor: etapa.cor }}>
+    <span
+      className={juntarClasses("pilulaEtapa", className)}
+      style={{ backgroundColor: etapa.cor }}
+    >
       {etapa.rotulo}
     </span>
   );
@@ -40,14 +43,19 @@ export function SeloPagamento({ estado }: { estado: EstadoPagamento }) {
   if (estado === "pago") {
     return (
       <span className="valorPagamento__selo valorPagamento__pago">
-        <IconeCheck />
+        <IconeCheck aria-hidden="true" />
         Pago
       </span>
     );
   }
   return (
-    <span className={juntarClasses("valorPagamento__selo", estado === "emBreve" ? "valorPagamento__emBreve" : "valorPagamento__pendente")}>
-      <IconeRelogio />
+    <span
+      className={juntarClasses(
+        "valorPagamento__selo",
+        estado === "emBreve" ? "valorPagamento__emBreve" : "valorPagamento__pendente",
+      )}
+    >
+      <IconeRelogio aria-hidden="true" />
       {estado === "emBreve" ? "Em breve" : "Pendente"}
     </span>
   );
@@ -55,10 +63,29 @@ export function SeloPagamento({ estado }: { estado: EstadoPagamento }) {
 
 // === Seção: Valor com situação de pagamento ===
 // Valor vazio (a GOM ainda não lançou) aparece como "-"
-export function ValorPagamento({ valor, estado }: { valor: number | string | null; estado: EstadoPagamento }) {
+export function ValorPagamento({
+  valor,
+  estado,
+}: {
+  valor: number | string | null;
+  estado: EstadoPagamento;
+}) {
+  const valorVazio = valor === null;
+  const textoValor = valorVazio
+    ? "-"
+    : typeof valor === "string"
+      ? valor
+      : formatarReais(valor);
+
   return (
     <span className="valorPagamento">
-      <span className="valorPagamento__numero">{valor === null ? "-" : typeof valor === "string" ? valor : formatarReais(valor)}</span>
+      <span
+        className="valorPagamento__numero"
+        aria-label={valorVazio ? "Valor não informado" : undefined}
+        title={valorVazio ? "Valor ainda não lançado" : undefined}
+      >
+        {textoValor}
+      </span>
       <SeloPagamento estado={estado} />
     </span>
   );

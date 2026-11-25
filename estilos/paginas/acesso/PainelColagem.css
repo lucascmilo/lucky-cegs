@@ -5,9 +5,7 @@
   position: relative;
   overflow: hidden;
   container-type: size;
-  background-color: var(--cor-rosa);
-  background-image: radial-gradient(circle, var(--cor-rosa-pontos) 1.3px, transparent 1.6px);
-  background-size: 22px 22px;
+  background: var(--cor-rosa) url("/imagens/fundo-trevos-rosa.svg") 0 0 / 120px 120px;
   box-shadow: 1px 0 0 var(--cor-preto);
 }
 
@@ -38,6 +36,7 @@
   aspect-ratio: 754 / 926;
   container-type: inline-size;
   transform: translateX(-50%);
+  pointer-events: none;
 }
 
 .painelColagem__palco > * {
@@ -45,15 +44,29 @@
   height: auto;
 }
 
-/* === Seção: Círculo rosa-claro === */
-.painelColagem__circulo {
-  left: 52.105%;
+.painelColagem__trevo,
+.painelColagem__adesivoTrevoFoto,
+.painelColagem__polaroid,
+.painelColagem__chaveiro,
+.painelColagem__codigoBarras,
+.painelColagem__modelo {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* === Seção: Quadrado rosa-claro === */
+.painelColagem__quadrado {
+  left: 60.105%;
   top: 9.646%;
-  width: 55.508%;
+  z-index: 0;
+  width: 50%;
   aspect-ratio: 1;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
+  border: var(--borda);
+  border-radius: 0;
   background: var(--cor-rosa-claro);
+  transform: rotate(77deg);
 }
 
 /* === Seção: Título === */
@@ -63,6 +76,8 @@
   display: flex;
   flex-direction: column;
   font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   font-size: 16.313cqw;
   line-height: 0.703;
   letter-spacing: 0.02em;
@@ -81,18 +96,28 @@
 }
 
 /* === Seção: Etiquetas pretas === */
+.painelColagem__grupoEtiquetas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 .painelColagem__etiqueta {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
+  max-width: calc(100% - 12%);
   height: 3.956cqw;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.85);
   background: var(--cor-preto);
-  box-shadow: 0.398cqw 0.531cqw 0.796cqw rgba(21, 18, 20, 0.25);
+  box-shadow: var(--sombra-objeto);
   font-size: 1.989cqw;
   font-weight: 800;
   line-height: 1;
   color: var(--cor-branco);
+  text-overflow: ellipsis;
   white-space: nowrap;
   transform-origin: 0 0;
 }
@@ -111,67 +136,24 @@
   transform: rotate(-2deg);
 }
 
-/* === Seção: Decorações === */
-.painelColagem__brilhoRosa {
-  left: 51.459%;
-  top: 8.315%;
-  width: 4.509%;
-}
-
-.painelColagem__coracao {
-  left: 3.714%;
-  top: 31.965%;
-  width: 3.448%;
-}
-
-.painelColagem__selo {
-  left: 42.134%;
-  top: 36.338%;
-  width: 21.509%;
-}
-
-.painelColagem__brilhoAmarelo {
-  width: 2.653%;
-}
-
-.painelColagem__brilhoAmareloMaior {
-  width: 2.918%;
-}
-
 /* === Seção: Variante Criar conta === */
-.painelColagem__criarConta .painelColagem__brilhoUm {
-  left: 70.889%;
-  top: 27.829%;
-  transform: rotate(20deg);
-}
-
-.painelColagem__criarConta .painelColagem__brilhoDois {
-  left: 2.653%;
-  top: 52.462%;
-}
-
-.painelColagem__criarConta .painelColagem__cd {
-  left: 32.064%;
-  top: 34.557%;
+.painelColagem__criarConta .painelColagem__trevo {
+  left: 42.064%;
+  top: 38.557%;
   width: 10.538%;
+  transform: rotate(15deg);
 }
 
 .painelColagem__criarConta .painelColagem__polaroid {
-  left: 5.828%;
-  top: 39.225%;
+  left: 4.828%;
+  top: 40.225%;
   width: 25%;
 }
 
 .painelColagem__criarConta .painelColagem__chaveiro {
-  left: 15.643%;
-  top: 55.184%;
+  left: 14.643%;
+  top: 56.184%;
   width: 20.304%;
-}
-
-.painelColagem__criarConta .painelColagem__adesivo {
-  left: 23.21%;
-  top: 52.16%;
-  width: 49.297%;
 }
 
 .painelColagem__criarConta .painelColagem__codigoBarras {
@@ -181,39 +163,32 @@
 }
 
 .painelColagem__criarConta .painelColagem__modelo {
-  left: 61.577%;
-  top: 28.154%;
+  left: 62.777%;
+  top: 31.154%;
   width: 38.329%;
   z-index: 3;
 }
 
+.painelColagem__criarConta .painelColagem__adesivoTrevoFoto {
+  left: 34.567%;
+  top: 56.6%;
+  width: 27.538%;
+  transform: rotate(-8deg);
+}
+
 /* === Seção: Variante Entrar === */
 .painelColagem__entrar .painelColagem__modelo {
-  left: 0%;
+  left: -6%;
   top: 31.965%;
   width: 68.7%;
   z-index: 1;
 }
 
-.painelColagem__entrar .painelColagem__selo {
-  z-index: 2;
-}
-
-.painelColagem__entrar .painelColagem__brilhoUm {
-  left: 74.735%;
-  top: 27.937%;
-  transform: rotate(20deg);
-}
-
-.painelColagem__entrar .painelColagem__brilhoDois {
-  left: 92.44%;
-  top: 56.026%;
-}
-
-.painelColagem__entrar .painelColagem__cd {
+.painelColagem__entrar .painelColagem__trevo {
   left: 84.85%;
   top: 30.454%;
   width: 10.538%;
+  transform: rotate(15deg);
 }
 
 .painelColagem__entrar .painelColagem__polaroid {
@@ -232,4 +207,21 @@
   left: 71.618%;
   top: 84.341%;
   width: 21.523%;
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 1000px) and (orientation: portrait), (max-width: 640px) {
+  .painelColagem__criarConta .painelColagem__adesivoTrevoFoto {
+    left: 33%;
+    top: 51.5%;
+    width: 29%;
+  }
+}
+
+@media (max-width: 480px) {
+  .painelColagem__criarConta .painelColagem__adesivoTrevoFoto {
+    left: 37%;
+    top: 50.5%;
+    width: 20%;
+  }
 }

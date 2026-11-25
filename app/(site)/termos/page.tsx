@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import brilhoAmarelo from "@/public/imagens/brilho-amarelo.png";
-import estrela from "@/public/imagens/termos-estrela.png";
-import photocard from "@/public/imagens/termos-photocard.png";
-import { INTRODUCAO_TERMOS, SECOES_TERMOS } from "./conteudoTermos";
+import adesivoPixelado from "@/public/imagens/adesivo-pixelado.png";
+import estrela from "@/public/imagens/estrela-modelo.png";
+import photocard from "@/public/imagens/photocard-termos.png";
 import IndiceTermos from "./IndiceTermos";
+import { INTRODUCAO_TERMOS, SECOES_TERMOS } from "./conteudoTermos";
 import "@/estilos/paginas/Termos.css";
 
 // === Seção: Metadados ===
@@ -30,8 +30,7 @@ export default function PaginaTermos() {
             <span className="termos__quadradoAzul" />
             <Image src={photocard} alt="" className="termos__photocard" sizes="232px" priority />
             <Image src={estrela} alt="" className="termos__estrela" sizes="175px" priority />
-            <Image src={brilhoAmarelo} alt="" className="termos__brilho termos__brilhoUm" />
-            <Image src={brilhoAmarelo} alt="" className="termos__brilho termos__brilhoDois" />
+            <Image src={adesivoPixelado} alt="" className="termos__adesivo" sizes="90px" />
           </div>
         </div>
       </section>
@@ -43,13 +42,22 @@ export default function PaginaTermos() {
         <div className="termos__corpo">
           {/* === Seção: Índice lateral === */}
           <IndiceTermos
-            itens={SECOES_TERMOS.map(({ id, numero, tituloIndice }) => ({ id, numero, titulo: tituloIndice }))}
+            itens={SECOES_TERMOS.map(({ id, numero, tituloIndice }) => ({
+              id,
+              numero,
+              titulo: tituloIndice,
+            }))}
           />
 
           {/* === Seção: Regras === */}
           <article className="termos__cartao">
             {SECOES_TERMOS.map((secao) => (
-              <section key={secao.id} id={secao.id} className="termos__secao" aria-labelledby={`titulo-${secao.id}`}>
+              <section
+                key={secao.id}
+                id={secao.id}
+                className="termos__secao"
+                aria-labelledby={`titulo-${secao.id}`}
+              >
                 <h2 id={`titulo-${secao.id}`} className="termos__tituloSecao">
                   <span className="termos__numeroSecao">{secao.numero}</span>
                   {secao.titulo}

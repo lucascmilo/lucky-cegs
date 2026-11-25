@@ -1,0 +1,72 @@
+/* === Seção: Estrutura compartilhada dos avisos fixos === */
+.avisoConexao,
+.avisoFlutuante {
+  position: fixed;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 2 * var(--margem-lateral));
+  margin: 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.avisoConexao__faixa,
+.avisoFlutuante__caixa {
+  border: var(--borda);
+  border-radius: 0;
+  box-shadow: var(--sombra-janela);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+/* === Seção: Aviso de conexão (topo) === */
+.avisoConexao {
+  top: max(10px, env(safe-area-inset-top));
+  z-index: 70;
+}
+
+.avisoConexao__faixa {
+  display: block;
+  padding: 10px 18px;
+  background: var(--cor-erro);
+  text-align: center;
+  color: var(--cor-branco);
+  animation: avisoTopoEntra 0.25s ease-out;
+}
+
+.avisoConexao__voltou {
+  background: var(--cor-ok);
+  color: var(--cor-preto);
+}
+
+/* === Seção: Aviso flutuante (base) === */
+.avisoFlutuante {
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 60;
+}
+
+.avisoFlutuante__caixa {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--cor-ok);
+  color: var(--cor-preto);
+  animation: avisoBaseEntra 0.25s ease-out;
+}
+
+/* === Seção: Animações === */
+@keyframes avisoTopoEntra {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes avisoBaseEntra {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}

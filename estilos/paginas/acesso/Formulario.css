@@ -12,7 +12,7 @@
 }
 
 .formulario__gradeUmaColuna {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 /* === Seção: Campo === */
@@ -20,6 +20,7 @@
   display: flex;
   flex-direction: column;
   gap: calc(var(--px-cartao) * 6.6);
+  min-width: 0;
 }
 
 .formulario__rotulo {
@@ -31,12 +32,13 @@
 
 .formulario__entrada {
   width: 100%;
+  min-width: 0;
   height: calc(var(--px-cartao) * 45);
   padding: 0 calc(var(--px-cartao) * 12);
-  border: 1.2px solid var(--cor-preto);
-  border-radius: calc(var(--px-cartao) * 12);
+  border: var(--borda);
+  border-radius: 0;
   background: var(--cor-branco);
-  font-size: max(12px, var(--px-cartao) * 12);
+  font-size: max(13px, var(--px-cartao) * 13);
   color: var(--cor-preto);
   transition:
     border-color 0.15s ease,
@@ -44,13 +46,13 @@
 }
 
 .formulario__entrada::placeholder {
-  color: #4a4547;
+  color: var(--cor-texto-suave);
 }
 
 .formulario__entrada:focus {
   outline: none;
-  border-color: var(--cor-rosa-escuro);
-  box-shadow: 0 0 0 3px rgba(234, 79, 128, 0.22);
+  border-color: var(--cor-rosa-texto);
+  box-shadow: var(--anel-foco);
 }
 
 .formulario__entrada[aria-invalid="true"] {
@@ -58,7 +60,8 @@
 }
 
 .formulario__dica {
-  font-size: max(12px, var(--px-cartao) * 11);
+  font-size: max(12px, var(--px-cartao) * 12);
+  line-height: 1.35;
   color: var(--cor-erro);
 }
 
@@ -68,7 +71,7 @@
   align-items: center;
   gap: calc(var(--px-cartao) * 14);
   margin-top: calc(var(--px-cartao) * 30);
-  font-size: max(12px, var(--px-cartao) * 14);
+  font-size: max(13px, var(--px-cartao) * 14);
   font-weight: 700;
   line-height: calc(var(--px-cartao) * 18);
   cursor: pointer;
@@ -81,16 +84,16 @@
   width: calc(var(--px-cartao) * 24);
   height: calc(var(--px-cartao) * 24);
   margin: 0;
-  border: 1.2px solid var(--cor-preto);
-  border-radius: calc(var(--px-cartao) * 5);
+  border: var(--borda);
+  border-radius: 0;
   background: var(--cor-branco);
   appearance: none;
   cursor: pointer;
 }
 
 .formulario__caixaSelecao:checked {
-  border-color: var(--cor-rosa-escuro);
-  background: var(--cor-rosa-escuro);
+  border-color: var(--cor-rosa-texto);
+  background: var(--cor-rosa-texto);
 }
 
 .formulario__caixaSelecao:checked::after {
@@ -109,7 +112,7 @@
 }
 
 .formulario__linkTermos {
-  color: var(--cor-rosa-escuro);
+  color: var(--cor-rosa-texto);
   text-underline-offset: 2px;
 }
 
@@ -117,11 +120,12 @@
 .formulario__mensagemErro {
   margin-top: calc(var(--px-cartao) * 22);
   padding: calc(var(--px-cartao) * 10) calc(var(--px-cartao) * 14);
-  border: 1px solid var(--cor-erro);
-  border-radius: 10px;
-  background: rgba(234, 79, 128, 0.1);
-  font-size: max(12px, var(--px-cartao) * 13);
+  border: 2px solid var(--cor-erro);
+  border-radius: 0;
+  background: rgba(200, 16, 46, 0.08);
+  font-size: max(13px, var(--px-cartao) * 13);
   font-weight: 600;
+  line-height: 1.4;
   color: var(--cor-erro);
 }
 
@@ -131,30 +135,31 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: calc(var(--px-cartao) * 50);
+  min-height: calc(var(--px-cartao) * 50);
+  height: auto;
+  padding: 10px 18px;
   margin-top: calc(var(--px-cartao) * 30);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: var(--raio-pilula);
-  background: linear-gradient(180deg, #d6487a 0%, #c42a62 45%, var(--cor-rosa-profundo) 100%);
-  box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -3px 0 rgba(21, 18, 20, 0.12),
-    0 9px 16px -4px rgba(21, 18, 20, 0.3);
+  border: var(--borda);
+  border-radius: 0;
+  background: var(--cor-preto);
+  box-shadow: var(--sombra-cartao);
   font-size: calc(var(--px-cartao) * 16);
   font-weight: 700;
-  color: var(--cor-branco);
+  color: var(--cor-creme);
   transition:
     transform 0.15s ease,
-    filter 0.15s ease;
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .formulario__botaoPrincipal:hover:not(:disabled) {
-  filter: brightness(1.06);
+  background: var(--cor-grafite);
   transform: translateY(-1px);
 }
 
 .formulario__botaoPrincipal:active:not(:disabled) {
-  transform: translateY(1px);
+  box-shadow: none;
+  transform: translate(4px, 3px);
 }
 
 .formulario__botaoPrincipal:disabled {
@@ -195,28 +200,6 @@
   margin-top: calc(var(--px-cartao) * 22.4);
 }
 
-/* === Seção: Responsivo === */
-@media (max-width: 600px) {
-  .formulario,
-  .formulario__formularioEntrar {
-    margin-top: 26px;
-  }
-
-  .formulario__grade {
-    grid-template-columns: 1fr;
-    gap: 22px;
-  }
-
-  /* 16 px evita o zoom automático do iPhone ao tocar no campo */
-  .formulario__entrada {
-    font-size: 16px;
-  }
-
-  .formulario__aceite {
-    align-items: flex-start;
-  }
-}
-
 /* === Seção: Campo de senha com olho === */
 .formulario__envoltorioSenha {
   position: relative;
@@ -237,9 +220,9 @@
   height: 36px;
   padding: 0;
   border: 0;
-  border-radius: 10px;
+  border-radius: 0;
   background: transparent;
-  color: #4a4547;
+  color: var(--cor-texto-suave);
   transform: translateY(-50%);
   transition:
     color 0.15s ease,
@@ -260,6 +243,49 @@
   margin-top: calc(var(--px-cartao) * 12);
   font-size: max(12px, var(--px-cartao) * 12);
   line-height: 1.4;
-  color: #4a4547;
+  color: var(--cor-texto-suave);
   text-wrap: pretty;
+}
+
+/* === Seção: Responsivo === */
+@media (pointer: coarse) {
+  .formulario__aceite {
+    min-height: 44px;
+  }
+
+  .formulario__botaoOlho {
+    width: 44px;
+    height: 44px;
+    right: 0;
+  }
+
+  .formulario__entradaSenha {
+    padding-right: 44px;
+  }
+}
+
+@media (max-width: 640px) {
+  .formulario__entrada {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .formulario,
+  .formulario__formularioEntrar {
+    margin-top: 26px;
+  }
+
+  .formulario__grade {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .formulario__entrada {
+    font-size: 16px;
+  }
+
+  .formulario__aceite {
+    align-items: flex-start;
+  }
 }

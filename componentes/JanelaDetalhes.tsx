@@ -92,17 +92,23 @@ const DURACAO_FECHAR = 180;
 
 function JanelaDetalhes({ detalhe, abaInicial, somenteFotos, aoFechar }: PropsJanelaDetalhes) {
   const referenciaJanela = useRef<HTMLDialogElement>(null);
+  const temporizadorFechar = useRef<number | null>(null);
   const [aba, setAba] = useState(abaInicial);
   const [fechando, setFechando] = useState(false);
 
   useEffect(() => {
     referenciaJanela.current?.showModal();
+    return () => {
+      if (temporizadorFechar.current !== null) {
+        window.clearTimeout(temporizadorFechar.current);
+      }
+    };
   }, []);
 
   function fecharSuave() {
     if (fechando) return;
     setFechando(true);
-    window.setTimeout(() => {
+    temporizadorFechar.current = window.setTimeout(() => {
       referenciaJanela.current?.close();
       aoFechar();
     }, DURACAO_FECHAR);
@@ -131,8 +137,13 @@ function JanelaDetalhes({ detalhe, abaInicial, somenteFotos, aoFechar }: PropsJa
         <div className="janelaDetalhes__topo">
           <EtiquetaMeu className="janelaDetalhes__etiqueta" />
           <p className="janelaDetalhes__cabecalho">{detalhe.cabecalho}</p>
-          <button type="button" className="janelaDetalhes__fechar" onClick={fecharSuave} aria-label="Fechar detalhes">
-            <IconeFechar />
+          <button
+            type="button"
+            className="janelaDetalhes__fechar"
+            onClick={fecharSuave}
+            aria-label="Fechar detalhes"
+          >
+            <IconeFechar aria-hidden="true" />
           </button>
         </div>
 
@@ -160,14 +171,21 @@ function JanelaDetalhes({ detalhe, abaInicial, somenteFotos, aoFechar }: PropsJa
                 aria-selected={aba === item.id}
                 aria-controls={`painel-${item.id}`}
                 tabIndex={aba === item.id ? 0 : -1}
-                className={juntarClasses("janelaDetalhes__aba", aba === item.id && "janelaDetalhes__abaAtiva")}
+                className={juntarClasses(
+                  "janelaDetalhes__aba",
+                  aba === item.id && "janelaDetalhes__abaAtiva",
+                )}
                 onClick={() => trocarAba(item.id)}
                 onKeyDown={(evento) => {
                   // Setas trocam de aba, como esperado em abas acessíveis
-                  const passo = evento.key === "ArrowRight" ? 1 : evento.key === "ArrowLeft" ? -1 : 0;
+                  const passo =
+                    evento.key === "ArrowRight" ? 1 : evento.key === "ArrowLeft" ? -1 : 0;
                   if (!passo) return;
+                  evento.preventDefault();
                   const indice = ABAS_DETALHES.findIndex((a) => a.id === aba);
-                  trocarAba(ABAS_DETALHES[(indice + passo + ABAS_DETALHES.length) % ABAS_DETALHES.length].id);
+                  trocarAba(
+                    ABAS_DETALHES[(indice + passo + ABAS_DETALHES.length) % ABAS_DETALHES.length].id,
+                  );
                 }}
               >
                 {item.rotulo}
@@ -195,7 +213,11 @@ function JanelaDetalhes({ detalhe, abaInicial, somenteFotos, aoFechar }: PropsJa
 function PainelFotos({ detalhe }: { detalhe: DetalheItem }) {
   return (
     <div className="janelaDetalhes__fotos">
-      <FotoItem publicId={detalhe.fotoId} descricao={`Foto de ${detalhe.nome}`} className="janelaDetalhes__foto" />
+      <FotoItem
+        publicId={detalhe.fotoId}
+        descricao={`Foto de ${detalhe.nome}`}
+        className="janelaDetalhes__foto"
+      />
       <FotoItem
         publicId={detalhe.proofWhId}
         descricao={`Balança de ${detalhe.nome}`}
@@ -210,10 +232,13 @@ function PainelStatus({ detalhe }: { detalhe: DetalheItem }) {
   return (
     <ol className="linhaTempo">
       {detalhe.etapas.map((etapa) => (
-        <li key={etapa.id} className={juntarClasses("linhaTempo__etapa", `linhaTempo__${etapa.estado}`)}>
+        <li
+          key={etapa.id}
+          className={juntarClasses("linhaTempo__etapa", `linhaTempo__${etapa.estado}`)}
+        >
           <span className="linhaTempo__marcador" aria-hidden="true">
-            {etapa.estado === "feita" && <IconeCheck tamanho={18} />}
-            {etapa.estado === "atual" && <IconeCoracao tamanho={14} />}
+            {etapa.estado === "feita" && <IconeCheck tamanho={18} aria-hidden="true" />}
+            {etapa.estado === "atual" && <IconeCoracao tamanho={14} aria-hidden="true" />}
           </span>
 
           {etapa.estado === "atual" ? (
@@ -262,7 +287,7 @@ function PainelPagamento({ detalhe }: { detalhe: DetalheItem }) {
         </div>
       ) : (
         <div className="pagamentoItem__falta pagamentoItem__tudoPago">
-          <IconeCheck tamanho={20} />
+          <IconeCheck tamanho={20} aria-hidden="true" />
           Tudo pago
         </div>
       )}

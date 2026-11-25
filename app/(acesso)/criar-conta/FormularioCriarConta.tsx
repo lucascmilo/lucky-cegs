@@ -28,7 +28,9 @@ function validarCampos(campos: CamposFormulario, aceitouTermos: boolean): ErrosC
 
   if (!campos.nome.trim()) erros.nome = "Informe seu nome.";
   if (!PADRAO_USER.test(userLimpo)) erros.user = MENSAGEM_USER_INVALIDO;
-  if (campos.senha.length < TAMANHO_MINIMO_SENHA) erros.senha = `Mínimo de ${TAMANHO_MINIMO_SENHA} caracteres.`;
+  if (campos.senha.length < TAMANHO_MINIMO_SENHA) {
+    erros.senha = `Mínimo de ${TAMANHO_MINIMO_SENHA} caracteres.`;
+  }
   if (campos.confirmarSenha !== campos.senha) erros.confirmarSenha = "As senhas não são iguais.";
   if (!aceitouTermos) erros.termos = "Para criar a conta, aceite os Termos da comunidade.";
 
@@ -38,7 +40,12 @@ function validarCampos(campos: CamposFormulario, aceitouTermos: boolean): ErrosC
 // === Seção: Formulário de cadastro ===
 export default function FormularioCriarConta() {
   const roteador = useRouter();
-  const [campos, setCampos] = useState<CamposFormulario>({ nome: "", user: "", senha: "", confirmarSenha: "" });
+  const [campos, setCampos] = useState<CamposFormulario>({
+    nome: "",
+    user: "",
+    senha: "",
+    confirmarSenha: "",
+  });
   const [aceitouTermos, setAceitouTermos] = useState(false);
   const [errosCampos, setErrosCampos] = useState<ErrosCampos>({});
   const [erroGeral, setErroGeral] = useState<string | null>(null);
@@ -51,6 +58,7 @@ export default function FormularioCriarConta() {
 
   async function enviarFormulario(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
+    if (enviando) return;
     setErroGeral(null);
 
     const erros = validarCampos(campos, aceitouTermos);
@@ -58,22 +66,27 @@ export default function FormularioCriarConta() {
     if (Object.values(erros).some(Boolean)) return;
 
     setEnviando(true);
-    const userLimpo = limparUser(campos.user);
-    const { error: falha } = await authClient.signUp.email({
-      name: campos.nome.trim(),
-      username: userLimpo,
-      email: `${userLimpo.toLowerCase()}@${DOMINIO_EMAIL_INTERNO}`,
-      password: campos.senha,
-    });
+    try {
+      const userLimpo = limparUser(campos.user);
+      const { error: falha } = await authClient.signUp.email({
+        name: campos.nome.trim(),
+        username: userLimpo,
+        email: `${userLimpo.toLowerCase()}@${DOMINIO_EMAIL_INTERNO}`,
+        password: campos.senha,
+      });
 
-    if (falha) {
-      setErroGeral(traduzirErroAutenticacao(falha.code, "criarConta"));
+      if (falha) {
+        setErroGeral(traduzirErroAutenticacao(falha.code, "criarConta"));
+        setEnviando(false);
+        return;
+      }
+
+      roteador.push(destinoDepoisDoLogin());
+      roteador.refresh();
+    } catch {
+      setErroGeral(traduzirErroAutenticacao(undefined, "criarConta"));
       setEnviando(false);
-      return;
     }
-
-    roteador.push(destinoDepoisDoLogin());
-    roteador.refresh();
   }
 
   // === Seção: Renderização de um campo ===
@@ -84,14 +97,17 @@ export default function FormularioCriarConta() {
     extras: { type?: string; autoComplete?: string } = {},
   ) {
     const mensagem = errosCampos[nomeCampo];
+    const idErro = mensagem ? `erro-${nomeCampo}` : undefined;
     const propsEntrada = {
       className: "formulario__entrada",
       name: nomeCampo,
       autoComplete: extras.autoComplete,
       placeholder: marcador,
       value: campos[nomeCampo],
-      onChange: (evento: ChangeEvent<HTMLInputElement>) => atualizarCampo(nomeCampo, evento.target.value),
+      onChange: (evento: ChangeEvent<HTMLInputElement>) =>
+        atualizarCampo(nomeCampo, evento.target.value),
       "aria-invalid": mensagem ? true : undefined,
+      "aria-describedby": idErro,
     };
     return (
       <label className="formulario__campo">
@@ -106,7 +122,11 @@ export default function FormularioCriarConta() {
             spellCheck={nomeCampo === "user" ? false : undefined}
           />
         )}
-        {mensagem && <span className="formulario__dica">{mensagem}</span>}
+        {mensagem && (
+          <span id={idErro} className="formulario__dica">
+            {mensagem}
+          </span>
+        )}
       </label>
     );
   }
@@ -115,9 +135,16 @@ export default function FormularioCriarConta() {
     <form className="formulario" onSubmit={enviarFormulario} noValidate>
       {/* === Seção: Campos === */}
       <div className="formulario__grade">
-        {renderizarCampo("nome", "Nome", "O nome que você usa no twitter", { autoComplete: "name" })}
-        {renderizarCampo("user", "Seu user", "Seu user no twitter", { autoComplete: "username" })}
-        {renderizarCampo("senha", "Senha", `Mínimo de ${TAMANHO_MINIMO_SENHA} caracteres`, { type: "password", autoComplete: "new-password" })}
+        {renderizarCampo("nome", "Nome", "O nome que você usa no twitter", {
+          autoComplete: "name",
+        })}
+        {renderizarCampo("user", "Seu user", "Seu user no twitter", {
+          autoComplete: "username",
+        })}
+        {renderizarCampo("senha", "Senha", `Mínimo de ${TAMANHO_MINIMO_SENHA} caracteres`, {
+          type: "password",
+          autoComplete: "new-password",
+        })}
         {renderizarCampo("confirmarSenha", "Confirmar senha", "Repita a senha", {
           type: "password",
           autoComplete: "new-password",
@@ -135,16 +162,21 @@ export default function FormularioCriarConta() {
             setErrosCampos((anteriores) => ({ ...anteriores, termos: undefined }));
           }}
           aria-invalid={errosCampos.termos ? true : undefined}
+          aria-describedby={errosCampos.termos ? "erro-termos" : undefined}
         />
         <span>
           Li e aceito os{" "}
-          <Link href="/termos" className="formulario__linkTermos" target="_blank">
+          <Link href="/termos" className="formulario__linkTermos" target="_blank" rel="noopener noreferrer">
             Termos da comunidade
           </Link>
           .
         </span>
       </label>
-      {errosCampos.termos && <span className="formulario__dica formulario__dicaTermos">{errosCampos.termos}</span>}
+      {errosCampos.termos && (
+        <span id="erro-termos" className="formulario__dica formulario__dicaTermos">
+          {errosCampos.termos}
+        </span>
+      )}
 
       {/* === Seção: Erro geral === */}
       {erroGeral && (
@@ -154,7 +186,12 @@ export default function FormularioCriarConta() {
       )}
 
       {/* === Seção: Ações === */}
-      <button type="submit" className="formulario__botaoPrincipal" disabled={enviando}>
+      <button
+        type="submit"
+        className="formulario__botaoPrincipal"
+        disabled={enviando}
+        aria-busy={enviando}
+      >
         {enviando ? "Criando conta…" : "Criar conta"}
       </button>
 

@@ -2,12 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import FaixaLetreiro from "@/componentes/FaixaLetreiro";
 import { IconeEnviar } from "@/componentes/Icones";
-import SeloPedidosAbertos from "@/componentes/SeloPedidosAbertos";
 import type { CaixaAndamento, JoinerDevendo, ProofPendente } from "@/lib/painel";
 import type { JoinerOpcao } from "@/lib/planilhaCaixa";
+import assinatura from "@/public/imagens/adesivo-assinatura.png";
 import codigoBarras from "@/public/imagens/codigo-barras.png";
-import colagemPainel from "@/public/imagens/painel-colagem.webp";
+import colagemPainel from "@/public/imagens/colagem-painel-gom.png";
 import photocardPainel from "@/public/imagens/painel-photocard.png";
+import polaroidsLeque from "@/public/imagens/polaroids-leque.png";
 import ContasJoiners from "./ContasJoiners";
 import ListaCaixasAndamento from "./ListaCaixasAndamento";
 import TabelaFaltaPagar from "./TabelaFaltaPagar";
@@ -51,13 +52,14 @@ export default function TelaPainel({ devendo, caixas, proofs, joiners }: PropsTe
               <Link href="/caixas?nova=1" className="botao botao__rosa">
                 + Nova caixa
               </Link>
-              <Link href="/caixas?novo=1" className="botao botao__rosa">
+              <Link href="/caixas?nova=1" className="botao botao__rosa">
                 + Adicionar item
               </Link>
             </div>
           </div>
 
           <div className="inicio__colagem">
+            <span className="painel__envelope" aria-hidden="true" />
             <Image
               src={colagemPainel}
               alt="Colagem com photocards, álbuns e cacarecos"
@@ -65,9 +67,9 @@ export default function TelaPainel({ devendo, caixas, proofs, joiners }: PropsTe
               sizes="(max-width: 860px) 90vw, 572px"
               className="inicio__imagemColagem"
             />
-            <Image src={photocardPainel} alt="" sizes="170px" className="inicio__photocard" />
+            <Image src={photocardPainel} alt="" sizes="170px" className="painel__photocard" />
             <Image src={codigoBarras} alt="" sizes="160px" className="inicio__codigoBarras" />
-            <SeloPedidosAbertos className="inicio__selo" />
+            <Image src={assinatura} alt="" sizes="190px" className="painel__assinatura" />
           </div>
         </div>
       </section>
@@ -76,7 +78,7 @@ export default function TelaPainel({ devendo, caixas, proofs, joiners }: PropsTe
 
       <div className="painel__secoes">
         {/* === Seção: Quem falta pagar e caixas em andamento === */}
-        <section className="inicioJoiner__faixa inicioJoiner__faixaQuadrados fundoAzulejos">
+        <section className="inicioJoiner__faixa inicioJoiner__faixaQuadrados fundoHalftone">
           <div className="painel__quadros">
             <div className="painel__coluna">
               <h2 className="inicioJoiner__titulo">
@@ -119,7 +121,7 @@ export default function TelaPainel({ devendo, caixas, proofs, joiners }: PropsTe
                       href={`/proofs?caixa=${proof.caixaId}&joiner=${encodeURIComponent(proof.userId)}`}
                       className="painel__proof"
                     >
-                      <IconeEnviar className="painel__proofIcone" />
+                      <IconeEnviar className="painel__proofIcone" aria-hidden="true" />
                       <span className="painel__proofUser">@{proof.user}</span>
                       <span className="painel__proofCaixa">{proof.nomeCaixa}</span>
                     </Link>
@@ -133,7 +135,7 @@ export default function TelaPainel({ devendo, caixas, proofs, joiners }: PropsTe
         </section>
 
         {/* === Seção: Contas dos joiners (senha esquecida e conta nova) === */}
-        <section className="inicioJoiner__faixa fundoAzulejos painel__faixaContas">
+        <section className="inicioJoiner__faixa fundoTrevosRosa painel__faixaContas">
           <div className="inicioJoiner__cartao painel__cartaoContas">
             <h2 className="inicioJoiner__titulo painel__tituloContas">
               CONTAS DOS
@@ -152,12 +154,7 @@ function ProofsEmDia() {
   return (
     <div className="proofsEmDia" role="status">
       <div className="proofsEmDia__leque" aria-hidden="true">
-        {[1, 2, 3].map((numero) => (
-          <span key={numero} className="proofsEmDia__polaroide">
-            <span className="proofsEmDia__foto" />
-          </span>
-        ))}
-        <span className="proofsEmDia__selo">TUDO EM DIA</span>
+        <Image src={polaroidsLeque} alt="" sizes="270px" className="proofsEmDia__imagem" />
       </div>
 
       <div className="proofsEmDia__texto">

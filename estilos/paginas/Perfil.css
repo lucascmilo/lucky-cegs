@@ -1,32 +1,69 @@
 /* === Seção: Escala da tela === */
 .perfil {
   --px-pagina: calc(var(--px-caixa) * 0.9);
-  /* Campos no mesmo tamanho dos formulários de Entrar e Criar conta */
   --px-cartao: var(--px-caixa);
-  --cor-sucesso: #17695a;
-  --cor-texto-suave: #4a4547;
+  --cor-sucesso: var(--cor-ok-texto);
   display: flex;
   flex: 1;
   flex-direction: column;
   padding-bottom: calc(var(--px-pagina) * 72);
 }
 
-/* === Seção: Faixa lilás do topo === */
+/* === Seção: Faixa do topo === */
 .perfil__faixa {
+  position: relative;
   overflow-x: clip;
   border-bottom: 1px solid var(--cor-preto);
-  background-color: #e2dcf5;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.55) 2px, transparent 2.5px);
-  background-size: 24px 24px;
+  background-color: var(--cor-papel);
+}
+
+.perfil__faixa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.25;
+  background-image: url("/imagens/fundo-trevos-creme.svg");
+  background-repeat: repeat;
+}
+
+.perfil__tira,
+.perfil__adesivoTrevo,
+.perfil__codigoBarras,
+.perfil__etiquetaFicha {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  pointer-events: none;
+}
+
+.perfil__tira {
+  position: absolute;
+  top: 50%;
+  right: -118px;
+  display: none;
+  width: 92px;
+  height: auto;
+  transform: translateY(-50%) rotate(5deg);
+}
+
+@media (min-width: 1400px) {
+  .perfil__tira {
+    display: block;
+  }
 }
 
 .perfil__faixaConteudo {
   position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
-  height: calc(var(--px-caixa) * 328);
+  min-height: calc(var(--px-caixa) * 328);
   margin-inline: auto;
+  padding-block: 32px;
 }
 
 .perfil__textoFaixa {
@@ -41,11 +78,12 @@
   display: flex;
   flex-direction: column;
   width: calc(var(--px-pagina) * 380);
+  max-width: 100%;
   aspect-ratio: 380 / 240;
-  border: 1px solid var(--cor-preto);
-  border-radius: calc(var(--px-pagina) * 18);
-  background: #fff4e8;
-  box-shadow: 0 18px 36px -8px rgba(21, 18, 20, 0.28);
+  border: var(--borda);
+  border-radius: 0;
+  background: var(--cor-branco);
+  box-shadow: var(--sombra-cartao);
   transform: translateY(-50%) rotate(-4deg);
 }
 
@@ -55,46 +93,50 @@
   left: 50%;
   width: calc(var(--px-pagina) * 104);
   height: calc(var(--px-pagina) * 28);
-  background: rgba(255, 226, 122, 0.88);
-  box-shadow: 0 1px 2px rgba(21, 18, 20, 0.12);
+  background: rgb(232 242 92 / 0.88);
+  box-shadow: var(--sombra-objeto);
   transform: translateX(-50%) rotate(5deg);
+  pointer-events: none;
 }
 
-.perfil__brilho {
+.perfil__adesivoTrevo {
   position: absolute;
-  top: calc(var(--px-pagina) * -30);
-  right: calc(var(--px-pagina) * -26);
-  width: calc(var(--px-pagina) * 30);
+  top: calc(var(--px-pagina) * -36);
+  left: calc(var(--px-pagina) * -46);
+  z-index: 2;
+  width: calc(var(--px-pagina) * 62);
   height: auto;
-  transform: rotate(18deg);
+  transform: rotate(-12deg);
 }
 
 .perfil__cartaoTopo {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   height: 26%;
   padding: 0 calc(var(--px-pagina) * 20);
   border-bottom: 1px solid var(--cor-preto);
-  border-radius: calc(var(--px-pagina) * 17) calc(var(--px-pagina) * 17) 0 0;
 }
 
 .perfil__cartaoMarca {
   font-family: var(--fonte-titulo);
   font-size: max(14px, var(--px-pagina) * 20);
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   letter-spacing: 0.02em;
-  color: var(--cor-branco);
-  text-shadow: 0 1px 0 rgba(21, 18, 20, 0.35);
+  color: var(--cor-preto);
 }
 
 .perfil__cartaoTipo {
   padding: 3px 10px 2px;
-  border: 1px solid var(--cor-preto);
+  border: var(--borda);
   border-radius: var(--raio-pilula);
-  background: var(--cor-branco);
+  background: var(--cor-acido);
   font-family: var(--fonte-pixel);
-  font-size: max(10px, var(--px-pagina) * 12);
+  font-size: max(12px, var(--px-pagina) * 12);
   color: var(--cor-preto);
+  white-space: nowrap;
 }
 
 .perfil__cartaoCorpo {
@@ -112,11 +154,12 @@
   place-items: center;
   width: calc(var(--px-pagina) * 70);
   height: calc(var(--px-pagina) * 70);
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
+  border: var(--borda);
   background: var(--cor-rosa);
   font-family: var(--fonte-titulo);
   font-size: calc(var(--px-pagina) * 32);
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   color: var(--cor-preto);
 }
 
@@ -137,6 +180,8 @@
 .perfil__cartaoNome {
   font-family: var(--fonte-titulo);
   font-size: max(17px, var(--px-pagina) * 25);
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: 1.05;
 }
 
@@ -150,6 +195,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  gap: 8px;
   padding: 0 calc(var(--px-pagina) * 22) calc(var(--px-pagina) * 16);
 }
 
@@ -160,7 +206,7 @@
 
 .perfil__desde {
   font-family: var(--fonte-pixel);
-  font-size: max(10px, var(--px-pagina) * 12);
+  font-size: max(12px, var(--px-pagina) * 12);
   color: var(--cor-texto-suave);
 }
 
@@ -171,11 +217,20 @@
 }
 
 .perfil__ficha {
+  position: relative;
   padding: 0 calc(var(--px-pagina) * 44);
-  border: 1px solid var(--cor-preto);
-  border-radius: calc(var(--px-pagina) * 22);
+  border: var(--borda);
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
+}
+
+.perfil__etiquetaFicha {
+  position: absolute;
+  top: calc(var(--px-pagina) * -20);
+  right: calc(var(--px-pagina) * 36);
+  width: calc(var(--px-pagina) * 150);
+  height: auto;
+  transform: rotate(3deg);
 }
 
 .perfil__linha {
@@ -186,13 +241,14 @@
 }
 
 .perfil__linha + .perfil__linha {
-  border-top: 1.5px dashed var(--cor-borda-bege);
+  border-top: 1.5px dashed var(--cor-preto);
 }
 
 .perfil__tituloLinha {
   font-family: var(--fonte-titulo);
   font-size: max(20px, var(--px-pagina) * 26);
-  font-weight: 400;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: 1;
 }
 
@@ -223,7 +279,6 @@
   color: var(--cor-texto-suave);
 }
 
-/* Campo do user com o "@" fixo na frente */
 .perfil__envoltorioArroba {
   position: relative;
   display: block;
@@ -269,14 +324,14 @@
 .perfil__aviso svg {
   box-sizing: content-box;
   padding: 4px;
-  border-radius: 50%;
-  background: var(--cor-menta);
+  background: var(--cor-ok);
   color: var(--cor-preto);
 }
 
 .perfil__botao {
-  height: 44px;
-  padding: 0 24px;
+  min-height: 44px;
+  height: auto;
+  padding: 10px 24px;
   font-size: 15px;
 }
 
@@ -293,7 +348,7 @@
   }
 
   .perfil__linha {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 18px;
     padding: 28px 0;
   }
@@ -303,14 +358,13 @@
   }
 }
 
-/* Em telas estreitas o cartão desce para baixo do título */
-@media (max-width: 760px) {
+@media (max-width: 860px) {
   .perfil__faixaConteudo {
     flex-direction: column;
     align-items: flex-start;
     gap: 34px;
-    height: auto;
-    padding: 34px 0 44px;
+    min-height: 0;
+    padding: 36px 0 44px;
   }
 
   .perfil__textoFaixa {
@@ -326,19 +380,29 @@
     transform: rotate(-3deg);
   }
 
+  .perfil__adesivoTrevo {
+    top: -40px;
+    left: -8px;
+  }
+
   .perfil__conteudo {
-    margin-top: 28px;
+    margin-top: 32px;
   }
 }
 
 @media (max-width: 600px) {
   .perfil__ficha {
     padding: 0 18px;
-    border-radius: 18px;
+  }
+
+  .perfil__etiquetaFicha {
+    top: -16px;
+    right: 16px;
+    width: 112px;
   }
 
   .perfil__duasColunas {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .perfil__acoes {

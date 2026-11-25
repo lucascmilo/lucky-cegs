@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { mostrarAviso } from "@/componentes/AvisoFlutuante";
 import { IconeFechar, IconeMegafone } from "@/componentes/Icones";
 import { juntarClasses } from "@/lib/classes";
+import { mensagemDeFalha } from "@/lib/conexao";
 import { TAMANHO_MAXIMO_AVISO } from "@/lib/configuracoes";
 import type { AvisoEnviado } from "@/lib/planilhaCaixa";
-import { mensagemDeFalha } from "@/lib/conexao";
 import { postarAviso } from "../acoesCaixa";
 import "@/estilos/componentes/JanelaGom.css";
 
@@ -29,7 +29,13 @@ type PropsJanelaAviso = {
 
 // === Seção: Janela "Aviso da caixa" ===
 // O aviso chega no sino de todos os joiners da caixa ou de um só, e leva para a página da caixa.
-export default function JanelaAviso({ caixaId, nomeCaixa, joiners, enviados, aoFechar }: PropsJanelaAviso) {
+export default function JanelaAviso({
+  caixaId,
+  nomeCaixa,
+  joiners,
+  enviados,
+  aoFechar,
+}: PropsJanelaAviso) {
   const referencia = useRef<HTMLDialogElement>(null);
   const campo = useRef<HTMLTextAreaElement>(null);
   const [para, setPara] = useState<"todos" | "um">("todos");
@@ -78,7 +84,9 @@ export default function JanelaAviso({ caixaId, nomeCaixa, joiners, enviados, aoF
       const resultado = await postarAviso(caixaId, texto, para === "todos" ? "todos" : joiner);
       if (!resultado.ok) return setErro(resultado.erro);
       mostrarAviso(
-        resultado.enviados === 1 ? "Aviso enviado para 1 joiner." : `Aviso enviado para ${resultado.enviados} joiners.`,
+        resultado.enviados === 1
+          ? "Aviso enviado para 1 joiner."
+          : `Aviso enviado para ${resultado.enviados} joiners.`,
       );
       fechar();
     } catch {
@@ -117,7 +125,7 @@ export default function JanelaAviso({ caixaId, nomeCaixa, joiners, enviados, aoF
             disabled={enviando}
             aria-label="Fechar sem enviar"
           >
-            <IconeFechar tamanho={22} />
+            <IconeFechar tamanho={22} aria-hidden="true" />
           </button>
         </div>
 
@@ -139,7 +147,10 @@ export default function JanelaAviso({ caixaId, nomeCaixa, joiners, enviados, aoF
                 ).map(([valor, rotulo]) => (
                   <label
                     key={valor}
-                    className={juntarClasses("janelaCaixa__origem", para === valor && "janelaCaixa__origemAtiva")}
+                    className={juntarClasses(
+                      "janelaCaixa__origem",
+                      para === valor && "janelaCaixa__origemAtiva",
+                    )}
                   >
                     <input
                       type="radio"
@@ -181,7 +192,12 @@ export default function JanelaAviso({ caixaId, nomeCaixa, joiners, enviados, aoF
               </label>
               <div className="janelaAviso__sugestoes" role="group" aria-label="Começos prontos">
                 {SUGESTOES.map((sugestao) => (
-                  <button key={sugestao} type="button" className="janelaAviso__sugestao" onClick={() => usarSugestao(sugestao)}>
+                  <button
+                    key={sugestao}
+                    type="button"
+                    className="janelaAviso__sugestao"
+                    onClick={() => usarSugestao(sugestao)}
+                  >
                     {sugestao.trim().replace(/:$/, "…")}
                   </button>
                 ))}
@@ -200,7 +216,13 @@ export default function JanelaAviso({ caixaId, nomeCaixa, joiners, enviados, aoF
                 aria-invalid={Boolean(erro)}
                 aria-describedby="aviso-contador"
               />
-              <p id="aviso-contador" className={juntarClasses("janelaGom__ajuda", restante < 20 && "janelaAviso__quaseCheio")}>
+              <p
+                id="aviso-contador"
+                className={juntarClasses(
+                  "janelaGom__ajuda",
+                  restante < 20 && "janelaAviso__quaseCheio",
+                )}
+              >
                 {restante} {restante === 1 ? "caractere restante" : "caracteres restantes"}
               </p>
             </div>
@@ -210,7 +232,7 @@ export default function JanelaAviso({ caixaId, nomeCaixa, joiners, enviados, aoF
               <span className="janelaAviso__previaRotulo">Assim chega no sino</span>
               <span className="janelaAviso__notificacao">
                 <span className="janelaAviso__icone">
-                  <IconeMegafone tamanho={14} />
+                  <IconeMegafone tamanho={14} aria-hidden="true" />
                 </span>
                 <span className="janelaAviso__textoNotificacao">
                   <strong>
@@ -233,7 +255,8 @@ export default function JanelaAviso({ caixaId, nomeCaixa, joiners, enviados, aoF
                 <li key={aviso.id} className="janelaAviso__enviado">
                   <span className="janelaAviso__textoEnviado">{aviso.texto}</span>
                   <span className="janelaAviso__dadosEnviado">
-                    {aviso.quando} · {aviso.para ? `para @${aviso.para}` : `para todos (${aviso.enviados})`}
+                    {aviso.quando} ·{" "}
+                    {aviso.para ? `para @${aviso.para}` : `para todos (${aviso.enviados})`}
                   </span>
                 </li>
               ))}
@@ -257,8 +280,16 @@ export default function JanelaAviso({ caixaId, nomeCaixa, joiners, enviados, aoF
             Cancelar
           </button>
           {joiners.length > 0 && (
-            <button type="submit" className="botao botao__rosa janelaGom__botao janelaAviso__enviar" disabled={enviando}>
-              {enviando ? "Enviando…" : quantos === 1 ? "Enviar para 1 joiner" : `Enviar para ${quantos} joiners`}
+            <button
+              type="submit"
+              className="botao botao__rosa janelaGom__botao janelaAviso__enviar"
+              disabled={enviando}
+            >
+              {enviando
+                ? "Enviando…"
+                : quantos === 1
+                  ? "Enviar para 1 joiner"
+                  : `Enviar para ${quantos} joiners`}
             </button>
           )}
         </div>

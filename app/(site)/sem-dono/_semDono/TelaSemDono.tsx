@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { FotosDoItem } from "@/componentes/FotoItem";
 import { IconeSetaBaixo } from "@/componentes/Icones";
@@ -6,14 +7,18 @@ import TextoCortado from "@/componentes/TextoCortado";
 import { formatarReais, normalizarBusca } from "@/lib/formatacao";
 import { textoDoParametro } from "@/lib/navegacao";
 import { textoCustosExtras, type ItemSemDono } from "@/lib/semDono";
-import ArteChaveiro from "./ArteChaveiro";
+import modeloGomSemDono from "@/public/imagens/modelo-gom-sem-dono.png";
 import BotaoQueroEsse from "./BotaoQueroEsse";
 import FaixaSemDono from "./FaixaSemDono";
 import "@/estilos/paginas/SemDono.css";
 
 const CARTOES_POR_VEZ = 4;
 
-type ParametrosSemDono = { busca?: string | string[]; mostrar?: string | string[] };
+type ParametrosSemDono = {
+  busca?: string | string[];
+  mostrar?: string | string[];
+  vazio?: string | string[];
+};
 
 type PropsTelaSemDono = {
   itens: ItemSemDono[];
@@ -23,18 +28,21 @@ type PropsTelaSemDono = {
 
 // === Seção: Tela de itens sem dono ===
 export default function TelaSemDono({ itens, logado, parametros }: PropsTelaSemDono) {
+  // === Atalho temporário para testar tela sem itens sobrando (?vazio=1) ===
+  const itensAtivos = textoDoParametro(parametros.vazio) === "1" ? [] : itens;
+
   const busca = textoDoParametro(parametros.busca).trim();
   const mostrar = Math.max(CARTOES_POR_VEZ, Number(textoDoParametro(parametros.mostrar)) || CARTOES_POR_VEZ);
 
   // A busca procura no nome, grupo, membro e caixa ("caixa 5" mostra só os da Caixa 5)
   const termo = normalizarBusca(busca);
   const encontrados = termo
-    ? itens.filter((item) =>
+    ? itensAtivos.filter((item) =>
         [item.nome, item.grupo, item.membro, item.nomeCaixa].some(
           (texto) => texto && normalizarBusca(texto).includes(termo),
         ),
       )
-    : itens;
+    : itensAtivos;
   const restantes = encontrados.length - mostrar;
 
   function endereco(mudancas: { mostrar?: number; limparBusca?: boolean }) {
@@ -68,7 +76,7 @@ export default function TelaSemDono({ itens, logado, parametros }: PropsTelaSemD
         </details>
 
         {/* === Seção: Busca === */}
-        {itens.length > 0 && (
+        {itensAtivos.length > 0 && (
           <form className="semDono__busca" action="/sem-dono" role="search">
             <label className="somenteLeitorTela" htmlFor="busca-sem-dono">
               Buscar nos itens sem dono
@@ -153,7 +161,6 @@ function CartaoSemDono({ item, logado }: { item: ItemSemDono; logado: boolean })
 }
 
 // === Seção: Aviso quando não há itens ===
-// Um cartão com o chaveiro balançando: sem itens na lista ou sem resultado na busca
 function SemItens({ buscando }: { buscando: boolean }) {
   const textos = buscando
     ? {
@@ -169,7 +176,16 @@ function SemItens({ buscando }: { buscando: boolean }) {
 
   return (
     <div className="semDonoVazio" role="status">
-      <ArteChaveiro texto="ITENS SEM DONO" id="anel-sem-dono" />
+      <div className="semDonoVazio__arte" aria-hidden="true">
+        <Image
+          src={modeloGomSemDono}
+          alt=""
+          width={modeloGomSemDono.width}
+          height={modeloGomSemDono.height}
+          sizes="(max-width: 560px) 220px, 240px"
+          className="semDonoVazio__imagem"
+        />
+      </div>
 
       <div className="semDonoVazio__conteudo">
         <p className="semDonoVazio__etiqueta">{textos.etiqueta}</p>

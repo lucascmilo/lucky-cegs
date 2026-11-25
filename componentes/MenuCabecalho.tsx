@@ -3,12 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { juntarClasses } from "@/lib/classes";
 import { obterLinksNavegacao } from "@/lib/navegacao";
 import type { CaixaDeEntrada } from "@/lib/notificacoes";
 import type { UsuarioAtual } from "@/lib/sessao";
-import coracaoBranco from "@/public/imagens/coracao-branco.png";
+import coracaoBranco from "@/public/imagens/coracao-branco.svg";
 import { IconeMenu } from "./Icones";
 import MenuUsuario from "./MenuUsuario";
 import SinoNotificacoes from "./SinoNotificacoes";
@@ -31,10 +31,24 @@ export function MenuCabecalhoComCaminho(props: Omit<PropsMenuCabecalho, "caminho
 }
 
 // === Seção: Menu do cabeçalho ===
-export default function MenuCabecalho({ usuario, notificacoes, carregando = false, caminhoAtual }: PropsMenuCabecalho) {
+export default function MenuCabecalho({
+  usuario,
+  notificacoes,
+  carregando = false,
+  caminhoAtual,
+}: PropsMenuCabecalho) {
   const [menuAberto, setMenuAberto] = useState(false);
 
   const links = obterLinksNavegacao(usuario?.papel ?? null);
+
+  useEffect(() => {
+    if (!menuAberto) return;
+    function aoPressionarTecla(evento: KeyboardEvent) {
+      if (evento.key === "Escape") setMenuAberto(false);
+    }
+    window.addEventListener("keydown", aoPressionarTecla);
+    return () => window.removeEventListener("keydown", aoPressionarTecla);
+  }, [menuAberto]);
 
   // "/" só fica ativo na própria página inicial; os demais também nas subpáginas
   function linkEstaAtivo(destino: string) {
@@ -59,7 +73,10 @@ export default function MenuCabecalho({ usuario, notificacoes, carregando = fals
       {/* === Seção: Links de navegação === */}
       <nav
         id="navegacao-principal"
-        className={juntarClasses("cabecalho__navegacao", menuAberto && "cabecalho__navegacaoAberta")}
+        className={juntarClasses(
+          "cabecalho__navegacao",
+          menuAberto && "cabecalho__navegacaoAberta",
+        )}
         aria-label="Navegação principal"
       >
         <ul className="cabecalho__listaLinks">
@@ -89,7 +106,11 @@ export default function MenuCabecalho({ usuario, notificacoes, carregando = fals
             <MenuUsuario usuario={usuario} />
           </div>
         ) : (
-          <Link href="/entrar" className="cabecalho__botaoConta" aria-label="Entrar para ver suas caixas">
+          <Link
+            href="/entrar"
+            className="cabecalho__botaoConta"
+            aria-label="Entrar para ver suas caixas"
+          >
             <span className="cabecalho__circuloCoracao">
               <Image src={coracaoBranco} alt="" className="cabecalho__coracaoBotao" />
               <span className="cabecalho__avisoLogin" aria-hidden="true" />

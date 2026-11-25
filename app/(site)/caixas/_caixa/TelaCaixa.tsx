@@ -69,7 +69,11 @@ export default function TelaCaixa({ caixa, caixasAbertas, itens, eu, parametros 
   // Set = item dividido entre mais de uma pessoa; os demais são pedidos individuais
   const eMeu = (item: ItemCaixa) => item.minhasPartes.length > 0;
   const sets = itens.filter((item) => item.totalPessoas > 1);
-  const contagens: Record<Filtro, number> = { todos: itens.length, meus: itens.filter(eMeu).length, sets: sets.length };
+  const contagens: Record<Filtro, number> = {
+    todos: itens.length,
+    meus: itens.filter(eMeu).length,
+    sets: sets.length,
+  };
 
   const termo = normalizarBusca(busca);
   const encontrados = termo ? itens.filter((item) => itemCombina(item, termo)) : itens;
@@ -84,9 +88,11 @@ export default function TelaCaixa({ caixa, caixasAbertas, itens, eu, parametros 
   // Janela de detalhes: só para itens do próprio joiner (os dados já vão prontos para o navegador)
   const detalhes = Object.fromEntries(itens.filter(eMeu).map((item) => [item.id, montarDetalheItem(item, caixa.nome)]));
   const abaPedida = ABAS_DETALHES.find((a) => a.id === textoDoParametro(parametros.aba))?.id ?? "fotos";
+  const itemInicialBruto = Number(textoDoParametro(parametros.item));
+  const itemInicial = Number.isInteger(itemInicialBruto) && itemInicialBruto > 0 ? itemInicialBruto : null;
 
   return (
-    <ProvedorDetalhes detalhes={detalhes} itemInicial={Number(textoDoParametro(parametros.item)) || null} abaInicial={abaPedida}>
+    <ProvedorDetalhes detalhes={detalhes} itemInicial={itemInicial} abaInicial={abaPedida}>
       <RegistroVisita caixaId={caixa.id} />
       <FaixaCaixa caixa={caixa} caixasAbertas={caixasAbertas} />
 

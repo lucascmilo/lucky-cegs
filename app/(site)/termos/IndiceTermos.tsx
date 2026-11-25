@@ -39,7 +39,11 @@ export default function IndiceTermos({ itens }: { itens: ItemIndice[] }) {
     const lista = referenciaLista.current;
     const aba = lista?.querySelector<HTMLElement>(".indiceTermos__itemAtivo");
     if (!lista || !aba || lista.scrollWidth <= lista.clientWidth) return;
-    lista.scrollTo({ left: aba.offsetLeft - (lista.clientWidth - aba.offsetWidth) / 2, behavior: "smooth" });
+    const movimentoReduzido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    lista.scrollTo({
+      left: aba.offsetLeft - (lista.clientWidth - aba.offsetWidth) / 2,
+      behavior: movimentoReduzido ? "auto" : "smooth",
+    });
   }, [idAtivo]);
 
   return (
@@ -49,7 +53,10 @@ export default function IndiceTermos({ itens }: { itens: ItemIndice[] }) {
           <li key={item.id}>
             <a
               href={`#${item.id}`}
-              className={juntarClasses("indiceTermos__item", item.id === idAtivo && "indiceTermos__itemAtivo")}
+              className={juntarClasses(
+                "indiceTermos__item",
+                item.id === idAtivo && "indiceTermos__itemAtivo",
+              )}
               aria-current={item.id === idAtivo ? "location" : undefined}
             >
               <span className="indiceTermos__numero">{item.numero}</span>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { type KeyboardEvent, useState } from "react";
 import CartaoPostal, { type CaixaPostal } from "@/componentes/CartaoPostal";
 import { juntarClasses } from "@/lib/classes";
 
@@ -15,8 +15,14 @@ type PropsFichario = {
 // Lista das caixas à esquerda; o cartão-postal da caixa escolhida à direita.
 // A caixa escolhida fica no endereço (?caixa=…) para o link levar direto a ela.
 export default function Fichario({ caixas, eu, caixaInicial }: PropsFichario) {
-  const [idAtual, setIdAtual] = useState(caixas.some((c) => c.id === caixaInicial) ? caixaInicial! : caixas[0].id);
-  const atual = caixas.find((c) => c.id === idAtual) ?? caixas[0];
+  const primeiraCaixa = caixas[0];
+  const [idAtual, setIdAtual] = useState<number | null>(
+    caixas.some((c) => c.id === caixaInicial) ? caixaInicial : (primeiraCaixa?.id ?? null),
+  );
+
+  if (!primeiraCaixa || idAtual === null) return null;
+
+  const atual = caixas.find((c) => c.id === idAtual) ?? primeiraCaixa;
 
   function escolher(id: number) {
     setIdAtual(id);
@@ -30,9 +36,12 @@ export default function Fichario({ caixas, eu, caixaInicial }: PropsFichario) {
     const passo = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[evento.key];
     if (!passo) return;
     evento.preventDefault();
-    const indice = (caixas.findIndex((c) => c.id === idAtual) + passo + caixas.length) % caixas.length;
-    escolher(caixas[indice].id);
-    document.getElementById(`aba-caixa-${caixas[indice].id}`)?.focus();
+    const indiceAtual = caixas.findIndex((c) => c.id === atual.id);
+    const proximoIndice = (indiceAtual + passo + caixas.length) % caixas.length;
+    const proxima = caixas[proximoIndice];
+    if (!proxima) return;
+    escolher(proxima.id);
+    document.getElementById(`aba-caixa-${proxima.id}`)?.focus();
   }
 
   return (
@@ -42,7 +51,12 @@ export default function Fichario({ caixas, eu, caixaInicial }: PropsFichario) {
         <p className="fichario__rotulo" id="rotulo-fichario">
           SUAS CAIXAS
         </p>
-        <div role="tablist" aria-labelledby="rotulo-fichario" aria-orientation="vertical" onKeyDown={aoApertarTecla}>
+        <div
+          role="tablist"
+          aria-labelledby="rotulo-fichario"
+          aria-orientation="vertical"
+          onKeyDown={aoApertarTecla}
+        >
           {caixas.map((caixa) => {
             const ativa = caixa.id === atual.id;
             return (
@@ -58,7 +72,12 @@ export default function Fichario({ caixas, eu, caixaInicial }: PropsFichario) {
                 onClick={() => escolher(caixa.id)}
               >
                 <span className="fichario__nomeCaixa">{caixa.nome}</span>
-                <span className={juntarClasses("fichario__situacao", caixa.fotoId && "fichario__situacaoChegou")}>
+                <span
+                  className={juntarClasses(
+                    "fichario__situacao",
+                    caixa.fotoId && "fichario__situacaoChegou",
+                  )}
+                >
                   {caixa.fotoId ? `Foto de ${caixa.enviadaEm}` : "Foto em breve"}
                 </span>
               </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, type CSSProperties } from "react";
+import { type CSSProperties, useLayoutEffect, useRef } from "react";
 
 // === Seção: Nome da caixa ajustado à largura das etapas ===
 // O título tem o tamanho máximo; se o nome não couber até o fim da última etapa, a fonte diminui
@@ -16,8 +16,9 @@ export default function NomeCaixa({ nome }: { nome: string }) {
     function ajustar() {
       if (!span || !titulo) return;
       span.style.fontSize = "1em";
+      if (span.scrollWidth <= 0 || titulo.clientWidth <= 0) return;
       const sobra = titulo.clientWidth / span.scrollWidth;
-      if (sobra < 1) span.style.fontSize = `${sobra}em`;
+      if (sobra < 1) span.style.fontSize = `${Math.max(sobra, 0.55)}em`;
     }
 
     ajustar();
@@ -28,7 +29,11 @@ export default function NomeCaixa({ nome }: { nome: string }) {
   }, [nome]);
 
   return (
-    <span ref={referencia} className="caixaTopo__nome" style={{ "--letras": nome.length } as CSSProperties}>
+    <span
+      ref={referencia}
+      className="caixaTopo__nome"
+      style={{ "--letras": nome.length } as CSSProperties}
+    >
       {nome}
     </span>
   );

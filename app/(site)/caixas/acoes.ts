@@ -3,14 +3,14 @@
 import { and, eq, inArray, ne, or } from "drizzle-orm";
 import type { BatchItem } from "drizzle-orm/batch";
 import { refresh, updateTag } from "next/cache";
-import { cloudinary } from "@/lib/cloudinaryServidor";
 import { user } from "@/auth-schema";
 import { db } from "@/db";
 import { caixa, claim, historicoEtapa, parte, registro, situacao as enumSituacao, situacaoCaixa } from "@/db/schema";
-import { etapaItemNaCaixa, type EtapaCaixa, type EtapaItem } from "@/lib/etapas";
+import { cloudinary } from "@/lib/cloudinaryServidor";
+import { type EtapaCaixa, type EtapaItem, etapaItemNaCaixa } from "@/lib/etapas";
 import { formatarReais } from "@/lib/formatacao";
-import { inserirNotificacoes, notificarEtapaCaixa, type NovaNotificacao } from "@/lib/notificacoes";
-import { CATEGORIAS, lerNumero, type Quantidades } from "@/lib/planilhaCaixa";
+import { type NovaNotificacao, inserirNotificacoes, notificarEtapaCaixa } from "@/lib/notificacoes";
+import { CATEGORIAS, type Quantidades, lerNumero } from "@/lib/planilhaCaixa";
 import { obterUsuarioAtual } from "@/lib/sessao";
 
 type Resultado = { ok: true } | { ok: false; erro: string };
@@ -66,6 +66,10 @@ function paraTexto(valor: number | null) {
   return valor === null ? null : String(valor);
 }
 
+function limparUsername(texto: string) {
+  return texto.trim().replace(/^@/, "").toLowerCase();
+}
+
 // === Seção: Conferência comum a "Novo item" e "Editar item" ===
 // Sem joiner, o item individual vira "sem dono" com valor + inter + taxa como preço.
 // Joiner sem conta no site não entra: a conta precisa existir antes.
@@ -95,14 +99,14 @@ async function conferirItem(dados: DadosItem) {
   const set = dados.tipo === "set";
   if (set && dados.partes.length < 2) erros.partes = "Um set precisa de pelo menos 2 joiners.";
 
-  const users = dados.partes.map((p) => p.user.trim().replace(/^@/, "").toLowerCase()).filter(Boolean);
+  const users = dados.partes.map((p) => limparUsername(p.user)).filter(Boolean);
   const contas = users.length
     ? await db.select({ id: user.id, user: user.username }).from(user).where(inArray(user.username, users))
     : [];
 
   const partes = (set ? dados.partes : dados.partes.slice(0, 1)).map((p, indice) => {
     const chave = `partes.${indice}`;
-    const username = p.user.trim().replace(/^@/, "").toLowerCase();
+    const username = limparUsername(p.user);
     const conta = contas.find((c) => c.user === username);
     if (!username && set) erros[`${chave}.user`] = "Escolha o joiner.";
     if (username && !conta) erros[`${chave}.user`] = "Nenhuma conta com esse user.";
@@ -319,8 +323,9 @@ export async function editarItem(registroId: number, dados: DadosItem): Promise<
   await db.batch(consultas as [BatchItem<"pg">, ...BatchItem<"pg">[]]);
 
   // Fotos trocadas: as antigas saem do Cloudinary (só se nenhum item usar)
+  const fotosAtuais = new Set([valores.fotoId, valores.proofWhId].filter(Boolean));
   const trocadas = [antes.fotoId, antes.proofWhId].filter(
-    (id): id is string => Boolean(id) && id !== valores.fotoId && id !== valores.proofWhId,
+    (id): id is string => Boolean(id) && !fotosAtuais.has(id),
   );
   if (trocadas.length > 0) await descartarFotos(trocadas);
 
@@ -368,7 +373,9 @@ export async function excluirItem(registroId: number): Promise<Resultado> {
 // A janela chama ao fechar sem salvar (ou ao trocar uma foto antes de salvar). Só apaga foto que nenhum item usa.
 export async function descartarFotos(ids: string[]): Promise<void> {
   if (!(await ehGom())) return;
-  const validas = ids.filter((id) => typeof id === "string" && PASTAS_FOTOS.some((pasta) => id.startsWith(pasta))).slice(0, 10);
+  const validas = ids
+    .filter((id) => typeof id === "string" && PASTAS_FOTOS.some((pasta) => id.startsWith(pasta)))
+    .slice(0, 10);
   if (validas.length === 0) return;
 
   const usadas = await db
@@ -437,7 +444,7 @@ export async function moverItens(ids: number[], caixaId: number): Promise<Result
         ),
       ),
     ...consultasDeEtapa(mudancas),
-  ]);
+  ] as [BatchItem<"pg">, ...BatchItem<"pg">[]]);
   refresh();
   return { ok: true, anteriores: itens };
 }
@@ -447,7 +454,10 @@ export async function moverItens(ids: number[], caixaId: number): Promise<Result
 export async function desfazerMover(anteriores: EstadoItem[]): Promise<Resultado> {
   if (!(await ehGom())) return { ok: false, erro: "Só a GOM pode mover itens." };
   const validos = anteriores.filter(
-    (item) => Number.isInteger(item.id) && Number.isInteger(item.caixaId) && enumSituacao.enumValues.includes(item.situacao),
+    (item) =>
+      Number.isInteger(item.id) &&
+      Number.isInteger(item.caixaId) &&
+      enumSituacao.enumValues.includes(item.situacao),
   );
   if (validos.length === 0) return { ok: false, erro: "Nada para desfazer." };
 
@@ -509,7 +519,7 @@ export async function mudarSituacaoCaixa(caixaId: number, situacao: EtapaCaixa):
   await db.batch([
     db.update(caixa).set({ situacao, situacaoAtualizadaEm: new Date() }).where(eq(caixa.id, caixaId)),
     ...consultasDeEtapa(mudancas),
-  ]);
+  ] as [BatchItem<"pg">, ...BatchItem<"pg">[]]);
   await notificarEtapaCaixa(caixaId, situacao);
   refresh();
   return { ok: true };

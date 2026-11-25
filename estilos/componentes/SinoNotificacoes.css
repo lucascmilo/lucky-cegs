@@ -10,8 +10,7 @@
   width: 40px;
   height: 40px;
   padding: 0;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
+  border: var(--borda);
   background: var(--cor-branco);
   color: var(--cor-preto);
   transition:
@@ -47,9 +46,9 @@
   min-width: 20px;
   height: 20px;
   padding: 0 5px;
-  border: 1px solid var(--cor-preto);
+  border: var(--borda);
   border-radius: var(--raio-pilula);
-  background: var(--cor-rosa-escuro);
+  background: var(--cor-rosa-texto);
   font-size: 11px;
   font-weight: 800;
   line-height: 1;
@@ -65,12 +64,11 @@
   z-index: 20;
   display: flex;
   flex-direction: column;
-  width: 370px;
+  width: min(370px, calc(100vw - 2 * var(--margem-lateral)));
   max-height: min(480px, var(--altura-tela) - 140px);
-  border: 1px solid var(--cor-preto);
-  border-radius: 16px;
+  border: var(--borda);
   background: var(--cor-branco);
-  box-shadow: 0 18px 40px rgba(21, 18, 20, 0.16);
+  box-shadow: var(--sombra-janela);
   overflow: hidden;
   animation: abrirSino 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
   transform-origin: top right;
@@ -86,25 +84,24 @@
 .sino__topo {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   gap: 12px;
   padding: 16px 18px 14px;
-  border-bottom: 1.5px dashed var(--cor-borda-bege);
-  background: #fff4e8;
+  border-bottom: 1.5px dashed var(--cor-preto);
+  background: var(--cor-creme);
 }
 
 .sino__titulo {
   font-family: var(--fonte-titulo);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
 }
 
 .sino__limpar {
   margin-left: auto;
-  min-height: 32px;
+  min-height: 36px;
   padding: 0 12px;
-  border: 1px solid var(--cor-preto);
-  border-radius: var(--raio-pilula);
+  border: var(--borda);
   background: var(--cor-branco);
   font-size: 12px;
   font-weight: 700;
@@ -126,7 +123,7 @@
 
 .sino__selo {
   padding: 3px 10px;
-  border: 1px solid var(--cor-preto);
+  border: var(--borda);
   border-radius: var(--raio-pilula);
   background: var(--cor-rosa-claro);
   font-size: 12px;
@@ -147,7 +144,6 @@
   align-items: flex-start;
   gap: 12px;
   padding: 12px;
-  border-radius: 11px;
   color: var(--cor-preto);
   text-decoration: none;
 }
@@ -172,8 +168,7 @@ a.sino__itemNova:focus-visible {
   place-items: center;
   width: 32px;
   height: 32px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
+  border: var(--borda);
   color: var(--cor-preto);
 }
 
@@ -194,7 +189,7 @@ a.sino__itemNova:focus-visible {
 }
 
 .sino__iconeMenta {
-  background: var(--cor-menta);
+  background: var(--cor-ok);
 }
 
 .sino__texto {
@@ -214,7 +209,7 @@ a.sino__itemNova:focus-visible {
 
 .sino__quando {
   font-size: 12px;
-  color: #4a4547;
+  color: var(--cor-texto-suave);
 }
 
 .sino__pontoNova {
@@ -222,8 +217,7 @@ a.sino__itemNova:focus-visible {
   width: 9px;
   height: 9px;
   margin-top: 6px;
-  border-radius: 50%;
-  background: var(--cor-rosa-escuro);
+  background: var(--cor-rosa-texto);
 }
 
 /* === Seção: Sem notificações === */
@@ -240,16 +234,16 @@ a.sino__itemNova:focus-visible {
   place-items: center;
   width: 52px;
   height: 52px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 50%;
+  border: var(--borda);
   background: var(--cor-amarelo);
-  transform: rotate(-12deg);
 }
 
 .sino__vazioTitulo {
   margin-top: 14px;
   font-family: var(--fonte-titulo);
   font-size: 16px;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
 }
 
 .sino__vazioTexto {
@@ -257,28 +251,29 @@ a.sino__itemNova:focus-visible {
   margin-top: 6px;
   font-size: 14px;
   line-height: 1.4;
-  color: #4a4547;
+  color: var(--cor-texto-suave);
 }
 
 /* === Seção: Responsivo === */
-/* Em telas estreitas o painel ocupa a largura do cabeçalho */
+@media (pointer: coarse) {
+  .sino__botao::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+  }
+}
+
 @media (max-width: 600px) {
   .sino {
     position: static;
   }
 
   .sino__painel {
+    top: calc(100% + 1px);
     left: 0;
     right: 0;
     width: auto;
-    top: calc(100% + 1px);
-  }
-}
-
-@media (max-width: 420px) {
-  .sino__botao {
-    width: 36px;
-    height: 36px;
+    max-height: calc(var(--altura-tela) - 96px);
   }
 }
 

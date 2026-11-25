@@ -1,9 +1,8 @@
 /* === Seção: Escala da tela === */
 .meusItens {
-  /* A estrutura da página (larguras, espaços, colagem) fica 10% menor */
   --px-pagina: calc(var(--px-caixa) * 0.9);
   --cor-falta-pagar: #9e1517;
-  --divisoria-item: 1px dashed #d6d3d3;
+  --divisoria-item: 1px dashed var(--cor-preto);
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -11,22 +10,43 @@
 
 /* === Seção: Faixa azul do topo === */
 .meusItens__faixa {
-  background: var(--cor-azul-colagem);
+  position: relative;
+  overflow: hidden;
+  background: var(--cor-papel);
   border-bottom: 1px solid var(--cor-preto);
+}
+
+.meusItens__faixa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.15;
+  background-image: url("/imagens/campo-pixels.svg");
+  background-repeat: repeat;
 }
 
 .meusItens__faixaConteudo {
   position: relative;
+  z-index: 1;
   width: min(100% - 2 * var(--margem-lateral), var(--largura-conteudo));
   min-height: calc(var(--px-pagina) * 360);
   margin-inline: auto;
   padding: calc(var(--px-pagina) * 63) 0 calc(var(--px-pagina) * 56);
 }
 
+.meusItens__faixaConteudo > :not(.meusItens__colagem) {
+  max-width: calc(100% - var(--px-pagina) * 410);
+}
+
 .meusItens__titulo {
+  position: relative;
+  z-index: 1;
   font-family: var(--fonte-titulo);
   font-size: calc(var(--px-caixa) * 72);
-  font-weight: 400;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: calc(var(--px-caixa) * 58);
   color: var(--cor-preto);
 }
@@ -36,18 +56,19 @@
   z-index: 1;
   display: flex;
   flex-wrap: wrap;
-  gap: calc(var(--px-caixa) * 16);
-  margin-top: calc(var(--px-caixa) * 44);
+  gap: calc(var(--px-caixa) * 14);
+  margin-top: calc(var(--px-caixa) * 40);
 }
 
 /* === Seção: Colagem da faixa === */
 .meusItens__colagem {
   position: absolute;
-  top: 50%;
+  top: 60%;
   right: calc(var(--px-pagina) * -43);
   width: calc(var(--px-pagina) * 433);
-  aspect-ratio: 433.33 / 305.77;
+  aspect-ratio: 433 / 306;
   transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .meusItens__colagem > * {
@@ -55,43 +76,43 @@
 }
 
 .meusItens__quadrado {
-  left: 38.31%;
   top: 0;
+  left: 38.31%;
   width: 50.77%;
   height: 55.6%;
-  border: 1px solid var(--cor-preto);
-  background: var(--cor-rosa);
+  border: var(--borda);
+  background: var(--cor-rosa-claro);
 }
 
-.meusItens__estrela {
-  left: 0;
-  top: 43.17%;
-  width: 40.1%;
+.meusItens__adesivoCirculo,
+.meusItens__foto,
+.meusItens__estrela-imagem {
   height: auto;
-  aspect-ratio: 1;
-  overflow: visible;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
 }
 
-.meusItens__estrela polygon {
-  fill: var(--cor-branco);
-  stroke: var(--cor-preto);
-  stroke-width: 0.8;
-  stroke-linejoin: round;
+.meusItens__adesivoCirculo {
+  top: -2%;
+  left: 1%;
+  width: 24%;
+  transform: rotate(-6deg);
 }
 
 .meusItens__foto {
-  left: 15.23%;
   top: 16.68%;
+  left: 15.23%;
+  z-index: 3;
   width: 43.85%;
-  height: auto;
-  box-shadow: var(--sombra-cartao);
 }
 
-.meusItens__adesivo {
-  left: 49.39%;
-  top: 16.68%;
-  width: 50.62%;
-  height: auto;
+.meusItens__estrela-imagem {
+  top: 27.68%;
+  left: 68.39%;
+  width: 30.62%;
+  transform: rotate(-6deg);
 }
 
 /* === Seção: Conteúdo === */
@@ -104,20 +125,20 @@
   padding: calc(var(--px-pagina) * 82) 0 calc(var(--px-pagina) * 81);
 }
 
-/* === Seção: Cartão da caixa (folha de caderno) === */
+/* === Seção: Cartão da caixa === */
 .cartaoMeusItens {
   position: relative;
   padding: calc(var(--px-pagina) * 36) calc(var(--px-pagina) * 21) calc(var(--px-pagina) * 24) calc(var(--px-pagina) * 20);
-  border-radius: calc(var(--px-pagina) * 14);
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
 }
 
 .cartaoMeusItens__topo {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 10px 16px;
   min-height: calc(var(--px-pagina) * 34);
   margin-bottom: calc(var(--px-pagina) * 16);
 }
@@ -126,7 +147,8 @@
   min-width: 0;
   font-family: var(--fonte-titulo);
   font-size: max(22px, var(--px-pagina) * 30);
-  font-weight: 400;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: 1.1;
   text-transform: uppercase;
   overflow-wrap: anywhere;
@@ -135,9 +157,9 @@
 .cartaoMeusItens .pilulaEtapa {
   flex-shrink: 0;
   min-width: 0;
-  height: max(22px, var(--px-caixa) * 26);
+  height: max(24px, var(--px-caixa) * 26);
   padding: 0 12px;
-  font-size: 11px;
+  font-size: 12px;
   white-space: nowrap;
 }
 
@@ -160,17 +182,17 @@
 .linhaMeuItem__resumo {
   display: grid;
   grid-template-columns:
-    calc(var(--px-caixa) * 46) minmax(0, 423fr) calc(var(--px-caixa) * 136) minmax(0, 336fr)
-    calc(var(--px-caixa) * 111) calc(var(--px-caixa) * 30);
+    calc(var(--px-caixa) * 46)
+    minmax(0, 423fr)
+    minmax(max-content, calc(var(--px-caixa) * 136))
+    minmax(12px, 336fr)
+    minmax(max-content, calc(var(--px-caixa) * 111))
+    calc(var(--px-caixa) * 30);
   align-items: center;
   min-height: calc(var(--px-caixa) * 79);
   padding: calc(var(--px-pagina) * 8) calc(var(--px-pagina) * 14) calc(var(--px-pagina) * 8) 0;
   list-style: none;
   cursor: pointer;
-}
-
-.linhaMeuItem__nome {
-  transition: color 0.2s ease;
 }
 
 .linhaMeuItem__resumo:hover .linhaMeuItem__nome {
@@ -182,17 +204,15 @@
 }
 
 .linhaMeuItem__resumo:focus-visible {
-  outline: 2px solid var(--cor-rosa-escuro);
+  outline: 2px solid var(--cor-rosa-texto);
   outline-offset: 2px;
-  border-radius: 8px;
 }
 
 .linhaMeuItem__miniatura {
   overflow: hidden;
   aspect-ratio: 1;
   border: 1px solid var(--cor-borda-bege);
-  border-radius: 6px;
-  background: var(--cor-bege-claro) var(--textura-ruido);
+  background: var(--fundo-vazio);
 }
 
 .linhaMeuItem__miniatura img {
@@ -218,6 +238,7 @@
   text-overflow: ellipsis;
   text-transform: lowercase;
   white-space: nowrap;
+  transition: color 0.2s ease;
 }
 
 .linhaMeuItem__grupo {
@@ -232,6 +253,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  padding-right: 10px;
   font-size: max(14px, var(--px-caixa) * 16);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
@@ -243,9 +265,8 @@
 }
 
 .linhaMeuItem__pago {
-  color: #0f6b33;
+  color: var(--cor-ok-texto);
 }
-
 
 .linhaMeuItem__seta {
   grid-column: 6;
@@ -258,10 +279,10 @@
   transform: rotate(180deg);
 }
 
-/* === Seção: Linha aberta (Item, Inter e Taxa) === */
+/* === Seção: Linha aberta === */
 .linhaMeuItem__aberta {
   display: grid;
-  grid-template-columns: minmax(0, 875fr) calc(var(--px-caixa) * 115);
+  grid-template-columns: minmax(0, 875fr) minmax(max-content, calc(var(--px-caixa) * 115));
   column-gap: calc(var(--px-pagina) * 46);
   align-items: start;
   margin-top: calc(var(--px-pagina) * 5);
@@ -274,12 +295,13 @@
 
 .linhaMeuItem__pagamento {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 6px 16px;
   min-height: calc(var(--px-caixa) * 40);
+  padding-block: 6px;
   border-top: var(--divisoria-item);
-  box-sizing: border-box;
   font-size: max(14px, var(--px-caixa) * 15);
   font-weight: 700;
 }
@@ -295,7 +317,7 @@
 
 .linhaMeuItem__pagamento .valorPagamento__selo {
   min-width: calc(var(--px-caixa) * 69);
-  height: calc(var(--px-caixa) * 23);
+  height: max(22px, calc(var(--px-caixa) * 23));
 }
 
 .linhaMeuItem__pagamento .valorPagamento__pendente {
@@ -304,16 +326,20 @@
 }
 
 .linhaMeuItem__detalhes {
-  height: calc(var(--px-caixa) * 30);
-  border: 1px solid var(--cor-preto);
-  border-radius: var(--raio-pilula);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border: var(--borda);
   background: var(--cor-branco);
   font-size: max(13px, var(--px-caixa) * 14);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--cor-preto);
+  white-space: nowrap;
   transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .linhaMeuItem__detalhes:hover {
@@ -328,7 +354,6 @@
   flex-direction: column;
   align-items: center;
   padding: 48px 24px 40px;
-  border-radius: calc(var(--px-pagina) * 14);
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
   text-align: center;
@@ -336,7 +361,8 @@
 
 .meusItens__vazioEtiqueta {
   font-family: var(--fonte-pixel);
-  font-size: 15px;
+  font-size: 16px;
+  letter-spacing: -0.01em;
   color: var(--cor-rosa-texto);
 }
 
@@ -345,28 +371,46 @@
   margin-top: 8px;
   font-size: 16px;
   font-weight: 500;
+  line-height: 1.45;
 }
 
 .meusItens__vazioBotao {
-  width: 180px;
-  height: 40px;
+  min-width: 180px;
+  min-height: 44px;
+  height: auto;
   margin-top: 20px;
 }
 
 /* === Seção: Responsivo === */
+@media (pointer: coarse) {
+  .linhaMeuItem__detalhes {
+    min-height: 44px;
+  }
+}
+
 @media (max-width: 1100px) {
   .meusItens__colagem {
     right: 0;
+    width: calc(var(--px-pagina) * 360);
+  }
+
+  .meusItens__faixaConteudo > :not(.meusItens__colagem) {
+    max-width: calc(100% - var(--px-pagina) * 376);
   }
 }
 
 @media (max-width: 860px) {
   .meusItens__faixaConteudo {
-    padding-top: 40px;
+    min-height: 0;
+    padding: 40px 0 0;
+  }
+
+  .meusItens__faixaConteudo > :not(.meusItens__colagem) {
+    max-width: none;
   }
 
   .meusItens__titulo {
-    font-size: clamp(44px, 12vw, 72px);
+    font-size: clamp(40px, 11.5vw, 72px);
     line-height: 0.85;
   }
 
@@ -379,21 +423,20 @@
     position: relative;
     top: auto;
     right: auto;
-    transform: none;
     width: min(340px, 92%);
     margin: 28px auto 0;
+    transform: none;
   }
 
   .meusItens__conteudo {
-    gap: 56px;
-    padding-top: 52px;
+    gap: 48px;
+    padding: 48px 0 64px;
   }
 
   .cartaoMeusItens {
-    padding: 30px 14px 16px;
+    padding: 30px 16px 16px;
   }
 
-  /* No celular a pílula da etapa passa para baixo do nome */
   .linhaMeuItem__resumo {
     grid-template-columns: 46px minmax(0, 1fr) auto 24px;
     grid-template-areas:
@@ -422,6 +465,7 @@
 
   .linhaMeuItem__valor {
     grid-area: valor;
+    padding-right: 0;
   }
 
   .linhaMeuItem__seta {
@@ -430,15 +474,15 @@
 
   .linhaMeuItem__aberta {
     grid-template-columns: minmax(0, 1fr);
-    row-gap: 12px;
+    row-gap: 14px;
     margin-top: 0;
     padding: 0 0 14px 58px;
   }
 
   .linhaMeuItem__detalhes {
     justify-self: start;
-    width: 115px;
-    height: 32px;
+    min-width: 120px;
+    min-height: 44px;
   }
 }
 
@@ -449,5 +493,24 @@
 
   .linhaMeuItem__pagamento .valorPagamento {
     gap: 10px;
+  }
+
+  .linhaMeuItem__detalhes,
+  .meusItens__vazioBotao {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .linhaMeuItem__resumo {
+    grid-template-columns: 44px minmax(0, 1fr) 24px;
+    grid-template-areas:
+      "foto textos seta"
+      "foto etapa seta"
+      "foto valor seta";
+  }
+
+  .linhaMeuItem__valor {
+    justify-self: start;
   }
 }

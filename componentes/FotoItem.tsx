@@ -27,14 +27,20 @@ export default function FotoItem({ publicId, descricao, className }: PropsFotoIt
 
   return (
     <div className={juntarClasses("fotoItem", className)}>
-      <CldImage src={publicId} alt={descricao} fill sizes="300px" className="fotoItem__imagem" />
+      <CldImage
+        src={publicId}
+        alt={descricao}
+        fill
+        sizes="300px"
+        className="fotoItem__imagem"
+      />
       <button
         type="button"
         className="fotoItem__lupa"
         onClick={() => referenciaJanela.current?.showModal()}
         aria-label={`Ampliar: ${descricao}`}
       >
-        <IconeLupa />
+        <IconeLupa aria-hidden="true" />
       </button>
 
       {/* === Seção: Foto ampliada === */}
@@ -46,14 +52,21 @@ export default function FotoItem({ publicId, descricao, className }: PropsFotoIt
           if (evento.target === evento.currentTarget) evento.currentTarget.close();
         }}
       >
-        <CldImage src={publicId} alt={descricao} width={1200} height={900} sizes="90vw" className="fotoItem__ampliada" />
+        <CldImage
+          src={publicId}
+          alt={descricao}
+          width={1200}
+          height={900}
+          sizes="90vw"
+          className="fotoItem__ampliada"
+        />
         <button
           type="button"
           className="fotoItem__fechar"
           onClick={() => referenciaJanela.current?.close()}
           aria-label="Fechar foto"
         >
-          <IconeFechar />
+          <IconeFechar aria-hidden="true" />
         </button>
       </dialog>
     </div>
@@ -71,8 +84,16 @@ type PropsFotosDoItem = {
 export function FotosDoItem({ item, className, classeFoto }: PropsFotosDoItem) {
   return (
     <div className={juntarClasses("fotosDoItem", className)}>
-      <FotoItem publicId={item.fotoId} descricao={`Foto de ${item.nome}`} className={classeFoto} />
-      <FotoItem publicId={item.proofWhId} descricao={`Balança de ${item.nome}`} className={classeFoto} />
+      <FotoItem
+        publicId={item.fotoId}
+        descricao={`Foto de ${item.nome}`}
+        className={classeFoto}
+      />
+      <FotoItem
+        publicId={item.proofWhId}
+        descricao={`Balança de ${item.nome}`}
+        className={classeFoto}
+      />
     </div>
   );
 }

@@ -1,40 +1,43 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo_Black, Figtree, Pinyon_Script, Silkscreen } from "next/font/google";
+import { Archivo, Figtree, Silkscreen } from "next/font/google";
 import "@/estilos/globais.css";
 
-// === Seção: Fontes do projeto ===
+// === Seção: Fontes ===
 const figtree = Figtree({
   variable: "--fonte-figtree",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const pinyonScript = Pinyon_Script({
-  variable: "--fonte-pinyon-script",
-  weight: "400",
+const archivo = Archivo({
+  variable: "--fonte-archivo",
+  axes: ["wdth"],
   subsets: ["latin"],
-});
-
-const archivoBlack = Archivo_Black({
-  variable: "--fonte-archivo-black",
-  weight: "400",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 const silkscreen = Silkscreen({
   variable: "--fonte-silkscreen",
   weight: ["400", "700"],
   subsets: ["latin"],
+  display: "swap",
 });
 
 // === Seção: Metadados ===
 export const metadata: Metadata = {
   title: "Lucky Cegs",
   description: "Organização de CEG's de sets nacionais e internacionais.",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export const viewport: Viewport = {
-  // Mesma cor da barra preta do topo: no celular, a barra do navegador continua o site
-  themeColor: "#151214",
+  themeColor: "#ea4f80",
 };
 
 // === Seção: Layout raiz ===
@@ -42,10 +45,9 @@ export default function LayoutRaiz({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
-      className={`${figtree.variable} ${pinyonScript.variable} ${archivoBlack.variable} ${silkscreen.variable}`}
+      className={`${figtree.variable} ${archivo.variable} ${silkscreen.variable}`}
     >
       <head>
-        {/* As fotos vêm do Cloudinary: a conexão abre antes de a página pedir a primeira */}
         <link rel="preconnect" href="https://res.cloudinary.com" />
       </head>
       <body>{children}</body>

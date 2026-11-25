@@ -2,7 +2,7 @@
 .inicioJoiner__letreiro.faixaLetreiro__faixa {
   height: 46px;
   padding-top: 0;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 /* === Seção: Faixas de fundo === */
@@ -11,14 +11,14 @@
   align-items: center;
   justify-content: center;
   min-height: 630px;
-  padding: 85px var(--margem-lateral);
+  padding: 80px var(--margem-lateral);
   border-bottom: 1px solid var(--cor-preto);
 }
 
 .inicioJoiner__faixaCoracoes {
   min-height: 400px;
-  padding-block: 75px;
-  background: var(--cor-creme) url("/imagens/fundo-coracoes.png") 0 0 / 112px 112px;
+  padding-block: 72px;
+  background: var(--cor-creme) url("/imagens/fundo-trevos-creme.svg") 0 0 / 120px 120px;
 }
 
 /* === Seção: Cartão das seções === */
@@ -26,33 +26,34 @@
   width: min(100%, var(--largura-conteudo));
   min-height: 460px;
   padding: 0 44px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 24px;
-  background: #fbf9f6;
+  border: var(--borda);
+  border-radius: 0;
+  background: var(--cor-papel);
   box-shadow: var(--sombra-cartao);
 }
 
 .inicioJoiner__titulo {
   display: flex;
   flex-direction: column;
+  gap: 0.14em;
   font-family: var(--fonte-titulo);
-  font-size: 62px;
-  font-weight: 400;
-  line-height: 0.703;
+  font-size: clamp(34px, 4.2vw, 52px);
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
+  line-height: 0.84;
   letter-spacing: 0.02em;
   color: var(--cor-preto);
 }
 
 .inicioJoiner__tituloRosa {
-  margin-top: 0.215em;
   color: var(--cor-rosa);
 }
 
 .inicioJoiner__texto {
   margin-top: 14px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.4;
   color: var(--cor-texto);
 }
 
@@ -70,14 +71,15 @@
 }
 
 .inicioJoiner__topoCaixas .botao {
-  width: 212px;
+  flex-shrink: 0;
+  min-width: 182px;
 }
 
 .inicioJoiner__listaCaixas {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 24px;
-  margin: 46px 0 0;
+  margin: 44px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -87,18 +89,26 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 210px;
-  padding: 21px 14px 0 17px;
-  border: 1px solid var(--cor-preto);
-  border-radius: 16px;
+  min-height: 210px;
+  height: 100%;
+  padding: 20px 16px 18px;
+  border: var(--borda);
+  border-radius: 0;
   background: var(--cor-branco);
   box-shadow: var(--sombra-cartao);
   text-decoration: none;
-  transition: transform 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .caixaResumo:hover {
   transform: translateY(-3px);
+}
+
+.caixaResumo:active {
+  box-shadow: none;
+  transform: translate(4px, 3px);
 }
 
 .caixaResumo__novo {
@@ -112,7 +122,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  height: 16px;
+  min-height: 18px;
   font-size: 13px;
 }
 
@@ -122,18 +132,19 @@
 }
 
 .caixaResumo__tempo {
-  color: #6b6466;
+  color: var(--cor-texto-suave);
   white-space: nowrap;
 }
 
 .caixaResumo__nome {
+  min-height: 22px;
+  margin-top: 18px;
   overflow: hidden;
-  height: 20px;
-  margin-top: 21px;
   font-family: var(--fonte-titulo);
   font-size: 18px;
-  font-weight: 400;
-  line-height: 20px;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
+  line-height: 1.2;
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
@@ -143,28 +154,30 @@
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
-  height: 26px;
-  margin-top: 20px;
-  padding: 0 24px;
-  border: 1px solid var(--cor-preto);
+  max-width: 100%;
+  min-height: 26px;
+  margin-top: 16px;
+  padding: 0 14px;
+  overflow: hidden;
+  border: var(--borda);
   border-radius: var(--raio-pilula);
   font-size: 13px;
   font-weight: 700;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .caixaResumo__progresso {
   display: grid;
-  grid-template-columns: repeat(4, 48px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
-  margin-top: 20px;
+  margin-top: 18px;
 }
 
 .caixaResumo__barra,
 .caixaResumo__barraCheia {
   height: 8px;
-  border-radius: var(--raio-pilula);
-  background: #e6e0d9;
+  background: var(--cor-bege);
 }
 
 .caixaResumo__barraCheia {
@@ -175,22 +188,25 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 19px;
-  padding-right: 11px;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 18px;
   font-size: 14px;
 }
 
 .caixaResumo__seus {
+  font-weight: 700;
   color: var(--cor-rosa-texto);
 }
 
 /* === Seção: Esqueleto do cartão de caixa === */
 .caixaResumo__carregando {
-  gap: 0;
   cursor: progress;
 }
 
-.caixaResumo__carregando:hover {
+.caixaResumo__carregando:hover,
+.caixaResumo__carregando:active {
+  box-shadow: var(--sombra-cartao);
   transform: none;
 }
 
@@ -202,46 +218,39 @@
 .caixaResumo__esqueletoNome {
   width: 70%;
   height: 20px;
-  margin-top: 23px;
+  margin-top: 20px;
 }
 
 .caixaResumo__esqueletoSelo {
   width: 120px;
   height: 26px;
-  margin-top: 20px;
+  margin-top: 16px;
   border-radius: var(--raio-pilula);
 }
 
 .caixaResumo__esqueletoBarras {
   width: 100%;
   height: 8px;
-  margin-top: 20px;
+  margin-top: 18px;
 }
 
 .caixaResumo__esqueletoRodape {
   width: 60%;
   height: 14px;
-  margin-top: 21px;
+  margin-top: auto;
+  padding-top: 18px;
 }
 
-/* === Seção: Aviso sem caixas (etiqueta de envio) === */
+/* === Seção: Aviso sem caixas === */
 .inicioJoiner__vazio {
   position: relative;
   display: grid;
-  grid-template-columns: 170px minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 36px;
   min-height: 210px;
-  margin-top: 46px;
+  margin-top: 44px;
   padding: 24px 40px 24px 32px;
-}
-
-.inicioJoiner__vazioCarimbo {
-  position: relative;
-  justify-self: center;
-  width: 150px;
-  height: auto;
-  transform: rotate(-8deg);
 }
 
 .inicioJoiner__vazioTextos {
@@ -249,14 +258,15 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+  min-width: 0;
 }
 
 .inicioJoiner__vazioEtiqueta {
   display: inline-flex;
   align-items: center;
-  height: 26px;
-  padding: 0 12px;
-  border: 1px solid var(--cor-preto);
+  min-height: 26px;
+  padding: 4px 12px;
+  border: var(--borda);
   border-radius: var(--raio-pilula);
   background: var(--cor-amarelo);
   font-family: var(--fonte-pixel);
@@ -266,8 +276,9 @@
 
 .inicioJoiner__vazioTitulo {
   font-family: var(--fonte-titulo);
-  font-size: 26px;
-  font-weight: 400;
+  font-size: clamp(22px, 3vw, 26px);
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: 1.1;
   color: var(--cor-preto);
   text-wrap: balance;
@@ -281,7 +292,7 @@
   max-width: 440px;
   font-size: 16px;
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.45;
   text-wrap: pretty;
 }
 
@@ -292,7 +303,7 @@
 }
 
 .inicioJoiner__vazioAcoes .botao {
-  width: 212px;
+  min-width: 212px;
 }
 
 /* === Seção: Do pedido até você === */
@@ -301,11 +312,17 @@
   align-items: center;
   justify-content: space-between;
   gap: 40px;
+  padding-block: 44px;
+}
+
+.inicioJoiner__cartaoEtapas > :first-child {
+  min-width: 0;
 }
 
 .inicioJoiner__etapas {
-  width: 426px;
-  margin: 24px 0 0;
+  flex: 0 1 426px;
+  width: min(100%, 426px);
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -313,9 +330,11 @@
 .inicioJoiner__etapas li {
   display: flex;
   align-items: baseline;
-  height: 63px;
-  font-size: 18px;
+  min-height: 56px;
+  padding-block: 10px;
+  font-size: 15px;
   font-weight: 600;
+  line-height: 1.35;
 }
 
 .inicioJoiner__numeroEtapa {
@@ -334,15 +353,22 @@
   justify-content: space-between;
   gap: 32px;
   min-height: 250px;
+  padding-block: 44px;
+}
+
+.inicioJoiner__cartaoCasa > :first-child {
+  min-width: 0;
 }
 
 .inicioJoiner__botoesCasa {
   display: flex;
-  gap: 18px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  gap: 16px;
 }
 
 .inicioJoiner__botoesCasa .botao {
-  width: 212px;
+  min-width: 182px;
 }
 
 /* === Seção: Responsivo === */
@@ -359,14 +385,6 @@
 }
 
 @media (max-width: 900px) {
-  .inicioJoiner__titulo {
-    font-size: 48px;
-  }
-
-  .inicioJoiner__texto {
-    font-size: 16px;
-  }
-
   .inicioJoiner__faixa {
     min-height: 0;
     padding-block: 56px;
@@ -380,24 +398,21 @@
   .inicioJoiner__cartaoEtapas {
     flex-direction: column;
     align-items: flex-start;
-    gap: 28px;
+    gap: 24px;
   }
 
   .inicioJoiner__etapas {
+    flex-basis: auto;
     width: 100%;
-    margin-top: 0;
+    max-width: none;
   }
 
   .inicioJoiner__vazio {
     grid-template-columns: minmax(0, 1fr);
     justify-items: center;
     gap: 20px;
-    padding: 36px 24px 48px;
+    padding: 32px 24px 36px;
     text-align: center;
-  }
-
-  .inicioJoiner__vazioCarimbo {
-    width: 120px;
   }
 
   .inicioJoiner__vazioTextos {
@@ -422,12 +437,11 @@
 
   .inicioJoiner__cartao {
     padding: 28px 18px;
-    border-radius: 18px;
   }
 
   .inicioJoiner__titulo {
-    font-size: 32px;
-    line-height: 0.86;
+    font-size: clamp(28px, 8.5vw, 34px);
+    line-height: 0.88;
   }
 
   .inicioJoiner__texto {
@@ -437,7 +451,7 @@
   .inicioJoiner__topoCaixas {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    gap: 18px;
   }
 
   .inicioJoiner__listaCaixas {
@@ -448,6 +462,7 @@
 
   .inicioJoiner__vazio {
     margin-top: 28px;
+    padding: 28px 18px 30px;
   }
 
   .inicioJoiner__vazioAcoes {
@@ -457,20 +472,17 @@
 
   .inicioJoiner__vazioAcoes .botao {
     width: 100%;
-  }
-
-  .inicioJoiner__vazioTitulo {
-    font-size: 22px;
+    min-width: 0;
   }
 
   .inicioJoiner__etapas li {
-    height: 46px;
-    font-size: 15px;
+    min-height: 44px;
+    padding-block: 8px;
   }
 
   .inicioJoiner__numeroEtapa {
     width: 40px;
-    font-size: 18px;
+    font-size: 16px;
     color: var(--cor-rosa-texto);
   }
 
@@ -483,5 +495,6 @@
   .inicioJoiner__topoCaixas .botao,
   .inicioJoiner__botoesCasa .botao {
     width: 100%;
+    min-width: 0;
   }
 }

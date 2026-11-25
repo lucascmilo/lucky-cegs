@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import TransicaoPagina from "@/componentes/TransicaoPagina";
 import { juntarClasses } from "@/lib/classes";
-import carimboPostal from "@/public/imagens/carimbo-postal.png";
+import carimboPostal from "@/public/imagens/carimbo-postal.svg";
 import PainelColagem, { type VarianteAcesso } from "./PainelColagem";
 import "@/estilos/paginas/acesso/TelaAcesso.css";
 

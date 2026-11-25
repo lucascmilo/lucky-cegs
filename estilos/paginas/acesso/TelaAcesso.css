@@ -21,14 +21,13 @@
 
 /* === Seção: Cartão-postal === */
 .telaAcesso__cartao {
-  /* Escala do cartão: fixa no celular, proporcional no desktop */
   --px-cartao: 1px;
   position: relative;
   width: min(100%, 560px);
-  border-radius: 4px;
+  border-radius: 0;
   background: var(--cor-creme);
   box-shadow:
-    inset 0 0 0 1px var(--cor-preto),
+    inset 0 0 0 2px var(--cor-preto),
     var(--sombra-cartao);
 }
 
@@ -36,7 +35,7 @@
   margin: calc(var(--px-cartao) * 13);
   padding: calc(var(--px-cartao) * 24.4) calc(var(--px-cartao) * 28.5) calc(var(--px-cartao) * 46.6);
   border: calc(var(--px-cartao) * 4) solid var(--cor-rosa);
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 /* === Seção: Topo do cartão === */
@@ -53,25 +52,35 @@
   left: calc(var(--px-cartao) * 343);
   width: calc(var(--px-cartao) * 183.4);
   height: auto;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  transform: rotate(-15deg);
   pointer-events: none;
 }
 
 .telaAcesso__saudacao {
   margin-top: calc(var(--px-cartao) * 17.6);
-  font-family: var(--fonte-cursiva);
-  font-size: calc(var(--px-cartao) * 38);
+  font-family: var(--fonte-pixel);
+  font-size: calc(var(--px-cartao) * 16);
+  font-weight: 700;
   line-height: calc(var(--px-cartao) * 40);
-  color: var(--cor-rosa-vivo);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-rosa-texto);
 }
 
 .telaAcesso__titulo {
   margin-top: calc(var(--px-cartao) * -3.5);
   font-family: var(--fonte-titulo);
   font-size: calc(var(--px-cartao) * 58);
-  font-weight: 400;
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
   line-height: calc(var(--px-cartao) * 55);
   letter-spacing: 0.02em;
   color: var(--cor-preto);
+  overflow-wrap: anywhere;
 }
 
 /* === Seção: Variante Entrar === */
@@ -91,7 +100,6 @@
   }
 
   .telaAcesso__cartao {
-    /* cqw é resolvido nos filhos, em relação ao próprio cartão */
     --px-cartao: calc(100cqw / 560);
     width: min(560px, 100cqw, var(--altura-tela) * 0.60474);
     container-type: inline-size;
@@ -99,10 +107,9 @@
 }
 
 /* === Seção: Responsivo === */
-/* Empilha só em pé: celular deitado mantém a colagem ao lado do formulário */
 @media (max-width: 1000px) and (orientation: portrait), (max-width: 640px) {
   .telaAcesso__tela {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto 1fr;
   }
 
@@ -117,7 +124,6 @@
   }
 }
 
-/* Cartão compacto: celular em pé ou deitado (ao lado da colagem o cartão fica estreito) */
 @media (max-width: 600px), (orientation: landscape) and (max-height: 540px) {
   .telaAcesso__molduraRosa {
     margin: 9px;
@@ -132,23 +138,183 @@
   }
 
   .telaAcesso__carimbo {
-    top: 6px;
-    right: 4px;
+    top: 8px;
+    right: 6px;
     left: auto;
-    width: 127px;
+    width: min(127px, 34%);
   }
 
   .telaAcesso__saudacao,
   .telaAcesso__cartaoEntrar .telaAcesso__saudacao {
     margin-top: 16px;
-    font-size: 32px;
+    font-size: 16px;
     line-height: 36px;
   }
 
   .telaAcesso__titulo,
   .telaAcesso__cartaoEntrar .telaAcesso__titulo {
     margin-top: 0;
-    font-size: clamp(40px, 12.5vw, 56px);
+    font-size: clamp(38px, 12vw, 56px);
     line-height: 0.95;
   }
+
+  /* === Seção: Tela (duas colunas) === */
+.telaAcesso__tela {
+  display: grid;
+  grid-template-columns: min(var(--largura-tela) * 0.52361, var(--altura-tela) * 0.81425) minmax(0, 1fr);
+  min-height: var(--altura-tela);
+}
+
+.telaAcesso__tela > aside {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: var(--altura-tela);
+}
+
+/* === Seção: Área do cartão === */
+.telaAcesso__areaCartao {
+  display: grid;
+  place-items: center;
+  padding: 24px 32px;
+}
+
+/* === Seção: Cartão-postal === */
+.telaAcesso__cartao {
+  --px-cartao: 1px;
+  position: relative;
+  width: min(100%, 560px);
+  border-radius: 0;
+  background: var(--cor-creme);
+  box-shadow:
+    inset 0 0 0 2px var(--cor-preto),
+    var(--sombra-cartao);
+}
+
+.telaAcesso__molduraRosa {
+  margin: calc(var(--px-cartao) * 13);
+  padding: calc(var(--px-cartao) * 24.4) calc(var(--px-cartao) * 28.5) calc(var(--px-cartao) * 46.6);
+  border: calc(var(--px-cartao) * 4) solid var(--cor-rosa);
+  border-radius: 0;
+}
+
+/* === Seção: Topo do cartão === */
+.telaAcesso__marca {
+  font-size: calc(var(--px-cartao) * 16);
+  font-weight: 700;
+  line-height: calc(var(--px-cartao) * 20);
+  color: var(--cor-preto);
+}
+
+.telaAcesso__carimbo {
+  position: absolute;
+  top: calc(var(--px-cartao) * 15);
+  left: calc(var(--px-cartao) * 343);
+  width: calc(var(--px-cartao) * 183.4);
+  height: auto;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  transform: rotate(-15deg);
+  pointer-events: none;
+}
+
+.telaAcesso__saudacao {
+  margin-top: calc(var(--px-cartao) * 17.6);
+  font-family: var(--fonte-pixel);
+  font-size: calc(var(--px-cartao) * 16);
+  font-weight: 700;
+  line-height: calc(var(--px-cartao) * 40);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-rosa-texto);
+}
+
+.telaAcesso__titulo {
+  margin-top: calc(var(--px-cartao) * -3.5);
+  font-family: var(--fonte-titulo);
+  font-size: calc(var(--px-cartao) * 58);
+  font-weight: var(--peso-titulo);
+  font-stretch: var(--largura-titulo);
+  line-height: calc(var(--px-cartao) * 55);
+  letter-spacing: 0.02em;
+  color: var(--cor-preto);
+  overflow-wrap: anywhere;
+}
+
+/* === Seção: Variante Entrar === */
+.telaAcesso__cartaoEntrar .telaAcesso__saudacao {
+  margin-top: calc(var(--px-cartao) * 26.6);
+}
+
+.telaAcesso__cartaoEntrar .telaAcesso__titulo {
+  margin-top: calc(var(--px-cartao) * -3.2);
+  font-size: calc(var(--px-cartao) * 61);
+}
+
+/* === Seção: Cartão proporcional (layout em duas colunas) === */
+@media (min-width: 1001px) {
+  .telaAcesso__areaCartao {
+    container-type: size;
+  }
+
+  .telaAcesso__cartao {
+    --px-cartao: calc(100cqw / 560);
+    width: min(560px, 100cqw, var(--altura-tela) * 0.60474);
+    container-type: inline-size;
+  }
+}
+
+/* === Seção: Responsivo === */
+@media (max-width: 1000px) and (orientation: portrait), (max-width: 640px) {
+  .telaAcesso__tela {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .telaAcesso__tela > aside {
+    position: relative;
+    height: min(112vw, 540px);
+    box-shadow: 0 1px 0 var(--cor-preto);
+  }
+
+  .telaAcesso__areaCartao {
+    padding: 32px var(--margem-lateral) 48px;
+  }
+}
+
+@media (max-width: 600px), (orientation: landscape) and (max-height: 540px) {
+  .telaAcesso__molduraRosa {
+    margin: 9px;
+    padding: 20px 18px 30px;
+    border-width: 3px;
+  }
+
+  .telaAcesso__marca {
+    max-width: 55%;
+    font-size: 13px;
+    line-height: 17px;
+  }
+
+  .telaAcesso__carimbo {
+    top: 8px;
+    right: 6px;
+    left: auto;
+    width: min(127px, 34%);
+  }
+
+  .telaAcesso__saudacao,
+  .telaAcesso__cartaoEntrar .telaAcesso__saudacao {
+    margin-top: 16px;
+    font-size: 16px;
+    line-height: 36px;
+  }
+
+  .painelColagem__quadrado {
+    top: 12.646%;
+    left: 65.105%;
+    width: 45%;
+  }
+}
 }

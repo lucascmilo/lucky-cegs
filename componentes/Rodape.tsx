@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { EMAIL_PIX } from "@/lib/configuracoes";
 import { obterLinksNavegacao, type Papel } from "@/lib/navegacao";
 import { obterUsuarioAtual } from "@/lib/sessao";
-import coracaoRosa from "@/public/imagens/coracao-rosa.png";
+import coracaoRosa from "@/public/imagens/coracao-rosa.svg";
 import BotaoCopiar from "./BotaoCopiar";
 import "@/estilos/componentes/Rodape.css";
 
@@ -48,7 +48,7 @@ export default function Rodape() {
         {/* === Seção: Card do Pix e assinatura === */}
         <div className="rodape__colunaPix">
           <div className="rodape__cardPix">
-            <h2 className="rodape__tituloPix">PIX · LUCKY CEGS</h2>
+            <p className="rodape__tituloPix">PIX · LUCKY CEGS</p>
             <span className="rodape__emailPix">{EMAIL_PIX}</span>
             <div className="rodape__acoesPix">
               <BotaoCopiar texto={EMAIL_PIX} variante="rosa" />

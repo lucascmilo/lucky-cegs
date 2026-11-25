@@ -15,8 +15,13 @@ export default function TextoCortado({ texto }: { texto: string }) {
     const caixa = referenciaCaixa.current;
     if (!caixa) return;
     const observador = new ResizeObserver(() => {
-      const linha = caixa.querySelector(".textoCortado__linha");
-      if (linha) setCortado(linha.scrollWidth > linha.clientWidth + 1);
+      const linha = caixa.querySelector<HTMLElement>(".textoCortado__linha");
+      if (!linha) return;
+      const excedeu = linha.scrollWidth > linha.clientWidth + 1;
+      setCortado((atual) => {
+        if (!excedeu) setAberto(false);
+        return atual === excedeu ? atual : excedeu;
+      });
     });
     observador.observe(caixa);
     return () => observador.disconnect();
@@ -47,16 +52,12 @@ export default function TextoCortado({ texto }: { texto: string }) {
           className="textoCortado__botao"
           onClick={() => setAberto((atual) => !atual)}
           aria-expanded={aberto}
-          title="Ver nome completo"
+          aria-label={`Ver nome completo: ${texto}`}
         >
-          <span className="textoCortado__linha">
-            {texto}
-          </span>
+          <span className="textoCortado__linha">{texto}</span>
         </button>
       ) : (
-        <span className="textoCortado__linha">
-          {texto}
-        </span>
+        <span className="textoCortado__linha">{texto}</span>
       )}
 
       {aberto && (
