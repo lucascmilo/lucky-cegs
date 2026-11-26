@@ -17,12 +17,47 @@ type PropsJanelaInterTaxaLote = {
   aoFechar: () => void;
 };
 
+type RascunhoInterTaxa = {
+  categoria: CategoriaEmLote;
+  inter: string;
+  taxa: string;
+};
+
 const OPCOES_CATEGORIA: { id: CategoriaEmLote; rotulo: string }[] = [
   { id: "photocards", rotulo: "Photocards" },
   { id: "postcards", rotulo: "Postcards" },
   { id: "smini", rotulo: "SMini" },
   { id: "itens", rotulo: "Itens" },
 ];
+
+function lerRascunhoInterTaxa(chave: string): RascunhoInterTaxa | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const bruto = window.sessionStorage.getItem(chave);
+    if (!bruto) return null;
+    return JSON.parse(bruto) as RascunhoInterTaxa;
+  } catch {
+    return null;
+  }
+}
+
+function gravarRascunhoInterTaxa(chave: string, dados: RascunhoInterTaxa) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(chave, JSON.stringify(dados));
+  } catch {
+    // Ignora falhas de armazenamento
+  }
+}
+
+function limparRascunhoInterTaxa(chave: string) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.removeItem(chave);
+  } catch {
+    // Ignora falhas de armazenamento
+  }
+}
 
 // === Seção: Janela "Inter e taxa em lote" ===
 // Multiplica a quantidade da categoria escolhida pelo valor unitário (ex.: 6 PCs × R$ 1,50 = R$ 9,00).
@@ -32,19 +67,33 @@ export default function JanelaInterTaxaLote({
   nomeCaixa,
   aoFechar,
 }: PropsJanelaInterTaxaLote) {
+  const chaveRascunho = `lucky-cegs:rascunho:inter-taxa:${caixaId}`;
   const referencia = useRef<HTMLDialogElement>(null);
   const formulario = useRef<HTMLFormElement>(null);
   const jaFechou = useRef(false);
 
-  const [categoria, setCategoria] = useState<CategoriaEmLote>("photocards");
-  const [inter, setInter] = useState("");
-  const [taxa, setTaxa] = useState("");
+  const [inicial] = useState<RascunhoInterTaxa>(() => {
+    const salvo = lerRascunhoInterTaxa(chaveRascunho);
+    return {
+      categoria: salvo?.categoria ?? "photocards",
+      inter: salvo?.inter ?? "",
+      taxa: salvo?.taxa ?? "",
+    };
+  });
+
+  const [categoria, setCategoria] = useState<CategoriaEmLote>(inicial.categoria);
+  const [inter, setInter] = useState(inicial.inter);
+  const [taxa, setTaxa] = useState(inicial.taxa);
   const [erro, setErro] = useState<string | null>(null);
   const [salvando, iniciar] = useTransition();
 
   useEffect(() => {
     referencia.current?.showModal();
   }, []);
+
+  useEffect(() => {
+    gravarRascunhoInterTaxa(chaveRascunho, { categoria, inter, taxa });
+  }, [chaveRascunho, categoria, inter, taxa]);
 
   useEffect(() => {
     if (!erro) return;
@@ -54,10 +103,12 @@ export default function JanelaInterTaxaLote({
   function aoFecharJanela() {
     if (jaFechou.current) return;
     jaFechou.current = true;
+    limparRascunhoInterTaxa(chaveRascunho);
     aoFechar();
   }
 
   function fechar() {
+    limparRascunhoInterTaxa(chaveRascunho);
     referencia.current?.close();
     aoFecharJanela();
   }
@@ -71,6 +122,7 @@ export default function JanelaInterTaxaLote({
       if (!resultado.ok) {
         return setErro(resultado.erro);
       }
+      limparRascunhoInterTaxa(chaveRascunho);
       mostrarAviso(
         `Inter/taxa lançados para ${resultado.atualizadas} ${
           resultado.atualizadas === 1 ? "parte" : "partes"

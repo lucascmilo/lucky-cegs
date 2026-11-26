@@ -31,6 +31,20 @@ const SEM_CONTA = "Nenhuma conta com esse user.";
 
 type Linha = DadosParte & { chave: number };
 
+type EstadoRascunhoItem = {
+  caixaId: string;
+  grupo: string;
+  situacao: EtapaItem;
+  nome: string;
+  fotoId: string | null;
+  proofWhId: string | null;
+  quantidades: Quantidades;
+  peso: string;
+  compra: string;
+  tipo: "individual" | "set";
+  linhas: Linha[];
+};
+
 const formatadorValor = new Intl.NumberFormat("pt-BR", {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
@@ -69,8 +83,37 @@ function limparUser(texto: string) {
   return texto.trim().replace(/^@/, "").toLowerCase();
 }
 
+function lerRascunhoItem(chave: string): EstadoRascunhoItem | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const bruto = window.sessionStorage.getItem(chave);
+    if (!bruto) return null;
+    return JSON.parse(bruto) as EstadoRascunhoItem;
+  } catch {
+    return null;
+  }
+}
+
+function gravarRascunhoItem(chave: string, dados: EstadoRascunhoItem) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(chave, JSON.stringify(dados));
+  } catch {
+    // Ignora falhas de armazenamento
+  }
+}
+
+function limparRascunhoItem(chave: string) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.removeItem(chave);
+  } catch {
+    // Ignora falhas de armazenamento
+  }
+}
+
 // === Seção: Estado inicial (vazio no "Novo item"; o registro no "Editar item") ===
-function estadoInicial(caixa: CaixaGom, registro?: RegistroGom) {
+function estadoInicial(caixa: CaixaGom, registro?: RegistroGom): EstadoRascunhoItem {
   if (!registro) {
     return {
       caixaId: String(caixa.id),
@@ -151,24 +194,33 @@ export default function JanelaItem({
   aoSalvar,
 }: PropsJanelaItem) {
   const editando = Boolean(registro);
+  const chaveRascunho = registro
+    ? `lucky-cegs:rascunho:item:editar:${registro.id}`
+    : `lucky-cegs:rascunho:item:novo:${caixa.id}`;
+
   const referencia = useRef<HTMLDialogElement>(null);
   const formulario = useRef<HTMLFormElement>(null);
   const idLista = useId();
 
-  const [inicial] = useState(() => estadoInicial(caixa, registro));
-  const [caixaId, setCaixaId] = useState(inicial.caixaId);
-  const [grupo, setGrupo] = useState(inicial.grupo);
-  const [situacao, setSituacao] = useState<EtapaItem>(inicial.situacao);
-  const [nome, setNome] = useState(inicial.nome);
-  const [fotoId, setFotoId] = useState(inicial.fotoId);
-  const [proofWhId, setProofWhId] = useState(inicial.proofWhId);
-  const [quantidades, setQuantidades] = useState<Quantidades>(inicial.quantidades);
-  const [peso, setPeso] = useState(inicial.peso);
-  const [compra, setCompra] = useState(inicial.compra);
-  const [tipo, setTipo] = useState(inicial.tipo);
-  const [linhas, setLinhas] = useState<Linha[]>(inicial.linhas);
+  const [inicial] = useState<EstadoRascunhoItem>(() => estadoInicial(caixa, registro));
+  const [rascunho] = useState<EstadoRascunhoItem>(() => lerRascunhoItem(chaveRascunho) ?? inicial);
+
+  const [caixaId, setCaixaId] = useState(rascunho.caixaId);
+  const [grupo, setGrupo] = useState(rascunho.grupo);
+  const [situacao, setSituacao] = useState<EtapaItem>(rascunho.situacao);
+  const [nome, setNome] = useState(rascunho.nome);
+  const [fotoId, setFotoId] = useState(rascunho.fotoId);
+  const [proofWhId, setProofWhId] = useState(rascunho.proofWhId);
+  const [quantidades, setQuantidades] = useState<Quantidades>(rascunho.quantidades);
+  const [peso, setPeso] = useState(rascunho.peso);
+  const [compra, setCompra] = useState(rascunho.compra);
+  const [tipo, setTipo] = useState(rascunho.tipo);
+  const [linhas, setLinhas] = useState<Linha[]>(rascunho.linhas);
+
   // Cada linha de joiner ganha uma chave nova (a lista muda de tamanho no set)
-  const ultimaChave = useRef(inicial.linhas.length);
+  const maiorChave = rascunho.linhas.reduce((max, l) => Math.max(max, l.chave), 0);
+  const ultimaChave = useRef(Math.max(maiorChave, rascunho.linhas.length));
+
   const [erros, setErros] = useState<Record<string, string>>({});
   const [erroGeral, setErroGeral] = useState<string | null>(null);
   const [salvando, iniciar] = useTransition();
@@ -214,7 +266,7 @@ export default function JanelaItem({
 
   const categoriasDoSet = CATEGORIAS.filter(({ id }) => quantidades[id] > 0);
 
-  const atual = {
+  const atual: EstadoRascunhoItem = {
     caixaId,
     grupo,
     situacao,
@@ -229,6 +281,15 @@ export default function JanelaItem({
   };
   const alterado = JSON.stringify(atual) !== JSON.stringify(inicial);
   useAvisoAoSair(alterado);
+
+  useEffect(() => {
+    if (salvou.current) return;
+    if (alterado) {
+      gravarRascunhoItem(chaveRascunho, atual);
+    } else {
+      limparRascunhoItem(chaveRascunho);
+    }
+  });
 
   function mudarFoto(id: string | null) {
     if (id) fotosEnviadas.current.add(id);
@@ -260,6 +321,7 @@ export default function JanelaItem({
   // Fecha e avisa a tela na hora: o evento "close" do navegador pode se perder enquanto a página atualiza
   const jaFechou = useRef(false);
   function fechar() {
+    limparRascunhoItem(chaveRascunho);
     referencia.current?.close();
     aoFecharJanela();
   }
@@ -267,6 +329,7 @@ export default function JanelaItem({
   function aoFecharJanela() {
     if (jaFechou.current) return;
     jaFechou.current = true;
+    limparRascunhoItem(chaveRascunho);
     const usadas = salvou.current
       ? [fotoId, proofWhId]
       : [inicial.fotoId, inicial.proofWhId];
@@ -370,6 +433,7 @@ export default function JanelaItem({
         : await chamar(() => criarItem(dados));
       if (resultado.ok) {
         salvou.current = true;
+        limparRascunhoItem(chaveRascunho);
         const outraCaixa = caixaEscolhida.id === caixa.id ? "" : ` na ${caixaEscolhida.nome}`;
         aoSalvar(`${nome.trim()} foi ${editando ? "atualizado" : "salvo"}${outraCaixa}.`);
         return fechar();
@@ -386,6 +450,7 @@ export default function JanelaItem({
       const resultado = await chamar(() => excluirItem(registro.id));
       if (!resultado.ok) return setErroExcluir(resultado.erro);
       salvou.current = true;
+      limparRascunhoItem(chaveRascunho);
       aoSalvar(`${registro.nome} foi excluído.`);
       fechar();
     });

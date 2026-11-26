@@ -17,6 +17,41 @@ type PropsJanelaMarcarPagoLote = {
   aoFechar: () => void;
 };
 
+type RascunhoMarcarPago = {
+  joinerUserId: string;
+  marcarInter: boolean;
+  marcarTaxa: boolean;
+};
+
+function lerRascunhoMarcarPago(chave: string): RascunhoMarcarPago | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const bruto = window.sessionStorage.getItem(chave);
+    if (!bruto) return null;
+    return JSON.parse(bruto) as RascunhoMarcarPago;
+  } catch {
+    return null;
+  }
+}
+
+function gravarRascunhoMarcarPago(chave: string, dados: RascunhoMarcarPago) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(chave, JSON.stringify(dados));
+  } catch {
+    // Ignora falhas de armazenamento
+  }
+}
+
+function limparRascunhoMarcarPago(chave: string) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.removeItem(chave);
+  } catch {
+    // Ignora falhas de armazenamento
+  }
+}
+
 // === Seção: Janela "Dar baixa em pagamentos" ===
 // Marca frete inter e/ou taxa já lançados como pagos para um joiner nesta caixa.
 // Fecha assim que a ação é concluída.
@@ -27,6 +62,7 @@ export default function JanelaMarcarPagoLote({
   joinersDaCaixa = [],
   aoFechar,
 }: PropsJanelaMarcarPagoLote) {
+  const chaveRascunho = `lucky-cegs:rascunho:marcar-pago:${caixaId}`;
   const referencia = useRef<HTMLDialogElement>(null);
   const formulario = useRef<HTMLFormElement>(null);
   const jaFechou = useRef(false);
@@ -35,9 +71,23 @@ export default function JanelaMarcarPagoLote({
     joinersDaCaixa.length > 0 ? joinersDaCaixa.includes(j.user) : true,
   );
 
-  const [joinerUserId, setJoinerUserId] = useState(opcoesJoiner[0]?.id ?? "");
-  const [marcarInter, setMarcarInter] = useState(true);
-  const [marcarTaxa, setMarcarTaxa] = useState(true);
+  const [inicial] = useState<RascunhoMarcarPago>(() => {
+    const salvo = lerRascunhoMarcarPago(chaveRascunho);
+    const idValido =
+      salvo?.joinerUserId && opcoesJoiner.some((j) => j.id === salvo.joinerUserId)
+        ? salvo.joinerUserId
+        : (opcoesJoiner[0]?.id ?? "");
+
+    return {
+      joinerUserId: idValido,
+      marcarInter: salvo?.marcarInter ?? true,
+      marcarTaxa: salvo?.marcarTaxa ?? true,
+    };
+  });
+
+  const [joinerUserId, setJoinerUserId] = useState(inicial.joinerUserId);
+  const [marcarInter, setMarcarInter] = useState(inicial.marcarInter);
+  const [marcarTaxa, setMarcarTaxa] = useState(inicial.marcarTaxa);
   const [erro, setErro] = useState<string | null>(null);
   const [salvando, iniciar] = useTransition();
 
@@ -45,13 +95,23 @@ export default function JanelaMarcarPagoLote({
     referencia.current?.showModal();
   }, []);
 
+  useEffect(() => {
+    gravarRascunhoMarcarPago(chaveRascunho, {
+      joinerUserId,
+      marcarInter,
+      marcarTaxa,
+    });
+  }, [chaveRascunho, joinerUserId, marcarInter, marcarTaxa]);
+
   function aoFecharJanela() {
     if (jaFechou.current) return;
     jaFechou.current = true;
+    limparRascunhoMarcarPago(chaveRascunho);
     aoFechar();
   }
 
   function fechar() {
+    limparRascunhoMarcarPago(chaveRascunho);
     referencia.current?.close();
     aoFecharJanela();
   }
@@ -68,6 +128,7 @@ export default function JanelaMarcarPagoLote({
       if (!resultado.ok) {
         return setErro(resultado.erro);
       }
+      limparRascunhoMarcarPago(chaveRascunho);
       mostrarAviso(
         `Pagamentos atualizados (${resultado.atualizadas} ${
           resultado.atualizadas === 1 ? "parte" : "partes"
